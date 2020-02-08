@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "119026447603",
+    "firebase_url": "https://chatot-9ab9b.firebaseio.com",
+    "project_id": "chatot-9ab9b",
+    "storage_bucket": "chatot-9ab9b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:119026447603:android:be0dab7ab677c8930b3386",
+        "android_client_info": {
+          "package_name": "com.chatot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "119026447603-caakapp6njtis28ujb4qs7b5dgqkh9el.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9XyMwMHcM0xUu5HwWgZi1z5s8NA8XkKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "119026447603-caakapp6njtis28ujb4qs7b5dgqkh9el.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
