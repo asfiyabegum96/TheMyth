@@ -40,6 +40,7 @@ export default class mainFeed extends React.Component {
       feedRefresh: false,
       liked: false,
       loading: true,
+      alreadyLiked: false,
       scale: new Animated.Value(0),
       animations: [
         new Animated.Value(0),
@@ -79,12 +80,16 @@ export default class mainFeed extends React.Component {
         likes: selectedPhoto.likes - 1
       })
       this.state.photoFeedData[index].likes = selectedPhoto.likes - 1;
+      this.state.photoFeedData[index].isLiked = false;
+      this.setState({ alreadyLiked: false })
     } else {
       let db = firebase.firestore();
       db.collection("photos").doc(selectedPhoto.docRef).update({
         likes: selectedPhoto.likes + 1
       })
       this.state.photoFeedData[index].likes = selectedPhoto.likes + 1;
+      this.state.photoFeedData[index].isLiked = true;
+      this.setState({ alreadyLiked: true })
     }
   }
 
@@ -169,6 +174,7 @@ export default class mainFeed extends React.Component {
       caption: data.caption,
       comments: data.comments,
       likes: data.likes,
+      isLiked: this.state.alreadyLiked,
       location: data.location,
       postedTime: that.timeConverter(data.postedTime),
       url: data.url,
@@ -249,7 +255,7 @@ export default class mainFeed extends React.Component {
                     }}>
                       <TouchableWithoutFeedback onPress={() => this.onLikePost({ item, index })} >
                         <Animated.View style={heartButtonStyle}>
-                          <Heart filled={this.state.liked} />
+                          <Heart filled={item.isLiked} />
                         </Animated.View>
                       </TouchableWithoutFeedback>
                       <TouchableOpacity style={{ paddingLeft: wp('1%') }}>
