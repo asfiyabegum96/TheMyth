@@ -171,7 +171,7 @@ class food extends React.Component {
         let authorDescription = this.state.user.description;
         let caption = this.state.caption;
         let comments = 'yet to be added';
-        let likes = '10';
+        let likes = 0;
         let location = this.state.location;
         let dateTime = Date.now();
         let timestamp = Math.floor(dateTime / 1000);
@@ -188,7 +188,8 @@ class food extends React.Component {
             postedTime: timestamp,
             saved: saved,
             url: imageUrl,
-            userAvatar: userAvatar
+            userAvatar: userAvatar,
+            docRef: imageId
         }
 
         firebase.firestore().collection('photos').doc(imageId).set(photoObj).then(function (docRef) {

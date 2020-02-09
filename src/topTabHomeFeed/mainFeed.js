@@ -1,27 +1,31 @@
 import React from 'react';
-import { StyleSheet,
-        Text,
-        Image,
-        View,
-        Button,
-        TextInput,
-        TouchableOpacity,
-        ScrollView,
-        Dimensions,
-        FlatList,
-        Animated,
-        TouchableWithoutFeedback,
-        ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  Button,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  Dimensions,
+  FlatList,
+  Animated,
+  TouchableWithoutFeedback,
+  ActivityIndicator
+} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import UserAvatar from 'react-native-user-avatar';
-import {widthPercentageToDP as wp, 
-        heightPercentageToDP as hp,
-        listenOrientationChange as loc,
-        removeOrientationListener as rol} 
-from 'react-native-responsive-screen';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+  listenOrientationChange as loc,
+  removeOrientationListener as rol
+}
+  from 'react-native-responsive-screen';
 import Heart from "./heart";
 import firebase from 'react-native-firebase';
 
@@ -29,7 +33,7 @@ const Jaguar = '#22222C';
 
 export default class mainFeed extends React.Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       photoFeedData: [],
@@ -46,16 +50,17 @@ export default class mainFeed extends React.Component {
         new Animated.Value(0),
       ],
     }
-    this.triggerLike = this.triggerLike.bind(this);
   }
 
   // Photo feed function
-  photoFeedLoad = () =>{
+  photoFeedLoad = () => {
     this.loadFeed();
   }
 
   // Heart like trigger function
-  triggerLike() {
+  onLikePost({ item, index }) {
+    const selectedPhoto = this.state.photoFeedData[index];
+    this.updateLikes(selectedPhoto, index);
     this.setState({
       liked: !this.state.liked
     })
@@ -67,48 +72,64 @@ export default class mainFeed extends React.Component {
     });
   }
 
+  updateLikes(selectedPhoto, index) {
+    if (this.state.liked) {
+      let db = firebase.firestore();
+      db.collection("photos").doc(selectedPhoto.docRef).update({
+        likes: selectedPhoto.likes - 1
+      })
+      this.state.photoFeedData[index].likes = selectedPhoto.likes - 1;
+    } else {
+      let db = firebase.firestore();
+      db.collection("photos").doc(selectedPhoto.docRef).update({
+        likes: selectedPhoto.likes + 1
+      })
+      this.state.photoFeedData[index].likes = selectedPhoto.likes + 1;
+    }
+  }
+
   componentDidMount() {
     loc(this);
     this.loadFeed();
   }
-  
+
   componentWillUnMount() {
     rol();
   }
 
   // Cover the timestamp to show in real minutes
-  pluralCheck=(s)=>{
-    if(s == 1){
+  pluralCheck = (s) => {
+    if (s == 1) {
       return ' ago';
-    }else {
+    } else {
       return 's ago';
     }
   }
-  timeConverter = (timestamp) =>{
-      let a = new Date(timestamp * 1000);
-      let seconds = Math.floor((new Date() - a) / 1000);
+  timeConverter = (timestamp) => {
+    let a = new Date(timestamp * 1000);
+    let seconds = Math.floor((new Date() - a) / 1000);
 
-      let interval = Math.floor(seconds / 31536000);
-      if(interval > 1){
-        return interval+ ' year'+this.pluralCheck(interval); 
-      }
-      interval = Math.floor(seconds / 2592000);
-      if(interval > 1){
-        return interval+ ' month'+this.pluralCheck(interval); 
-      }
-      interval = Math.floor(seconds / 86400);
-      if(interval > 1){
-        return interval+ ' day'+this.pluralCheck(interval); 
-      }
-      interval = Math.floor(seconds / 3600);
-      if(interval > 1){
-        return interval+ ' hour'+this.pluralCheck(interval); 
-      }
-      interval = Math.floor(seconds / 60);
-      if(interval > 1){
-        return interval+ ' minute'+this.pluralCheck(interval); 
-      }
-      return Math.floor(seconds)+ ' second'+this.pluralCheck(seconds);
+    let interval = Math.floor(seconds / 31536000);
+    if (interval > 1) {
+      return interval + ' year' + this.pluralCheck(interval);
+    }
+    interval = Math.floor(seconds / 2592000);
+    if (interval > 1) {
+      return interval + ' month' + this.pluralCheck(interval);
+    }
+    interval = Math.floor(seconds / 86400);
+    if (interval > 1) {
+      return interval + ' day' + this.pluralCheck(interval);
+    }
+    interval = Math.floor(seconds / 3600);
+    if (interval > 1) {
+      return interval + ' hour' + this.pluralCheck(interval);
+    }
+    interval = Math.floor(seconds / 60);
+    if (interval > 1) {
+      return interval + ' minute' + this.pluralCheck(interval);
+    }
+    return Math.floor(seconds) + ' second' + this.pluralCheck(seconds);
   }
   // Fetch data from the database and display in the view
 
@@ -116,73 +137,44 @@ export default class mainFeed extends React.Component {
   loadFeed = () => {
 
     this.setState({
-      feedRefresh:true,
-      photoFeedData:[]
+      feedRefresh: true,
+      photoFeedData: []
     });
     let that = this;
 
     let db = firebase.firestore();
     let photosRef = db.collection('photos');
-    photosRef.orderBy('postedTime','desc').get().then(function(querySnapshot){
-      
-      querySnapshot.forEach(function(doc) {
-        // doc.data() is never undefined for query doc snapshots
-        // console.log(doc.id, " => ", doc.data());
-        
+    photosRef.orderBy('postedTime', 'desc').get().then(function (querySnapshot) {
+
+      querySnapshot.forEach(function (doc) {
+
         let data;
-        
+
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
-        if(docNotEmpty)  data =  (doc.id, " => ", doc.data());
-        //console.log('photoFeedData: ', data.location );
-        // console.log('photoFeedData: ', data );
+        if (docNotEmpty) data = (doc.id, " => ", doc.data());
         let photoFeedData = that.state.photoFeedData;
 
-        
         that.addToFlatlist(photoFeedData, data);
-        
-        // for(let photo in data){
-        //   console.log('photo', photo);
-        //     let photoObject = data[photo];
-            
-          // photoFeedData.push({
-          //           id: photo,
-          //           author:photoObject.author,
-          //           authorDescription:photoObject.authorDescription,
-          //           caption: photoObject.caption,
-          //           comments: photoObject.comments,
-          //           likes: photoObject.likes,
-          //           location: photoObject.location,
-          //           postedTime: photoObject.postedTime,
-          //           url: photoObject.url,
-          //           userAvatar: photoObject.userAvatar
-          //         });
-              //     that.setState({
-              //       refresh: false,
-              //       loading: false
-              //     });
-              //     console.log('photoObject', photoObject);
-              // }
-                    
+      });
     });
-  });
-}
+  }
 
-  addToFlatlist = (photoFeedData, data) =>{
+  addToFlatlist = (photoFeedData, data) => {
 
     var that = this;
 
     photoFeedData.push({
-      author:data.author,
-      authorDescription:data.authorDescription,
+      author: data.author,
+      authorDescription: data.authorDescription,
       caption: data.caption,
       comments: data.comments,
       likes: data.likes,
       location: data.location,
       postedTime: that.timeConverter(data.postedTime),
       url: data.url,
-      userAvatar: data.userAvatar
+      userAvatar: data.userAvatar,
+      docRef: data.docRef
     });
-    // console.log(photoFeedData);
     that.setState({
       feedRefresh: false,
       loading: false
@@ -192,106 +184,108 @@ export default class mainFeed extends React.Component {
 
   render() {
     //Heart like spring animation 
-      const bouncyHeart = this.state.scale.interpolate({
-        inputRange: [0, 1, 2],
-        outputRange: [1, .8, 1]
-      })
-      const heartButtonStyle = {
-        transform: [
-          { scale: bouncyHeart }
-        ]
-      }
+    const bouncyHeart = this.state.scale.interpolate({
+      inputRange: [0, 1, 2],
+      outputRange: [1, .8, 1]
+    })
+    const heartButtonStyle = {
+      transform: [
+        { scale: bouncyHeart }
+      ]
+    }
 
     return (
-      <View style={{ flex: 1,}}>
+      <View style={{ flex: 1, }}>
         <View
           style={{
-          borderBottomColor: '#22222C',
-          borderBottomWidth: 1.5,
-          }}/>
-          { this.state.loading == true ? (
-            <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-              <ActivityIndicator size="large" color='red'/>
-            </View>
-          ) : (
-            <FlatList
-          refreshing={this.state.feedRefresh}
-          onRefresh={this.photoFeedLoad}
-          data={this.state.photoFeedData}
-          keyExtractor={(item, index) => index.toString()} 
-          style={{flex:1}}
-          renderItem={({item, index}) => (
-
-          <View key={index} style={{ paddingHorizontal: wp('1%'),marginTop: hp('1%') }}>
-            <View style={styles.feedBorder}>
-              <View style={styles.listHeader}>
-                <TouchableOpacity style={{ paddingHorizontal: 10, }} 
-                onPress={() => this.props.navigation.navigate('profile')}>
-                  <UserAvatar size="50" name={item.author} 
-                  src={item.userAvatar}
-                  />
-                </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={() => this.props.navigation.navigate('profile')} >
-                  <Text style={styles.listProfileName}>{item.author}</Text>
-                  <Text style={styles.listProfileSubName}>{item.authorDescription}</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.listViewImg}>
-                <Image style={styles.listViewInlineImg}
-                // source={{uri: 'https://source.unsplash.com/random/500'+Math.floor((Math.random() * 800)+ 500)}}
-                source={{uri:item.url}}
-                loadingIndicatorSource={require('../images/loading.gif')}
-                />
-              </View>
-              <View style={styles.foodNameDiv}>
-                <Text style={styles.foodNameText}>{item.caption}</Text>
-              </View>
-              <View style={styles.locationDiv}>
-                <Text style={styles.locationText}>{item.location}</Text>
-              </View>
-              <View style={{flexDirection: 'row',  
-              paddingHorizontal: wp('2%'),
-              paddingVertical: wp('2%')}}>
-                  <TouchableWithoutFeedback onPress={this.triggerLike}>
-                    <Animated.View style={heartButtonStyle}>
-                      <Heart filled={this.state.liked}/>
-                    </Animated.View>
-                  </TouchableWithoutFeedback>
-                  <TouchableOpacity style={{paddingLeft:wp('1%')}}>
-                    <Fontisto style={styles.comment} name="comment" size={22} color="#22222C" />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={{paddingLeft:wp('1%')}}>
-                    <Fontisto name="bookmark-alt" size={20} color="#22222C" />
-                  </TouchableOpacity>
-                <View>
-                </View>
-              </View>
-              <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
-                <Text style={styles.likeText}>{item.likes} likes</Text>
-                <Text>{item.postedTime}</Text>
-              </View>
-            </View>
+            borderBottomColor: '#22222C',
+            borderBottomWidth: 1.5,
+          }} />
+        {this.state.loading == true ? (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color='red' />
           </View>
-        )}
-        />
+        ) : (
+            <FlatList
+              refreshing={this.state.feedRefresh}
+              onRefresh={this.photoFeedLoad}
+              data={this.state.photoFeedData}
+              keyExtractor={(item, index) => index.toString()}
+              style={{ flex: 1 }}
+              renderItem={({ item, index }) => (
+
+                <View key={index} style={{ paddingHorizontal: wp('1%'), marginTop: hp('1%') }}>
+                  <View style={styles.feedBorder}>
+                    <View style={styles.listHeader}>
+                      <TouchableOpacity style={{ paddingHorizontal: 10, }}
+                        onPress={() => this.props.navigation.navigate('profile')}>
+                        <UserAvatar size="50" name={item.author}
+                          src={item.userAvatar}
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('profile')} >
+                        <Text style={styles.listProfileName}>{item.author}</Text>
+                        <Text style={styles.listProfileSubName}>{item.authorDescription}</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.listViewImg}>
+                      <Image style={styles.listViewInlineImg}
+                        // source={{uri: 'https://source.unsplash.com/random/500'+Math.floor((Math.random() * 800)+ 500)}}
+                        source={{ uri: item.url }}
+                        loadingIndicatorSource={require('../images/loading.gif')}
+                      />
+                    </View>
+                    <View style={styles.foodNameDiv}>
+                      <Text style={styles.foodNameText}>{item.caption}</Text>
+                    </View>
+                    <View style={styles.locationDiv}>
+                      <Text style={styles.locationText}>{item.location}</Text>
+                    </View>
+                    <View style={{
+                      flexDirection: 'row',
+                      paddingHorizontal: wp('2%'),
+                      paddingVertical: wp('2%')
+                    }}>
+                      <TouchableWithoutFeedback onPress={() => this.onLikePost({ item, index })} >
+                        <Animated.View style={heartButtonStyle}>
+                          <Heart filled={this.state.liked} />
+                        </Animated.View>
+                      </TouchableWithoutFeedback>
+                      <TouchableOpacity style={{ paddingLeft: wp('1%') }}>
+                        <Fontisto style={styles.comment} name="comment" size={22} color="#22222C" />
+                      </TouchableOpacity>
+                      <TouchableOpacity style={{ paddingLeft: wp('1%') }}>
+                        <Fontisto name="bookmark-alt" size={20} color="#22222C" />
+                      </TouchableOpacity>
+                      <View>
+                      </View>
+                    </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <Text style={styles.likeText}>{item.likes} likes</Text>
+                      <Text>{item.postedTime}</Text>
+                    </View>
+                  </View>
+                </View>
+              )}
+            />
           )}
-        
-      </View>  
+
+      </View>
     );
   }
 }
 
 mainFeed.navigationOptions = {
-	tabBarIcon: ({tintColor, focused}) => (
-		<FontAwesome5 name={'globe'} 
-		style={styles.globe}
-		color={tintColor}/>
-		)
+  tabBarIcon: ({ tintColor, focused }) => (
+    <FontAwesome5 name={'globe'}
+      style={styles.globe}
+      color={tintColor} />
+  )
 }
 
-const styles = StyleSheet. create ({
-  globe:{
+const styles = StyleSheet.create({
+  globe: {
     fontSize: hp('3%'),
   },
   // elevation:{
@@ -311,13 +305,13 @@ const styles = StyleSheet. create ({
   //   shadowRadius: 0.5,
   //   elevation:5,
   // },
-  feedBorder:{
+  feedBorder: {
     // borderTopWidth:wp('0.1%'),
     // borderTopColor: '#121212',
-    borderBottomWidth:wp('0.1%'),
+    borderBottomWidth: wp('0.1%'),
     borderBottomColor: '#121212'
   },
-  listHeader:{
+  listHeader: {
     flexDirection: 'row',
     marginTop: hp('1%')
   },
@@ -326,7 +320,7 @@ const styles = StyleSheet. create ({
     fontWeight: 'bold',
     color: '#22222C',
   },
-  listProfileSubName:{
+  listProfileSubName: {
     color: '#22222C'
   },
   listViewImg: {
@@ -334,7 +328,7 @@ const styles = StyleSheet. create ({
   },
   listViewInlineImg: {
     width: wp('97%'),
-    height:wp('60%'),
+    height: wp('60%'),
     // height: 275, 
     // resizeMode:'center',
     borderWidth: 1,
@@ -344,7 +338,7 @@ const styles = StyleSheet. create ({
   foodNameDiv: {
     left: 10,
     flexDirection: 'row',
-    alignItems: 'baseline', 
+    alignItems: 'baseline',
   },
   foodNameText: {
     fontSize: hp('2.5%'),
@@ -356,12 +350,12 @@ const styles = StyleSheet. create ({
   },
   locationText: {
     fontSize: hp('2.5%'),
-    fontWeight:'bold'
+    fontWeight: 'bold'
   },
-  comment:{
+  comment: {
     paddingHorizontal: wp('2%')
   },
-  likeText:{
+  likeText: {
     fontSize: hp('2.5%'),
     paddingHorizontal: wp('2%'),
     paddingBottom: wp('4%'),
