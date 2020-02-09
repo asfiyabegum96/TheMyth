@@ -23,26 +23,26 @@ class gallery extends React.Component {
     }
   }
 
-  componentWillReceiveProps() {
+  componentDidUpdate() {
     if (this.props && this.props.navigation && this.props.navigation.state && this.props.navigation.state.params)
       this.setState({ email: this.props.navigation.state.params.email })
-      console.log('inside',  this.props.navigation.state.params)
   }
 
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <UploadPage email={this.state.email}/>
+        <UploadPage screenProps={{ navigation: this.props.navigation }} />
       </View>
     );
   }
 }
 
 class photos extends React.Component {
+
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <CameraScreen/>
+        <CameraScreen />
       </View>
     );
   }
@@ -60,13 +60,13 @@ class videos extends React.Component {
 
 const TabNavigator = createBottomTabNavigator(
   {
-    Gallery: gallery,
-    // Gallery: {
-    //   screen: gallery,
-    //   navigationOptions: {
-    //     tabBarLabel: 'Gallery',
-    //   },
-    // },
+    // Gallery: gallery,
+    Gallery: {
+      screen: gallery,
+      navigationOptions: {
+        tabBarLabel: 'Gallery',
+      },
+    },
     Photos: photos,
     Videos: videos,
   },

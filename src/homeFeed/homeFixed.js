@@ -49,7 +49,7 @@ export default class homeFixed extends React.Component {
     return (
       <View style={styles.mainContainer}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('bottomTab', { email: this.props.navigation.state.params.email })}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('bottomTab', { email: this.props.navigation.state.params.email.trim() })}>
             <FontAwesome5 style={styles.camera} name={'camera'} />
           </TouchableOpacity>
           <TextInput style={styles.inputSearch}

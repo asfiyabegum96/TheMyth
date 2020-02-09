@@ -38,13 +38,19 @@ class food extends React.Component {
             uploading: false,
             progress: 0,
             caption: '',
-            location: ''
+            location: '',
+            user: ''
         }
-        // console.log('dgdfg',props)
+        this.baseState = this.state;
+        console.log('dgdfg', props.screenProps)
     }
 
     componentDidMount() {
         this.fetchUserDetails()
+    }
+
+    componentWillUnMount() {
+        this.setState(this.baseState)
     }
 
     // Generate random Id for images
@@ -97,7 +103,6 @@ class food extends React.Component {
                     path: response.path.toString(),
                     uri: response.uri
                 });
-                // this.uploadImage(image);
             }
         });
     }
@@ -106,12 +111,12 @@ class food extends React.Component {
         const context = this;
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
-        photosRef.where('email', '==', 'aravind@gmail.com').get().then(function (querySnapshot) {
+        photosRef.where('email', '==', context.props.screenProps.navigation.state.params.email).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
                 if (docNotEmpty) data = (doc.id, " => ", doc.data());
-                console.log('dataaaa', doc.data(), context.props.navigation)
+                context.setState({ user: doc.data() })
             })
         })
     }
@@ -121,6 +126,7 @@ class food extends React.Component {
 
         var imageId = this.state.imageId;
         var imagePath = this.state.path;
+        var userDetails = this.state.user;
         this.setState({
             uploading: true
         });
@@ -141,7 +147,6 @@ class food extends React.Component {
 
                     firebase.storage().ref('images/userId/' + imageId).getDownloadURL()
                         .then((url) => {
-                            // console.log(url);
                             this.processUpload(url);
                         });
                 }
@@ -155,11 +160,11 @@ class food extends React.Component {
 
     //uploading feed data in cloud firestore
     processUpload = (imageUrl) => {
-
+        const context = this;
         let imageId = this.state.imageId;
         //Set variable for feed
-        let author = 'Surya';
-        let authorDescription = 'Traveller';
+        let author = this.state.user.fullName;
+        let authorDescription = this.state.user.description;
         let caption = this.state.caption;
         let comments = 'yet to be added';
         let likes = '10';
@@ -183,13 +188,14 @@ class food extends React.Component {
             userAvatar: userAvatar
         }
 
-        firebase.firestore().collection('photos').doc(imageId).set(photoObj);
-        alert('image uploaded');
-
-        this.setState({
-            uploading: false,
+        firebase.firestore().collection('photos').doc(imageId).set(photoObj).then(function (docRef) {
+            alert('Image uploaded!');
+            context.setState({
+                uploading: false,
+            });
+            context.props.screenProps.navigation.navigate('homeFixed');
         });
-        this.props.navigation.navigate('homeFixed');
+
     }
 
     render() {
