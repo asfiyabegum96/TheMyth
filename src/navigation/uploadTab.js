@@ -39,10 +39,10 @@ class food extends React.Component {
             progress: 0,
             caption: '',
             location: '',
-            user: ''
+            user: '',
+            fieldNotEmpty: false
         }
         this.baseState = this.state;
-        console.log('dgdfg', props.screenProps)
     }
 
     componentDidMount() {
@@ -77,7 +77,7 @@ class food extends React.Component {
 
         ImagePicker.showImagePicker(options, (response) => {
             console.log('Response = ', response);
-
+            this.setState({ fieldNotEmpty: true })
             if (response.didCancel) {
                 console.log('User cancelled image picker');
             }
@@ -101,7 +101,8 @@ class food extends React.Component {
                 // };
                 this.setState({
                     path: response.path.toString(),
-                    uri: response.uri
+                    uri: response.uri,
+                    fieldNotEmpty: false
                 });
             }
         });
@@ -123,39 +124,42 @@ class food extends React.Component {
 
     // upload image to fireabase storage
     uploadImage = () => {
-
-        var imageId = this.state.imageId;
-        var imagePath = this.state.path;
-        var userDetails = this.state.user;
-        this.setState({
-            uploading: true
-        });
-        var uploadTask = firebase.storage().ref('images/userId/' + imageId).putFile(imagePath);
-        uploadTask.on(
-            firebase.storage.TaskEvent.STATE_CHANGED,
-            (snapshot) => {
-                let progress = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0);
-                console.log('Upload is ' + progress + '% complete')
-                this.setState({
-                    progress: progress
-                });
-                if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-                    // complete
+        if (this.state.path) {
+            var imageId = this.state.imageId;
+            var imagePath = this.state.path;
+            var userDetails = this.state.user;
+            this.setState({
+                uploading: true
+            });
+            var uploadTask = firebase.storage().ref('images/userId/' + imageId).putFile(imagePath);
+            uploadTask.on(
+                firebase.storage.TaskEvent.STATE_CHANGED,
+                (snapshot) => {
+                    let progress = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0);
+                    console.log('Upload is ' + progress + '% complete')
                     this.setState({
-                        progress: 100
+                        progress: progress
                     });
-
-                    firebase.storage().ref('images/userId/' + imageId).getDownloadURL()
-                        .then((url) => {
-                            this.processUpload(url);
+                    if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+                        // complete
+                        this.setState({
+                            progress: 100
                         });
-                }
-            },
-            (error) => {
-                unsubscribe();
-                console.error(error);
-            },
-        );
+
+                        firebase.storage().ref('images/userId/' + imageId).getDownloadURL()
+                            .then((url) => {
+                                this.processUpload(url);
+                            });
+                    }
+                },
+                (error) => {
+                    unsubscribe();
+                    console.error(error);
+                },
+            );
+        } else {
+            this.setState({ fieldNotEmpty: true })
+        }
     }
 
     //uploading feed data in cloud firestore
@@ -172,8 +176,7 @@ class food extends React.Component {
         let dateTime = Date.now();
         let timestamp = Math.floor(dateTime / 1000);
         let saved = 'no';
-        let userAvatar = 'https://firebasestorage.googleapis.com/v0/b/chatot-9ab9b.appspot.com/o/images%2FuserId%2F297c99cd-2b78-e3b8-7f97-b377-8ed4-0289?alt=media&token=aea7c4f4-d0d4-4d04-87dd-833195730ea7';
-
+        let userAvatar = this.state.user.profilePicture
         // Create object for firestore
         let photoObj = {
             author: author,
@@ -219,8 +222,8 @@ class food extends React.Component {
                             <Image
                                 source={{ uri: this.state.uri }}
                                 style={{
-                                    width: wp('97%'),
-                                    height: hp('60%'),
+                                    width: wp('40%'),
+                                    height: hp('20%'),
                                     resizeMode: 'cover'
                                 }} />
                         }
@@ -296,6 +299,11 @@ class food extends React.Component {
                             <View></View>
                         )}
                 </View>
+                {this.state.fieldNotEmpty === true ? (
+                    <Text style={{ color: 'red' }}>Please select an image to upload</Text>
+                ) : (
+                        <View></View>
+                    )}
                 <View style={{ paddingTop: wp('3%'), paddingBottom: wp('5%') }}>
                     <TouchableOpacity style={styles.uploadButton} onPress={() => this.uploadImage()}>
                         <View>
@@ -407,6 +415,7 @@ class travel extends React.Component {
                         </View>
                     </TouchableOpacity>
                 </View>
+
                 <View style={{ paddingTop: wp('3%'), paddingBottom: wp('5%') }}>
                     <TouchableOpacity style={styles.uploadButton}>
                         <View>
