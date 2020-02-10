@@ -19,7 +19,7 @@ import {
   removeOrientationListener as rol
 }
   from 'react-native-responsive-screen';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, NavigationEvents } from 'react-navigation';
 import TopNavigator from '../navigation/topNavigatorHomeFeed.js';
 console.disableYellowBox = true;
 
@@ -41,6 +41,10 @@ export default class homeFixed extends React.Component {
     loc(this);
   }
 
+  componentDidUpdate() {
+    console.log('inside')
+  }
+
   componentWillUnMount() {
     rol();
   }
@@ -48,6 +52,9 @@ export default class homeFixed extends React.Component {
   render() {
     return (
       <View style={styles.mainContainer}>
+        <NavigationEvents
+          onDidFocus={() =>loc(this)}
+        />
         <View style={styles.header}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('bottomTab', { email: this.props.navigation.state.params.email.trim() })}>
             <FontAwesome5 style={styles.camera} name={'camera'} />

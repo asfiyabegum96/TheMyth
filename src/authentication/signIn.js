@@ -27,45 +27,37 @@ export default class Home extends React.Component {
       email: '',
       password: '',
       fieldNotEmpty: false,
-      isInvalid: false
+      isInvalid: false,
 
     }
     this.ref = firebase.firestore().collection('signup')
   }
 
   checkUser() {
-    let db = firebase.firestore();
-    let signupRef = db.collection('signup');
-    let userEmail = this.state.email;
-    let verifyPassword = this.state.password;
-    let query = signupRef.where('email', '==', userEmail.trim()).where('password', '==', verifyPassword).get()
-      .then(snapshot => {
-        if (snapshot.empty) {
-          this.setState({ isInvalid: true })
-          return;
-        }
-        else {
-          this.setState({ isInvalid: false })
-          this.props.navigation.navigate('homeFixed', { email: this.state.email })
-          return;
-        }
-      })
-      .catch(err => {
-        return 0;
-      });
+    const context = this;
+    let userEmail = context.state.email.trim();
+    let verifyPassword = context.state.password;
+    firebase.auth().signInWithEmailAndPassword(userEmail, verifyPassword).then(function () {
+      context.setState({ isInvalid: false })
+      context.props.navigation.navigate('homeFixed', { email: context.state.email })
+    }).catch((error) => {
+      if (error)
+        this.setState({ isInvalid: true })
+    })
   }
 
   // check Textfields are not empty
 
   requireField = () => {
-    if (this.state.email !== '' && this.state.password !== '') {
-      this.handleLogin();
-      this.setState({
+    const context = this;
+    if (context.state.email !== '' && context.state.password !== '') {
+      context.handleLogin();
+      context.setState({
         fieldNotEmpty: false,
       });
     }
     else {
-      this.setState({
+      context.setState({
         fieldNotEmpty: true
       });
     }
@@ -80,8 +72,6 @@ export default class Home extends React.Component {
 
   onSubmit = () => {
     let { current: field } = this.fieldRef;
-
-    console.log(field.value());
   };
 
   formatText = (text) => {
@@ -123,7 +113,7 @@ export default class Home extends React.Component {
             textColor='#FCD705'
             baseColor="white"
             tintColor="#FCD705"
-            maxLength={8}
+            minLength={8}
             secureTextEntry={true}
             onChangeText={(text) => this.setState({ password: text })}
             value={this.state.password}

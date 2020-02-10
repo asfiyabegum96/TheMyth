@@ -60,13 +60,12 @@ export default class forgotPassword extends React.Component {
     updatePassword = () => {
         const context = this;
         if (this.state.email !== '') {
-        //    firebase.auth().sendPasswordResetEmail(this.state.email).then((data) => console.log(data))
-            // context.props.firebase.passwordReset(context.state.email);
-            context.props.navigation.navigate('Home')
-            // this.handleLogin();
-            this.setState({
-                fieldNotEmpty: false,
-            });
+            firebase.auth().sendPasswordResetEmail(this.state.email).then((data) => {
+                context.props.navigation.navigate('Home')
+                this.setState({
+                    fieldNotEmpty: false,
+                });
+            })
         }
         else {
             this.setState({
@@ -110,7 +109,7 @@ export default class forgotPassword extends React.Component {
                 </View>
                 <View style={styles.TextInputDiv}>
                     <TextField
-                        label='Email'
+                        label='Enter your email ID to reset'
                         onSubmitEditing={this.onSubmit}
                         ref={input => { this.fieldRef = input }}
                         containerStyle={{ width: wp('70%') }}
@@ -120,32 +119,6 @@ export default class forgotPassword extends React.Component {
                         onChangeText={(text) => this.setState({ email: text })}
                         value={this.state.email}
                     />
-                    <TextField
-                        label='New Password'
-                        onSubmitEditing={this.onSubmit}
-                        ref={input => { this.fieldRef = input }}
-                        containerStyle={{ width: wp('70%'), }}
-                        textColor='#FCD705'
-                        baseColor="white"
-                        tintColor="#FCD705"
-                        maxLength={8}
-                        secureTextEntry={true}
-                        onChangeText={(text) => this.setState({ password: text })}
-                        value={this.state.password}
-                    />
-                    <TextField
-                        label='Re-enter Password'
-                        onSubmitEditing={this.onSubmit}
-                        ref={input => { this.fieldRef = input }}
-                        containerStyle={{ width: wp('70%'), }}
-                        textColor='#FCD705'
-                        baseColor="white"
-                        tintColor="#FCD705"
-                        maxLength={8}
-                        secureTextEntry={true}
-                        onChangeText={(text) => this.setState({ password: text })}
-                        value={this.state.password}
-                    />
                     {this.state.fieldNotEmpty == true ? (
                         <Text style={{ color: 'red' }}>Please enter email and password</Text>
                     ) : (
@@ -154,7 +127,7 @@ export default class forgotPassword extends React.Component {
                 </View>
                 <View style={styles.but}>
                     <TouchableOpacity onPress={() => this.updatePassword()}>
-                        <Text style={styles.butText}>Update</Text>
+                        <Text style={styles.butText}>Reset</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

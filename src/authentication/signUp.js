@@ -48,22 +48,23 @@ export default class signup extends React.Component {
     let db = firebase.firestore();
     const { fullName, email, phoneNumber, password, description, gender, profilePicture } = this.state;
     const values = { fullName, email, phoneNumber, password, description, gender, profilePicture }
-    db.collection("signup").add({
-      email: values.email,
-      fullName: values.fullName,
-      password: values.password,
-      phoneNumber: values.phoneNumber,
-      gender: values.gender,
-      description: values.description,
-      profilePicture: values.profilePicture
-    })
-      .then(function (docRef) {
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(function (cred) {
+      return db.collection("signup").doc(cred.user.uid).set({
+        email: values.email,
+        fullName: values.fullName,
+        password: values.password,
+        phoneNumber: values.phoneNumber,
+        gender: values.gender,
+        description: values.description,
+        profilePicture: values.profilePicture
+      }).then(function (docRef) {
         console.log("Document written with ID: ", docRef.id);
         context.props.navigation.navigate('homeFixed')
       })
-      .catch(function (error) {
-        console.error("Error adding document: ", error);
-      });
+        .catch(function (error) {
+          console.error("Error adding document: ", error);
+        });
+    });
   }
 
   render() {
