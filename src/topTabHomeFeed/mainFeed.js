@@ -258,7 +258,7 @@ export default class mainFeed extends React.Component {
                           <Heart filled={item.isLiked} />
                         </Animated.View>
                       </TouchableWithoutFeedback>
-                      <TouchableOpacity style={{ paddingLeft: wp('1%') }}>
+                      <TouchableOpacity onPress={() => this.props.navigation.navigate('comments')} style={{ paddingLeft: wp('1%') }}>
                         <Fontisto style={styles.comment} name="comment" size={22} color="#22222C" />
                       </TouchableOpacity>
                       <TouchableOpacity style={{ paddingLeft: wp('1%') }}>

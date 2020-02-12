@@ -8,6 +8,7 @@ import homeFixed from '../homeFeed/homeFixed';
 import chat from '../chat/chat';
 import mainFeed from '../topTabHomeFeed/mainFeed'
 import forgotPassword from '../authentication/forgotPassword';
+import Comments from '../topTabHomeFeed/comments';
 
 const AppNavigator = createStackNavigator({
     Home: {
@@ -39,7 +40,11 @@ const AppNavigator = createStackNavigator({
     },
     chat: {
         screen: chat,
-    }
+    },
+    comments: {
+        screen: Comments,
+        navigationOptions: { header: null }
+    },
 });
 
 export default createAppContainer(AppNavigator);
