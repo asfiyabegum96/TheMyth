@@ -6,11 +6,14 @@ import {
     TouchableOpacity,
     Image,
     ScrollView,
-    FlatList
+    FlatList,
+    TextInput,
+    Button
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import {
     widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
 }
     from 'react-native-responsive-screen';
 
@@ -19,6 +22,7 @@ export default class Comments extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            commentText: '',
             data: [
                 { id: 1, image: "https://bootdey.com/img/Content/avatar/avatar1.png", name: "Frank Odalthh", comment: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor." },
                 { id: 2, image: "https://bootdey.com/img/Content/avatar/avatar6.png", name: "John DoeLink", comment: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor." },
@@ -31,19 +35,20 @@ export default class Comments extends Component {
         }
     }
 
+    insertComment = () => {
+        console.log('sdfsdf', this.state)
+    }
+
     render() {
         return (
-            <ScrollView>
+            <View>
                 <View style={styles.viewcomment}>
-                    {/* <Image style={styles.image} source={{ uri: "https://bootdey.com/img/Content/avatar/avatar1.png" }} /> */}
-                    <TextField
-                        placeholder='Your comments...'
-                        placeholderTextColor='#FCD705'
-                        textColor='#FCD705'
-                        baseColor="white"
-                        tintColor="#FCD705"
-                        style={styles.addcomment}
-                    />
+                    <Image style={styles.myimage} source={{ uri: "https://bootdey.com/img/Content/avatar/avatar1.png" }} />
+                    <TextInput value={this.state.commentText}
+                        onChangeText={(commentText) => { this.setState({ commentText }) }} placeholder="Your comments..." placeholderTextColor='#FCD705' multiline={true} style={styles.inputStyle} />
+                    <TouchableOpacity onPress={this.insertComment} style={styles.butText}>
+                        <Text style={styles.buttonText}>Comment</Text>
+                    </TouchableOpacity>
                 </View>
                 <FlatList
                     style={styles.root}
@@ -76,7 +81,7 @@ export default class Comments extends Component {
                             </View>
                         );
                     }} />
-            </ScrollView>
+            </View>
         );
     }
 }
@@ -130,5 +135,29 @@ const styles = StyleSheet.create({
     },
     viewcomment: {
         backgroundColor: '#121212',
+        flexDirection: 'row'
+    },
+    butText: {
+        color: '#22222C',
+        marginTop: 15,
+        borderBottomColor: '#FCD705', // Add this to specify bottom border color
+        borderBottomWidth: 1
+    },
+    inputStyle: {
+        marginLeft: 30,
+        width: 210,
+        color: '#fff',
+        borderBottomColor: '#FCD705', // Add this to specify bottom border color
+        borderBottomWidth: 1
+    },
+    buttonText: {
+        color: '#FCD705'
+    },
+    myimage: {
+        width: 45,
+        height: 45,
+        borderRadius: 20,
+        marginLeft: 35,
+        marginTop: 15,
     }
 });  
