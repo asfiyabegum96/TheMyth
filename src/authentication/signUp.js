@@ -58,7 +58,6 @@ export default class signup extends React.Component {
         description: values.description,
         profilePicture: values.profilePicture
       }).then(function (docRef) {
-        console.log("Document written with ID: ", docRef.id);
         context.props.navigation.navigate('homeFixed')
       })
         .catch(function (error) {

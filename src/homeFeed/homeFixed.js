@@ -49,11 +49,15 @@ export default class homeFixed extends React.Component {
     rol();
   }
 
+  navigateToPage = () => {
+    this.props.navigation.navigate('comments')
+  }
+
   render() {
     return (
       <View style={styles.mainContainer}>
         <NavigationEvents
-          onDidFocus={() =>loc(this)}
+          onDidFocus={() => loc(this)}
         />
         <View style={styles.header}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('bottomTab', { email: this.props.navigation.state.params.email.trim() })}>
@@ -74,7 +78,7 @@ export default class homeFixed extends React.Component {
             <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />
           </View>
         </TouchableOpacity>
-        <AppIndex />
+        <AppIndex screenProps={this.navigateToPage} />
       </View>
     );
   }
