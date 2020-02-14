@@ -40,22 +40,29 @@ export default class SignupHome extends React.Component {
   // check Textfields are not empty
 
   requireField = (e) => {
+    this.setState({ clicked: true })
     const values = this.props.values;
     if (values.email !== '' && values.password !== '' && values.fullName !== '' && values.phoneNumber !== '') {
       this.setState({
         fieldNotEmpty: false,
       });
       if (values.phoneNumber.length === 10 && values.password.length >= 8) {
+        this.setState({
+          passwordInvalid: false,
+          phoneNumberInvalid: false
+        });
         this.continue(e);
       } else {
         if (values.phoneNumber.length !== 10) {
           this.setState({
-            phoneNumberInvalid: true
+            phoneNumberInvalid: true,
+            passwordInvalid: false
           });
         }
         if (values.password.length < 8) {
           this.setState({
-            passwordInvalid: true
+            passwordInvalid: true,
+            phoneNumberInvalid: false
           });
         }
       }
@@ -77,6 +84,7 @@ export default class SignupHome extends React.Component {
     let query = signupRef.where('email', '==', userEmail.trim()).get()
       .then(snapshot => {
         if (snapshot.empty) {
+          this.setState({ clicked: false })
           this.props.nextStep();
           return;
         }
@@ -166,7 +174,7 @@ export default class SignupHome extends React.Component {
                     /> */}
           </View>
           <View style={styles.but}>
-            <TouchableOpacity >
+            <TouchableOpacity disabled={this.state.clicked} >
               <Text style={styles.butText} onPress={this.requireField}>Continue</Text>
             </TouchableOpacity>
             {this.state.fieldNotEmpty == true ? (
@@ -175,7 +183,7 @@ export default class SignupHome extends React.Component {
                 <View></View>
               )}
 
-              {this.state.isInvalid == true ? (
+            {this.state.isInvalid == true ? (
               <Text style={{ color: 'red' }}>Email ID already exists!</Text>
             ) : (
                 <View></View>
@@ -216,7 +224,7 @@ export default class SignupHome extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-      </React.Fragment>
+      </React.Fragment >
     );
   }
 }

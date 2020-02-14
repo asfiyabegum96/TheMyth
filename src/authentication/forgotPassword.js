@@ -60,12 +60,15 @@ export default class forgotPassword extends React.Component {
     updatePassword = () => {
         const context = this;
         if (this.state.email !== '') {
-            firebase.auth().sendPasswordResetEmail(this.state.email).then((data) => {
+            firebase.auth().sendPasswordResetEmail(this.state.email.trim()).then((data) => {
+                alert('Please check your mail to reset your password!')
                 context.props.navigation.navigate('Home')
                 this.setState({
                     fieldNotEmpty: false,
-                });
-            })
+                })
+            }).catch((error) => {
+                alert('Incorrect Email ID')
+            });
         }
         else {
             this.setState({

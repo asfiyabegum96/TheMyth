@@ -57,8 +57,8 @@ export default class signup extends React.Component {
         gender: values.gender,
         description: values.description,
         profilePicture: values.profilePicture
-      }).then(function (docRef) {
-        context.props.navigation.navigate('homeFixed')
+      }).then(function () {
+        context.props.navigation.navigate('homeFixed', { email: values.email })
       })
         .catch(function (error) {
           console.error("Error adding document: ", error);
