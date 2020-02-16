@@ -49,8 +49,8 @@ export default class homeFixed extends React.Component {
     rol();
   }
 
-  navigateToPage = () => {
-    this.props.navigation.navigate('comments')
+  navigateToPage = (item) => {
+    this.props.navigation.navigate('comments', { selectedItem: item })
   }
 
   render() {

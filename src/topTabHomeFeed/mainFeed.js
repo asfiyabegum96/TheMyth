@@ -187,9 +187,8 @@ export default class mainFeed extends React.Component {
     });
   }
 
-  navigateToComment = () => {
-    const context = this;
-    context.props.screenProps()
+  navigateToComment = ({ item, index }) => {
+    this.props.screenProps({ item, index })
   }
 
 
@@ -263,7 +262,7 @@ export default class mainFeed extends React.Component {
                           <Heart filled={item.isLiked} />
                         </Animated.View>
                       </TouchableWithoutFeedback>
-                      <TouchableOpacity onPress={this.navigateToComment} style={{ paddingLeft: wp('1%') }}>
+                      <TouchableOpacity onPress={() => this.navigateToComment({ item, index })} style={{ paddingLeft: wp('1%') }}>
                         <Fontisto style={styles.comment} name="comment" size={22} color="#22222C" />
                       </TouchableOpacity>
                       <TouchableOpacity style={{ paddingLeft: wp('1%') }}>
