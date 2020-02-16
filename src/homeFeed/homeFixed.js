@@ -50,7 +50,7 @@ export default class homeFixed extends React.Component {
   }
 
   navigateToPage = (item) => {
-    this.props.navigation.navigate('comments', { selectedItem: item })
+    this.props.navigation.navigate('comments', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })
   }
 
   render() {

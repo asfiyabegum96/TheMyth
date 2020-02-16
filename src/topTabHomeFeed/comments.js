@@ -27,12 +27,15 @@ export default class Comments extends Component {
             commentText: '',
             feedData: [],
             selectedItem: props.navigation.state.params.selectedItem,
-            feedRefresh: false
+            email: props.navigation.state.params.email,
+            feedRefresh: false,
+            userDetails: ''
         }
         this.baseState = this.state;
     }
 
     componentDidMount() {
+        this.fetchUserDetails();
         this.fetchComments();
     }
 
@@ -40,18 +43,33 @@ export default class Comments extends Component {
         this.setState(this.baseState)
     }
 
+    fetchUserDetails = () => {
+        const context = this;
+        console.log(this.state.selectedItem)
+        let db = firebase.firestore();
+        let photosRef = db.collection('signup');
+        photosRef.where('email', '==', this.state.email).get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                console.log('data', doc.data())
+                let data;
+                const docNotEmpty = (doc.id, " => ", doc.data() != null);
+                if (docNotEmpty) {
+                    data = (doc.id, " => ", doc.data());
+                    context.setState({ userDetails: data })
+                }
+            });
+        });
+    }
     fetchComments = () => {
         this.setState({
             feedData: [],
             feedRefresh: true
         });
         let that = this;
-        console.log(this.state.selectedItem)
         let db = firebase.firestore();
         let photosRef = db.collection('comments');
         photosRef.where('image', '==', this.state.selectedItem.item.url).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
-                console.log('data', doc.data())
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
                 if (docNotEmpty) {
@@ -143,8 +161,8 @@ export default class Comments extends Component {
             let commentObject = {
                 comment: this.state.commentText,
                 image: selectedItem.url,
-                name: selectedItem.author,
-                userAvatar: selectedItem.userAvatar,
+                name: this.state.userDetails.fullName,
+                userAvatar: this.state.userDetails.profilePicture,
                 docRef: docRef,
                 postedTime: timestamp,
             }
