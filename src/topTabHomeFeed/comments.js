@@ -178,7 +178,7 @@ export default class Comments extends Component {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.viewcomment}>
-                    <Image style={styles.myimage} source={{ uri: "https://bootdey.com/img/Content/avatar/avatar1.png" }} />
+                    <Image style={styles.myimage} source={{ uri: this.state.userDetails.profilePicture }} />
                     <TextInput value={this.state.commentText}
                         onChangeText={(commentText) => { this.setState({ commentText }) }} placeholder="Your comments..." placeholderTextColor='#FCD705' multiline={true} style={styles.inputStyle} />
                     <TouchableOpacity onPress={this.insertComment} style={styles.butText}>
