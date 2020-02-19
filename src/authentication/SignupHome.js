@@ -3,7 +3,9 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator,
+  ScrollView
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { TextField } from 'react-native-material-textfield';
@@ -26,9 +28,16 @@ export default class SignupHome extends React.Component {
       fieldNotEmpty: false,
       phoneNumberInvalid: false,
       passwordInvalid: false,
-      isInvalid: false
+      isInvalid: false,
+      loading: true,
+      passwordMismatch: false,
+      hidePassword: true
     }
     this.ref = firebase.firestore().collection('signup')
+  }
+
+  setPasswordVisibility = () => {
+    this.setState({ hidePassword: !this.state.hidePassword });
   }
 
   onSubmit = () => {
@@ -42,28 +51,37 @@ export default class SignupHome extends React.Component {
   requireField = (e) => {
     this.setState({ clicked: true })
     const values = this.props.values;
-    if (values.email !== '' && values.password !== '' && values.fullName !== '' && values.phoneNumber !== '') {
+    if (values.email !== '' && values.password !== '' && values.fullName !== '' && values.phoneNumber !== '' && values.confirmPassword !== '') {
       this.setState({
         fieldNotEmpty: false,
       });
-      if (values.phoneNumber.length === 10 && values.password.length >= 8) {
+      if (values.phoneNumber.length === 10 && values.password.length >= 8 && values.password === values.confirmPassword) {
         this.setState({
           passwordInvalid: false,
-          phoneNumberInvalid: false
+          phoneNumberInvalid: false,
+          passwordMismatch: false
         });
         this.continue(e);
       } else {
         if (values.phoneNumber.length !== 10) {
           this.setState({
             phoneNumberInvalid: true,
-            passwordInvalid: false
+            passwordInvalid: false,
+            passwordMismatch: false
           });
         }
         if (values.password.length < 8) {
           this.setState({
             passwordInvalid: true,
-            phoneNumberInvalid: false
+            phoneNumberInvalid: false,
+            passwordMismatch: false
           });
+        }
+        if (values.password !== values.confirmPassword) {
+          this.setState({
+            passwordMismatch: true, phoneNumberInvalid: false,
+            passwordInvalid: false,
+          })
         }
       }
 
@@ -90,7 +108,6 @@ export default class SignupHome extends React.Component {
         }
         else {
           this.setState({ isInvalid: true })
-          return;
         }
       })
       .catch(err => {
@@ -99,6 +116,9 @@ export default class SignupHome extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({
+      loading: false,
+    });
     loc(this);
   }
 
@@ -111,119 +131,151 @@ export default class SignupHome extends React.Component {
 
     return (
       <React.Fragment>
-        <View style={styles.container}>
-          <View style={styles.TitleDiv}>
-            <Text style={styles.title}>Create Account</Text>
+        {this.state.loading == true ? (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color='red' />
           </View>
-          <View style={styles.TextInputDiv}>
-            <TextField
-              label='Full Name'
-              onSubmitEditing={this.onSubmit}
-              ref={this.fieldRef}
-              containerStyle={{ width: wp('70%'), height: hp('11%') }}
-              textColor='#FCD705'
-              baseColor="white"
-              tintColor="#FCD705"
-              // onChange={handleChange('fullName')}
-              onChangeText={text => handleChange('fullName', text)}
-              defaultValue={values.fullName}
-            />
-            <TextField
-              label='Email'
-              ref="email"
-              containerStyle={{ width: wp('70%'), height: hp('11%') }}
-              textColor='#FCD705'
-              baseColor="white"
-              autoCapitalize="false"
-              tintColor="#FCD705"
-              keyboardType={'email-address'}
-              // onChange={handleChange('email')}
-              onChangeText={text => handleChange('email', text)}
-              defaultValue={values.email}
-            />
-            <TextField
-              label='Mobile Number'
-              ref="phoneNumber"
-              containerStyle={{ width: wp('70%'), height: hp('11%') }}
-              textColor='#FCD705'
-              baseColor="white"
-              tintColor="#FCD705"
-              onChangeText={text => handleChange('phoneNumber', text)}
-              keyboardType={'number-pad'}
-              defaultValue={values.phoneNumber}
-            />
-            <TextField
-              label='Password'
-              ref="password"
-              containerStyle={{ width: wp('70%'), height: hp('11%') }}
-              textColor='#FCD705'
-              baseColor="white"
-              tintColor="#FCD705"
-              secureTextEntry={true}
-              onChangeText={text => handleChange('password', text)}
-              defaultValue={values.password}
-            />
-          </View>
+        ) :
+          <ScrollView style={styles.container}>
+            <View >
+              <View style={styles.TitleDiv}>
+                <Text style={styles.title}>Create Account</Text>
+              </View>
+              <View style={styles.TextInputDiv}>
+                <TextField
+                  label='Full Name'
+                  onSubmitEditing={this.onSubmit}
+                  ref={this.fieldRef}
+                  containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                  textColor='#FCD705'
+                  baseColor="white"
+                  tintColor="#FCD705"
+                  // onChange={handleChange('fullName')}
+                  onChangeText={text => handleChange('fullName', text)}
+                  defaultValue={values.fullName}
+                />
+                <TextField
+                  label='Email'
+                  ref="email"
+                  containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                  textColor='#FCD705'
+                  baseColor="white"
+                  autoCapitalize="false"
+                  tintColor="#FCD705"
+                  keyboardType={'email-address'}
+                  // onChange={handleChange('email')}
+                  onChangeText={text => handleChange('email', text)}
+                  defaultValue={values.email}
+                />
+                <TextField
+                  label='Mobile Number'
+                  ref="phoneNumber"
+                  containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                  textColor='#FCD705'
+                  baseColor="white"
+                  tintColor="#FCD705"
+                  onChangeText={text => handleChange('phoneNumber', text)}
+                  keyboardType={'number-pad'}
+                  defaultValue={values.phoneNumber}
+                />
+                <View style={{ flexDirection: 'row', }}>
+                  <TextField
+                    label='Password'
+                    ref="password"
+                    containerStyle={{ width: wp('65%'), height: hp('11%') }}
+                    textColor='#FCD705'
+                    baseColor="white"
+                    tintColor="#FCD705"
+                    secureTextEntry={this.state.hidePassword}
+                    onChangeText={text => handleChange('password', text)}
+                    defaultValue={values.password}
+                  />
+                  <TouchableOpacity onPress={this.setPasswordVisibility}>
+                    {this.state.hidePassword === true ?
+                      <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
+                      :
+                      <FontAwesome5 style={styles.hideIcon} name={'eye'} />
 
-          <View style={styles.checkboxDiv}>
-            {/* <CheckBox
+                    }
+                  </TouchableOpacity>
+                </View>
+                <TextField
+                  label='Confirm Password'
+                  ref="confirmPassword"
+                  containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                  textColor='#FCD705'
+                  baseColor="white"
+                  tintColor="#FCD705"
+                  secureTextEntry={true}
+                  onChangeText={text => handleChange('confirmPassword', text)}
+                  defaultValue={values.confirmPassword}
+                />
+              </View>
+
+              <View style={styles.checkboxDiv}>
+                {/* <CheckBox
                     checkedImage={require('../images/Checked.png')}
                     uncheckedImage={require('../images/unChecked.png')}
                     label='I accept all terms and conditions'
                     labelStyle={{ color:'white' }}
                     /> */}
-          </View>
-          <View style={styles.but}>
-            <TouchableOpacity disabled={this.state.clicked} >
-              <Text style={styles.butText} onPress={this.requireField}>Continue</Text>
-            </TouchableOpacity>
-            {this.state.fieldNotEmpty == true ? (
-              <Text style={{ color: 'red' }}>Please enter all values</Text>
-            ) : (
-                <View></View>
-              )}
+              </View>
+              <View style={styles.but}>
+                <TouchableOpacity disabled={this.state.clicked} >
+                  <Text style={styles.butText} onPress={this.requireField}>Continue</Text>
+                </TouchableOpacity>
+                {this.state.fieldNotEmpty == true ? (
+                  <Text style={{ color: 'red' }}>Please enter all values</Text>
+                ) : (
+                    <View></View>
+                  )}
 
-            {this.state.isInvalid == true ? (
-              <Text style={{ color: 'red' }}>Email ID already exists!</Text>
-            ) : (
-                <View></View>
-              )}
+                {this.state.isInvalid == true ? (
+                  <Text style={{ color: 'red' }}>Email ID already exists!</Text>
+                ) : (
+                    <View></View>
+                  )}
 
-            {this.state.phoneNumberInvalid == true && this.state.passwordInvalid === false ? (
-              <Text style={{ color: 'red' }}>Please enter valid phone number</Text>
-            ) : (
-                <View></View>
-              )}
+                {this.state.phoneNumberInvalid == true && this.state.passwordInvalid === false ? (
+                  <Text style={{ color: 'red' }}>Please enter valid phone number</Text>
+                ) : (
+                    <View></View>
+                  )}
 
-            {this.state.passwordInvalid == true && this.state.phoneNumberInvalid == false ? (
-              <Text style={{ color: 'red' }}>Please enter strong password</Text>
-            ) : (
-                <View></View>
-              )}
+                {this.state.passwordInvalid == true && this.state.phoneNumberInvalid == false ? (
+                  <Text style={{ color: 'red' }}>Please enter strong password</Text>
+                ) : (
+                    <View></View>
+                  )}
 
-            {this.state.passwordInvalid == true && this.state.phoneNumberInvalid == true ? (
-              <Text style={{ color: 'red' }}>Please enter strong password and valid phone number</Text>
-            ) : (
-                <View></View>
-              )}
-            <Text style={{ color: 'white', marginTop: wp('3%') }}>Or create using social media</Text>
-          </View>
-          <View style={styles.socialIconDiv}>
-            <TouchableOpacity>
-              <Text style={{ paddingRight: 40 }}>
-                <FontAwesome5 style={styles.fontFacebook} name={'facebook-square'} />
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <FontAwesome5 style={styles.fontInsta} name={'instagram'} />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Text style={{ paddingLeft: 40 }}>
-                <FontAwesome5 style={styles.fontGoogle} name={'google-plus'} />
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+                {this.state.passwordInvalid == true && this.state.phoneNumberInvalid == true ? (
+                  <Text style={{ color: 'red' }}>Please enter strong password and valid phone number</Text>
+                ) : (
+                    <View></View>
+                  )}
+                {this.state.passwordMismatch == true ? (
+                  <Text style={{ color: 'red' }}>Password mismatch!</Text>
+                ) : (
+                    <View></View>
+                  )}
+              </View>
+              {/* <View style={styles.socialIconDiv}>
+              <TouchableOpacity>
+                <Text style={{ paddingRight: 40 }}>
+                  <FontAwesome5 style={styles.fontFacebook} name={'facebook-square'} />
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <FontAwesome5 style={styles.fontInsta} name={'instagram'} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Text style={{ paddingLeft: 40 }}>
+                  <FontAwesome5 style={styles.fontGoogle} name={'google-plus'} />
+                </Text>
+              </TouchableOpacity>
+            </View> */}
+            </View>
+          </ScrollView>}
       </React.Fragment >
     );
   }
@@ -293,5 +345,11 @@ const styles = StyleSheet.create({
   fontGoogle: {
     fontSize: 30,
     color: '#FAFBFF',
+  },
+  hideIcon: {
+    fontSize: 18,
+    color: '#FAFBFF',
+    marginTop: wp(10),
+    // marginRight: hp(5)
   },
 });

@@ -5,7 +5,8 @@ import {
   StyleSheet,
   Image,
   Button,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { TextField } from 'react-native-material-textfield';
@@ -93,8 +94,6 @@ export default class SignupSecond extends React.Component {
   }
 
   signUp = () => {
-    console.log('gender', this.state.radioState);
-    console.log('values', this.props);
     this.props.insertUser();
   }
 
@@ -117,7 +116,7 @@ export default class SignupSecond extends React.Component {
     ];
     // console.log(values);
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.TitleDiv}>
           <Text style={styles.title}>Create Account</Text>
         </View>
@@ -209,26 +208,8 @@ export default class SignupSecond extends React.Component {
               <Text style={styles.butText}>SIGN UP</Text>
             </TouchableOpacity>
           </View>
-          <View style={{ alignItems: 'center' }}>
-            <Text style={{ color: 'white', marginTop: wp('3%') }}>Or create using social media</Text>
-          </View>
         </View>
-        <View style={styles.socialIconDiv}>
-          <TouchableOpacity>
-            <Text style={{ paddingRight: 40 }}>
-              <FontAwesome5 style={styles.fontFacebook} name={'facebook-square'} />
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome5 style={styles.fontInsta} name={'instagram'} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={{ paddingLeft: 40 }}>
-              <FontAwesome5 style={styles.fontGoogle} name={'google-plus'} />
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      </ScrollView>
     );
   }
 }

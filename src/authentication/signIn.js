@@ -28,9 +28,14 @@ export default class Home extends React.Component {
       password: '',
       fieldNotEmpty: false,
       isInvalid: false,
+      hidePassword: true
 
     }
     this.ref = firebase.firestore().collection('signup')
+  }
+
+  setPasswordVisibility = () => {
+    this.setState({ hidePassword: !this.state.hidePassword });
   }
 
   checkUser() {
@@ -105,19 +110,30 @@ export default class Home extends React.Component {
             onChangeText={(text) => this.setState({ email: text })}
             value={this.state.email}
           />
-          <TextField
-            label='Password'
-            onSubmitEditing={this.onSubmit}
-            ref={input => { this.fieldRef = input }}
-            containerStyle={{ width: wp('70%'), }}
-            textColor='#FCD705'
-            baseColor="white"
-            tintColor="#FCD705"
-            minLength={8}
-            secureTextEntry={true}
-            onChangeText={(text) => this.setState({ password: text })}
-            value={this.state.password}
-          />
+          <View style={{ flexDirection: 'row', }}>
+            <TextField
+              label='Password'
+              onSubmitEditing={this.onSubmit}
+              ref={input => { this.fieldRef = input }}
+              containerStyle={{ width: wp('65%'), }}
+              underlineColorAndroid="transparent"
+              textColor='#FCD705'
+              baseColor="white"
+              tintColor="#FCD705"
+              minLength={8}
+              secureTextEntry={this.state.hidePassword}
+              onChangeText={(text) => this.setState({ password: text })}
+              value={this.state.password}
+            />
+            <TouchableOpacity onPress={this.setPasswordVisibility}>
+              {this.state.hidePassword === true ?
+                <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
+                :
+                <FontAwesome5 style={styles.hideIcon} name={'eye'} />
+
+              }
+            </TouchableOpacity>
+          </View>
           {this.state.fieldNotEmpty == true ? (
             <Text style={{ color: 'red' }}>Please enter email and password</Text>
           ) : (
@@ -140,24 +156,6 @@ export default class Home extends React.Component {
             <Text style={styles.butText}>SIGN IN</Text>
           </TouchableOpacity>
         </View>
-        <View>
-          <Text style={styles.socialAccount}>Or create account using social media</Text>
-        </View>
-        <View style={styles.socialIconDiv}>
-          <TouchableOpacity>
-            <Text style={{ paddingRight: 40, }}>
-              <FontAwesome5 style={styles.fontFacebook} name={'facebook-square'} />
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <FontAwesome5 style={styles.fontInsta} name={'instagram'} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={{ paddingLeft: 40, }}>
-              <FontAwesome5 style={styles.fontGoogle} name={'google-plus'} />
-            </Text>
-          </TouchableOpacity>
-        </View>
         <View style={styles.CreateDiv}>
           <View>
             <Text style={styles.pass}>Don't have an account?</Text>
@@ -166,7 +164,12 @@ export default class Home extends React.Component {
             <Text style={styles.pass2}>Create</Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+        {this.state.loading == true ? (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color='red' />
+          </View>
+        ) : <View></View>}
+      </ScrollView >
     );
   }
 }
@@ -183,7 +186,7 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#FCD705',
-    fontSize: hp('8%'),
+    fontSize: hp('6%'),
     fontWeight: 'bold',
   },
   titleSub: {
@@ -235,6 +238,12 @@ const styles = StyleSheet.create({
   fontFacebook: {
     fontSize: 30,
     color: '#FAFBFF',
+  },
+  hideIcon: {
+    fontSize: 18,
+    color: '#FAFBFF',
+    marginTop: wp(10),
+    // marginRight: hp(5)
   },
   fontInsta: {
     fontSize: 30,
