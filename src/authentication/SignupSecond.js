@@ -116,7 +116,7 @@ export default class SignupSecond extends React.Component {
     ];
     // console.log(values);
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView keyboardShouldPersistTaps={ true } style={styles.container}>
         <View style={styles.TitleDiv}>
           <Text style={styles.title}>Create Account</Text>
         </View>

@@ -93,7 +93,7 @@ export default class Home extends React.Component {
   }
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
         <View style={styles.TitleDiv}>
           <Text style={styles.title}>TheMyth</Text>
           <Text style={styles.titleSub}>Sign in to your account</Text>
@@ -242,8 +242,9 @@ const styles = StyleSheet.create({
   hideIcon: {
     fontSize: 18,
     color: '#FAFBFF',
-    marginTop: wp(10),
-    // marginRight: hp(5)
+    marginTop: wp('10.3%'),
+    paddingBottom: wp('1%'),
+    borderBottomColor: '#A9A9A9', borderBottomWidth: 1,
   },
   fontInsta: {
     fontSize: 30,

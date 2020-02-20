@@ -204,7 +204,7 @@ class food extends React.Component {
 
     render() {
         return (
-            <ScrollView style={{ flex: 1, padding: wp('3%') }}>
+            <ScrollView keyboardShouldPersistTaps={ true } style={{ flex: 1, padding: wp('3%') }}>
                 <Text style={{
                     fontSize: wp('5%'),
                     textAlign: 'center',

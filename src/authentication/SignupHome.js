@@ -27,6 +27,7 @@ export default class SignupHome extends React.Component {
     this.state = {
       fieldNotEmpty: false,
       phoneNumberInvalid: false,
+      emailInvalid: false,
       passwordInvalid: false,
       isInvalid: false,
       loading: true,
@@ -55,32 +56,45 @@ export default class SignupHome extends React.Component {
       this.setState({
         fieldNotEmpty: false,
       });
-      if (values.phoneNumber.length === 10 && values.password.length >= 8 && values.password === values.confirmPassword) {
+      let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if (reg.test(values.email) && values.phoneNumber.length === 10 && values.password.length >= 8 && values.password === values.confirmPassword) {
         this.setState({
           passwordInvalid: false,
           phoneNumberInvalid: false,
-          passwordMismatch: false
+          passwordMismatch: false,
+          emailInvalid: false
         });
         this.continue(e);
       } else {
+        if (!reg.test(values.email)) {
+          this.setState({
+            phoneNumberInvalid: false,
+            passwordInvalid: false,
+            passwordMismatch: false,
+            emailInvalid: true
+          });
+        }
         if (values.phoneNumber.length !== 10) {
           this.setState({
             phoneNumberInvalid: true,
             passwordInvalid: false,
-            passwordMismatch: false
+            passwordMismatch: false,
+            emailInvalid: false
           });
         }
         if (values.password.length < 8) {
           this.setState({
             passwordInvalid: true,
             phoneNumberInvalid: false,
-            passwordMismatch: false
+            passwordMismatch: false,
+            emailInvalid: false
           });
         }
         if (values.password !== values.confirmPassword) {
           this.setState({
             passwordMismatch: true, phoneNumberInvalid: false,
             passwordInvalid: false,
+            emailInvalid: false
           })
         }
       }
@@ -136,7 +150,7 @@ export default class SignupHome extends React.Component {
             <ActivityIndicator size="large" color='red' />
           </View>
         ) :
-          <ScrollView style={styles.container}>
+          <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
             <View >
               <View style={styles.TitleDiv}>
                 <Text style={styles.title}>Create Account</Text>
@@ -258,6 +272,11 @@ export default class SignupHome extends React.Component {
                 ) : (
                     <View></View>
                   )}
+                {this.state.emailInvalid == true ? (
+                  <Text style={{ color: 'red' }}>Please enter a valid Email ID</Text>
+                ) : (
+                    <View></View>
+                  )}
               </View>
               {/* <View style={styles.socialIconDiv}>
               <TouchableOpacity>
@@ -349,7 +368,8 @@ const styles = StyleSheet.create({
   hideIcon: {
     fontSize: 18,
     color: '#FAFBFF',
-    marginTop: wp(10),
-    // marginRight: hp(5)
+    marginTop: wp('11.6%'),
+    paddingBottom: wp('2%'),
+    borderBottomColor: '#A9A9A9', borderBottomWidth: 1,
   },
 });
