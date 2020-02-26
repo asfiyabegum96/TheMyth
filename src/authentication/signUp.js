@@ -18,7 +18,6 @@ export default class signup extends React.Component {
       signup: [],
       fullName: '',
       email: '',
-      phoneNumber: '',
       password: '',
       description: '',
       gender: '',
@@ -61,14 +60,13 @@ export default class signup extends React.Component {
     let context = this;
     context.setState({ loadingSecond: true })
     let db = firebase.firestore();
-    const { fullName, email, phoneNumber, password, description, gender, profilePicture } = this.state;
-    const values = { fullName, email, phoneNumber, password, description, gender, profilePicture }
+    const { fullName, email, password, description, gender, profilePicture } = this.state;
+    const values = { fullName, email, password, description, gender, profilePicture }
     firebase.auth().createUserWithEmailAndPassword(email, password).then(function (cred) {
       return db.collection("signup").doc(cred.user.uid).set({
         email: values.email,
         fullName: values.fullName,
         password: values.password,
-        phoneNumber: values.phoneNumber,
         gender: values.gender,
         description: values.description,
         profilePicture: values.profilePicture
@@ -89,8 +87,8 @@ export default class signup extends React.Component {
   render() {
 
     const { step } = this.state;
-    const { fullName, email, phoneNumber, password, description, gender, profilePicture, confirmPassword } = this.state;
-    const values = { fullName, email, phoneNumber, password, description, gender, profilePicture, confirmPassword }
+    const { fullName, email, password, description, gender, profilePicture, confirmPassword } = this.state;
+    const values = { fullName, email, password, description, gender, profilePicture, confirmPassword }
 
     switch (step) {
       case 1:

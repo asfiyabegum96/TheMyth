@@ -100,7 +100,7 @@ export default class Home extends React.Component {
         </View>
         <View style={styles.TextInputDiv}>
           <TextField
-            label='Email'
+            label='Email *'
             onSubmitEditing={this.onSubmit}
             ref={input => { this.fieldRef = input }}
             containerStyle={{ width: wp('70%') }}
@@ -112,7 +112,7 @@ export default class Home extends React.Component {
           />
           <View style={{ flexDirection: 'row', }}>
             <TextField
-              label='Password'
+              label='Password *'
               onSubmitEditing={this.onSubmit}
               ref={input => { this.fieldRef = input }}
               containerStyle={{ width: wp('65%'), }}
@@ -203,8 +203,8 @@ const styles = StyleSheet.create({
     marginTop: wp('3%')
   },
   ForgotPass: {
-    color: 'white',
-    fontSize: hp('2.5%'),
+    color: '#FCD705',
+    fontSize: hp('2.2%'),
   },
   but: {
     left: 130,
@@ -261,11 +261,11 @@ const styles = StyleSheet.create({
   },
   pass: {
     color: 'white',
-    fontSize: hp('2.5%'),
+    fontSize: hp('2.3%'),
   },
   pass2: {
     color: '#FCD705',
-    fontSize: hp('2.5%'),
+    fontSize: hp('2.3%'),
     paddingLeft: 5,
   },
 });

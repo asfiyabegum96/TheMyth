@@ -26,7 +26,6 @@ export default class SignupHome extends React.Component {
     super(props)
     this.state = {
       fieldNotEmpty: false,
-      phoneNumberInvalid: false,
       emailInvalid: false,
       passwordInvalid: false,
       isInvalid: false,
@@ -52,15 +51,14 @@ export default class SignupHome extends React.Component {
   requireField = (e) => {
     this.setState({ clicked: true })
     const values = this.props.values;
-    if (values.email !== '' && values.password !== '' && values.fullName !== '' && values.phoneNumber !== '' && values.confirmPassword !== '') {
+    if (values.email !== '' && values.password !== '' && values.fullName !== '' && values.confirmPassword !== '') {
       this.setState({
         fieldNotEmpty: false,
       });
       let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      if (reg.test(values.email) && values.phoneNumber.length === 10 && values.password.length >= 8 && values.password === values.confirmPassword) {
+      if (reg.test(values.email) && values.password.length >= 8 && values.password === values.confirmPassword) {
         this.setState({
           passwordInvalid: false,
-          phoneNumberInvalid: false,
           passwordMismatch: false,
           emailInvalid: false
         });
@@ -68,31 +66,21 @@ export default class SignupHome extends React.Component {
       } else {
         if (!reg.test(values.email)) {
           this.setState({
-            phoneNumberInvalid: false,
             passwordInvalid: false,
             passwordMismatch: false,
             emailInvalid: true
           });
         }
-        if (values.phoneNumber.length !== 10) {
-          this.setState({
-            phoneNumberInvalid: true,
-            passwordInvalid: false,
-            passwordMismatch: false,
-            emailInvalid: false
-          });
-        }
         if (values.password.length < 8) {
           this.setState({
             passwordInvalid: true,
-            phoneNumberInvalid: false,
             passwordMismatch: false,
             emailInvalid: false
           });
         }
         if (values.password !== values.confirmPassword) {
           this.setState({
-            passwordMismatch: true, phoneNumberInvalid: false,
+            passwordMismatch: true,
             passwordInvalid: false,
             emailInvalid: false
           })
@@ -157,7 +145,7 @@ export default class SignupHome extends React.Component {
               </View>
               <View style={styles.TextInputDiv}>
                 <TextField
-                  label='Full Name'
+                  label='Full Name *'
                   onSubmitEditing={this.onSubmit}
                   ref={this.fieldRef}
                   containerStyle={{ width: wp('70%'), height: hp('11%') }}
@@ -169,7 +157,7 @@ export default class SignupHome extends React.Component {
                   defaultValue={values.fullName}
                 />
                 <TextField
-                  label='Email'
+                  label='Email *'
                   ref="email"
                   containerStyle={{ width: wp('70%'), height: hp('11%') }}
                   textColor='#FCD705'
@@ -181,20 +169,19 @@ export default class SignupHome extends React.Component {
                   onChangeText={text => handleChange('email', text)}
                   defaultValue={values.email}
                 />
-                <TextField
-                  label='Mobile Number'
-                  ref="phoneNumber"
-                  containerStyle={{ width: wp('70%'), height: hp('11%') }}
-                  textColor='#FCD705'
-                  baseColor="white"
-                  tintColor="#FCD705"
-                  onChangeText={text => handleChange('phoneNumber', text)}
-                  keyboardType={'number-pad'}
-                  defaultValue={values.phoneNumber}
-                />
+                {this.state.emailInvalid == true ? (
+                  <Text style={{ color: 'red' }}>Please enter a valid Email ID</Text>
+                ) : (
+                    <View></View>
+                  )}
+                {this.state.isInvalid == true ? (
+                  <Text style={{ color: 'red' }}>Email ID already exists!</Text>
+                ) : (
+                    <View></View>
+                  )}
                 <View style={{ flexDirection: 'row', }}>
                   <TextField
-                    label='Password'
+                    label='Password *'
                     ref="password"
                     containerStyle={{ width: wp('65%'), height: hp('11%') }}
                     textColor='#FCD705'
@@ -214,7 +201,7 @@ export default class SignupHome extends React.Component {
                   </TouchableOpacity>
                 </View>
                 <TextField
-                  label='Confirm Password'
+                  label='Confirm Password *'
                   ref="confirmPassword"
                   containerStyle={{ width: wp('70%'), height: hp('11%') }}
                   textColor='#FCD705'
@@ -224,6 +211,21 @@ export default class SignupHome extends React.Component {
                   onChangeText={text => handleChange('confirmPassword', text)}
                   defaultValue={values.confirmPassword}
                 />
+                {this.state.passwordInvalid == true ? (
+                  <Text style={{ color: 'red' }}>Please enter strong password</Text>
+                ) : (
+                    <View></View>
+                  )}
+                {this.state.passwordMismatch == true ? (
+                  <Text style={{ color: 'red' }}>Password mismatch!</Text>
+                ) : (
+                    <View></View>
+                  )}
+                {this.state.fieldNotEmpty == true ? (
+                  <Text style={{ color: 'red' }}>Please enter all values</Text>
+                ) : (
+                    <View></View>
+                  )}
               </View>
 
               <View style={styles.checkboxDiv}>
@@ -238,45 +240,6 @@ export default class SignupHome extends React.Component {
                 <TouchableOpacity disabled={this.state.clicked} >
                   <Text style={styles.butText} onPress={this.requireField}>Continue</Text>
                 </TouchableOpacity>
-                {this.state.fieldNotEmpty == true ? (
-                  <Text style={{ color: 'red' }}>Please enter all values</Text>
-                ) : (
-                    <View></View>
-                  )}
-
-                {this.state.isInvalid == true ? (
-                  <Text style={{ color: 'red' }}>Email ID already exists!</Text>
-                ) : (
-                    <View></View>
-                  )}
-
-                {this.state.phoneNumberInvalid == true && this.state.passwordInvalid === false ? (
-                  <Text style={{ color: 'red' }}>Please enter valid phone number</Text>
-                ) : (
-                    <View></View>
-                  )}
-
-                {this.state.passwordInvalid == true && this.state.phoneNumberInvalid == false ? (
-                  <Text style={{ color: 'red' }}>Please enter strong password</Text>
-                ) : (
-                    <View></View>
-                  )}
-
-                {this.state.passwordInvalid == true && this.state.phoneNumberInvalid == true ? (
-                  <Text style={{ color: 'red' }}>Please enter strong password and valid phone number</Text>
-                ) : (
-                    <View></View>
-                  )}
-                {this.state.passwordMismatch == true ? (
-                  <Text style={{ color: 'red' }}>Password mismatch!</Text>
-                ) : (
-                    <View></View>
-                  )}
-                {this.state.emailInvalid == true ? (
-                  <Text style={{ color: 'red' }}>Please enter a valid Email ID</Text>
-                ) : (
-                    <View></View>
-                  )}
               </View>
               {/* <View style={styles.socialIconDiv}>
               <TouchableOpacity>

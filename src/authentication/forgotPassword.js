@@ -112,7 +112,8 @@ export default class forgotPassword extends React.Component {
                 </View>
                 <View style={styles.TextInputDiv}>
                     <TextField
-                        label='Enter your email ID to reset'
+                        placeholder='Enter your email ID to reset'
+                        placeholderTextColor='#fff'
                         onSubmitEditing={this.onSubmit}
                         ref={input => { this.fieldRef = input }}
                         containerStyle={{ width: wp('70%') }}
