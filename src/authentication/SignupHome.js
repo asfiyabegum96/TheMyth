@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   },
   TextInputDiv: {
     alignItems: 'center',
-    marginTop: wp('5%')
+    marginTop: wp('15%')
   },
   inputfield: {
     width: wp('88%'),
@@ -309,6 +309,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#FCD705'
   },
   socialIconDiv: {
     flexDirection: 'row',

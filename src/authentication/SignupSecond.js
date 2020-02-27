@@ -121,8 +121,8 @@ export default class SignupSecond extends React.Component {
           <Text style={styles.title}>Create Account</Text>
         </View>
         <View style={{
-          marginTop: wp('5%'),
-          marginBottom: wp('3%'),
+          marginTop: wp('15%'),
+          marginBottom: wp('5%'),
           left: 60
         }}>
           <Text style={{ color: 'white', fontSize: wp('4.5%'), marginBottom: wp('1%') }}>Profile picture:</Text>
@@ -236,11 +236,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FCD705',
     paddingVertical: 8,
     paddingHorizontal: 20,
-    borderRadius: wp('30%'),
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#FCD705',
     fontWeight: 'bold',
   },
   TextInputDiv: {
-    alignItems: 'center'
+    alignItems: 'center',
+    
   },
   inputfield: {
     width: wp('88%'),
@@ -291,6 +294,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#FCD705'
   },
   socialIconDiv: {
     flexDirection: 'row',

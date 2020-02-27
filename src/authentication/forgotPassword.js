@@ -146,12 +146,12 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     TitleDiv: {
-        left: 45,
+        left: 55,
         marginTop: wp('10%')
     },
     title: {
         color: '#FCD705',
-        fontSize: hp('8%'),
+        fontSize: hp('6%'),
         fontWeight: 'bold',
     },
     titleSub: {
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
     },
     TextInputDiv: {
         alignItems: 'center',
+        marginTop: wp('20%')
     },
     ForgotPassDiv: {
         left: 210,
@@ -186,6 +187,9 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 20,
         fontWeight: 'bold',
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#FCD705'
     },
     socialAccount: {
         paddingTop: 5,

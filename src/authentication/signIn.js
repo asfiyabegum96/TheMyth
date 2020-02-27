@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   TitleDiv: {
-    left: 45,
+    left: 55,
     marginTop: wp('10%')
   },
   title: {
@@ -197,6 +197,7 @@ const styles = StyleSheet.create({
   },
   TextInputDiv: {
     alignItems: 'center',
+    marginTop: wp('20%')
   },
   ForgotPassDiv: {
     left: 210,
@@ -210,7 +211,8 @@ const styles = StyleSheet.create({
     left: 130,
     width: wp('35%'),
     marginTop: wp('3%'),
-    alignItems: 'center'
+    alignItems: 'center',
+    
   },
   butText: {
     color: '#22222C',
@@ -221,6 +223,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#FCD705'
   },
   socialAccount: {
     paddingTop: 5,
