@@ -177,7 +177,7 @@ export default class Home extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#fff2e7',
     flex: 1,
   },
   TitleDiv: {
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     
   },
   butText: {
-    color: 'white',
+    color: '#fff2e7',
     fontSize: hp('3%'),
     marginTop: 10,
     borderColor: '#A9A9A9',
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
-    borderRadius:10,
+    borderRadius:6,
     borderWidth: 1,
     borderColor: '#FF7200'
   },

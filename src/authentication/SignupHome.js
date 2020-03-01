@@ -280,7 +280,7 @@ export default class SignupHome extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#fff2e7',
     flex: 1,
   },
   TitleDiv: {
@@ -312,11 +312,11 @@ const styles = StyleSheet.create({
   },
   but: {
     alignItems: 'center',
-    borderRadius: 15,
+    borderRadius: 6,
     marginTop: wp('3%')
   },
   butText: {
-    color: '#fff',
+    color: '#fff2e7',
     fontSize: hp('3%'),
     marginTop: 10,
     borderColor: '#A9A9A9',
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
-    borderRadius: 10,
+    borderRadius: 6,
     borderWidth: 1,
     borderColor: '#FF7200'
   },

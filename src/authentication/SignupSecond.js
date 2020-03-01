@@ -230,7 +230,7 @@ export default class SignupSecond extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#fff2e7',
     flex: 1,
   },
   TitleDiv: {
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF7200',
     paddingVertical: 8,
     paddingHorizontal: 20,
-    borderRadius:10,
+    borderRadius:6,
     borderWidth: 1,
     borderColor: '#FF7200',
     fontWeight: 'bold',
@@ -296,11 +296,11 @@ const styles = StyleSheet.create({
     marginLeft: 35,
   },
   but: {
-    borderRadius: 15,
+    borderRadius: 6,
     marginTop: wp('1%')
   },
   butText: {
-    color: '#fff',
+    color: '#fff2e7',
     fontSize: hp('2%'),
     marginTop: 10,
     borderColor: '#A9A9A9',
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
-    borderRadius:10,
+    borderRadius:6,
     borderWidth: 1,
     borderColor: '#FF7200'
   },
