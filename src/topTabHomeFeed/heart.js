@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     },
     filledHeart: {
         // backgroundColor: '#e31745',
-        backgroundColor: '#FCD705',
+        backgroundColor: '#FF7200',
     },
     fit: {
         transform: [

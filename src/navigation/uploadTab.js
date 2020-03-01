@@ -28,7 +28,7 @@ import firebase from 'react-native-firebase';
 
 
 
-class food extends React.Component {
+class photosUpload extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -154,7 +154,6 @@ class food extends React.Component {
                 },
                 (error) => {
                     unsubscribe();
-                    console.error(error);
                 },
             );
         } else {
@@ -204,20 +203,36 @@ class food extends React.Component {
 
     render() {
         return (
-            <ScrollView keyboardShouldPersistTaps={ true } style={{ flex: 1, padding: wp('3%') }}>
+            <ScrollView keyboardShouldPersistTaps={true} style={{ flex: 1, padding: wp('3%') }}>
+                <View style={styles.logo}>
+                    {/* <Text style={styles.title}>TheMyth</Text>
+                    <Text style={styles.titleSub}>Reset Password</Text> */}
+                    <Image
+                        source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+                        style={{
+                            width: wp('25%'),
+                            height: hp('15%'),
+                            borderRadius: wp('30%'),
+                            resizeMode: 'cover',
+                            marginLeft: wp('20%'),
+                            marginTop: wp('5%')
+                        }} />
+                </View>
                 <Text style={{
                     fontSize: wp('5%'),
                     textAlign: 'center',
-                    fontWeight: 'bold'
-                }}>Food Upload </Text>
+                    fontWeight: 'bold',
+                    color: '#FF7200',
+                    marginTop: wp('10%')
+                }}>Photos Upload </Text>
                 <View
                     style={{
-                        borderBottomColor: '#22222C',
+                        borderBottomColor: '#FF7200',
                         borderBottomWidth: 1,
-                        marginTop: wp('2%')
+                        marginTop: wp('3%')
                     }} />
                 <View style={{ alignItems: 'center' }}>
-                    <View style={{ paddingTop: wp('3%'), }}>
+                    <View style={{ paddingTop: wp('5%'), }}>
                         {
                             this.state.uri &&
                             <Image
@@ -225,18 +240,18 @@ class food extends React.Component {
                                 style={{
                                     width: wp('40%'),
                                     height: hp('20%'),
-                                    resizeMode: 'cover'
+                                    resizeMode: 'cover',
                                 }} />
                         }
                     </View>
-                    <View style={{ paddingTop: wp('3%') }}>
+                    <View style={styles.imagePick}>
                         <TouchableOpacity style={styles.uploadImageButton}
                             onPress={this.selectImage}>
                             <View>
                                 <FontAwesome5 name='images' style={styles.images} />
                             </View>
                             <View>
-                                <Text>PICK IMAGE</Text>
+                                <Text style={styles.buttonText}>PICK IMAGE</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -252,9 +267,9 @@ class food extends React.Component {
                             width: wp('90%'),
                             height: wp('17%')
                         }}
-                        textColor='#006B38FF'
+                        textColor='#FF7200'
                         baseColor="#121212"
-                        tintColor="#006B38FF"
+                        tintColor="#FF7200"
                     />
                     <TextField
                         editable={true}
@@ -266,9 +281,9 @@ class food extends React.Component {
                             width: wp('90%'),
                             height: wp('17%')
                         }}
-                        textColor='#006B38FF'
+                        textColor='#FF7200'
                         baseColor="#121212"
-                        tintColor="#006B38FF"
+                        tintColor="#FF7200"
                     />
                 </View>
                 {/* <View>
@@ -284,10 +299,10 @@ class food extends React.Component {
                 <View>
                     {this.state.uploading == true ? (
                         <View style={{ marginTop: wp('2%'), }}>
-                            <Text style={{ color: '#006B38FF' }}>{this.state.progress}%</Text>
+                            <Text style={{ color: '#FF7200' }}>{this.state.progress}%</Text>
                             <View>
                                 {this.state.progress != 100 ? (
-                                    <ActivityIndicator size='small' color='#006B38FF' />
+                                    <ActivityIndicator size='small' color='#FF7200' />
                                 ) : (
                                         <View>
                                             <Text>Processing</Text>
@@ -305,129 +320,17 @@ class food extends React.Component {
                 ) : (
                         <View></View>
                     )}
-                <View style={{ paddingTop: wp('3%'), paddingBottom: wp('5%') }}>
+                <View style={styles.uploadImageStyle}>
                     <TouchableOpacity style={styles.uploadButton} onPress={() => this.uploadImage()}>
                         <View>
-                            <MaterialCommunityIcons name='upload' size={20} />
+                            <MaterialCommunityIcons style={{ color: '#fff', }} name='upload' size={20} />
                         </View>
                         <View>
-                            <Text>UPLOAD</Text>
+                            <Text style={styles.buttonText}>UPLOAD</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
             </ScrollView >
-        );
-    }
-}
-
-class travel extends React.Component {
-
-    state = {
-        imageSource: null
-    }
-
-    selectImage = async () => {
-        ImagePicker.launchImageLibrary({ noData: true, mediaType: 'mixed' }, (response) => {
-            console.log('Response = ', response);
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-                console.log('User tapped custom button: ', response.customButton);
-            } else {
-                // You can also display the image using data:
-                // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-                this.setState({
-                    imageSource: response.uri,
-                });
-            }
-        });
-    }
-
-    render() {
-        return (
-            <ScrollView style={{ flex: 1, padding: wp('3%') }}>
-                <Text style={{
-                    fontSize: wp('5%'),
-                    textAlign: 'center',
-                    fontWeight: 'bold'
-                }}>Travel Upload</Text>
-                <View
-                    style={{
-                        borderBottomColor: '#22222C',
-                        borderBottomWidth: 1,
-                        marginTop: wp('2%')
-                    }} />
-                <View style={{ alignItems: 'center' }}>
-                    <View style={{ paddingTop: wp('3%') }}>
-                        {
-                            this.state.imageSource &&
-                            <Image
-                                source={{ uri: this.state.imageSource }}
-                                style={{
-                                    width: wp('40%'),
-                                    height: hp('30%'),
-                                    resizeMode: 'cover'
-                                }} />
-                        }
-                    </View>
-                    <View style={{ paddingTop: wp('3%') }}>
-                        <TouchableOpacity style={styles.uploadImageButton}
-                            onPress={this.selectImage}>
-                            <View>
-                                <FontAwesome5 name='images' style={styles.images} />
-                            </View>
-                            <View>
-                                <Text>PICK IMAGE</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={{ paddingVertical: wp('1%'), alignItems: 'center' }}>
-                    <TextField
-                        label='Title'
-                        containerStyle={{
-                            width: wp('90%'),
-                            height: wp('17%')
-                        }}
-                        textColor='#FCD705'
-                        baseColor="#121212"
-                        tintColor="#FCD705"
-                    />
-                    <TextField
-                        label='Description'
-                        containerStyle={{
-                            width: wp('90%'),
-                            height: wp('17%')
-                        }}
-                        textColor='#FCD705'
-                        baseColor="#121212"
-                        tintColor="#FCD705"
-                    />
-                </View>
-                <View>
-                    <TouchableOpacity style={styles.uploadButton}>
-                        <View>
-                            <FontAwesome5 name='map-marker' style={styles.location} />
-                        </View>
-                        <View>
-                            <Text>LOCATION</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-
-                <View style={{ paddingTop: wp('3%'), paddingBottom: wp('5%') }}>
-                    <TouchableOpacity style={styles.uploadButton}>
-                        <View>
-                            <MaterialCommunityIcons name='upload' size={20} />
-                        </View>
-                        <View>
-                            <Text>UPLOAD</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
         );
     }
 }
@@ -437,21 +340,22 @@ const styles = StyleSheet.create({
         alignItems: 'baseline',
         justifyContent: 'center',
         borderWidth: wp('0.5%'),
-        borderColor: '#121212',
+        borderColor: '#FF7200',
         padding: wp('1%'),
-        borderRadius: wp('1%')
+        borderRadius: wp('1%'),
     },
     uploadButton: {
         flexDirection: 'row',
         alignItems: 'baseline',
         justifyContent: 'center',
         borderWidth: wp('0.5%'),
-        borderColor: '#121212',
+        borderColor: '#FF7200',
         padding: wp('1%'),
-        borderRadius: wp('1%')
+        borderRadius: wp('1%'),
+
     },
     images: {
-        color: '#121212',
+        color: '#fff',
         fontSize: hp('2%'),
         paddingVertical: wp('0.5%'),
         paddingHorizontal: wp('0.8%'),
@@ -461,39 +365,27 @@ const styles = StyleSheet.create({
         fontSize: hp('2%'),
         paddingVertical: wp('0.5%'),
         paddingHorizontal: wp('0.8%'),
-    }
+    },
+    logo: {
+        left: 55,
+    },
+    imagePick: {
+        marginTop: wp('5%'),
+        paddingTop: wp('1%'), backgroundColor: '#FF7200',
+        borderRadius: wp('1%'),
+        borderWidth: wp('0.5%'),
+        borderColor: '#FF7200',
+    },
+    uploadImageStyle: {
+        marginTop: wp('5%'),
+        paddingTop: wp('1%'), 
+        paddingBottom: wp('1%'),
+         backgroundColor: '#FF7200',
+        borderRadius: wp('1%'),
+        borderWidth: wp('0.5%'),
+        borderColor: '#FF7200',
+    },
+    buttonText: { color: 'white', fontWeight: 'bold' }
 });
 
-const uploadNavigator = createMaterialTopTabNavigator(
-    {
-        Home: food,
-        Second: travel,
-    },
-    {
-        navigationOptions: {
-            swipeEnabled: true
-        },
-        tabBarOptions: {
-            activeTintColor: '#FCD705',
-            inactiveTintColor: 'white',
-            showIcon: true,
-            showLabel: false,
-            style: {
-                backgroundColor: '#121212',
-                borderBottomColor: wp('0.5%'),
-            }
-        },
-    },
-)
-food.navigationOptions = {
-    tabBarIcon: ({ tintColor, focused }) => (
-        <MaterialCommunityIcons name="food" size={25} color={tintColor} />
-    )
-}
-travel.navigationOptions = {
-    tabBarIcon: ({ tintColor, focused }) => (
-        <MaterialCommunityIcons name="wallet-travel" size={25} color={tintColor} />
-    )
-}
-
-export default createAppContainer(uploadNavigator);
+export default photosUpload;
