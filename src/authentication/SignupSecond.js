@@ -117,15 +117,29 @@ export default class SignupSecond extends React.Component {
     // console.log(values);
     return (
       <ScrollView keyboardShouldPersistTaps={ true } style={styles.container}>
+        <View style={styles.logo}>
+                {/* <Text style={styles.title}>TheMyth</Text>
+                    <Text style={styles.titleSub}>Reset Password</Text> */}
+                <Image
+                  source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+                  style={{
+                    width: wp('25%'),
+                    height: hp('15%'),
+                    borderRadius: wp('30%'),
+                    resizeMode: 'cover',
+                    marginLeft: wp('20%'),
+                    marginTop: wp('5%')
+                  }} />
+              </View>
         <View style={styles.TitleDiv}>
           <Text style={styles.title}>Create Account</Text>
         </View>
         <View style={{
-          marginTop: wp('15%'),
+          marginTop: wp('10%'),
           marginBottom: wp('5%'),
           left: 60
         }}>
-          <Text style={{ color: 'white', fontSize: wp('4.5%'), marginBottom: wp('1%') }}>Profile picture:</Text>
+          <Text style={{ color: 'black', fontSize: wp('4.5%'), marginBottom: wp('1%') }}>Profile picture:</Text>
         </View>
         <View style={{
           flexDirection: 'row',
@@ -165,15 +179,15 @@ export default class SignupSecond extends React.Component {
             label='Description'
             ref="Description"
             containerStyle={{ width: wp('70%'), height: hp('11%') }}
-            textColor='#FCD705'
-            baseColor="white"
-            tintColor="#FCD705"
+            textColor='#FF7200'
+            baseColor="black"
+            tintColor="#FF7200"
             onChangeText={text => handleChange('description', text)}
             defaultValue={values.description}
           />
         </View>
         <View>
-          <Text style={{ color: 'white', left: 60, marginBottom: 8, fontSize: wp('4.5%'), marginTop: wp('1%') }}>Gender :</Text>
+          <Text style={{ color: 'black', left: 60, marginBottom: 8, fontSize: wp('4.5%'), marginTop: wp('1%') }}>Gender :</Text>
           <View>
             {options.map(item => {
               return (
@@ -192,7 +206,7 @@ export default class SignupSecond extends React.Component {
                     </TouchableOpacity>
                   </View>
                   <View>
-                    <Text style={{ color: 'white', marginLeft: 10 }}>{item.text}</Text>
+                    <Text style={{ color: 'black', marginLeft: 10 }}>{item.text}</Text>
                   </View>
                 </View>
               );
@@ -216,29 +230,29 @@ export default class SignupSecond extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#121212',
+    backgroundColor: '#fff',
     flex: 1,
   },
   TitleDiv: {
     alignItems: 'center',
-    marginTop: wp('15%')
+    marginTop: wp('5%')
   },
   title: {
-    color: '#FCD705',
+    color: '#FF7200',
     fontSize: hp('4%'),
     fontWeight: 'bold',
   },
   selectImage: {
-    color: '#22222C',
+    color: '#fff',
     fontSize: hp('2%'),
     marginTop: 10,
     borderColor: '#A9A9A9',
-    backgroundColor: '#FCD705',
+    backgroundColor: '#FF7200',
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius:10,
     borderWidth: 1,
-    borderColor: '#FCD705',
+    borderColor: '#FF7200',
     fontWeight: 'bold',
   },
   TextInputDiv: {
@@ -253,7 +267,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#22222C',
     marginBottom: 10,
-    borderColor: '#FCD705',
+    borderColor: '#FF7200',
     backgroundColor: '#A19FA3',
   },
   buttonContainer: {
@@ -276,7 +290,7 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: '#FCD705',
+    backgroundColor: '#FF7200',
   },
   checkboxDiv: {
     marginLeft: 35,
@@ -286,17 +300,17 @@ const styles = StyleSheet.create({
     marginTop: wp('1%')
   },
   butText: {
-    color: '#22222C',
+    color: '#fff',
     fontSize: hp('2%'),
     marginTop: 10,
     borderColor: '#A9A9A9',
-    backgroundColor: '#FCD705',
+    backgroundColor: '#FF7200',
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
     borderRadius:10,
     borderWidth: 1,
-    borderColor: '#FCD705'
+    borderColor: '#FF7200'
   },
   socialIconDiv: {
     flexDirection: 'row',
@@ -315,5 +329,8 @@ const styles = StyleSheet.create({
   fontGoogle: {
     fontSize: 30,
     color: '#FAFBFF',
+  },
+  logo: {
+    left: 55,
   },
 });

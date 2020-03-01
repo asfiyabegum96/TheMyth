@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
-  ScrollView
+  ScrollView,
+  Image
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { TextField } from 'react-native-material-textfield';
@@ -140,6 +141,20 @@ export default class SignupHome extends React.Component {
         ) :
           <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
             <View >
+              <View style={styles.logo}>
+                {/* <Text style={styles.title}>TheMyth</Text>
+                    <Text style={styles.titleSub}>Reset Password</Text> */}
+                <Image
+                  source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+                  style={{
+                    width: wp('25%'),
+                    height: hp('15%'),
+                    borderRadius: wp('30%'),
+                    resizeMode: 'cover',
+                    marginLeft: wp('20%'),
+                    marginTop: wp('5%')
+                  }} />
+              </View>
               <View style={styles.TitleDiv}>
                 <Text style={styles.title}>Create Account</Text>
               </View>
@@ -149,9 +164,9 @@ export default class SignupHome extends React.Component {
                   onSubmitEditing={this.onSubmit}
                   ref={this.fieldRef}
                   containerStyle={{ width: wp('70%'), height: hp('11%') }}
-                  textColor='#FCD705'
-                  baseColor="white"
-                  tintColor="#FCD705"
+                  textColor='#FF7200'
+                  baseColor="black"
+                  tintColor="#FF7200"
                   // onChange={handleChange('fullName')}
                   onChangeText={text => handleChange('fullName', text)}
                   defaultValue={values.fullName}
@@ -160,10 +175,10 @@ export default class SignupHome extends React.Component {
                   label='Email *'
                   ref="email"
                   containerStyle={{ width: wp('70%'), height: hp('11%') }}
-                  textColor='#FCD705'
-                  baseColor="white"
+                  textColor='#FF7200'
+                  baseColor="black"
                   autoCapitalize="false"
-                  tintColor="#FCD705"
+                  tintColor="#FF7200"
                   keyboardType={'email-address'}
                   // onChange={handleChange('email')}
                   onChangeText={text => handleChange('email', text)}
@@ -184,9 +199,9 @@ export default class SignupHome extends React.Component {
                     label='Password *'
                     ref="password"
                     containerStyle={{ width: wp('65%'), height: hp('11%') }}
-                    textColor='#FCD705'
-                    baseColor="white"
-                    tintColor="#FCD705"
+                    textColor='#FF7200'
+                    baseColor="black"
+                    tintColor="#FF7200"
                     secureTextEntry={this.state.hidePassword}
                     onChangeText={text => handleChange('password', text)}
                     defaultValue={values.password}
@@ -204,9 +219,9 @@ export default class SignupHome extends React.Component {
                   label='Confirm Password *'
                   ref="confirmPassword"
                   containerStyle={{ width: wp('70%'), height: hp('11%') }}
-                  textColor='#FCD705'
-                  baseColor="white"
-                  tintColor="#FCD705"
+                  textColor='#FF7200'
+                  baseColor="black"
+                  tintColor="#FF7200"
                   secureTextEntry={true}
                   onChangeText={text => handleChange('confirmPassword', text)}
                   defaultValue={values.confirmPassword}
@@ -265,21 +280,21 @@ export default class SignupHome extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#121212',
+    backgroundColor: '#fff',
     flex: 1,
   },
   TitleDiv: {
     alignItems: 'center',
-    marginTop: wp('15%')
+    marginTop: wp('5%')
   },
   title: {
-    color: '#FCD705',
+    color: '#FF7200',
     fontSize: hp('4%'),
     fontWeight: 'bold',
   },
   TextInputDiv: {
     alignItems: 'center',
-    marginTop: wp('15%')
+    marginTop: wp('10%')
   },
   inputfield: {
     width: wp('88%'),
@@ -289,7 +304,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#22222C',
     marginBottom: 10,
-    borderColor: '#FCD705',
+    borderColor: '#FF7200',
     backgroundColor: '#A19FA3',
   },
   checkboxDiv: {
@@ -301,17 +316,17 @@ const styles = StyleSheet.create({
     marginTop: wp('3%')
   },
   butText: {
-    color: '#22222C',
+    color: '#fff',
     fontSize: hp('3%'),
     marginTop: 10,
     borderColor: '#A9A9A9',
-    backgroundColor: '#FCD705',
+    backgroundColor: '#FF7200',
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
-    borderRadius:10,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#FCD705'
+    borderColor: '#FF7200'
   },
   socialIconDiv: {
     flexDirection: 'row',
@@ -333,9 +348,12 @@ const styles = StyleSheet.create({
   },
   hideIcon: {
     fontSize: 18,
-    color: '#FAFBFF',
-    marginTop: wp('11.6%'),
+    color: '#000',
+    marginTop: wp('11.7%'),
     paddingBottom: wp('2%'),
-    borderBottomColor: '#A9A9A9', borderBottomWidth: 1,
+    borderBottomColor: '#000', borderBottomWidth: 0.5,
+  },
+  logo: {
+    left: 55,
   },
 });

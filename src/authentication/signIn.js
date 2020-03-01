@@ -95,7 +95,7 @@ export default class Home extends React.Component {
     return (
       <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
         <View style={styles.TitleDiv}>
-          <Text style={styles.title}>TheMyth</Text>
+          <Text style={styles.title}>Myth</Text>
           <Text style={styles.titleSub}>Sign in to your account</Text>
         </View>
         <View style={styles.TextInputDiv}>
@@ -104,9 +104,9 @@ export default class Home extends React.Component {
             onSubmitEditing={this.onSubmit}
             ref={input => { this.fieldRef = input }}
             containerStyle={{ width: wp('70%') }}
-            textColor='#FCD705'
-            baseColor="white"
-            tintColor="#FCD705"
+            textColor='#FF7200'
+            baseColor="black"
+            tintColor="#FF7200"
             onChangeText={(text) => this.setState({ email: text })}
             value={this.state.email}
           />
@@ -117,9 +117,9 @@ export default class Home extends React.Component {
               ref={input => { this.fieldRef = input }}
               containerStyle={{ width: wp('65%'), }}
               underlineColorAndroid="transparent"
-              textColor='#FCD705'
-              baseColor="white"
-              tintColor="#FCD705"
+              textColor='#FF7200'
+              baseColor="black"
+              tintColor="#FF7200"
               minLength={8}
               secureTextEntry={this.state.hidePassword}
               onChangeText={(text) => this.setState({ password: text })}
@@ -177,7 +177,7 @@ export default class Home extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#121212',
+    backgroundColor: '#fff',
     flex: 1,
   },
   TitleDiv: {
@@ -185,12 +185,12 @@ const styles = StyleSheet.create({
     marginTop: wp('10%')
   },
   title: {
-    color: '#FCD705',
+    color: '#FF7200',
     fontSize: hp('6%'),
     fontWeight: 'bold',
   },
   titleSub: {
-    color: '#FCD705',
+    color: '#FF7200',
     fontSize: hp('3%'),
     marginBottom: 10,
     marginTop: 5,
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     marginTop: wp('3%')
   },
   ForgotPass: {
-    color: '#FCD705',
+    color: '#FF7200',
     fontSize: hp('2.2%'),
   },
   but: {
@@ -215,17 +215,17 @@ const styles = StyleSheet.create({
     
   },
   butText: {
-    color: '#22222C',
+    color: 'white',
     fontSize: hp('3%'),
     marginTop: 10,
     borderColor: '#A9A9A9',
-    backgroundColor: '#FCD705',
+    backgroundColor: '#FF7200',
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
     borderRadius:10,
     borderWidth: 1,
-    borderColor: '#FCD705'
+    borderColor: '#FF7200'
   },
   socialAccount: {
     paddingTop: 5,
@@ -246,10 +246,10 @@ const styles = StyleSheet.create({
   },
   hideIcon: {
     fontSize: 18,
-    color: '#FAFBFF',
+    color: '#000',
     marginTop: wp('10.3%'),
     paddingBottom: wp('1%'),
-    borderBottomColor: '#A9A9A9', borderBottomWidth: 1,
+    borderBottomColor: '#000', borderBottomWidth: 0.5,
   },
   fontInsta: {
     fontSize: 30,
@@ -265,11 +265,11 @@ const styles = StyleSheet.create({
     marginTop: wp('3%')
   },
   pass: {
-    color: 'white',
+    color: 'black',
     fontSize: hp('2.3%'),
   },
   pass2: {
-    color: '#FCD705',
+    color: '#FF7200',
     fontSize: hp('2.3%'),
     paddingLeft: 5,
   },

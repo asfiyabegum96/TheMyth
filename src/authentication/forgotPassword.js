@@ -5,9 +5,9 @@ import {
     StyleSheet,
     ScrollView,
     TouchableOpacity,
+    Image
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -107,19 +107,29 @@ export default class forgotPassword extends React.Component {
         return (
             <ScrollView style={styles.container}>
                 <View style={styles.TitleDiv}>
-                    <Text style={styles.title}>TheMyth</Text>
-                    <Text style={styles.titleSub}>Reset Password</Text>
+                    {/* <Text style={styles.title}>TheMyth</Text>
+                    <Text style={styles.titleSub}>Reset Password</Text> */}
+                    <Image
+                        source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+                        style={{
+                            width: wp('25%'),
+                            height: hp('15%'),
+                            borderRadius: wp('30%'),
+                            resizeMode: 'cover',
+                            marginLeft: wp('20%'),
+                            marginTop: wp('20%')
+                        }} />
                 </View>
                 <View style={styles.TextInputDiv}>
                     <TextField
                         placeholder='Enter your email ID to reset'
-                        placeholderTextColor='#fff'
+                        placeholderTextColor='#000'
                         onSubmitEditing={this.onSubmit}
                         ref={input => { this.fieldRef = input }}
                         containerStyle={{ width: wp('70%') }}
-                        textColor='#FCD705'
-                        baseColor="white"
-                        tintColor="#FCD705"
+                        textColor='#FF7200'
+                        baseColor="black"
+                        tintColor="#FF7200"
                         onChangeText={(text) => this.setState({ email: text })}
                         value={this.state.email}
                     />
@@ -142,27 +152,27 @@ export default class forgotPassword extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#121212',
+        backgroundColor: '#fff',
         flex: 1,
     },
     TitleDiv: {
         left: 55,
-        marginTop: wp('10%')
+        marginTop: wp('30%')
     },
     title: {
-        color: '#FCD705',
+        color: '#FF7200',
         fontSize: hp('6%'),
         fontWeight: 'bold',
     },
     titleSub: {
-        color: '#FCD705',
+        color: '#FF7200',
         fontSize: hp('3%'),
         marginBottom: 10,
         marginTop: 5,
     },
     TextInputDiv: {
         alignItems: 'center',
-        marginTop: wp('20%')
+        marginTop: wp('10%'),
     },
     ForgotPassDiv: {
         left: 210,
@@ -179,17 +189,17 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     butText: {
-        color: '#22222C',
+        color: '#fff',
         fontSize: hp('3%'),
         marginTop: 10,
         borderColor: '#A9A9A9',
-        backgroundColor: '#FCD705',
+        backgroundColor: '#FF7200',
         paddingVertical: 8,
         paddingHorizontal: 20,
         fontWeight: 'bold',
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#FCD705'
+        borderColor: '#FF7200'
     },
     socialAccount: {
         paddingTop: 5,
@@ -226,7 +236,7 @@ const styles = StyleSheet.create({
         fontSize: hp('2.5%'),
     },
     pass2: {
-        color: '#FCD705',
+        color: '#FF7200',
         fontSize: hp('2.5%'),
         paddingLeft: 5,
     },

@@ -255,7 +255,8 @@ export default class mainFeed extends React.Component {
                     <View style={{
                       flexDirection: 'row',
                       paddingHorizontal: wp('2%'),
-                      paddingVertical: wp('2%')
+                      paddingVertical: wp('2%'),
+                      marginLeft: wp('1.3%')
                     }}>
                       <TouchableWithoutFeedback onPress={() => this.onLikePost({ item, index })} >
                         <Animated.View style={heartButtonStyle}>
@@ -271,9 +272,9 @@ export default class mainFeed extends React.Component {
                       <View>
                       </View>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: wp('2%') }}>
                       <Text style={styles.likeText}>{item.likes} likes</Text>
-                      <Text>{item.postedTime}</Text>
+                      <Text style={{ marginRight: wp('4%') }}>{item.postedTime}</Text>
                     </View>
                   </View>
                 </View>
@@ -337,8 +338,9 @@ const styles = StyleSheet.create({
     paddingVertical: wp('2%'),
   },
   listViewInlineImg: {
-    width: wp('97%'),
+    width: wp('91%'),
     height: wp('60%'),
+    marginLeft: wp('3.5%'),
     // height: 275, 
     // resizeMode:'center',
     borderWidth: 1,
@@ -346,7 +348,7 @@ const styles = StyleSheet.create({
     // borderColor: '#FCD705',
   },
   foodNameDiv: {
-    left: 10,
+    left: 16,
     flexDirection: 'row',
     alignItems: 'baseline',
   },
@@ -354,7 +356,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2.5%'),
   },
   locationDiv: {
-    left: 10,
+    left: 16,
     flexDirection: 'row',
     alignItems: 'baseline'
   },

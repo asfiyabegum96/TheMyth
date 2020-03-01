@@ -29,7 +29,7 @@ YellowBox.ignoreWarnings(['ViewPagerAndroid']);
 
 const AppIndex = createAppContainer(TopNavigator);
 
-const yellow = '#FCD705';
+const orange = '#FF7200';
 
 export default class homeFixed extends React.Component {
 
@@ -64,9 +64,9 @@ export default class homeFixed extends React.Component {
             <FontAwesome5 style={styles.camera} name={'camera'} />
           </TouchableOpacity>
           <TextInput style={styles.inputSearch}
-            selectionColor={yellow}
+            selectionColor={orange}
             placeholder="Search"
-            placeholderTextColor='#FCD705'
+            placeholderTextColor='#FF7200'
           />
           <TouchableOpacity onPress={() => this.props.navigation.navigate('profile')}>
             <FontAwesome5 style={styles.profile} name={'user-alt'} />
@@ -93,17 +93,17 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#121212',
+    backgroundColor: '#fff',
     padding: 10,
   },
   camera: {
-    color: '#FCD705',
+    color: '#FF7200',
     fontSize: hp('3.5%'),
     paddingLeft: 8,
     marginTop: 5,
   },
   profile: {
-    color: '#FCD705',
+    color: '#FF7200',
     fontSize: hp('3.5%'),
     marginTop: 5,
   },
@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
     width: wp('70%'),
     paddingVertical: 2,
     borderBottomWidth: 1,
-    borderBottomColor: 'yellow',
+    borderBottomColor: '#FF7200',
     fontSize: 20,
     backgroundColor: 'transparent',
-    color: '#FCD705'
+    color: '#FF7200'
   },
   fabDiv: {
     position: 'absolute',
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   fabIcon: {
-    color: '#FCD705',
+    color: '#FF7200',
     padding: wp('3%'),
     marginRight: wp('1%')
   },
