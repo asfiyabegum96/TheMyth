@@ -287,18 +287,7 @@ export default class mainFeed extends React.Component {
   }
 }
 
-mainFeed.navigationOptions = {
-  tabBarIcon: ({ tintColor, focused }) => (
-    <FontAwesome5 name={'globe'}
-      style={styles.globe}
-      color={tintColor} />
-  )
-}
-
 const styles = StyleSheet.create({
-  globe: {
-    fontSize: hp('3%'),
-  },
   // elevation:{
   //   marginBottom: hp('2%'),
   //   borderColor:'#ffffff',

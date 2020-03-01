@@ -50,16 +50,30 @@ class Mainscreen extends React.Component {
     );
   }
 }
+const styles = StyleSheet.create({
+  globe: {
+    fontSize: hp('3%'),
+  },
+})
 const TopNavigator = createMaterialTopTabNavigator(
   {
-    Home: Mainscreen,
+    Home: {
+      screen: Mainscreen,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor, focused }) => (
+          <FontAwesome5 name={'globe'}
+            style={styles.globe}
+            color={tintColor} />
+        )
+      }
+    },
     Second: connect,
     Third: diary,
     Fourth: notification,
   },
   {
     tabBarOptions: {
-      activeTintColor: '#FCD705',
+      activeTintColor: '#FF7200',
       inactiveTintColor: '#22222C',
       showIcon: true,
       showLabel: false,

@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   fab: {
-    backgroundColor: '#121212',
+    backgroundColor: '#fff',
     alignItems: 'center',
     width: wp('15%'),
     borderRadius: wp('10%'),
