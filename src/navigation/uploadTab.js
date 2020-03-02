@@ -188,7 +188,8 @@ class photosUpload extends React.Component {
             saved: saved,
             url: imageUrl,
             userAvatar: userAvatar,
-            docRef: imageId
+            docRef: imageId,
+            email: this.props.screenProps.navigation.state.params.email
         }
 
         firebase.firestore().collection('photos').doc(imageId).set(photoObj).then(function (docRef) {
@@ -378,9 +379,9 @@ const styles = StyleSheet.create({
     },
     uploadImageStyle: {
         marginTop: wp('5%'),
-        paddingTop: wp('1%'), 
+        paddingTop: wp('1%'),
         paddingBottom: wp('1%'),
-         backgroundColor: '#FF7200',
+        backgroundColor: '#FF7200',
         borderRadius: wp('1%'),
         borderWidth: wp('0.5%'),
         borderColor: '#FF7200',

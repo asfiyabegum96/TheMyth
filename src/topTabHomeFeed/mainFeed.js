@@ -227,8 +227,7 @@ export default class mainFeed extends React.Component {
                 <View key={index} style={{ paddingHorizontal: wp('1%'), marginTop: hp('1%') }}>
                   <View style={styles.feedBorder}>
                     <View style={styles.listHeader}>
-                      <TouchableOpacity style={{ paddingHorizontal: 10, }}
-                        onPress={() => this.props.navigation.navigate('profile')}>
+                      <TouchableOpacity style={{ paddingHorizontal: 10, }}>
                         <UserAvatar size="50" name={item.author}
                           src={item.userAvatar}
                         />

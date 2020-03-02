@@ -68,7 +68,7 @@ export default class homeFixed extends React.Component {
             placeholder="Search"
             placeholderTextColor='#FF7200'
           />
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('profile')}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim() })}>
             <FontAwesome5 style={styles.profile} name={'user-alt'} />
           </TouchableOpacity>
         </View>
