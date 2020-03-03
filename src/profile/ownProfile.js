@@ -8,6 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  Alert,
+  ActivityIndicator
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -31,7 +33,8 @@ export default class profile extends React.Component {
     super(props)
     this.state = {
       user: '',
-      images: []
+      images: [],
+      loading: true
     }
     this.baseState = this.state;
   }
@@ -61,22 +64,48 @@ export default class profile extends React.Component {
     const image = [];
     let db = firebase.firestore();
     let photosRef = db.collection('photos');
-    photosRef.where('email', '==', context.props.navigation.state.params.email).get().then(function (querySnapshot) {
+    photosRef.where('email', '==', context.props.navigation.state.params.email).where('isDeleted', '==', false).get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         let data;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) data = (doc.id, " => ", doc.data());
         image.push({
           URL: doc.data().url,
-          dimensions: { width: 900, height: 1050 }
+          dimensions: { width: 900, height: 1050 },
+          data: doc.data()
         });
       })
-      context.setState({ images: image })
+      context.setState({ images: image, loading: false })
     })
   }
 
   componentWillUnMount() {
     rol();
+  }
+
+  confirmDelete(item, index) {
+    Alert.alert(
+      //title
+      'Confirmation',
+      //body
+      'Are you sure to delete this post?',
+      [
+        { text: 'Yes', onPress: () => this.deletePost(item) },
+        { text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel' },
+      ],
+      { cancelable: false }
+      //clicking out side of alert will not cancel
+    );
+  }
+
+  deletePost(item) {
+    this.setState({ loading: true })
+    let db = firebase.firestore();
+    db.collection("photos").doc(item.data.docRef).update({
+      isDeleted: true
+    }).then(() => {
+      this.fetchImages();
+    })
   }
   render() {
     return (
@@ -182,10 +211,17 @@ export default class profile extends React.Component {
             </View>
           </View>
           <View style={{ padding: 10 }}>
-            <MasonryList
-              columns={3}
-              images={this.state.images}
-            />
+            {this.state.loading == true ? (
+              <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color='red' />
+              </View>
+            ) : (
+                <MasonryList
+                  onRefresh={this.fetchImages}
+                  columns={3}
+                  images={this.state.images}
+                  onLongPressImage={(item, index) => this.confirmDelete(item, index)}
+                />)}
           </View>
         </ScrollView>
       </View>

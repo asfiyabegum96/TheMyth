@@ -157,9 +157,12 @@ export default class mainFeed extends React.Component {
 
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) data = (doc.id, " => ", doc.data());
-        let photoFeedData = that.state.photoFeedData;
+        if (doc.data().isDeleted === false) {
+          let photoFeedData = that.state.photoFeedData;
 
-        that.addToFlatlist(photoFeedData, data);
+          that.addToFlatlist(photoFeedData, data);
+        }
+
       });
     });
   }

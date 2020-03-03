@@ -175,6 +175,7 @@ class photosUpload extends React.Component {
         let dateTime = Date.now();
         let timestamp = Math.floor(dateTime / 1000);
         let saved = 'no';
+        let isDeleted = false;
         let userAvatar = this.state.user.profilePicture
         // Create object for firestore
         let photoObj = {
@@ -189,6 +190,7 @@ class photosUpload extends React.Component {
             url: imageUrl,
             userAvatar: userAvatar,
             docRef: imageId,
+            isDeleted: isDeleted,
             email: this.props.screenProps.navigation.state.params.email
         }
 
@@ -389,4 +391,4 @@ const styles = StyleSheet.create({
     buttonText: { color: 'white', fontWeight: 'bold' }
 });
 
-export default photosUpload;
+export default photosUpload;  

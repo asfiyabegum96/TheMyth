@@ -9,10 +9,10 @@ import {
 }
   from 'react-native-responsive-screen';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import uploadNavigator from '../navigation/uploadTab';
+import photosUpload from '../navigation/uploadTab';
 import CameraScreen from './camera';
 
-const UploadPage = createAppContainer(uploadNavigator);
+const UploadPage = photosUpload;
 
 class gallery extends React.Component {
 
@@ -30,7 +30,7 @@ class gallery extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>  
         <UploadPage screenProps={{ navigation: this.props.navigation }} />
       </View>
     );
