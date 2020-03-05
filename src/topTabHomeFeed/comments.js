@@ -180,7 +180,7 @@ export default class Comments extends Component {
                 <View style={styles.viewcomment}>
                     <Image style={styles.myimage} source={{ uri: this.state.userDetails.profilePicture }} />
                     <TextInput value={this.state.commentText}
-                        onChangeText={(commentText) => { this.setState({ commentText }) }} placeholder="Your comments..." placeholderTextColor='#FCD705' multiline={true} style={styles.inputStyle} />
+                        onChangeText={(commentText) => { this.setState({ commentText }) }} placeholder="Your comments..." placeholderTextColor='#FF7200' multiline={true} style={styles.inputStyle} />
                     <TouchableOpacity onPress={this.insertComment} style={styles.butText}>
                         <Text style={styles.buttonText}>Comment</Text>
                     </TouchableOpacity>
@@ -231,7 +231,7 @@ export default class Comments extends Component {
 
 const styles = StyleSheet.create({
     root: {
-        backgroundColor: '#121212',
+        backgroundColor: '#fff2e7',
         paddingTop: 10,
     },
     container: {
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: '#FCD705'
+        backgroundColor: '#FF7200'
     },
     image: {
         width: 45,
@@ -267,34 +267,34 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 16,
         fontWeight: "bold",
-        color: '#FCD705'
+        color: '#FF7200'
     },
     commentSection: {
-        color: "#cccccc",
+        color: "#FF7200",
     },
     addcomment: {
         // height: '40%',
         marginLeft: 100,
     },
     viewcomment: {
-        backgroundColor: '#121212',
+        backgroundColor: '#fff2e7',
         flexDirection: 'row'
     },
     butText: {
         color: '#22222C',
         marginTop: 15,
-        borderBottomColor: '#FCD705', // Add this to specify bottom border color
+        borderBottomColor: '#FF7200', // Add this to specify bottom border color
         borderBottomWidth: 1
     },
     inputStyle: {
         marginLeft: 30,
         width: 210,
-        color: '#fff',
-        borderBottomColor: '#FCD705', // Add this to specify bottom border color
+        color: '#FF7200',
+        borderBottomColor: '#FF7200', // Add this to specify bottom border color
         borderBottomWidth: 1
     },
     buttonText: {
-        color: '#FCD705'
+        color: '#FF7200'
     },
     myimage: {
         width: 45,

@@ -72,7 +72,7 @@ export default class profile extends React.Component {
         image.push({
           URL: doc.data().url,
           dimensions: { width: 900, height: 1050 },
-          data: doc.data()
+          item: doc.data()
         });
       })
       context.setState({ images: image, loading: false })
@@ -98,10 +98,10 @@ export default class profile extends React.Component {
     );
   }
 
-  deletePost(item) {
+  deletePost(selectedItem) {
     this.setState({ loading: true })
     let db = firebase.firestore();
-    db.collection("photos").doc(item.data.docRef).update({
+    db.collection("photos").doc(selectedItem.item.docRef).update({
       isDeleted: true
     }).then(() => {
       this.fetchImages();
@@ -109,7 +109,7 @@ export default class profile extends React.Component {
   }
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: '#fff2e7' }}>
         <TouchableOpacity onPress={() => this.props.navigation.navigate("chat")}
           style={styles.fabDiv}>
           <View style={styles.fab}>
@@ -118,15 +118,15 @@ export default class profile extends React.Component {
         </TouchableOpacity>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed')} >
-            <Icon name={'home'} size={30} color="#FCD705" />
+            <Icon name={'home'} size={30} color="#FF7200" />
           </TouchableOpacity>
           <TextInput style={styles.inputSearch}
-            selectionColor='#FCD705'
+            selectionColor='#FF7200'
             placeholder="Search"
-            placeholderTextColor='#FCD705'
+            placeholderTextColor='#FF7200'
           />
-          <TouchableOpacity>
-            <MaterialCommunityIcons name="settings" size={35} color="#FCD705" />
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('sideNavigator')}>
+            <MaterialCommunityIcons name="settings" size={35} color="#FF7200" />
           </TouchableOpacity>
         </View>
         <View style={styles.countDiv}>
@@ -138,7 +138,7 @@ export default class profile extends React.Component {
               <View style={styles.countDesign}>
                 <Text style={{
                   fontSize: wp('5%'),
-                  color: '#FCD705'
+                  color: '#FF7200'
                 }}>20</Text>
               </View>
             </CollapseHeader>
@@ -146,7 +146,7 @@ export default class profile extends React.Component {
               <View style={styles.countTextDesign}>
                 <Text style={{
                   fontSize: wp('5%'),
-                  color: '#FCD705'
+                  color: '#FF7200'
                 }}>Posts</Text>
               </View>
             </CollapseBody>
@@ -156,7 +156,7 @@ export default class profile extends React.Component {
               <View style={styles.countDesign}>
                 <Text style={{
                   fontSize: wp('5%'),
-                  color: '#FCD705'
+                  color: '#FF7200'
                 }}>30</Text>
               </View>
             </CollapseHeader>
@@ -164,7 +164,7 @@ export default class profile extends React.Component {
               <View style={styles.countTextDesign}>
                 <Text style={{
                   fontSize: wp('5%'),
-                  color: '#FCD705'
+                  color: '#FF7200'
                 }}>Followers</Text>
               </View>
             </CollapseBody>
@@ -174,7 +174,7 @@ export default class profile extends React.Component {
               <View style={styles.countDesign}>
                 <Text style={{
                   fontSize: wp('5%'),
-                  color: '#FCD705'
+                  color: '#FF7200'
                 }}>20</Text>
               </View>
             </CollapseHeader>
@@ -182,7 +182,7 @@ export default class profile extends React.Component {
               <View style={styles.countTextDesign}>
                 <Text style={{
                   fontSize: wp('5%'),
-                  color: '#FCD705'
+                  color: '#FF7200'
                 }}>Following</Text>
               </View>
             </CollapseBody>
@@ -203,7 +203,7 @@ export default class profile extends React.Component {
               <TouchableOpacity>
                 <View style={styles.follow}>
                   <Text style={{
-                    color: '#FCD705',
+                    color: '#FF7200',
                     fontSize: 17,
                   }}>Follow</Text>
                 </View>
@@ -217,10 +217,12 @@ export default class profile extends React.Component {
               </View>
             ) : (
                 <MasonryList
+                  backgroundColor={'#fff2e7'}
                   onRefresh={this.fetchImages}
                   columns={3}
                   images={this.state.images}
                   onLongPressImage={(item, index) => this.confirmDelete(item, index)}
+                  onPressImage={(item) => this.props.navigation.navigate('comments', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })}
                 />)}
           </View>
         </ScrollView>
@@ -239,24 +241,24 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   fab: {
-    backgroundColor: '#121212',
+    backgroundColor: '#fff',
     alignItems: 'center',
     width: wp('15%'),
     borderRadius: wp('10%'),
     justifyContent: 'center'
   },
   fabIcon: {
-    color: '#FCD705',
+    color: '#FF7200',
     padding: wp('3%'),
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#121212',
+    backgroundColor: '#fff2e7',
     padding: 10,
   },
   backArrow: {
-    color: '#FCD705',
+    color: '#FF7200',
     fontSize: hp('3%'),
     marginTop: 5,
   },
@@ -264,10 +266,10 @@ const styles = StyleSheet.create({
     width: wp('70%'),
     paddingVertical: 2,
     borderBottomWidth: 1,
-    borderBottomColor: 'yellow',
+    borderBottomColor: '#FF7200',
     fontSize: 20,
     backgroundColor: 'transparent',
-    color: '#FCD705'
+    color: '#FF7200'
   },
   profileName: {
     fontSize: hp('4%'),
@@ -277,7 +279,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: wp('30%'),
     alignItems: 'center',
-    backgroundColor: '#121212',
+    backgroundColor: '#fff',
     borderRadius: 50,
   },
   countDiv: {
@@ -287,14 +289,14 @@ const styles = StyleSheet.create({
     zIndex: 1
   },
   countDesign: {
-    backgroundColor: '#121212',
+    backgroundColor: '#fff2e7',
     paddingLeft: wp('3%'),
     paddingVertical: wp('1%'),
     borderTopLeftRadius: wp('2%'),
     borderBottomLeftRadius: wp('2%')
   },
   countTextDesign: {
-    backgroundColor: '#121212',
+    backgroundColor: '#fff2e7',
     paddingLeft: wp('1.5%'),
     paddingRight: wp('2%'),
     paddingVertical: wp('1%'),
@@ -317,7 +319,7 @@ const styles = StyleSheet.create({
     width: wp('40%'),
     height: hp('30%'),
     borderWidth: 1,
-    borderColor: '#FCD705',
+    borderColor: '#FF7200',
     borderRadius: 20,
   },
 
