@@ -9,7 +9,8 @@ import {
     Image,
     ScrollView,
     Button,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
@@ -124,6 +125,21 @@ class photosUpload extends React.Component {
 
     // upload image to fireabase storage
     uploadImage = () => {
+        Alert.alert(
+            //title
+            'Confirmation',
+            //body
+            'Tell us where you want to upload the photo!',
+            [
+                { text: 'My Wall', onPress: () => this.wallUpload() },
+                { text: 'My Diary', onPress: () => console.log('No Pressed'), style: 'cancel' },
+            ],
+            { cancelable: false }
+            //clicking out side of alert will not cancel
+        );
+    }
+
+    wallUpload() {
         if (this.state.path) {
             var imageId = this.state.imageId;
             var imagePath = this.state.path;

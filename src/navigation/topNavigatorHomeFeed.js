@@ -51,7 +51,7 @@ class Mainscreen extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  globe: {
+  icon: {
     fontSize: hp('3%'),
   },
 })
@@ -62,13 +62,22 @@ const TopNavigator = createMaterialTopTabNavigator(
       navigationOptions: {
         tabBarIcon: ({ tintColor, focused }) => (
           <FontAwesome5 name={'globe'}
-            style={styles.globe}
+            style={styles.icon}
             color={tintColor} />
         )
       }
     },
     Second: connect,
-    Third: diary,
+    Third: {
+      screen: diary,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor, focused }) => (
+          <FontAwesome5 name={'address-book'}
+            style={styles.icon}
+            color={tintColor} />
+        )
+      }
+    },
     Fourth: notification,
   },
   {
@@ -87,5 +96,4 @@ const TopNavigator = createMaterialTopTabNavigator(
     },
   },
 )
-
 export default TopNavigator;
