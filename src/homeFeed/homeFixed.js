@@ -21,6 +21,7 @@ import {
   from 'react-native-responsive-screen';
 import { createAppContainer, NavigationEvents } from 'react-navigation';
 import TopNavigator from '../navigation/topNavigatorHomeFeed.js';
+import firebase from 'react-native-firebase';
 console.disableYellowBox = true;
 
 
@@ -35,10 +36,36 @@ export default class homeFixed extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      path: '',
+      imageUri: null,
+      uploading: false,
+      progress: 0,
+      caption: '',
+      location: '',
+      user: '',
+      fieldNotEmpty: false
+    }
+    this.baseState = this.state;
   }
 
   componentDidMount() {
+    this.fetchUserDetails();
     loc(this);
+  }
+
+  fetchUserDetails() {
+    const context = this;
+    let db = firebase.firestore();
+    let photosRef = db.collection('signup');
+    photosRef.where('email', '==', context.props.navigation.state.params.email).get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        let data;
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) data = (doc.id, " => ", doc.data());
+        context.setState({ user: doc.data() })
+      })
+    })
   }
 
   componentDidUpdate() {
@@ -49,8 +76,44 @@ export default class homeFixed extends React.Component {
     rol();
   }
 
-  navigateToPage = (item) => {
-    this.props.navigation.navigate('comments', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })
+  navigateToPage = (item, isComment) => {
+    if (isComment) {
+      this.props.navigation.navigate('comments', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })
+    } else {
+      this.addToSaveCollection(item)
+    }
+  }
+
+  //uploading feed data in cloud firestore
+  addToSaveCollection = (selectedItem) => {
+    //Set variable for feed
+    let author = selectedItem.item.author;
+    let authorDescription = selectedItem.item.authorDescription;
+    let caption = selectedItem.item.caption;
+    let likes = selectedItem.item.likes;
+    let location = selectedItem.item.location;
+    let dateTime = Date.now();
+    let timestamp = Math.floor(dateTime / 1000);
+    let isDeleted = false;
+    let userAvatar = selectedItem.item.userAvatar
+    // Create object for firestore
+    let photoObj = {
+      author: author,
+      authorDescription: authorDescription,
+      caption: caption,
+      likes: likes,
+      location: location,
+      postedTime: timestamp,
+      url: selectedItem.item.url,
+      userAvatar: userAvatar,
+      docRef: selectedItem.item.docRef,
+      isDeleted: isDeleted,
+      email: this.props.navigation.state.params.email.trim()
+    }
+    firebase.firestore().collection('savedCollections').doc(photoObj.docRef).set(photoObj).then(function (docRef) {
+      alert('Added to your collections!');
+    });
+
   }
 
   render() {
