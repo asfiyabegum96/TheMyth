@@ -131,15 +131,15 @@ class photosUpload extends React.Component {
             //body
             'Tell us where you want to upload the photo!',
             [
-                { text: 'My Wall', onPress: () => this.wallUpload() },
-                { text: 'My Diary', onPress: () => console.log('No Pressed'), style: 'cancel' },
+                { text: 'My Wall', onPress: () => this.proceedToUpload(false) },
+                { text: 'My Diary', onPress: () => this.proceedToUpload(true) },
             ],
             { cancelable: false }
             //clicking out side of alert will not cancel
         );
     }
 
-    wallUpload() {
+    proceedToUpload(flag) {
         if (this.state.path) {
             var imageId = this.state.imageId;
             var imagePath = this.state.path;
@@ -164,7 +164,7 @@ class photosUpload extends React.Component {
 
                         firebase.storage().ref('images/userId/' + imageId).getDownloadURL()
                             .then((url) => {
-                                this.processUpload(url);
+                                this.processUpload(url, flag);
                             });
                     }
                 },
@@ -178,7 +178,8 @@ class photosUpload extends React.Component {
     }
 
     //uploading feed data in cloud firestore
-    processUpload = (imageUrl) => {
+    processUpload = (imageUrl, flag) => {
+        const url = flag ? 'diary' : 'photos'
         const context = this;
         let imageId = this.state.imageId;
         //Set variable for feed
@@ -210,7 +211,7 @@ class photosUpload extends React.Component {
             email: this.props.screenProps.navigation.state.params.email
         }
 
-        firebase.firestore().collection('photos').doc(imageId).set(photoObj).then(function (docRef) {
+        firebase.firestore().collection(url).doc(imageId).set(photoObj).then(function (docRef) {
             alert('Image uploaded!');
             context.setState({
                 uploading: false,
