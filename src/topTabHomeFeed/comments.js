@@ -45,12 +45,10 @@ export default class Comments extends Component {
 
     fetchUserDetails = () => {
         const context = this;
-        console.log(this.state.selectedItem)
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
         photosRef.where('email', '==', this.state.email).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
-                console.log('data', doc.data())
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
                 if (docNotEmpty) {

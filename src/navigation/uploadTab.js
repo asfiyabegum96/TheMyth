@@ -125,18 +125,22 @@ class photosUpload extends React.Component {
 
     // upload image to fireabase storage
     uploadImage = () => {
-        Alert.alert(
-            //title
-            'Confirmation',
-            //body
-            'Tell us where you want to upload the photo!',
-            [
-                { text: 'My Wall', onPress: () => this.proceedToUpload(false) },
-                { text: 'My Diary', onPress: () => this.proceedToUpload(true) },
-            ],
-            { cancelable: false }
-            //clicking out side of alert will not cancel
-        );
+        if (this.state.path) {
+            Alert.alert(
+                //title
+                'Confirmation',
+                //body
+                'Tell us where you want to upload the photo!',
+                [
+                    { text: 'My Wall', onPress: () => this.proceedToUpload(false) },
+                    { text: 'My Diary', onPress: () => this.proceedToUpload(true) },
+                ],
+                { cancelable: false }
+                //clicking out side of alert will not cancel
+            );
+        } else {
+            this.setState({ fieldNotEmpty: true })
+        }
     }
 
     proceedToUpload(flag) {
@@ -172,8 +176,6 @@ class photosUpload extends React.Component {
                     unsubscribe();
                 },
             );
-        } else {
-            this.setState({ fieldNotEmpty: true })
         }
     }
 

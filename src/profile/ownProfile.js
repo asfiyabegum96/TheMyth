@@ -101,6 +101,9 @@ export default class profile extends React.Component {
   deletePost(selectedItem) {
     this.setState({ loading: true })
     let db = firebase.firestore();
+    db.collection("savedCollections").doc(selectedItem.item.docRef).update({
+      isDeleted: true
+    })
     db.collection("photos").doc(selectedItem.item.docRef).update({
       isDeleted: true
     }).then(() => {
@@ -222,7 +225,7 @@ export default class profile extends React.Component {
                   columns={3}
                   images={this.state.images}
                   onLongPressImage={(item, index) => this.confirmDelete(item, index)}
-                  onPressImage={(item) => this.props.navigation.navigate('comments', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })}
+                  onPressImage={(item) => this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })}
                 />)}
           </View>
         </ScrollView>

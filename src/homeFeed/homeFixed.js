@@ -76,10 +76,13 @@ export default class homeFixed extends React.Component {
     rol();
   }
 
-  navigateToPage = (item, isComment) => {
+  navigateToPage = (item, isComment, isSavedCollection) => {
     if (isComment) {
       this.props.navigation.navigate('comments', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })
-    } else {
+    } else if (isSavedCollection) {
+      this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim(), isSavedCollection : true })
+    }
+    else {
       this.addToSaveCollection(item)
     }
   }

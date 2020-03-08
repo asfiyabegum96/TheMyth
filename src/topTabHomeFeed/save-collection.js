@@ -43,14 +43,12 @@ export default class SaveCollection extends Component {
     }
 
     fetchImages() {
-        console.log('ibnside')
         const context = this;
         context.setState({ feedRefresh: true })
         const image = [];
         let db = firebase.firestore();
         let photosRef = db.collection('savedCollections');
         photosRef.where('email', '==', 'asfiidarlachu@gmail.com').where('isDeleted', '==', false).get().then(function (querySnapshot) {
-            console.log('ibnside', querySnapshot)
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -106,6 +104,7 @@ export default class SaveCollection extends Component {
                                     columns={3}
                                     images={this.state.images}
                                     keyExtractor={(item, index) => index.toString()}
+                                    onPressImage={(item) => this.props.screenProps(item, false, true)}
                                     onLongPressImage={(item, index) => this.confirmDelete(item, index)}
                                 />
                             </View>

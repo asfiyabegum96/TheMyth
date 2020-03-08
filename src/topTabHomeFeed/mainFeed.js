@@ -145,10 +145,14 @@ export default class mainFeed extends React.Component {
       feedRefresh: true,
       photoFeedData: []
     });
+    let url = 'photos';
+    if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params.isSavedCollection) {
+      url = this.props.navigation.state.params.isSavedCollection === true ? 'savedCollections' : 'photos';
+    }
     let that = this;
 
     let db = firebase.firestore();
-    let photosRef = db.collection('photos');
+    let photosRef = db.collection(url);
     photosRef.orderBy('postedTime', 'desc').get().then(function (querySnapshot) {
 
       querySnapshot.forEach(function (doc) {
@@ -191,10 +195,48 @@ export default class mainFeed extends React.Component {
   }
 
   navigateToComment = ({ item, index }, isComment) => {
-    console.log('tocomm', isComment)
-    this.props.screenProps({ item, index }, isComment)
+    if (this.props.screenProps) {
+      this.props.screenProps({ item, index }, isComment)
+    } else {
+      if (isComment) {
+        this.props.navigation.navigate('comments', { selectedItem: { item: item }, email: this.props.navigation.state.params.email.trim() })
+      } else {
+        this.addToSaveCollection({ item: item })
+      }
+    }
   }
 
+  //uploading feed data in cloud firestore
+  addToSaveCollection = (selectedItem) => {
+    //Set variable for feed
+    let author = selectedItem.item.author;
+    let authorDescription = selectedItem.item.authorDescription;
+    let caption = selectedItem.item.caption;
+    let likes = selectedItem.item.likes;
+    let location = selectedItem.item.location;
+    let dateTime = Date.now();
+    let timestamp = Math.floor(dateTime / 1000);
+    let isDeleted = false;
+    let userAvatar = selectedItem.item.userAvatar
+    // Create object for firestore
+    let photoObj = {
+      author: author,
+      authorDescription: authorDescription,
+      caption: caption,
+      likes: likes,
+      location: location,
+      postedTime: timestamp,
+      url: selectedItem.item.url,
+      userAvatar: userAvatar,
+      docRef: selectedItem.item.docRef,
+      isDeleted: isDeleted,
+      email: this.props.navigation.state.params.email.trim()
+    }
+    firebase.firestore().collection('savedCollections').doc(photoObj.docRef).set(photoObj).then(function (docRef) {
+      alert('Added to your collections!');
+    });
+
+  }
 
   render() {
     //Heart like spring animation 
@@ -236,8 +278,7 @@ export default class mainFeed extends React.Component {
                           src={item.userAvatar}
                         />
                       </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('profile')} >
+                      <TouchableOpacity>
                         <Text style={styles.listProfileName}>{item.author}</Text>
                         <Text style={styles.listProfileSubName}>{item.authorDescription}</Text>
                       </TouchableOpacity>
