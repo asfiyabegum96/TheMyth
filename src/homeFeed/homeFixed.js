@@ -80,7 +80,7 @@ export default class homeFixed extends React.Component {
     if (isComment) {
       this.props.navigation.navigate('comments', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })
     } else if (isSavedCollection) {
-      this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim(), isSavedCollection : true })
+      this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim(), isSavedCollection: true })
     }
     else {
       this.addToSaveCollection(item)
@@ -144,7 +144,7 @@ export default class homeFixed extends React.Component {
             <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />
           </View>
         </TouchableOpacity>
-        <AppIndex screenProps={this.navigateToPage} />
+        <AppIndex screenProps={{ navigation: this.navigateToPage, email: this.props.navigation.state.params.email.trim() }} />
       </View>
     );
   }

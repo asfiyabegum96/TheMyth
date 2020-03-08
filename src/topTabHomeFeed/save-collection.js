@@ -31,7 +31,7 @@ export default class SaveCollection extends Component {
         const context = this;
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
-        photosRef.where('email', '==', 'asfiidarlachu@gmail.com').get().then(function (querySnapshot) {
+        photosRef.where('email', '==', this.props.screenProps.email).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -48,7 +48,7 @@ export default class SaveCollection extends Component {
         const image = [];
         let db = firebase.firestore();
         let photosRef = db.collection('savedCollections');
-        photosRef.where('email', '==', 'asfiidarlachu@gmail.com').where('isDeleted', '==', false).get().then(function (querySnapshot) {
+        photosRef.where('email', '==', this.props.screenProps.email).where('isDeleted', '==', false).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -104,7 +104,7 @@ export default class SaveCollection extends Component {
                                     columns={3}
                                     images={this.state.images}
                                     keyExtractor={(item, index) => index.toString()}
-                                    onPressImage={(item) => this.props.screenProps(item, false, true)}
+                                    onPressImage={(item) => this.props.screenProps.navigation(item, false, true)}
                                     onLongPressImage={(item, index) => this.confirmDelete(item, index)}
                                 />
                             </View>

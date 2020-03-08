@@ -41,7 +41,7 @@ export default class DiaryMaintain extends Component {
         const context = this;
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
-        photosRef.where('email', '==', 'asfiidarlachu@gmail.com').get().then(function (querySnapshot) {
+        photosRef.where('email', '==', this.props.screenProps.email).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -88,18 +88,20 @@ export default class DiaryMaintain extends Component {
     }
 
     fetchImages() {
+        console.log('inside')
         const context = this;
         context.setState({ feedRefresh: true })
         const image = [];
         const fetchData = [];
         let db = firebase.firestore();
         let photosRef = db.collection('diary');
-        photosRef.where('email', '==', 'asfiidarlachu@gmail.com').where('isDeleted', '==', false).get().then(function (querySnapshot) {
+        photosRef.where('email', '==', this.props.screenProps.email).where('isDeleted', '==', false).get().then(function (querySnapshot) {
             let data;
             querySnapshot.forEach(function (doc) {
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
                 if (docNotEmpty) data = (doc.id, " => ", doc.data());
                 fetchData.push(doc.data());
+                console.log('url', doc.data().url)
                 image.push({
                     URL: doc.data().url,
                     dimensions: { width: 900, height: 1050 },
