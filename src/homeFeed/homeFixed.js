@@ -154,12 +154,12 @@ export default class homeFixed extends React.Component {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1.0,
-    backgroundColor: 'white'
+    backgroundColor: '#fff2e7'
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#fff',
+    backgroundColor: '#fff2e7',
     padding: 10,
   },
   camera: {
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   fab: {
-    backgroundColor: '#fff',
+    backgroundColor: '#fff2e7',
     alignItems: 'center',
     width: wp('15%'),
     borderRadius: wp('10%'),

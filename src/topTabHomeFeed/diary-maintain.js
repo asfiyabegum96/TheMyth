@@ -88,7 +88,6 @@ export default class DiaryMaintain extends Component {
     }
 
     fetchImages() {
-        console.log('inside')
         const context = this;
         context.setState({ feedRefresh: true })
         const image = [];
@@ -101,7 +100,6 @@ export default class DiaryMaintain extends Component {
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
                 if (docNotEmpty) data = (doc.id, " => ", doc.data());
                 fetchData.push(doc.data());
-                console.log('url', doc.data().url)
                 image.push({
                     URL: doc.data().url,
                     dimensions: { width: 900, height: 1050 },

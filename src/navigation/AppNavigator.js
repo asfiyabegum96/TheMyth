@@ -9,10 +9,15 @@ import chat from '../chat/chat';
 import mainFeed from '../topTabHomeFeed/mainFeed'
 import forgotPassword from '../authentication/forgotPassword';
 import Comments from '../topTabHomeFeed/comments';
-
+import sideNavigator from './sideDrawerNavigator'
+import editProfile from '../sideDrawer/editProfile'
 const AppNavigator = createStackNavigator({
     Home: {
         screen: Home,
+        navigationOptions: { header: null },
+    },
+    editProfile: {
+        screen: editProfile,
         navigationOptions: { header: null },
     },
     signup: {
@@ -45,6 +50,10 @@ const AppNavigator = createStackNavigator({
         screen: Comments,
         navigationOptions: { header: null }
     },
+    sideNavigator: {
+        screen: sideNavigator,
+        navigationOptions: { header: null },
+    }
 });
 
 export default createAppContainer(AppNavigator);
