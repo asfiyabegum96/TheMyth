@@ -8,7 +8,6 @@ import {
     ScrollView,
     Image
 } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { TextField } from 'react-native-material-textfield';
 import {
     widthPercentageToDP as wp,
@@ -18,7 +17,8 @@ import {
 }
     from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
-
+import ImagePicker from 'react-native-image-picker';
+import signup from '../authentication/signUp';
 
 export default class editProfile extends React.Component {
     fieldRef = React.createRef();
@@ -47,38 +47,21 @@ export default class editProfile extends React.Component {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
                 if (docNotEmpty) data = (doc.id, " => ", doc.data());
-                console.log(doc.data())
-                context.setState({ user: doc.data(), })
+                context.setState({ user: doc.data(), });
             })
         })
     }
 
-    onSubmit = () => {
-        let { current: field } = this.fieldRef;
-
-        console.log(field.value());
-    };
-
-    continue = e => {
-        const context = this;
-        e.preventDefault();
+    updateProfileDetails() {
         let db = firebase.firestore();
-        let signupRef = db.collection('signup');
-        let userEmail = context.props.values.email;
-        let query = signupRef.where('email', '==', userEmail.trim()).get()
-            .then(snapshot => {
-                if (snapshot.empty) {
-                    this.setState({ clicked: false })
-                    this.props.nextStep();
-                    return;
-                }
-                else {
-                    this.setState({ isInvalid: true })
-                }
-            })
-            .catch(err => {
-                return 0;
-            });
+        const saveParams = {
+            profilePicture: this.state.imageSelected === true ? this.state.uri : this.state.user.profilePicture,
+            fullName: this.state.nameChanged === true ? this.state.fullName : this.state.user.fullName,
+            description: this.state.descriptionChanged === true ? this.state.description : this.state.user.description
+        }
+        db.collection('signup').doc(this.state.user.docRef).update(saveParams).then(() => {
+            alert('success')
+        })
     }
 
     componentDidMount() {
@@ -93,65 +76,146 @@ export default class editProfile extends React.Component {
         rol();
     }
 
+    // pick image from imagepicker
+    selectImage = () => {
+        const options = {
+            title: 'Choose profile picture',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+                allowsEditing: true,
+            },
+        };
+
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+
+            }
+            else {
+                this.setState({
+                    imagePath: response.path.toString(),
+                    uri: response.uri,
+                    imageSelected: true,
+                });
+            }
+        });
+    }
+
+    handleChange = (input, value) => {
+        this.setState({
+            [input]: value,
+        });
+        if (input === 'description') {
+            this.setState({ descriptionChanged: true })
+        } else {
+            this.setState({ nameChanged: true })
+        }
+    };
+
     render() {
         return (
-            <React.Fragment>
+            <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
                 {this.state.loading == true ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <ActivityIndicator size="large" color='red' />
                     </View>
                 ) :
-                    <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
-                        <View >
-                            <View style={styles.logo}>
-                                {/* <Text style={styles.title}>TheMyth</Text>
+                    <View >
+                        <View style={styles.logo}>
+                            {/* <Text style={styles.title}>TheMyth</Text>
                     <Text style={styles.titleSub}>Reset Password</Text> */}
-                                <Image
-                                    source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                                    style={{
-                                        width: wp('25%'),
-                                        height: hp('15%'),
-                                        borderRadius: wp('30%'),
-                                        resizeMode: 'cover',
-                                        marginLeft: wp('20%'),
-                                        marginTop: wp('5%')
-                                    }} />
+                            <Image
+                                source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+                                style={{
+                                    width: wp('25%'),
+                                    height: hp('15%'),
+                                    borderRadius: wp('30%'),
+                                    resizeMode: 'cover',
+                                    marginLeft: wp('20%'),
+                                    marginTop: wp('5%')
+                                }} />
+                        </View>
+                        <View style={styles.TitleDiv}>
+                            <Text style={styles.title}>Update Account</Text>
+                        </View>
+                        <View style={{
+                            marginTop: wp('10%'),
+                            marginBottom: wp('5%'),
+                            left: 60
+                        }}>
+                            <Text style={{ color: 'black', fontSize: wp('4.5%'), marginBottom: wp('1%') }}>Profile picture:</Text>
+                        </View>
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            alignItems: "center",
+                        }}>
+                            <View style={{ left: 25 }}>
+                                {this.state.imageSelected == true ? (
+                                    <Image
+                                        source={{ uri: this.state.uri }}
+                                        style={{
+                                            width: wp('25%'),
+                                            height: hp('15%'),
+                                            borderRadius: wp('30%'),
+                                            resizeMode: 'cover'
+                                        }} />
+                                ) : (
+                                        <Image
+                                            source={{ uri: this.state.user.profilePicture }}
+                                            style={{
+                                                width: wp('25%'),
+                                                height: hp('15%'),
+                                                borderRadius: wp('30%'),
+                                                resizeMode: 'cover'
+                                            }} />
+                                    )}
                             </View>
-                            <View style={styles.TitleDiv}>
-                                <Text style={styles.title}>Update Account</Text>
-                            </View>
-                            <View style={styles.TextInputDiv}>
-                                <TextField
-                                    label='Full Name *'
-                                    onSubmitEditing={this.onSubmit}
-                                    ref={this.fieldRef}
-                                    containerStyle={{ width: wp('70%'), height: hp('11%') }}
-                                    textColor='#FF7200'
-                                    baseColor="black"
-                                    tintColor="#FF7200"
-                                    onChangeText={text => handleChange('fullName', text)}
-                                    defaultValue={this.state.user.fullName}
-                                />
-                                <TextField
-                                    label='Description *'
-                                    ref="description"
-                                    containerStyle={{ width: wp('70%'), height: hp('11%') }}
-                                    textColor='#FF7200'
-                                    baseColor="black"
-                                    autoCapitalize="false"
-                                    tintColor="#FF7200"
-                                    onChangeText={text => handleChange('email', text)}
-                                    defaultValue={this.state.user.description}
-                                />
-                            </View>
-                            <View style={styles.but}>
-                                <TouchableOpacity disabled={this.state.clicked} >
-                                    <Text style={styles.butText}>Continue</Text>
+                            <View style={{ right: 25 }}>
+                                <TouchableOpacity onPress={this.selectImage}>
+                                    <Text style={styles.selectImage}>Edit Image</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </ScrollView>}
-            </React.Fragment >
+                        <View style={styles.TextInputDiv}>
+                            <TextField
+                                label='Full Name'
+                                ref={this.fieldRef}
+                                containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                                textColor='#FF7200'
+                                baseColor="black"
+                                tintColor="#FF7200"
+                                onChangeText={text => this.handleChange('fullName', text)}
+                                defaultValue={this.state.user.fullName}
+                            />
+                            <TextField
+                                label='Description'
+                                ref="description"
+                                containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                                textColor='#FF7200'
+                                baseColor="black"
+                                autoCapitalize="false"
+                                tintColor="#FF7200"
+                                onChangeText={text => this.handleChange('description', text)}
+                                defaultValue={this.state.user.description}
+                            />
+                        </View>
+                        <View style={styles.but}>
+                            <TouchableOpacity onPress={() => this.updateProfileDetails()}>
+                                <Text style={styles.butText}>Make Changes</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>}
+            </ScrollView>
         );
     }
 }
@@ -233,5 +297,18 @@ const styles = StyleSheet.create({
     },
     logo: {
         left: 55,
+    },
+    selectImage: {
+        color: '#fff',
+        fontSize: hp('2%'),
+        marginTop: 10,
+        borderColor: '#A9A9A9',
+        backgroundColor: '#FF7200',
+        paddingVertical: 8,
+        paddingHorizontal: 20,
+        borderRadius: 6,
+        borderWidth: 1,
+        borderColor: '#FF7200',
+        fontWeight: 'bold',
     },
 });

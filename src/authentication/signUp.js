@@ -69,7 +69,8 @@ export default class signup extends React.Component {
         password: values.password,
         gender: values.gender,
         description: values.description,
-        profilePicture: values.profilePicture
+        profilePicture: values.profilePicture,
+        docRef: cred.user.uid
       }).then(function () {
         context.props.navigation.navigate('homeFixed', { email: values.email })
         context.loadingChange();

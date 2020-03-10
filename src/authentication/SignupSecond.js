@@ -116,21 +116,21 @@ export default class SignupSecond extends React.Component {
     ];
     // console.log(values);
     return (
-      <ScrollView keyboardShouldPersistTaps={ true } style={styles.container}>
+      <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
         <View style={styles.logo}>
-                {/* <Text style={styles.title}>TheMyth</Text>
+          {/* <Text style={styles.title}>TheMyth</Text>
                     <Text style={styles.titleSub}>Reset Password</Text> */}
-                <Image
-                  source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                  style={{
-                    width: wp('25%'),
-                    height: hp('15%'),
-                    borderRadius: wp('30%'),
-                    resizeMode: 'cover',
-                    marginLeft: wp('20%'),
-                    marginTop: wp('5%')
-                  }} />
-              </View>
+          <Image
+            source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+            style={{
+              width: wp('25%'),
+              height: hp('15%'),
+              borderRadius: wp('30%'),
+              resizeMode: 'cover',
+              marginLeft: wp('20%'),
+              marginTop: wp('5%')
+            }} />
+        </View>
         <View style={styles.TitleDiv}>
           <Text style={styles.title}>Create Account</Text>
         </View>
@@ -250,14 +250,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF7200',
     paddingVertical: 8,
     paddingHorizontal: 20,
-    borderRadius:6,
+    borderRadius: 6,
     borderWidth: 1,
     borderColor: '#FF7200',
     fontWeight: 'bold',
   },
   TextInputDiv: {
     alignItems: 'center',
-    
+
   },
   inputfield: {
     width: wp('88%'),
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
-    borderRadius:6,
+    borderRadius: 6,
     borderWidth: 1,
     borderColor: '#FF7200'
   },
