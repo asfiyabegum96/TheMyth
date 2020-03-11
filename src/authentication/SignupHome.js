@@ -102,7 +102,7 @@ export default class SignupHome extends React.Component {
     let db = firebase.firestore();
     let signupRef = db.collection('signup');
     let userEmail = context.props.values.email;
-    let query = signupRef.where('email', '==', userEmail.trim()).get()
+    let query = signupRef.where('email', '==', userEmail.trim()).where('isDeleted', '==', false).get()
       .then(snapshot => {
         if (snapshot.empty) {
           this.setState({ clicked: false })

@@ -70,7 +70,8 @@ export default class signup extends React.Component {
         gender: values.gender,
         description: values.description,
         profilePicture: values.profilePicture,
-        docRef: cred.user.uid
+        docRef: cred.user.uid,
+        isDeleted: false
       }).then(function () {
         context.props.navigation.navigate('homeFixed', { email: values.email })
         context.loadingChange();

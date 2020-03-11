@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, Alert } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -45,9 +45,36 @@ class settings extends Component {
 
 
   logout = () => {
-    firebase.auth().signOut();
-    this.navigateToRoute('Home')
+    firebase.auth().signOut().then(() => {
+      this.navigateToRoute('Home');
+    })
   }
+
+  confirmDeactivate = () => {
+    Alert.alert(
+      //title
+      'Confirmation',
+      //body
+      'Are you sure to deactivate this account?',
+      [
+        { text: 'Yes', onPress: () => this.deactivate() },
+        { text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel' },
+      ],
+      { cancelable: false }
+      //clicking out side of alert will not cancel
+    );
+  }
+
+  deactivate = () => {
+    firebase.auth().currentUser.delete().then(() => {
+      db.collection("signup").doc(selectedItem.item.docRef).update({
+        isDeleted: true
+      })
+      alert('Thanks for using Myth!');
+      this.navigateToRoute('Home');
+    })
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -62,7 +89,7 @@ class settings extends Component {
             <Text style={styles.navItemStyle} onPress={this.navigateToScreen('Page2')}>
               Update Password
               </Text>
-            <Text style={styles.navItemStyle} onPress={this.navigateToScreen('Page3')}>
+            <Text style={styles.navItemStyle} onPress={() => this.confirmDeactivate()}>
               De-activate Account
               </Text>
           </View>
