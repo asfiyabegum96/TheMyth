@@ -86,7 +86,7 @@ class settings extends Component {
               </Text>
           </View>
           <View>
-            <Text style={styles.navItemStyle} onPress={this.navigateToScreen('Page2')}>
+            <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('updatePassword')}>
               Update Password
               </Text>
             <Text style={styles.navItemStyle} onPress={() => this.confirmDeactivate()}>

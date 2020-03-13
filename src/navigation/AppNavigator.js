@@ -11,6 +11,8 @@ import forgotPassword from '../authentication/forgotPassword';
 import Comments from '../topTabHomeFeed/comments';
 import sideNavigator from './sideDrawerNavigator'
 import editProfile from '../sideDrawer/editProfile'
+import updatePassword from '../sideDrawer/updatePassword'
+
 const AppNavigator = createStackNavigator({
     Home: {
         screen: Home,
@@ -18,6 +20,10 @@ const AppNavigator = createStackNavigator({
     },
     editProfile: {
         screen: editProfile,
+        navigationOptions: { header: null },
+    },
+    updatePassword: {
+        screen: updatePassword,
         navigationOptions: { header: null },
     },
     signup: {
