@@ -24,6 +24,9 @@ export default class SaveCollection extends Component {
 
     componentDidMount() {
         loc(this);
+        this.props.navigation.setParams({
+            onFocus: () => { this.fetchImages() }
+        })
         this.fetchUserDetails();
     }
 
@@ -44,7 +47,7 @@ export default class SaveCollection extends Component {
 
     fetchImages() {
         const context = this;
-        context.setState({ feedRefresh: true })
+        context.setState({ feedRefresh: true, images: []})
         const image = [];
         let db = firebase.firestore();
         let photosRef = db.collection('savedCollections');

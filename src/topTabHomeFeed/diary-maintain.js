@@ -34,6 +34,9 @@ export default class DiaryMaintain extends Component {
 
     componentDidMount() {
         loc(this);
+        this.props.navigation.setParams({
+            onFocus: () => {this.fetchImages()}
+        })
         this.fetchUserDetails();
     }
 
@@ -46,7 +49,7 @@ export default class DiaryMaintain extends Component {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
                 if (docNotEmpty) data = (doc.id, " => ", doc.data());
-                context.setState({ user: doc.data(), })
+                context.setState({ user: doc.data(), });
                 context.fetchImages();
             })
         })
@@ -89,7 +92,7 @@ export default class DiaryMaintain extends Component {
 
     fetchImages() {
         const context = this;
-        context.setState({ feedRefresh: true })
+        context.setState({ feedRefresh: true, images: [], isListView: false })
         const image = [];
         const fetchData = [];
         let db = firebase.firestore();

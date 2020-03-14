@@ -14,13 +14,25 @@ const diary = createMaterialTopTabNavigator({
   Home: {
     screen: DiaryMaintain,
     navigationOptions: {
-      title: 'DIARY'
+      title: 'DIARY',
+      tabBarOnPress: ({ navigation, defaultHandler }) => {
+        defaultHandler()
+        if (navigation.state && navigation.state.params) {
+          navigation.state.params.onFocus()
+        }
+      },
     }
   },
   Second: {
     screen: SaveCollection,
     navigationOptions: {
-      title: 'SAVED COLLECTIONS'
+      title: 'SAVED COLLECTIONS',
+      tabBarOnPress: ({ navigation, defaultHandler }) => {
+        defaultHandler()
+        if (navigation.state && navigation.state.params) {
+          navigation.state.params.onFocus()
+        }
+      },
     }
   }
 },
