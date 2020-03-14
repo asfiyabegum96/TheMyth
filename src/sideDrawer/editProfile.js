@@ -18,7 +18,7 @@ import {
     from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
-import signup from '../authentication/signUp';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 export default class editProfile extends React.Component {
     fieldRef = React.createRef();
@@ -60,8 +60,17 @@ export default class editProfile extends React.Component {
             description: this.state.descriptionChanged === true ? this.state.description : this.state.user.description
         }
         db.collection('signup').doc(this.state.user.docRef).update(saveParams).then(() => {
-            alert('success')
+            alert('success');
+            this.navigateToRoute('sideNavigator');
         })
+    }
+
+    navigateToRoute = (route) => {
+        const resetAction = StackActions.reset({
+            index: 0,
+            actions: [NavigationActions.navigate({ routeName: route })],
+        });
+        this.props.navigation.dispatch(resetAction);
     }
 
     componentDidMount() {

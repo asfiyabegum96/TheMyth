@@ -26,21 +26,13 @@ class settings extends Component {
   navigateToRoute = (route) => {
     const resetAction = StackActions.reset({
       index: 0,
-      actions: [NavigationActions.navigate({ routeName: route })],
+      actions: [NavigationActions.navigate({ routeName: route})],
     });
     this.props.navigation.dispatch(resetAction);
   }
 
-  navigateToScreen = (route) => {
-    const navigateAction = NavigationActions.navigate({
-      routeName: route
-    });
-    console.log(navigateAction)
-    this.props.navigation.dispatch(navigateAction);
-  }
-
   onBack = () => {
-    this.props.navigation.navigate('profile')
+    this.props.navigation.navigate('profile', { email: 'asfiidarlachu@gmail.com' })
   }
 
 
