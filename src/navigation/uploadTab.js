@@ -218,7 +218,7 @@ class photosUpload extends React.Component {
             context.setState({
                 uploading: false,
             });
-            context.props.screenProps.navigation.navigate('homeFixed');
+            context.props.screenProps.navigation.navigate('homeFixed', { email: photoObj.email });
         });
 
     }

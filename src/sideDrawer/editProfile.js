@@ -35,14 +35,13 @@ export default class editProfile extends React.Component {
             hidePassword: true,
             user: ''
         }
-        this.ref = firebase.firestore().collection('signup')
     }
 
     fetchUserDetails() {
         const context = this;
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
-        photosRef.where('email', '==', 'asfiidarlachu@gmail.com').get().then(function (querySnapshot) {
+        photosRef.where('email', '==', this.props.navigation.state.params.email.trim()).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -61,16 +60,12 @@ export default class editProfile extends React.Component {
         }
         db.collection('signup').doc(this.state.user.docRef).update(saveParams).then(() => {
             alert('success');
-            this.navigateToRoute('sideNavigator');
+            this.navigateToRoute();
         })
     }
 
-    navigateToRoute = (route) => {
-        const resetAction = StackActions.reset({
-            index: 0,
-            actions: [NavigationActions.navigate({ routeName: route })],
-        });
-        this.props.navigation.dispatch(resetAction);
+    navigateToRoute = () => {
+        this.props.navigation.state.params.navigation.navigate('sideNavigator');
     }
 
     componentDidMount() {

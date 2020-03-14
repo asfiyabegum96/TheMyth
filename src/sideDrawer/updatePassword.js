@@ -43,7 +43,7 @@ export default class updatePassword extends React.Component {
             index: 0,
             actions: [NavigationActions.navigate({ routeName: route })],
         });
-        this.props.navigation.dispatch(resetAction);
+        this.props.screenProps.navigation.dispatch(resetAction);
     }
 
     // check Textfields are not empty

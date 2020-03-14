@@ -120,7 +120,7 @@ export default class profile extends React.Component {
           </View>
         </TouchableOpacity>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed')} >
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
             <Icon name={'home'} size={30} color="#FF7200" />
           </TouchableOpacity>
           <TextInput style={styles.inputSearch}
@@ -128,7 +128,7 @@ export default class profile extends React.Component {
             placeholder="Search"
             placeholderTextColor='#FF7200'
           />
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('sideNavigator')}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('sideNavigator', { email: this.props.navigation.state.params.email })}>
             <MaterialCommunityIcons name="settings" size={35} color="#FF7200" />
           </TouchableOpacity>
         </View>

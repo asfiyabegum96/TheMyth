@@ -12,7 +12,7 @@ import {
 import firebase from 'react-native-firebase';
 import { StackActions } from 'react-navigation';
 
-class settings extends Component {
+class Settings extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -22,23 +22,49 @@ class settings extends Component {
       radioState: ''
     }
   }
+  componentDidMount() {
+    loc(this);
+    this.fetchUserDetails();
+  }
+
+  fetchUserDetails() {
+    const context = this;
+    let db = firebase.firestore();
+    let photosRef = db.collection('signup');
+    photosRef.where('email', '==', this.props.screenProps.email.trim()).get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        let data;
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) data = (doc.id, " => ", doc.data());
+        context.setState({ user: doc.data() })
+      })
+    })
+  }
 
   navigateToRoute = (route) => {
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: route})],
-    });
-    this.props.navigation.dispatch(resetAction);
+    if (route === 'Home') {
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: route })],
+      });
+      this.props.screenProps.navigation.dispatch(resetAction);
+    } else {
+      this.props.screenProps.navigation.navigate(route, { email: this.props.screenProps.email.trim(), navigation: this.props.screenProps.navigation })
+    }
+  }
+
+  navigation() {
+    this.props.screenProps.navigation.navigate('sideNavigator')
   }
 
   onBack = () => {
-    this.props.navigation.navigate('profile', { email: 'asfiidarlachu@gmail.com' })
+    this.props.screenProps.navigation.navigate('profile', { email: this.props.screenProps.email.trim() })
   }
 
 
   logout = () => {
     firebase.auth().signOut().then(() => {
-      this.navigateToRoute('Home');
+      this.navigateToRoute('Home')
     })
   }
 
@@ -58,8 +84,9 @@ class settings extends Component {
   }
 
   deactivate = () => {
+    let db = firebase.firestore();
     firebase.auth().currentUser.delete().then(() => {
-      db.collection("signup").doc(selectedItem.item.docRef).update({
+      db.collection("signup").doc(this.state.user.docRef).update({
         isDeleted: true
       })
       alert('Thanks for using Myth!');
@@ -101,7 +128,7 @@ class settings extends Component {
   }
 }
 
-settings.propTypes = {
+Settings.propTypes = {
   navigation: PropTypes.object
 };
 
@@ -148,4 +175,4 @@ const styles = {
   }
 };
 
-export default settings;
+export default Settings;

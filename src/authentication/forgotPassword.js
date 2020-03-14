@@ -46,7 +46,7 @@ export default class forgotPassword extends React.Component {
                 }
                 else {
                     this.setState({ isInvalid: false })
-                    this.props.navigation.navigate('homeFixed')
+                    this.props.navigation.navigate('Home')
                     return;
                 }
             })
