@@ -25,7 +25,7 @@ export default class SaveCollection extends Component {
     componentDidMount() {
         loc(this);
         this.props.navigation.setParams({
-            onFocus: () => { this.fetchImages() }
+            onFocus: () => { this.fetchUserDetails() }
         })
         this.fetchUserDetails();
     }
