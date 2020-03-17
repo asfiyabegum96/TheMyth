@@ -58,6 +58,7 @@ export default class Comments extends Component {
             });
         });
     }
+
     fetchComments = () => {
         this.setState({
             feedData: [],
@@ -74,7 +75,19 @@ export default class Comments extends Component {
                     data = (doc.id, " => ", doc.data());
                 }
                 let feedData = that.state.feedData;
-                that.addToFlatlist(feedData, data);
+                let userRef = db.collection('signup');
+                userRef.where('email', '==', that.state.email).get().then(function (userQuerySnapshot) {
+                    userQuerySnapshot.forEach(function (doc) {
+                        let userData;
+                        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+                        if (docNotEmpty) {
+                            userData = (doc.id, " => ", doc.data());
+                            if (userData.email === data.email) {
+                                that.addToFlatlist(feedData, data, userData);
+                            }
+                        }
+                    });
+                });
             });
         });
         that.setState({
@@ -84,15 +97,14 @@ export default class Comments extends Component {
     }
 
 
-    addToFlatlist = (feedData, data) => {
+    addToFlatlist = (feedData, data, userData) => {
         var that = this;
-
         feedData.push({
-            name: data.name,
+            name: userData.fullName,
             comment: data.comment,
             postedTime: that.timeConverter(data.postedTime),
             image: data.url,
-            userAvatar: data.userAvatar,
+            userAvatar: userData.profilePicture,
         });
         that.setState({
             feedRefresh: false,
@@ -159,8 +171,7 @@ export default class Comments extends Component {
             let commentObject = {
                 comment: this.state.commentText,
                 image: selectedItem.url,
-                name: this.state.userDetails.fullName,
-                userAvatar: this.state.userDetails.profilePicture,
+                email: this.state.email,
                 docRef: docRef,
                 postedTime: timestamp,
             }

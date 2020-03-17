@@ -90,25 +90,19 @@ export default class homeFixed extends React.Component {
   //uploading feed data in cloud firestore
   addToSaveCollection = (selectedItem) => {
     //Set variable for feed
-    let author = selectedItem.item.author;
-    let authorDescription = selectedItem.item.authorDescription;
     let caption = selectedItem.item.caption;
     let likes = selectedItem.item.likes;
     let location = selectedItem.item.location;
     let dateTime = Date.now();
     let timestamp = Math.floor(dateTime / 1000);
     let isDeleted = false;
-    let userAvatar = selectedItem.item.userAvatar
     // Create object for firestore
     let photoObj = {
-      author: author,
-      authorDescription: authorDescription,
       caption: caption,
       likes: likes,
       location: location,
       postedTime: timestamp,
       url: selectedItem.item.url,
-      userAvatar: userAvatar,
       docRef: selectedItem.item.docRef,
       isDeleted: isDeleted,
       email: this.props.navigation.state.params.email.trim()

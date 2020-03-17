@@ -140,14 +140,17 @@ export default class mainFeed extends React.Component {
 
 
   loadFeed = () => {
-
     this.setState({
       feedRefresh: true,
       photoFeedData: []
     });
     let url = 'photos';
+    let email;
     if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params.isSavedCollection) {
+      email = this.props.navigation.state.params.email
       url = this.props.navigation.state.params.isSavedCollection === true ? 'savedCollections' : 'photos';
+    } else {
+      email = this.props.screenProps.property.screenProps.email
     }
     let that = this;
 
@@ -158,26 +161,36 @@ export default class mainFeed extends React.Component {
       querySnapshot.forEach(function (doc) {
 
         let data;
-
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) data = (doc.id, " => ", doc.data());
         if (doc.data().isDeleted === false) {
           let photoFeedData = that.state.photoFeedData;
-
-          that.addToFlatlist(photoFeedData, data);
+          let userRef = db.collection('signup');
+          userRef.where('email', '==', email.trim()).get().then(function (userQuerySnapshot) {
+            userQuerySnapshot.forEach(function (doc) {
+              let userData;
+              const docNotEmpty = (doc.id, " => ", doc.data() != null);
+              if (docNotEmpty) {
+                userData = (doc.id, " => ", doc.data());
+                if (userData.email === data.email) {
+                  that.addToFlatlist(photoFeedData, data, userData);
+                }
+              }
+            });
+          });
         }
 
       });
     });
   }
 
-  addToFlatlist = (photoFeedData, data) => {
+  addToFlatlist = (photoFeedData, data, userData) => {
 
     var that = this;
 
     photoFeedData.push({
-      author: data.author,
-      authorDescription: data.authorDescription,
+      author: userData.fullName,
+      authorDescription: userData.description,
       caption: data.caption,
       comments: data.comments,
       likes: data.likes,
@@ -185,7 +198,7 @@ export default class mainFeed extends React.Component {
       location: data.location,
       postedTime: that.timeConverter(data.postedTime),
       url: data.url,
-      userAvatar: data.userAvatar,
+      userAvatar: userData.profilePicture,
       docRef: data.docRef
     });
     that.setState({
@@ -196,7 +209,7 @@ export default class mainFeed extends React.Component {
 
   navigateToComment = ({ item, index }, isComment) => {
     if (this.props.screenProps) {
-      this.props.screenProps({ item, index }, isComment)
+      this.props.screenProps.navigation({ item, index }, isComment)
     } else {
       if (isComment) {
         this.props.navigation.navigate('comments', { selectedItem: { item: item }, email: this.props.navigation.state.params.email.trim() })

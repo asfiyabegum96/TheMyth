@@ -45,7 +45,7 @@ class Mainscreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <MainFeed screenProps={this.navigateToComment} />
+        <MainFeed screenProps={{ navigation: this.navigateToComment, property: this.props }} />
       </View>
     );
   }
