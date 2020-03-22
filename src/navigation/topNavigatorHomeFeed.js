@@ -38,8 +38,8 @@ class Mainscreen extends React.Component {
     }
   }
 
-  navigateToComment = (item, isComment) => {
-    this.props.screenProps.navigation(item, isComment)
+  navigateToComment = (item, isComment, isSavedCollection, viewUserProfile) => {
+    this.props.screenProps.navigation(item, isComment, isSavedCollection, viewUserProfile)
   }
 
   render() {

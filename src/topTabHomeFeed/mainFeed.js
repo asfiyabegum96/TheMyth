@@ -152,7 +152,6 @@ export default class mainFeed extends React.Component {
     } else {
       email = this.props.screenProps.property.screenProps.email
     }
-    console.log('email', email)
     let that = this;
 
     let db = firebase.firestore();
@@ -168,16 +167,12 @@ export default class mainFeed extends React.Component {
           let photoFeedData = that.state.photoFeedData;
           let userRef = db.collection('signup');
           userRef.where('email', '==', email.trim()).get().then(function (userQuerySnapshot) {
-            // console.log('sd',userQuerySnapshot)
             userQuerySnapshot.forEach(function (doc) {
               let userData;
-              console.log('sd', doc)
               const docNotEmpty = (doc.id, " => ", doc.data() != null);
               if (docNotEmpty) {
                 userData = (doc.id, " => ", doc.data());
-                console.log(userData.email, data.email)
                 if (userData.email.trim() === data.email.trim()) {
-                  console.log('sdsd', userData)
                   that.addToFlatlist(photoFeedData, data, userData);
                 } else {
                   userRef.where('email', '==', data.email.trim()).get().then(function (otheruserSnapshot) {
@@ -233,6 +228,10 @@ export default class mainFeed extends React.Component {
         this.addToSaveCollection({ item: item })
       }
     }
+  }
+
+  viewOtherUserProfiles = ({ item }) => {
+    this.props.screenProps.navigation({ item }, false, false, true)
   }
 
   //uploading feed data in cloud firestore
@@ -302,7 +301,7 @@ export default class mainFeed extends React.Component {
                 <View key={index} style={{ paddingHorizontal: wp('1%'), marginTop: hp('1%') }}>
                   <View style={styles.feedBorder}>
                     <View style={styles.listHeader}>
-                      <TouchableOpacity style={{ paddingHorizontal: 10, }}>
+                      <TouchableOpacity onPress={() => this.viewOtherUserProfiles({ item })} style={{ paddingHorizontal: 10, }}>
                         <UserAvatar size="50" name={item.author}
                           src={item.userAvatar}
                         />

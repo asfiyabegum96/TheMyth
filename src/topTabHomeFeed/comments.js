@@ -84,6 +84,17 @@ export default class Comments extends Component {
                             userData = (doc.id, " => ", doc.data());
                             if (userData.email === data.email) {
                                 that.addToFlatlist(feedData, data, userData);
+                            } else {
+                                userRef.where('email', '==', data.email.trim()).get().then(function (otheruserSnapshot) {
+                                    otheruserSnapshot.forEach(function (otherDoc) {
+                                        const docNotEmpty = (otherDoc.id, " => ", otherDoc.data() != null);
+                                        if (docNotEmpty) {
+                                            let otherUserData;
+                                            otherUserData = (otherDoc.id, " => ", otherDoc.data());
+                                            that.addToFlatlist(feedData, data, otherUserData);
+                                        }
+                                    })
+                                })
                             }
                         }
                     });
