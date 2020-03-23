@@ -19,6 +19,7 @@ import {
   removeOrientationListener as rol
 }
   from 'react-native-responsive-screen';
+import { SearchBar } from 'react-native-elements';
 import { createAppContainer, NavigationEvents } from 'react-navigation';
 import TopNavigator from '../navigation/topNavigatorHomeFeed.js';
 import firebase from 'react-native-firebase';
@@ -115,6 +116,11 @@ export default class homeFixed extends React.Component {
 
   }
 
+  updateSearch() {
+    // this.setState({ search: });
+    this.props.navigation.navigate('search')
+  };
+
   render() {
     return (
       <View style={styles.mainContainer}>
@@ -125,11 +131,17 @@ export default class homeFixed extends React.Component {
           <TouchableOpacity onPress={() => this.props.navigation.navigate('bottomTab', { email: this.props.navigation.state.params.email.trim() })}>
             <FontAwesome5 style={styles.camera} name={'camera'} />
           </TouchableOpacity>
-          <TextInput style={styles.inputSearch}
+          <SearchBar containerStyle={{ backgroundColor: 'fff2e7', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
+            placeholder="Search"
+            placeholderTextColor="#FF7200"
+            inputStyle={{ color: '#FF7200' }}
+            onFocus={() => this.updateSearch()}
+          />
+          {/* <TextInput style={styles.inputSearch}
             selectionColor={orange}
             placeholder="Search"
             placeholderTextColor='#FF7200'
-          />
+          /> */}
           <TouchableOpacity onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim() })}>
             <FontAwesome5 style={styles.profile} name={'user-alt'} />
           </TouchableOpacity>
@@ -174,9 +186,10 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderBottomWidth: 1,
     borderBottomColor: '#FF7200',
+    backgroundColor: '#fff2e7',
     fontSize: 20,
-    backgroundColor: 'transparent',
-    color: '#FF7200'
+    color: '#FF7200',
+    height: hp('4%')
   },
   fabDiv: {
     position: 'absolute',

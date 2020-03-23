@@ -11,7 +11,8 @@ import forgotPassword from '../authentication/forgotPassword';
 import Comments from '../topTabHomeFeed/comments';
 import sideNavigator from './sideDrawerNavigator'
 import editProfile from '../sideDrawer/editProfile'
-import updatePassword from '../sideDrawer/updatePassword'
+import updatePassword from '../sideDrawer/updatePassword';
+import search from '../topTabHomeFeed/search';
 
 const AppNavigator = createStackNavigator({
     Home: {
@@ -20,6 +21,10 @@ const AppNavigator = createStackNavigator({
     },
     editProfile: {
         screen: editProfile,
+        navigationOptions: { header: null },
+    },
+    search: {
+        screen: search,
         navigationOptions: { header: null },
     },
     updatePassword: {
@@ -59,7 +64,7 @@ const AppNavigator = createStackNavigator({
     sideNavigator: {
         screen: sideNavigator,
         navigationOptions: { header: null },
-    }
+    },
 });
 
 export default createAppContainer(AppNavigator);
