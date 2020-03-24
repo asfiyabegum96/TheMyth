@@ -8,6 +8,7 @@ import {
     TextInput,
     TouchableOpacity,
     ScrollView,
+    FlatList
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -20,6 +21,8 @@ import {
 }
     from 'react-native-responsive-screen';
 import { SearchBar } from 'react-native-elements';
+import firebase from 'react-native-firebase';
+
 const Jaguar = '#22222C';
 
 export default class search extends React.Component {
@@ -27,10 +30,11 @@ export default class search extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-          search: '',
+            search: '',
+            feedData: []
         }
         this.baseState = this.state;
-      }
+    }
     componentDidMount() {
         loc(this);
     }
@@ -39,30 +43,94 @@ export default class search extends React.Component {
         rol();
     }
 
-    updateSearch() {
-        this.setState({search});
+    updateSearch(text) {
+        this.setState({ search: text });
     }
+
+    fetchSearchList() {
+        const searchArray = []
+        console.log('submitted', this.state.search);
+        const context = this;
+        let db = firebase.firestore();
+        let photosRef = db.collection('signup');
+        photosRef.where('fullName', '>=', this.state.search).get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                let data;
+                const docNotEmpty = (doc.id, " => ", doc.data() != null);
+                if (docNotEmpty) {
+                    data = (doc.id, " => ", doc.data());
+                    searchArray.push(data);
+                }
+            });
+            context.setState({ feedData: searchArray })
+        });
+    }
+
     render() {
         const { search } = this.state;
         return (
             <View style={{ flex: 1, }}>
-                <SearchBar containerStyle={{ backgroundColor: 'fff2e7', height: hp('8%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
+                <SearchBar containerStyle={{ backgroundColor: '#fff2e7', height: hp('8%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
                     placeholder="Search"
                     autoFocus="true"
                     placeholderTextColor="#FF7200"
                     inputStyle={{ color: '#FF7200' }}
-                    onChangeText={() => this.updateSearch()}
+                    onChangeText={(text) => this.updateSearch(text)}
+                    onSubmitEditing={() => this.fetchSearchList()}
+                    onClear={() => this.setState({ feedData: [] })}
                     value={search}
                 />
-
+                <FlatList
+                    style={styles.root}
+                    data={this.state.feedData}
+                    extraData={this.state}
+                    ItemSeparatorComponent={
+                        () => { return <View style={styles.separator} /> }
+                    }
+                    keyExtractor={(item) => {
+                        return item.id;
+                    }}
+                    renderItem={(item) => {
+                        const Notification = item.item;
+                        return (
+                            <View style={styles.container}>
+                                <View style={styles.content}>
+                                    <Text style={styles.name}>{Notification.fullName}</Text>
+                                </View>
+                            </View>
+                        );
+                    }} />
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    bell: {
-        fontSize: hp('3%'),
+    root: {
+        backgroundColor: '#fff2e7',
+        paddingTop: 10,
+        paddingLeft: '5.5%',
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#FF7200',
+        width: wp('90%')
+    },
+    container: {
+        paddingLeft: 19,
+        paddingRight: 16,
+        paddingVertical: 12,
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+    },
+    name: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: '#FF7200',
+    },
+    content: {
+        marginLeft: 16,
+        flex: 1,
     },
     inputSearch: {
         width: wp('90%'),
