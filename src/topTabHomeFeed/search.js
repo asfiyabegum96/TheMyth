@@ -53,7 +53,7 @@ export default class search extends React.Component {
         const context = this;
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
-        photosRef.where('fullName', '>=', this.state.search).get().then(function (querySnapshot) {
+        photosRef.orderBy('fullName').startAt(this.state.search).endAt(this.state.search+ "\uf8ff").get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -64,6 +64,11 @@ export default class search extends React.Component {
             });
             context.setState({ feedData: searchArray })
         });
+    }
+
+    navigateToOtherUser(selectedItem) {
+        this.setState(this.baseState)
+        this.props.navigation.navigate('profile', { email: selectedItem.email.trim() })
     }
 
     render() {
@@ -95,7 +100,7 @@ export default class search extends React.Component {
                         return (
                             <View style={styles.container}>
                                 <View style={styles.content}>
-                                    <Text onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim() })} style={styles.name}>{Notification.fullName}</Text>
+                                    <Text onPress={(selectedItem) => this.navigateToOtherUser(Notification)} style={styles.name}>{Notification.fullName}</Text>
                                 </View>
                             </View>
                         );

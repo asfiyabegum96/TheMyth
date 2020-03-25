@@ -25,6 +25,7 @@ import {
 import MasonryList from "react-native-masonry-list";
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native"
 import firebase from 'react-native-firebase';
+import { SearchBar } from 'react-native-elements';
 
 const Jaguar = '#22222C';
 
@@ -110,6 +111,13 @@ export default class profile extends React.Component {
       this.fetchImages();
     })
   }
+
+  
+  updateSearch() {
+    this.props.navigation.navigate('search', { navigation: this.props.navigation, email: this.props.navigation.state.params.email.trim() })
+  };
+
+
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff2e7' }}>
@@ -123,11 +131,17 @@ export default class profile extends React.Component {
           <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
             <Icon name={'home'} size={30} color="#FF7200" />
           </TouchableOpacity>
-          <TextInput style={styles.inputSearch}
+          <SearchBar containerStyle={{ backgroundColor: 'fff2e7', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
+            placeholder="Search"
+            placeholderTextColor="#FF7200"
+            inputStyle={{ color: '#FF7200' }}
+            onFocus={() => this.updateSearch()}
+          />
+          {/* <TextInput style={styles.inputSearch}
             selectionColor='#FF7200'
             placeholder="Search"
             placeholderTextColor='#FF7200'
-          />
+          /> */}
           <TouchableOpacity onPress={() => this.props.navigation.navigate('sideNavigator', { email: this.props.navigation.state.params.email })}>
             <MaterialCommunityIcons name="settings" size={35} color="#FF7200" />
           </TouchableOpacity>
@@ -270,9 +284,10 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderBottomWidth: 1,
     borderBottomColor: '#FF7200',
+    backgroundColor: '#fff2e7',
     fontSize: 20,
-    backgroundColor: 'transparent',
-    color: '#FF7200'
+    color: '#FF7200',
+    height: hp('4%')
   },
   profileName: {
     fontSize: hp('4%'),
