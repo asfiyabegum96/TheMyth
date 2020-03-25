@@ -95,7 +95,7 @@ export default class search extends React.Component {
                         return (
                             <View style={styles.container}>
                                 <View style={styles.content}>
-                                    <Text style={styles.name}>{Notification.fullName}</Text>
+                                    <Text onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim() })} style={styles.name}>{Notification.fullName}</Text>
                                 </View>
                             </View>
                         );

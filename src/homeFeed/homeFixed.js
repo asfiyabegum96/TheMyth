@@ -118,7 +118,7 @@ export default class homeFixed extends React.Component {
 
   updateSearch() {
     // this.setState({ search: });
-    this.props.navigation.navigate('search')
+    this.props.navigation.navigate('search', { navigation: this.props.navigation, email: this.props.navigation.state.params.email.trim() })
   };
 
   render() {
