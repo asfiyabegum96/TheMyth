@@ -146,7 +146,7 @@ export default class mainFeed extends React.Component {
     });
     let url = 'photos';
     let email;
-    if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params.isSavedCollection) {
+    if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params.email) {
       email = this.props.navigation.state.params.email
       url = this.props.navigation.state.params.isSavedCollection === true ? 'savedCollections' : 'photos';
     } else {
