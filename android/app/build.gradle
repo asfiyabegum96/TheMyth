@@ -210,6 +210,9 @@ dependencies {
     // add SDKs for any other desired Firebase products
     // https://firebase.google.com/docs/android/setup#available-libraries
 
+    // Firebase cloud messaging
+    implementation "com.google.firebase:firebase-messaging:19.0.0"
+
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
         debugImplementation files(hermesPath + "hermes-debug.aar")
