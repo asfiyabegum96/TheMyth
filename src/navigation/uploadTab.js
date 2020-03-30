@@ -26,7 +26,7 @@ import { createAppContainer } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'react-native-firebase';
-
+import PushNotification from 'react-native-push-notification';
 
 
 class photosUpload extends React.Component {
@@ -41,13 +41,22 @@ class photosUpload extends React.Component {
             caption: '',
             location: '',
             user: '',
-            fieldNotEmpty: false
+            fieldNotEmpty: false,
+            token: ''
         }
         this.baseState = this.state;
     }
 
     componentDidMount() {
-        this.fetchUserDetails()
+        PushNotification.configure({
+
+            // (required) Called when a remote or local notification is opened or received
+            onNotification: function (notification) {
+                console.log("NOTIFICATION:", notification);
+            },
+        });
+        this.fetchUserDetails();
+        this.checkUserAuthorization();
     }
 
     componentWillUnMount() {
@@ -139,12 +148,14 @@ class photosUpload extends React.Component {
                 //clicking out side of alert will not cancel
             );
         } else {
+            this.sendNotification();
             this.setState({ fieldNotEmpty: true })
         }
     }
 
     proceedToUpload(flag) {
         if (this.state.path) {
+            var firstTime = true;
             var imageId = this.state.imageId;
             var imagePath = this.state.path;
             var userDetails = this.state.user;
@@ -168,7 +179,10 @@ class photosUpload extends React.Component {
 
                         firebase.storage().ref('images/userId/' + imageId).getDownloadURL()
                             .then((url) => {
-                                this.processUpload(url, flag);
+                                if (firstTime) {
+                                    firstTime = false;
+                                    this.processUpload(url, flag);
+                                }
                             });
                     }
                 },
@@ -181,6 +195,8 @@ class photosUpload extends React.Component {
 
     //uploading feed data in cloud firestore
     processUpload = (imageUrl, flag) => {
+        console.log('hjfh')
+        let firstTime = true;
         const url = flag ? 'diary' : 'photos'
         const context = this;
         let imageId = this.state.imageId;
@@ -219,8 +235,68 @@ class photosUpload extends React.Component {
                 uploading: false,
             });
             context.props.screenProps.navigation.navigate('homeFixed', { email: photoObj.email });
+            context.sendNotification()
         });
 
+    }
+
+    async sendNotification() {
+        console.log('lol');
+        const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
+        const message = {
+            registration_ids: [this.state.token],
+            notification: {
+                title: "Myth",
+                body: "Added photo",
+                "vibrate": 1,
+                "sound": 1,
+                "show_in_foreground": true,
+                "priority": "high",
+                "content_available": true,
+            }
+        }
+
+        let headers = new Headers({
+            "Content-Type": "application/json",
+            "Authorization": "key=" + FIREBASE_API_KEY
+        });
+
+        let response = await fetch("https://fcm.googleapis.com/fcm/send", { method: "POST", headers, body: JSON.stringify(message) })
+        response = await response.json();
+        console.log(response);
+    }
+
+    async checkUserAuthorization() {
+        firebase.messaging().hasPermission()
+            .then((enabled) => {
+                if (enabled) {
+                    console.log('user has permission');
+                } else {
+                    console.log('user does not have permission');
+                    this.getPermission()
+                }
+            });
+        let fcmToken = await AsyncStorage.getItem('fcmToken');
+        this.setState({ token: fcmToken })
+        console.log('token from async storage', fcmToken);
+        if (!fcmToken) {
+            fcmToken = await firebase.messaging().getToken();
+            if (fcmToken) {
+                console.log('token from firebase', fcmToken);
+                this.setState({ token: fcmToken })
+                await AsyncStorage.setItem("fcmToken", fcmToken, this.state.token);
+            }
+        }
+    }
+
+    async getPermission() {
+        firebase.messaging().requestPermission()
+            .then(() => {
+                console.log('user has authorized')
+            })
+            .catch(() => {
+                console.log('rejected permission')
+            })
     }
 
     render() {
