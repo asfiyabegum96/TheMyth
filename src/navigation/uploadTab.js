@@ -195,7 +195,6 @@ class photosUpload extends React.Component {
 
     //uploading feed data in cloud firestore
     processUpload = (imageUrl, flag) => {
-        console.log('hjfh')
         let firstTime = true;
         const url = flag ? 'diary' : 'photos'
         const context = this;
@@ -235,19 +234,20 @@ class photosUpload extends React.Component {
                 uploading: false,
             });
             context.props.screenProps.navigation.navigate('homeFixed', { email: photoObj.email });
-            context.sendNotification()
+            if (!flag) {
+                context.sendNotification()
+            }
         });
 
     }
 
     async sendNotification() {
-        console.log('lol');
         const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
         const message = {
             registration_ids: [this.state.token],
             notification: {
                 title: "Myth",
-                body: "Added photo",
+                body: "One of your friends had a food cravings!",
                 "vibrate": 1,
                 "sound": 1,
                 "show_in_foreground": true,
