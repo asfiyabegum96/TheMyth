@@ -235,13 +235,13 @@ class photosUpload extends React.Component {
             });
             context.props.screenProps.navigation.navigate('homeFixed', { email: photoObj.email });
             if (!flag) {
-                context.sendNotification()
+                context.sendNotification(photoObj)
             }
         });
 
     }
 
-    async sendNotification() {
+    async sendNotification(photoObj) {
         const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
         const message = {
             registration_ids: [this.state.token],
@@ -263,6 +263,19 @@ class photosUpload extends React.Component {
 
         let response = await fetch("https://fcm.googleapis.com/fcm/send", { method: "POST", headers, body: JSON.stringify(message) })
         response = await response.json();
+        if (response.success) {
+            let dateTime = Date.now();
+            let timestamp = Math.floor(dateTime / 1000);
+            const notificationObj = {
+                docRef: this.state.imageId,
+                title: 'Photo upload',
+                body: `${photoObj.author} added a photo!`,
+                userAvatar: photoObj.userAvatar,
+                postedTime: timestamp
+            }
+            firebase.firestore().collection('notifications').doc(this.state.imageId).set(notificationObj).then(function (docRef) {
+            });
+        }
         console.log(response);
     }
 

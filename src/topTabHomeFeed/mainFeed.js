@@ -147,6 +147,7 @@ export default class mainFeed extends React.Component {
     let url = 'photos';
     let email;
     if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params.email) {
+      console.log('sdfsdf', this.props.navigation.state.params)
       email = this.props.navigation.state.params.email
       url = this.props.navigation.state.params.isSavedCollection === true ? 'savedCollections' : 'photos';
     } else {
@@ -164,33 +165,44 @@ export default class mainFeed extends React.Component {
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) data = (doc.id, " => ", doc.data());
         if (doc.data().isDeleted === false) {
-          let photoFeedData = that.state.photoFeedData;
-          let userRef = db.collection('signup');
-          userRef.where('email', '==', email.trim()).get().then(function (userQuerySnapshot) {
-            userQuerySnapshot.forEach(function (doc) {
-              let userData;
-              const docNotEmpty = (doc.id, " => ", doc.data() != null);
-              if (docNotEmpty) {
-                userData = (doc.id, " => ", doc.data());
-                if (userData.email.trim() === data.email.trim()) {
-                  that.addToFlatlist(photoFeedData, data, userData);
-                } else {
-                  userRef.where('email', '==', data.email.trim()).get().then(function (otheruserSnapshot) {
-                    otheruserSnapshot.forEach(function (otherDoc) {
-                      const docNotEmpty = (otherDoc.id, " => ", otherDoc.data() != null);
-                      if (docNotEmpty) {
-                        let otherUserData;
-                        otherUserData = (otherDoc.id, " => ", otherDoc.data());
-                        that.addToFlatlist(photoFeedData, data, otherUserData);
-                      }
-                    })
-                  })
-                }
-              }
-            });
-          });
-        }
+          if (that.props.navigation && that.props.navigation.state && that.props.navigation.state.params && that.props.navigation.state.params.notification === true) {
+            if (doc.data().docRef === that.props.navigation.state.params.selectedItem.docRef) {
+              that.userRefFeed(email, data, that)
 
+            }
+          } else {
+            that.userRefFeed(email, data, that)
+          }
+        }
+      });
+    });
+  }
+
+  userRefFeed = (email, data, that) => {
+    let db = firebase.firestore();
+    let photoFeedData = that.state.photoFeedData;
+    let userRef = db.collection('signup');
+    userRef.where('email', '==', email.trim()).get().then(function (userQuerySnapshot) {
+      userQuerySnapshot.forEach(function (doc) {
+        let userData;
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) {
+          userData = (doc.id, " => ", doc.data());
+          if (userData.email.trim() === data.email.trim()) {
+            that.addToFlatlist(photoFeedData, data, userData);
+          } else {
+            userRef.where('email', '==', data.email.trim()).get().then(function (otheruserSnapshot) {
+              otheruserSnapshot.forEach(function (otherDoc) {
+                const docNotEmpty = (otherDoc.id, " => ", otherDoc.data() != null);
+                if (docNotEmpty) {
+                  let otherUserData;
+                  otherUserData = (otherDoc.id, " => ", otherDoc.data());
+                  that.addToFlatlist(photoFeedData, data, otherUserData);
+                }
+              })
+            })
+          }
+        }
       });
     });
   }
