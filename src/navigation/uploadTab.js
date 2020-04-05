@@ -22,8 +22,6 @@ import {
 import { TextField } from 'react-native-material-textfield';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { createAppContainer } from 'react-navigation';
-import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'react-native-firebase';
 import PushNotification from 'react-native-push-notification';
@@ -48,11 +46,16 @@ class photosUpload extends React.Component {
     }
 
     componentDidMount() {
+        const context = this;
         PushNotification.configure({
-
             // (required) Called when a remote or local notification is opened or received
             onNotification: function (notification) {
                 console.log("NOTIFICATION:", notification);
+                if (notification.userInteraction === true) {
+                    console.log('sdf', context.props)
+                    context.props.screenProps.navigation.navigate('homeFixed', { email: context.props.screenProps.navigation.state.params.email })
+                }
+
             },
         });
         this.fetchUserDetails();
