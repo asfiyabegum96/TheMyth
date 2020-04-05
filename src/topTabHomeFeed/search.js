@@ -53,7 +53,7 @@ export default class search extends React.Component {
         const context = this;
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
-        photosRef.orderBy('fullName').startAt(this.state.search).endAt(this.state.search+ "\uf8ff").get().then(function (querySnapshot) {
+        photosRef.orderBy('fullName').startAt(this.state.search).endAt(this.state.search + "\uf8ff").get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -75,6 +75,10 @@ export default class search extends React.Component {
         const { search } = this.state;
         return (
             <View style={{ flex: 1, }}>
+                <View style={styles.header}>
+                <TouchableOpacity style={{marginTop: '3%', marginLeft: '3%'}} onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
+                    <Icon name={'home'} size={30} color="#FF7200" />
+                </TouchableOpacity>
                 <SearchBar containerStyle={{ backgroundColor: '#fff2e7', height: hp('8%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
                     placeholder="Search"
                     autoFocus="true"
@@ -85,6 +89,7 @@ export default class search extends React.Component {
                     onClear={() => this.setState({ feedData: [] })}
                     value={search}
                 />
+                </View>
                 <FlatList
                     style={styles.root}
                     data={this.state.feedData}
@@ -149,5 +154,11 @@ const styles = StyleSheet.create({
         color: '#FF7200',
         height: hp('6%')
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: '#fff2e7',
+        padding: 5,
+      },
 });
 
