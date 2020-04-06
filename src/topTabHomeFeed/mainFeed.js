@@ -165,9 +165,8 @@ export default class mainFeed extends React.Component {
         if (docNotEmpty) data = (doc.id, " => ", doc.data());
         if (doc.data().isDeleted === false) {
           if (that.props.navigation && that.props.navigation.state && that.props.navigation.state.params && that.props.navigation.state.params.notification === true) {
-            if (doc.data().docRef === that.props.navigation.state.params.selectedItem.docRef) {
+            if (doc.data().docRef === that.props.navigation.state.params.selectedItem.item.docRef) {
               that.userRefFeed(email, data, that)
-
             }
           } else {
             that.userRefFeed(email, data, that)
@@ -221,12 +220,18 @@ export default class mainFeed extends React.Component {
       postedTime: that.timeConverter(data.postedTime),
       url: data.url,
       userAvatar: userData.profilePicture,
-      docRef: data.docRef
+      docRef: data.docRef,
+      email: data.email
     });
+    that.setPhoto(photoFeedData);
     that.setState({
       feedRefresh: false,
-      loading: false
+      loading: false,
     });
+  }
+
+  setPhoto= (data) => {
+    this.setState({photoFeedData: data});
   }
 
   navigateToComment = ({ item, index }, isComment) => {

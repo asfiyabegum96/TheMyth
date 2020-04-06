@@ -59,7 +59,9 @@ export default class search extends React.Component {
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
                 if (docNotEmpty) {
                     data = (doc.id, " => ", doc.data());
-                    searchArray.push(data);
+                    if (data.isDeleted === false) {
+                        searchArray.push(data);
+                    }
                 }
             });
             context.setState({ feedData: searchArray })
@@ -67,8 +69,9 @@ export default class search extends React.Component {
     }
 
     navigateToOtherUser(selectedItem) {
-        this.setState(this.baseState)
-        this.props.navigation.navigate('profile', { email: selectedItem.email.trim() })
+        this.setState(this.baseState);
+        const email = selectedItem.item && selectedItem.item.email ? selectedItem.item.email: selectedItem.email;
+        this.props.navigation.navigate('profile', { email: email.trim() })
     }
 
     render() {
@@ -76,19 +79,19 @@ export default class search extends React.Component {
         return (
             <View style={{ flex: 1, }}>
                 <View style={styles.header}>
-                <TouchableOpacity style={{marginTop: '3%', marginLeft: '3%'}} onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
-                    <Icon name={'home'} size={30} color="#FF7200" />
-                </TouchableOpacity>
-                <SearchBar containerStyle={{ backgroundColor: '#fff2e7', height: hp('8%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
-                    placeholder="Search"
-                    autoFocus="true"
-                    placeholderTextColor="#FF7200"
-                    inputStyle={{ color: '#FF7200' }}
-                    onChangeText={(text) => this.updateSearch(text)}
-                    onSubmitEditing={() => this.fetchSearchList()}
-                    onClear={() => this.setState({ feedData: [] })}
-                    value={search}
-                />
+                    <TouchableOpacity style={{ marginTop: '3%', marginLeft: '3%' }} onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
+                        <Icon name={'home'} size={30} color="#FF7200" />
+                    </TouchableOpacity>
+                    <SearchBar containerStyle={{ backgroundColor: '#fff2e7', height: hp('8%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
+                        placeholder="Search"
+                        autoFocus="true"
+                        placeholderTextColor="#FF7200"
+                        inputStyle={{ color: '#FF7200' }}
+                        onChangeText={(text) => this.updateSearch(text)}
+                        onSubmitEditing={() => this.fetchSearchList()}
+                        onClear={() => this.setState({ feedData: [] })}
+                        value={search}
+                    />
                 </View>
                 <FlatList
                     style={styles.root}
@@ -104,8 +107,11 @@ export default class search extends React.Component {
                         const Notification = item.item;
                         return (
                             <View style={styles.container}>
+                                <TouchableOpacity onPress={() => { }}>
+                                    <Image style={styles.image} source={{ uri: Notification.profilePicture }} />
+                                </TouchableOpacity>
                                 <View style={styles.content}>
-                                    <Text onPress={(selectedItem) => this.navigateToOtherUser(Notification)} style={styles.name}>{Notification.fullName}</Text>
+                                    <Text onPress={(selectedItem) => this.navigateToOtherUser(item)} style={styles.name}>{Notification.fullName}</Text>
                                 </View>
                             </View>
                         );
@@ -159,6 +165,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         backgroundColor: '#fff2e7',
         padding: 5,
-      },
+    },
+    image: {
+        width: 45,
+        height: 45,
+        borderRadius: 20,
+        marginLeft: 20
+    },
 });
 

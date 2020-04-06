@@ -274,7 +274,8 @@ class photosUpload extends React.Component {
                 title: 'Photo upload',
                 body: `${photoObj.author} added a photo!`,
                 userAvatar: photoObj.userAvatar,
-                postedTime: timestamp
+                postedTime: timestamp,
+                email: photoObj.email
             }
             firebase.firestore().collection('notifications').doc(this.state.imageId).set(notificationObj).then(function (docRef) {
             });

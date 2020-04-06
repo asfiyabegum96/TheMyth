@@ -74,7 +74,8 @@ export default class notification extends React.Component {
       postedTime: that.timeConverter(data.postedTime),
       body: data.body,
       userAvatar: data.userAvatar,
-      docRef: data.docRef
+      docRef: data.docRef,
+      email: data.email
     });
     that.setState({
       feedRefresh: false,
@@ -167,7 +168,7 @@ export default class notification extends React.Component {
                     <View style={styles.container}>
                       <Image style={styles.image} source={{ uri: Notification.userAvatar }} />
                       <View style={styles.content}>
-                        <TouchableOpacity onPress={() => this.props.screenProps.navigation(Notification, false, false, false, true)}>
+                        <TouchableOpacity onPress={() => this.props.screenProps.navigation(item, false, false, false, true)}>
                           <View style={styles.contentHeader}>
                             <Text style={styles.name}>{Notification.title}</Text>
                             <Text style={styles.time}>
