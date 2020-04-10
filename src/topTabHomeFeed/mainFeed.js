@@ -75,7 +75,7 @@ export default class mainFeed extends React.Component {
   }
 
   updateLikes(selectedPhoto, index) {
-    if (this.state.liked) {
+    if (selectedPhoto.isLiked) {
       let db = firebase.firestore();
       db.collection("photos").doc(selectedPhoto.docRef).update({
         likes: selectedPhoto.likes - 1
