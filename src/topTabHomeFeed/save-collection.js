@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, View, ScrollView, Alert } from 'react-native';
+import { ActivityIndicator, View, ScrollView, Alert, Text } from 'react-native';
 import MasonryList from "react-native-masonry-list";
 import {
     widthPercentageToDP as wp,
@@ -25,7 +25,7 @@ export default class SaveCollection extends Component {
     componentDidMount() {
         loc(this);
         this.props.navigation.setParams({
-            onFocus: () => { this.fetchUserDetails() }
+            onFocus: () => { this.fetchImages() }
         })
         this.fetchUserDetails();
     }
@@ -47,7 +47,7 @@ export default class SaveCollection extends Component {
 
     fetchImages() {
         const context = this;
-        context.setState({ feedRefresh: true, images: []})
+        context.setState({ feedRefresh: true, images: [] })
         const image = [];
         let db = firebase.firestore();
         let photosRef = db.collection('savedCollections');
@@ -62,8 +62,13 @@ export default class SaveCollection extends Component {
                     item: doc.data()
                 });
             })
-            context.setState({ images: image, loading: false, feedRefresh: false, })
+            context.setPhoto(image)
+            context.setState({ loading: false, feedRefresh: false, });
         })
+    }
+
+    setPhoto = (data) => {
+        this.setState({ images: data });
     }
 
     confirmDelete(item, index) {
@@ -101,15 +106,18 @@ export default class SaveCollection extends Component {
                         </View>
                     ) : (
                             <View style={{ flex: 1, }}>
-                                <MasonryList
-                                    masonryFlatListColProps={{ refreshing: this.state.feedRefresh, onRefresh: () => this.fetchImages() }}
-                                    backgroundColor={'#fff2e7'}
-                                    columns={3}
-                                    images={this.state.images}
-                                    keyExtractor={(item, index) => index.toString()}
-                                    onPressImage={(item) => this.props.screenProps.navigation(item, false, true)}
-                                    onLongPressImage={(item, index) => this.confirmDelete(item, index)}
-                                />
+                                {this.state.images.length > 0 ?
+                                    <MasonryList
+                                        rerender={true}
+                                        masonryFlatListColProps={{ refreshing: this.state.feedRefresh, onRefresh: () => this.fetchUserDetails() }}
+                                        backgroundColor={'#fff2e7'}
+                                        columns={3}
+                                        images={this.state.images}
+                                        keyExtractor={(item, index) => index.toString()}
+                                        onPressImage={(item) => this.props.screenProps.navigation(item, false, true)}
+                                        onLongPressImage={(item, index) => this.confirmDelete(item, index)}
+                                    /> : <Text>No results found</Text>}
+
                             </View>
                         )}
                 </View>

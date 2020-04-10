@@ -211,7 +211,7 @@ class photosUpload extends React.Component {
         let location = this.state.location;
         let dateTime = Date.now();
         let timestamp = Math.floor(dateTime / 1000);
-        let saved = 'no';
+        let saved = false;
         let isDeleted = false;
         let userAvatar = this.state.user.profilePicture
         // Create object for firestore

@@ -84,9 +84,9 @@ export default class homeFixed extends React.Component {
       this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim(), isSavedCollection: true })
     } else if (viewOthers) {
       this.props.navigation.navigate('profile', { email: item.item.email.trim() })
-    }else if (notification) {
-      this.props.navigation.navigate('mainFeed', { selectedItem: item, email: item.item.email.trim(), notification: true})
-    } 
+    } else if (notification) {
+      this.props.navigation.navigate('mainFeed', { selectedItem: item, email: item.item.email.trim(), notification: true })
+    }
     else {
       this.addToSaveCollection(item)
     }
@@ -94,6 +94,7 @@ export default class homeFixed extends React.Component {
 
   //uploading feed data in cloud firestore
   addToSaveCollection = (selectedItem) => {
+    let db = firebase.firestore();
     //Set variable for feed
     let caption = selectedItem.item.caption;
     let likes = selectedItem.item.likes;
@@ -112,14 +113,18 @@ export default class homeFixed extends React.Component {
       isDeleted: isDeleted,
       email: this.props.navigation.state.params.email.trim()
     }
-    firebase.firestore().collection('savedCollections').doc(photoObj.docRef).set(photoObj).then(function (docRef) {
-      alert('Added to your collections!');
+    db.collection("photos").doc(photoObj.docRef).update({
+      saved: true
+    }).then(function (docRef) {
+      selectedItem.context.state.photoFeedData[selectedItem.index].isSaved = true;
+      selectedItem.context.setPhoto(selectedItem.context.state.photoFeedData);
     });
+
+    firebase.firestore().collection('savedCollections').doc(photoObj.docRef).set(photoObj)
 
   }
 
   updateSearch() {
-    // this.setState({ search: });
     this.props.navigation.navigate('search', { navigation: this.props.navigation, email: this.props.navigation.state.params.email.trim() })
   };
 

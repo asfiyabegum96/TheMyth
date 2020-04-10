@@ -208,9 +208,9 @@ export default class SignupHome extends React.Component {
                   />
                   <TouchableOpacity onPress={this.setPasswordVisibility}>
                     {this.state.hidePassword === true ?
-                      <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
-                      :
                       <FontAwesome5 style={styles.hideIcon} name={'eye'} />
+                      :
+                      <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
 
                     }
                   </TouchableOpacity>

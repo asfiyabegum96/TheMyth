@@ -105,7 +105,7 @@ export default class forgotPassword extends React.Component {
     }
     render() {
         return (
-            <ScrollView style={styles.container}>
+            <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
                 <View style={styles.TitleDiv}>
                     {/* <Text style={styles.title}>TheMyth</Text>
                     <Text style={styles.titleSub}>Reset Password</Text> */}

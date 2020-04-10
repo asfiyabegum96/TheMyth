@@ -50,6 +50,7 @@ export default class mainFeed extends React.Component {
         new Animated.Value(0),
         new Animated.Value(0),
       ],
+      isSaved: false
     }
   }
 
@@ -221,7 +222,8 @@ export default class mainFeed extends React.Component {
       url: data.url,
       userAvatar: userData.profilePicture,
       docRef: data.docRef,
-      email: data.email
+      email: data.email,
+      isSaved: data.saved
     });
     that.setPhoto(photoFeedData);
     that.setState({
@@ -230,18 +232,18 @@ export default class mainFeed extends React.Component {
     });
   }
 
-  setPhoto= (data) => {
-    this.setState({photoFeedData: data});
+  setPhoto = (data) => {
+    this.setState({ photoFeedData: data });
   }
 
   navigateToComment = ({ item, index }, isComment) => {
     if (this.props.screenProps) {
-      this.props.screenProps.navigation({ item, index }, isComment)
+      this.props.screenProps.navigation({ item, index, context: this }, isComment);
     } else {
       if (isComment) {
         this.props.navigation.navigate('comments', { selectedItem: { item: item }, email: this.props.navigation.state.params.email.trim() })
       } else {
-        this.addToSaveCollection({ item: item })
+        this.addToSaveCollection({ item, index })
       }
     }
   }
@@ -251,7 +253,8 @@ export default class mainFeed extends React.Component {
   }
 
   //uploading feed data in cloud firestore
-  addToSaveCollection = (selectedItem) => {
+  addToSaveCollection = (selectedItem, index) => {
+    const context = this;
     //Set variable for feed
     let author = selectedItem.item.author;
     let authorDescription = selectedItem.item.authorDescription;
@@ -261,7 +264,7 @@ export default class mainFeed extends React.Component {
     let dateTime = Date.now();
     let timestamp = Math.floor(dateTime / 1000);
     let isDeleted = false;
-    let userAvatar = selectedItem.item.userAvatar
+    let userAvatar = selectedItem.item.userAvatar;
     // Create object for firestore
     let photoObj = {
       author: author,
@@ -276,11 +279,33 @@ export default class mainFeed extends React.Component {
       isDeleted: isDeleted,
       email: this.props.navigation.state.params.email.trim()
     }
-    firebase.firestore().collection('savedCollections').doc(photoObj.docRef).set(photoObj).then(function (docRef) {
-      alert('Added to your collections!');
-    });
 
+    db.collection("photos").doc(selectedItem.item.docRef).update({
+      saved: true
+    })
+
+    firebase.firestore().collection('savedCollections').doc(photoObj.docRef).set(photoObj).then(function (docRef) {
+      context.state.photoFeedData[index].isSaved = true;
+      context.setPhoto(context.state.photoFeedData);
+    });
   }
+
+  deleteCollection(selectedItem) {
+    const context = this;
+    let db = firebase.firestore();
+
+    db.collection("photos").doc(selectedItem.item.docRef).update({
+      saved: false
+    }).then(() => {
+      context.state.photoFeedData[selectedItem.index].isSaved = false;
+      context.setPhoto(context.state.photoFeedData);
+    })
+
+    db.collection("savedCollections").doc(selectedItem.item.docRef).update({
+      isDeleted: true
+    })
+  }
+
 
   render() {
     //Heart like spring animation 
@@ -303,7 +328,7 @@ export default class mainFeed extends React.Component {
           }} />
         {this.state.loading == true ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" color='red' />
+            <ActivityIndicator size="large" color='#FF7200' />
           </View>
         ) : (
             <FlatList
@@ -354,9 +379,14 @@ export default class mainFeed extends React.Component {
                       <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('1%') }}>
                         <Fontisto style={styles.comment} name="comment" size={22} color="#22222C" />
                       </TouchableOpacity>
-                      <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, false)} style={{ paddingLeft: wp('1%') }}>
-                        <Fontisto name="bookmark-alt" size={22} color="#22222C" />
-                      </TouchableOpacity>
+                      {item.isSaved === true ?
+                        <TouchableOpacity onPress={() => { this.deleteCollection({ item, index }) }} style={{ paddingLeft: wp('1%') }}>
+                          <Fontisto name="bookmark-alt" size={22} color="#FF7200" />
+                        </TouchableOpacity> :
+                        <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, false)} style={{ paddingLeft: wp('1%') }}>
+                          <Fontisto name="bookmark" size={22} />
+                        </TouchableOpacity>
+                      }
                       <View>
                       </View>
                     </View>
