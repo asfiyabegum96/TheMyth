@@ -50,7 +50,7 @@ export default class mainFeed extends React.Component {
         new Animated.Value(0),
         new Animated.Value(0),
       ],
-      isSaved: false
+      email: ''
     }
   }
 
@@ -80,9 +80,10 @@ export default class mainFeed extends React.Component {
       db.collection("photos").doc(selectedPhoto.docRef).update({
         likes: selectedPhoto.likes - 1
       })
+      db.collection("photos").doc(selectedPhoto.docRef).collection('likedUsers').doc(selectedPhoto.docRef).update({ email: this.state.email + '_unliked' })
       this.state.photoFeedData[index].likes = selectedPhoto.likes - 1;
       this.state.photoFeedData[index].isLiked = false;
-      this.setState({ alreadyLiked: false })
+      this.setState({ alreadyLiked: false, liked: false })
     } else {
       let db = firebase.firestore();
       db.collection("photos").doc(selectedPhoto.docRef).update({
@@ -90,7 +91,8 @@ export default class mainFeed extends React.Component {
       })
       this.state.photoFeedData[index].likes = selectedPhoto.likes + 1;
       this.state.photoFeedData[index].isLiked = true;
-      this.setState({ alreadyLiked: true })
+      db.collection("photos").doc(selectedPhoto.docRef).collection('likedUsers').doc(selectedPhoto.docRef).set({ email: this.state.email.trim() })
+      this.setState({ alreadyLiked: true, liked: true })
     }
   }
 
@@ -153,6 +155,7 @@ export default class mainFeed extends React.Component {
     } else {
       email = this.props.screenProps.property.screenProps.email
     }
+    this.setState({ email: email })
     let that = this;
 
     let db = firebase.firestore();
@@ -242,6 +245,19 @@ export default class mainFeed extends React.Component {
           }
           if (data && data.email.trim() === email.trim()) {
             element.isSaved = true;
+          }
+        });
+      });
+
+      let likedUsersRef = db.collection('photos').doc(element.docRef).collection('likedUsers');
+      likedUsersRef.get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          const docNotEmpty = (doc.id, " => ", doc.data() != null);
+          if (docNotEmpty) {
+            data = doc.data();
+          }
+          if (data && data.email.trim() === email.trim()) {
+            element.isLiked = true;
           }
         });
       });
