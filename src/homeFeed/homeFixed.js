@@ -120,6 +120,8 @@ export default class homeFixed extends React.Component {
       selectedItem.context.setPhoto(selectedItem.context.state.photoFeedData);
     });
 
+    db.collection("photos").doc(photoObj.docRef).collection('savedUsers').doc(photoObj.docRef).set({ email: this.props.navigation.state.params.email.trim() })
+
     firebase.firestore().collection('savedCollections').doc(photoObj.docRef).set(photoObj)
 
   }

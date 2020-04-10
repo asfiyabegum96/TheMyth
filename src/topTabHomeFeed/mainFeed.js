@@ -188,7 +188,7 @@ export default class mainFeed extends React.Component {
         if (docNotEmpty) {
           userData = (doc.id, " => ", doc.data());
           if (userData.email.trim() === data.email.trim()) {
-            that.addToFlatlist(photoFeedData, data, userData);
+            that.addToFlatlist(photoFeedData, data, userData, email);
           } else {
             userRef.where('email', '==', data.email.trim()).get().then(function (otheruserSnapshot) {
               otheruserSnapshot.forEach(function (otherDoc) {
@@ -196,7 +196,7 @@ export default class mainFeed extends React.Component {
                 if (docNotEmpty) {
                   let otherUserData;
                   otherUserData = (otherDoc.id, " => ", otherDoc.data());
-                  that.addToFlatlist(photoFeedData, data, otherUserData);
+                  that.addToFlatlist(photoFeedData, data, otherUserData, email);
                 }
               })
             })
@@ -206,10 +206,9 @@ export default class mainFeed extends React.Component {
     });
   }
 
-  addToFlatlist = (photoFeedData, data, userData) => {
+  addToFlatlist = (photoFeedData, data, userData, email) => {
 
     var that = this;
-
     photoFeedData.push({
       author: userData.fullName,
       authorDescription: userData.description,
@@ -225,11 +224,36 @@ export default class mainFeed extends React.Component {
       email: data.email,
       isSaved: data.saved
     });
-    that.setPhoto(photoFeedData);
-    that.setState({
-      feedRefresh: false,
-      loading: false,
-    });
+    that.fetchSavedUsers(photoFeedData, email);
+
+  }
+
+  fetchSavedUsers = (item, email) => {
+    var that = this;
+    let db = firebase.firestore();
+    let data;
+    item.forEach((element) => {
+      let savedUsersRef = db.collection('photos').doc(element.docRef).collection('savedUsers');
+      savedUsersRef.get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          const docNotEmpty = (doc.id, " => ", doc.data() != null);
+          if (docNotEmpty) {
+            data = doc.data();
+          }
+          if (data && data.email.trim() === email.trim()) {
+            element.isSaved = true;
+          }
+        });
+      });
+    })
+    setTimeout(() => {
+      that.setPhoto(item);
+      that.setState({
+        feedRefresh: false,
+        loading: false,
+      });
+    }, 1000);
+
   }
 
   setPhoto = (data) => {
@@ -284,6 +308,8 @@ export default class mainFeed extends React.Component {
       saved: true
     })
 
+    db.collection("photos").doc(selectedItem.item.docRef).collection('savedUsers').doc(selectedItem.item.docRef).set({ email: this.props.navigation.state.params.email.trim() })
+
     firebase.firestore().collection('savedCollections').doc(photoObj.docRef).set(photoObj).then(function (docRef) {
       context.state.photoFeedData[index].isSaved = true;
       context.setPhoto(context.state.photoFeedData);
@@ -300,6 +326,8 @@ export default class mainFeed extends React.Component {
       context.state.photoFeedData[selectedItem.index].isSaved = false;
       context.setPhoto(context.state.photoFeedData);
     })
+
+    db.collection("photos").doc(selectedItem.item.docRef).collection('savedUsers').doc(selectedItem.item.docRef).update({ email: selectedItem.item.email + '_deleted' })
 
     db.collection("savedCollections").doc(selectedItem.item.docRef).update({
       isDeleted: true
