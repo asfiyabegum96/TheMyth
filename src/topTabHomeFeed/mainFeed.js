@@ -199,7 +199,9 @@ export default class mainFeed extends React.Component {
                 if (docNotEmpty) {
                   let otherUserData;
                   otherUserData = (otherDoc.id, " => ", otherDoc.data());
-                  that.addToFlatlist(photoFeedData, data, otherUserData, email);
+                  if (otherUserData.isPrivateAccount === false) {
+                    that.addToFlatlist(photoFeedData, data, otherUserData, email);
+                  }
                 }
               })
             })
@@ -225,7 +227,7 @@ export default class mainFeed extends React.Component {
       userAvatar: userData.profilePicture,
       docRef: data.docRef,
       email: data.email,
-      isSaved: data.saved
+      isSaved: false
     });
     that.fetchSavedUsers(photoFeedData, email);
 
@@ -289,7 +291,8 @@ export default class mainFeed extends React.Component {
   }
 
   viewOtherUserProfiles = ({ item }) => {
-    this.props.screenProps.navigation({ item }, false, false, true)
+    const isSameProfile = this.state.email.trim() === item.email.trim();
+    this.props.screenProps.navigation({ item, email: this.state.email.trim(), isSameProfile: isSameProfile }, false, false, true)
   }
 
   //uploading feed data in cloud firestore

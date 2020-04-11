@@ -31,7 +31,8 @@ export default class search extends React.Component {
         super(props);
         this.state = {
             search: '',
-            feedData: []
+            feedData: [],
+            email: props.navigation.state.params.email
         }
         this.baseState = this.state;
     }
@@ -69,9 +70,15 @@ export default class search extends React.Component {
     }
 
     navigateToOtherUser(selectedItem) {
+        const searchedEmail = selectedItem.item && selectedItem.item.email ? selectedItem.item.email : selectedItem.email;
+        const isPrivateAccount
+            = selectedItem.item
+                ? selectedItem.item.isPrivateAccount
+                : selectedItem.isPrivateAccount
+            ;
+        const isSameProfile = this.state.email.trim() === searchedEmail.trim();
         this.setState(this.baseState);
-        const email = selectedItem.item && selectedItem.item.email ? selectedItem.item.email: selectedItem.email;
-        this.props.navigation.navigate('profile', { email: email.trim() })
+        this.props.navigation.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile })
     }
 
     render() {

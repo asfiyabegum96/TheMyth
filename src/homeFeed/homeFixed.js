@@ -83,7 +83,7 @@ export default class homeFixed extends React.Component {
     } else if (isSavedCollection) {
       this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim(), isSavedCollection: true })
     } else if (viewOthers) {
-      this.props.navigation.navigate('profile', { email: item.item.email.trim() })
+      this.props.navigation.navigate('profile', { email: item.email, searchedEmail: item.item.email.trim(), privateAccount: item.item.isPrivateAccount, isSameProfile: item.isSameProfile })
     } else if (notification) {
       this.props.navigation.navigate('mainFeed', { selectedItem: item, email: item.item.email.trim(), notification: true })
     }
@@ -151,7 +151,7 @@ export default class homeFixed extends React.Component {
             placeholder="Search"
             placeholderTextColor='#FF7200'
           /> */}
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim() })}>
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim(), searchedEmail: this.props.navigation.state.params.email.trim(), privateAccount: false, isSameProfile: true })}>
             <FontAwesome5 style={styles.profile} name={'user-alt'} />
           </TouchableOpacity>
         </View>

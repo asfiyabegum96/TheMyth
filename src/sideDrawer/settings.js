@@ -58,7 +58,7 @@ class Settings extends Component {
   }
 
   onBack = () => {
-    this.props.screenProps.navigation.navigate('profile', { email: this.props.screenProps.email.trim() })
+    this.props.screenProps.navigation.navigate('profile', { email: this.props.screenProps.email.trim(), searchedEmail: this.props.screenProps.email.trim(), privateAccount: false, isSameProfile: true })
   }
 
 

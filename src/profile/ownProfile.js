@@ -42,14 +42,24 @@ export default class profile extends React.Component {
 
   componentDidMount() {
     loc(this);
-    this.fetchUserDetails();
+    this._unsubscribe = this.props.navigation.addListener('willFocus', () => {
+      this.setState(this.baseState)
+      this.fetchUserDetails();
+    });
   }
 
   fetchUserDetails() {
     const context = this;
+    let email;
+    let params = context.props.navigation.state.params;
     let db = firebase.firestore();
     let photosRef = db.collection('signup');
-    photosRef.where('email', '==', context.props.navigation.state.params.email).get().then(function (querySnapshot) {
+    if (params.isSameProfile === true) {
+      email = params.email;
+    } else {
+      email = params.searchedEmail
+    }
+    photosRef.where('email', '==', email).get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         let data;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -63,25 +73,37 @@ export default class profile extends React.Component {
   fetchImages() {
     const context = this;
     const image = [];
+    let email;
     let db = firebase.firestore();
     let photosRef = db.collection('photos');
-    photosRef.where('email', '==', context.props.navigation.state.params.email).where('isDeleted', '==', false).get().then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        let data;
-        const docNotEmpty = (doc.id, " => ", doc.data() != null);
-        if (docNotEmpty) data = (doc.id, " => ", doc.data());
-        image.push({
-          URL: doc.data().url,
-          dimensions: { width: 900, height: 1050 },
-          item: doc.data()
-        });
+    let params = context.props.navigation.state.params;
+    if (params.isSameProfile === true) {
+      email = params.email;
+    } else if (params.privateAccount === false) {
+      email = params.searchedEmail
+    }
+    if (email) {
+      photosRef.where('email', '==', email).where('isDeleted', '==', false).get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+          let data;
+          const docNotEmpty = (doc.id, " => ", doc.data() != null);
+          if (docNotEmpty) data = (doc.id, " => ", doc.data());
+          image.push({
+            URL: doc.data().url,
+            dimensions: { width: 900, height: 1050 },
+            item: doc.data()
+          });
+        })
+        context.setState({ images: image, loading: false })
       })
-      context.setState({ images: image, loading: false })
-    })
+    } else {
+      context.setState({ images: [], loading: false })
+    }
   }
 
   componentWillUnMount() {
     rol();
+    this._unsubscribe();
   }
 
   confirmDelete(item, index) {
@@ -112,7 +134,7 @@ export default class profile extends React.Component {
     })
   }
 
-  
+
   updateSearch() {
     this.props.navigation.navigate('search', { navigation: this.props.navigation, email: this.props.navigation.state.params.email.trim() })
   };
