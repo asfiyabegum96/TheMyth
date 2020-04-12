@@ -35,7 +35,9 @@ export default class profile extends React.Component {
     this.state = {
       user: '',
       images: [],
-      loading: true
+      loading: true,
+      navProps: props.navigation.state.params,
+      followText: 'Follow'
     }
     this.baseState = this.state;
   }
@@ -139,6 +141,56 @@ export default class profile extends React.Component {
     this.props.navigation.navigate('search', { navigation: this.props.navigation, email: this.props.navigation.state.params.email.trim() })
   };
 
+  followPressed = () => {
+    this.setState({ navProps: this.props.navigation.state.params });
+    this.fetchCurrentUserDetails();
+  }
+
+  fetchCurrentUserDetails() {
+    const context = this;
+    let db = firebase.firestore();
+    let userData;
+    db.collection("signup").where('email', '==', this.state.navProps.email.trim()).get().then(function (userQuerySnapshot) {
+      userQuerySnapshot.forEach(function (doc) {
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) {
+          userData = (doc.id, " => ", doc.data());
+          context.fetchSeachedUser(userData);
+        }
+      });
+    });
+
+  }
+
+  fetchSeachedUser(userData) {
+    const context = this;
+    let db = firebase.firestore();
+    let searchedUserData;
+    db.collection("signup").where('email', '==', this.state.navProps.searchedEmail.trim()).get().then(function (searchedQuerySnapshot) {
+      searchedQuerySnapshot.forEach(function (doc) {
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) {
+          searchedUserData = (doc.id, " => ", doc.data());
+          context.updateFollowers(userData, searchedUserData)
+        }
+      });
+    });
+
+  }
+
+  updateFollowers(userData, searchedUserData) {
+    let db = firebase.firestore();
+    if (this.state.followText === 'Follow') {
+      this.setState({ followText: 'Unfollow' })
+      db.collection("signup").doc(userData.docRef).collection('following').doc(userData.docRef).set({ email: searchedUserData.email.trim() }).then((dat) => alert('done'))
+      db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(searchedUserData.docRef).set({ email: userData.email.trim() })
+    } else {
+      this.setState({ followText: 'Follow' })
+      db.collection("signup").doc(userData.docRef).collection('following').doc(userData.docRef).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => alert('done'))
+      db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(searchedUserData.docRef).update({ email: userData.email.trim() + '_removed' })
+
+    }
+  }
 
   render() {
     return (
@@ -239,14 +291,16 @@ export default class profile extends React.Component {
                 fontSize: hp('2.5%'),
                 marginLeft: 4,
               }}>{this.state.user.description}</Text>
-              <TouchableOpacity>
-                <View style={styles.follow}>
-                  <Text style={{
-                    color: '#FF7200',
-                    fontSize: 17,
-                  }}>Follow</Text>
-                </View>
-              </TouchableOpacity>
+              {this.props.navigation.state.params.isSameProfile === true ? <View></View> :
+                <TouchableOpacity onPress={() => { this.followPressed() }}>
+                  <View style={styles.follow}>
+                    <Text style={{
+                      color: '#FF7200',
+                      fontSize: 17,
+                    }}>{this.state.followText}</Text>
+                  </View>
+                </TouchableOpacity>
+              }
             </View>
           </View>
           <View style={{ padding: 10 }}>
