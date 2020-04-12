@@ -49,7 +49,7 @@ export default class search extends React.Component {
     }
 
     fetchSearchList() {
-        const searchArray = []
+        const searchArray = [];
         console.log('submitted', this.state.search);
         const context = this;
         let db = firebase.firestore();
@@ -65,8 +65,35 @@ export default class search extends React.Component {
                     }
                 }
             });
-            context.setState({ feedData: searchArray })
+            context.getFollowers(searchArray);
         });
+    }
+
+    getFollowers(searchArray) {
+        const context = this;
+        let db = firebase.firestore();
+        let photosRef = db.collection('signup');
+        if (searchArray.length) {
+            searchArray.forEach((searchElement) => {
+                photosRef.doc(searchElement.docRef).collection('followers').get().then(function (followerSnapshot) {
+                    followerSnapshot.forEach(function (followerDoc) {
+                        const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
+                        if (docNotEmpty) {
+                            if (context.state.email === followerDoc.data().email) {
+                                searchElement.isFollowed = true
+                            } else {
+                                searchElement.isFollowed = false
+                            }
+                        }
+                    })
+                    context.setState({ feedData: searchArray })
+                })
+            });
+
+        } else {
+            this.setState({ feedData: [] })
+        }
+
     }
 
     navigateToOtherUser(selectedItem) {
@@ -76,9 +103,13 @@ export default class search extends React.Component {
                 ? selectedItem.item.isPrivateAccount
                 : selectedItem.isPrivateAccount
             ;
+        const isFollowed = selectedItem.item
+            ? selectedItem.item.isFollowed
+            : selectedItem.isFollowed
+            ;
         const isSameProfile = this.state.email.trim() === searchedEmail.trim();
         this.setState(this.baseState);
-        this.props.navigation.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile })
+        this.props.navigation.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile, isFollowed: isFollowed })
     }
 
     render() {

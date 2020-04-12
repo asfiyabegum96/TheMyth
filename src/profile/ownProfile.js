@@ -60,6 +60,9 @@ export default class profile extends React.Component {
       email = params.email;
     } else {
       email = params.searchedEmail
+      if (params.isFollowed === true) {
+        this.setState({ followText: 'Unfollow' })
+      }
     }
     photosRef.where('email', '==', email).get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
