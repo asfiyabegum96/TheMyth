@@ -199,9 +199,20 @@ export default class mainFeed extends React.Component {
                 if (docNotEmpty) {
                   let otherUserData;
                   otherUserData = (otherDoc.id, " => ", otherDoc.data());
-                  if (otherUserData.isPrivateAccount === false) {
-                    that.addToFlatlist(photoFeedData, data, otherUserData, email);
-                  }
+                  userRef.doc(otherUserData.docRef).collection('followers').get().then(function (followerSnapshot) {
+                    followerSnapshot.forEach(function (followerDoc) {
+                      const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
+                      if (docNotEmpty) {
+                        if (email === followerDoc.data().email) {
+                          otherUserData.isFollowed = true;
+                          that.addToFlatlist(photoFeedData, data, otherUserData, email);
+                        } else {
+                          otherUserData.isFollowed = false;
+                        }
+                      }
+                    })
+                  });
+
                 }
               })
             })
@@ -212,7 +223,6 @@ export default class mainFeed extends React.Component {
   }
 
   addToFlatlist = (photoFeedData, data, userData, email) => {
-
     var that = this;
     photoFeedData.push({
       author: userData.fullName,

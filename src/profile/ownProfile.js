@@ -37,7 +37,9 @@ export default class profile extends React.Component {
       images: [],
       loading: true,
       navProps: props.navigation.state.params,
-      followText: 'Follow'
+      followText: 'Follow',
+      followersCount: 0,
+      followingCount: 0
     }
     this.baseState = this.state;
   }
@@ -99,11 +101,35 @@ export default class profile extends React.Component {
             item: doc.data()
           });
         })
-        context.setState({ images: image, loading: false })
+        context.setState({ images: image, loading: false });
+        context.fetchFollowersDetails()
       })
     } else {
       context.setState({ images: [], loading: false })
     }
+  }
+
+  fetchFollowersDetails() {
+    const context = this;
+    let followerCount = 0;
+    let followingCount = 0;
+    let db = firebase.firestore();
+    db.collection("signup").doc(this.state.user.docRef).collection('following').get().then(function (followingSnapshot) {
+      followingSnapshot.forEach(function (doc) {
+        let data;
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) data = (doc.id, " => ", doc.data());
+        context.setState({ followingCount: ++followingCount })
+      })
+    })
+    db.collection("signup").doc(this.state.user.docRef).collection('followers').get().then(function (followerSnapshot) {
+      followerSnapshot.forEach(function (doc) {
+        let data;
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) data = (doc.id, " => ", doc.data());
+        context.setState({ followersCount: ++followerCount })
+      })
+    })
   }
 
   componentWillUnMount() {
@@ -233,7 +259,7 @@ export default class profile extends React.Component {
                 <Text style={{
                   fontSize: wp('5%'),
                   color: '#FF7200'
-                }}>20</Text>
+                }}>{this.state.images.length}</Text>
               </View>
             </CollapseHeader>
             <CollapseBody style={{ alignItems: 'center', justifyContent: 'center', }}>
@@ -251,7 +277,7 @@ export default class profile extends React.Component {
                 <Text style={{
                   fontSize: wp('5%'),
                   color: '#FF7200'
-                }}>30</Text>
+                }}>{this.state.followersCount}</Text>
               </View>
             </CollapseHeader>
             <CollapseBody style={{ alignItems: 'center', justifyContent: 'center', }}>
@@ -269,7 +295,7 @@ export default class profile extends React.Component {
                 <Text style={{
                   fontSize: wp('5%'),
                   color: '#FF7200'
-                }}>20</Text>
+                }}>{this.state.followingCount}</Text>
               </View>
             </CollapseHeader>
             <CollapseBody style={{ alignItems: 'center', justifyContent: 'center', }}>
