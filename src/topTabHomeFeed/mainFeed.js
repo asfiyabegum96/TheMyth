@@ -147,11 +147,14 @@ export default class mainFeed extends React.Component {
       feedRefresh: true,
       photoFeedData: []
     });
+    let viewSpecificPhotos = false;
     let url = 'photos';
-    let email;
+    let email, selectedEmail;
     if (this.props.navigation && this.props.navigation.state && this.props.navigation.state.params.email) {
-      email = this.props.navigation.state.params.email
+      email = this.props.navigation.state.params.email;
+      selectedEmail = this.props.navigation.state.params.selectedItem.item.email;
       url = this.props.navigation.state.params.isSavedCollection === true ? 'savedCollections' : 'photos';
+      viewSpecificPhotos = this.props.navigation.state.params.viewSpecificPhotos;
     } else {
       email = this.props.screenProps.property.screenProps.email
     }
@@ -167,17 +170,27 @@ export default class mainFeed extends React.Component {
         let data;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) data = (doc.id, " => ", doc.data());
-        if (doc.data().isDeleted === false) {
-          if (that.props.navigation && that.props.navigation.state && that.props.navigation.state.params && that.props.navigation.state.params.notification === true) {
-            if (doc.data().docRef === that.props.navigation.state.params.selectedItem.item.docRef) {
-              that.userRefFeed(email, data, that)
-            }
-          } else {
-            that.userRefFeed(email, data, that)
+        if (viewSpecificPhotos === true) {
+          if (doc.data().isDeleted === false && data.email === selectedEmail) {
+            that.fetchUserFeed(email, data, that)
+          }
+        } else {
+          if (doc.data().isDeleted === false) {
+            that.fetchUserFeed(email, data, that)
           }
         }
       });
     });
+  }
+
+  fetchUserFeed = (email, data, that) => {
+    if (that.props.navigation && that.props.navigation.state && that.props.navigation.state.params && that.props.navigation.state.params.notification === true) {
+      if (data.docRef === that.props.navigation.state.params.selectedItem.item.docRef) {
+        that.userRefFeed(email, data, that)
+      }
+    } else {
+      that.userRefFeed(email, data, that)
+    }
   }
 
   userRefFeed = (email, data, that) => {
@@ -203,11 +216,10 @@ export default class mainFeed extends React.Component {
                     followerSnapshot.forEach(function (followerDoc) {
                       const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                       if (docNotEmpty) {
+                        otherUserData.isFollowed = false;
                         if (email === followerDoc.data().email) {
                           otherUserData.isFollowed = true;
                           that.addToFlatlist(photoFeedData, data, otherUserData, email);
-                        } else {
-                          otherUserData.isFollowed = false;
                         }
                       }
                     })
@@ -237,7 +249,9 @@ export default class mainFeed extends React.Component {
       userAvatar: userData.profilePicture,
       docRef: data.docRef,
       email: data.email,
-      isSaved: false
+      isSaved: false,
+      isFollowed: userData.isFollowed,
+      isPrivateAccount: userData.isPrivateAccount
     });
     that.fetchSavedUsers(photoFeedData, email);
 

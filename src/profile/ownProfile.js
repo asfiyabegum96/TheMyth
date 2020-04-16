@@ -86,7 +86,7 @@ export default class profile extends React.Component {
     let params = context.props.navigation.state.params;
     if (params.isSameProfile === true) {
       email = params.email;
-    } else if (params.privateAccount === false) {
+    } else if (params.privateAccount === false || params.isFollowed === true) {
       email = params.searchedEmail
     }
     if (email) {
@@ -344,7 +344,7 @@ export default class profile extends React.Component {
                   columns={3}
                   images={this.state.images}
                   onLongPressImage={(item, index) => this.confirmDelete(item, index)}
-                  onPressImage={(item) => this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })}
+                  onPressImage={(item) => this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim(), viewSpecificPhotos: true })}
                 />)}
           </View>
         </ScrollView>
