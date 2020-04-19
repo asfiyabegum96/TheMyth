@@ -50,20 +50,37 @@ export default class SaveCollection extends Component {
         context.setState({ feedRefresh: true, images: [] })
         const image = [];
         let db = firebase.firestore();
-        let photosRef = db.collection('savedCollections');
-        photosRef.where('email', '==', this.props.screenProps.email).where('isDeleted', '==', false).get().then(function (querySnapshot) {
+        let photosRef = db.collection('photos');
+        photosRef.where('isDeleted', '==', false).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
-                if (docNotEmpty) data = (doc.id, " => ", doc.data());
-                image.push({
-                    URL: doc.data().url,
-                    dimensions: { width: 900, height: 1050 },
-                    item: doc.data()
-                });
+                if (docNotEmpty) {
+                    data = (doc.id, " => ", doc.data());
+                    photosRef.doc(data.docRef).collection('savedUsers').get().then(function (savedSnapshot) {
+                        savedSnapshot.forEach(function (savedDoc) {
+                            let savedData;
+                            const docNotEmpty = (savedDoc.id, " => ", savedDoc.data() != null);
+                            if (docNotEmpty) {
+                                savedData = (savedDoc.id, " => ", savedDoc.data());
+                                if (savedData.email === context.props.screenProps.email) {
+                                    image.push({
+                                        URL: doc.data().url,
+                                        dimensions: { width: 900, height: 1050 },
+                                        item: doc.data()
+                                    });
+                                }
+                                context.setPhoto(image)
+                                context.setState({ loading: false, feedRefresh: false, });
+                            } else {
+                                context.setPhoto([])
+                            }
+                        })
+                    })
+                } else {
+                    context.setPhoto([])
+                }
             })
-            context.setPhoto(image)
-            context.setState({ loading: false, feedRefresh: false, });
         })
     }
 
@@ -89,8 +106,8 @@ export default class SaveCollection extends Component {
     deletePost(selectedItem) {
         this.setState({ loading: true })
         let db = firebase.firestore();
-        db.collection("savedCollections").doc(selectedItem.item.docRef).update({
-            isDeleted: true
+        db.collection("photos").doc(selectedItem.item.docRef).collection('savedUsers').doc(this.props.screenProps.email).update({
+            email: this.props.screenProps.email + '_deleted'
         }).then(() => {
             this.fetchImages();
         })
@@ -99,13 +116,13 @@ export default class SaveCollection extends Component {
     render() {
         return (
             <ScrollView style={{ backgroundColor: '#fff2e7' }}>
-                <View style={{ padding: 10 }}>
+                <View style={{ padding: 10, minHeight: hp('50%') }}>
                     {this.state.loading == true ? (
                         <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
                             <ActivityIndicator size="large" color='red' />
                         </View>
                     ) : (
-                            <View style={{ flex: 1, }}>
+                            <View style={{ flex: 1}}>
                                 {this.state.images.length > 0 ?
                                     <MasonryList
                                         rerender={true}
@@ -116,8 +133,7 @@ export default class SaveCollection extends Component {
                                         keyExtractor={(item, index) => index.toString()}
                                         onPressImage={(item) => this.props.screenProps.navigation(item, false, true)}
                                         onLongPressImage={(item, index) => this.confirmDelete(item, index)}
-                                    /> : <Text>No results found</Text>}
-
+                                    /> : <Text></Text>}
                             </View>
                         )}
                 </View>

@@ -80,7 +80,7 @@ export default class mainFeed extends React.Component {
       db.collection("photos").doc(selectedPhoto.docRef).update({
         likes: selectedPhoto.likes - 1
       })
-      db.collection("photos").doc(selectedPhoto.docRef).collection('likedUsers').doc(selectedPhoto.docRef).update({ email: this.state.email + '_unliked' })
+      db.collection("photos").doc(selectedPhoto.docRef).collection('likedUsers').doc(this.state.email).update({ email: this.state.email + '_unliked' })
       this.state.photoFeedData[index].likes = selectedPhoto.likes - 1;
       this.state.photoFeedData[index].isLiked = false;
       this.setState({ alreadyLiked: false, liked: false })
@@ -91,7 +91,7 @@ export default class mainFeed extends React.Component {
       })
       this.state.photoFeedData[index].likes = selectedPhoto.likes + 1;
       this.state.photoFeedData[index].isLiked = true;
-      db.collection("photos").doc(selectedPhoto.docRef).collection('likedUsers').doc(selectedPhoto.docRef).set({ email: this.state.email.trim() })
+      db.collection("photos").doc(selectedPhoto.docRef).collection('likedUsers').doc(this.state.email).set({ email: this.state.email.trim() })
       this.setState({ alreadyLiked: true, liked: true })
     }
   }
@@ -351,12 +351,12 @@ export default class mainFeed extends React.Component {
       saved: true
     })
 
-    db.collection("photos").doc(selectedItem.item.docRef).collection('savedUsers').doc(selectedItem.item.docRef).set({ email: this.props.navigation.state.params.email.trim() })
-
-    firebase.firestore().collection('savedCollections').doc(photoObj.docRef).set(photoObj).then(function (docRef) {
+    db.collection("photos").doc(selectedItem.item.docRef).collection('savedUsers').doc(selectedItem.item.email).set({ email: this.props.navigation.state.params.email.trim() }).then(function (docRef) {
       context.state.photoFeedData[index].isSaved = true;
       context.setPhoto(context.state.photoFeedData);
     });
+
+    // firebase.firestore().collection('savedCollections').doc(photoObj.email).set(photoObj)
   }
 
   deleteCollection(selectedItem) {
@@ -370,11 +370,11 @@ export default class mainFeed extends React.Component {
       context.setPhoto(context.state.photoFeedData);
     })
 
-    db.collection("photos").doc(selectedItem.item.docRef).collection('savedUsers').doc(selectedItem.item.docRef).update({ email: selectedItem.item.email + '_deleted' })
+    db.collection("photos").doc(selectedItem.item.docRef).collection('savedUsers').doc(context.state.email).update({ email: context.state.email + '_deleted' })
 
-    db.collection("savedCollections").doc(selectedItem.item.docRef).update({
-      isDeleted: true
-    })
+    // db.collection("savedCollections").doc(selectedItem.item.docRef).update({
+    //   isDeleted: true
+    // })
   }
 
 

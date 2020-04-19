@@ -138,18 +138,20 @@ export default class profile extends React.Component {
   }
 
   confirmDelete(item, index) {
-    Alert.alert(
-      //title
-      'Confirmation',
-      //body
-      'Are you sure to delete this post?',
-      [
-        { text: 'Yes', onPress: () => this.deletePost(item) },
-        { text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel' },
-      ],
-      { cancelable: false }
-      //clicking out side of alert will not cancel
-    );
+    if (this.props.navigation.state && this.props.navigation.state.params && this.props.navigation.state.params.isSameProfile === true) {
+      Alert.alert(
+        //title
+        'Confirmation',
+        //body
+        'Are you sure to delete this post?',
+        [
+          { text: 'Yes', onPress: () => this.deletePost(item) },
+          { text: 'No', onPress: () => console.log('No Pressed'), style: 'cancel' },
+        ],
+        { cancelable: false }
+        //clicking out side of alert will not cancel
+      );
+    }
   }
 
   deletePost(selectedItem) {

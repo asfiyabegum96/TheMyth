@@ -141,7 +141,7 @@ export default class DiaryMaintain extends Component {
     render() {
         return (
             <ScrollView style={{ backgroundColor: '#fff2e7' }}>
-                <View style={{ padding: 10 }}>
+                <View style={{ padding: 10, minHeight: hp('50%') }}>
                     {this.state.loading == true ? (
                         <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
                             <ActivityIndicator size="large" color='red' />
