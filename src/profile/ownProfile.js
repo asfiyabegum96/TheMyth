@@ -212,9 +212,15 @@ export default class profile extends React.Component {
   updateFollowers(userData, searchedUserData) {
     let db = firebase.firestore();
     if (this.state.followText === 'Follow') {
-      this.setState({ followText: 'Unfollow' })
-      db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => alert('done'))
-      db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
+      console.log(searchedUserData)
+      if (searchedUserData.isPrivateAccount === true) {
+        this.setState({ followText: 'Requested' });
+        db.collection("signup").doc(searchedUserData.docRef).collection('pendingFollowers').doc(userData.email.trim()).set({ email: userData.email.trim() })
+      } else {
+        this.setState({ followText: 'Unfollow' });
+        db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => alert('done'))
+        db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
+      }
     } else {
       this.setState({ followText: 'Follow' })
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => alert('done'))

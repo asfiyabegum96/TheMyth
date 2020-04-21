@@ -36,7 +36,7 @@ export default class connect extends React.Component {
         }}/>
           <Text style={{
             fontSize: hp('3.5'),
-            color: '#FCD705',
+            color: '#FF7200',
             paddingVertical: 7,
             left: 25
           }}>Connect</Text>
@@ -60,7 +60,7 @@ export default class connect extends React.Component {
             </View>
             <View style={{ flexDirection: 'row'}}>
               <TouchableOpacity style={styles.accept}>
-                <Text style={{ color:'#FCD705',
+                <Text style={{ color:'#fff',
                 fontSize: 12, }}>Accept</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.ignore}>
@@ -69,7 +69,7 @@ export default class connect extends React.Component {
             </View>
           </View>
         </View>
-        <View style={{ flexDirection: 'row', paddingVertical:10, paddingHorizontal:10 }}>
+        {/* <View style={{ flexDirection: 'row', paddingVertical:10, paddingHorizontal:10 }}>
           <TouchableOpacity style={{ paddingHorizontal:10 }}>
             <UserAvatar size="70" name="Avishay Bar" 
             src="https://pbs.twimg.com/profile_images/780079944118444032/cEl3YHYW_400x400.jpg" />
@@ -81,7 +81,7 @@ export default class connect extends React.Component {
             </View>
             <View style={{ flexDirection: 'row'}}>
               <TouchableOpacity style={styles.accept}>
-                <Text style={{ color:'#FCD705',
+                <Text style={{ color:'#fff',
                 fontSize: 12, }}>Accept</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.ignore}>
@@ -89,7 +89,7 @@ export default class connect extends React.Component {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </View> */}
       </View>  
     );
   }
@@ -111,7 +111,7 @@ const styles = StyleSheet. create ({
     borderRadius: 50,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    backgroundColor: '#22222C',
+    backgroundColor: '#FF7200',
     width: wp('25%'),
     alignItems: 'center',
     marginRight: 10,
