@@ -1,111 +1,207 @@
 import React from 'react';
-import { StyleSheet,
-         Text,
-         Image,
-         View,
-         Button,
-         TextInput,
-         TouchableOpacity,
-         ScrollView, } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  Button,
+  TextInput,
+  TouchableOpacity,
+  FlatList,
+} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Entypo';
 import UserAvatar from 'react-native-user-avatar';
-import {widthPercentageToDP as wp, 
-        heightPercentageToDP as hp,
-        listenOrientationChange as loc,
-        removeOrientationListener as rol} 
-from 'react-native-responsive-screen';
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+  listenOrientationChange as loc,
+  removeOrientationListener as rol
+}
+  from 'react-native-responsive-screen';
+import firebase from 'react-native-firebase';
 const Jaguar = '#22222C';
- 
+
 export default class connect extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: {},
+      feedData: [],
+      email: props.screenProps.email
+    }
+    this.baseState = this.state;
+  }
+
   componentDidMount() {
+    this.fetchUserDetails();
     loc(this);
   }
-  
+
   componentWillUnMount() {
     rol();
   }
+
+
+  fetchUserDetails() {
+    const context = this;
+    let db = firebase.firestore();
+    let photosRef = db.collection('signup');
+    photosRef.where('email', '==', context.state.email.trim()).get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        let data;
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) {
+          data = (doc.id, " => ", doc.data());
+          context.setState({ user: doc.data() });
+          context.getFollowers();
+        }
+      })
+    })
+  }
+
+  getFollowers() {
+    if (this.state.user.isPrivateAccount === true) {
+      let db = firebase.firestore();
+      const context = this;
+      let feedData = this.state.feedData;
+      db.collection("signup").doc(this.state.user.docRef).collection('pendingFollowers').get().then(function (followerSnapshot) {
+        followerSnapshot.forEach(function (doc) {
+          let data;
+          const docNotEmpty = (doc.id, " => ", doc.data() != null);
+          if (docNotEmpty) {
+            data = (doc.id, " => ", doc.data());
+            context.addToFlatlist(feedData, data);
+            console.log('esfdsf', data);
+          }
+        })
+      })
+    } else {
+      this.setState({
+        feedData: [],
+        feedRefresh: false,
+        loading: false,
+      })
+    }
+  }
+
+  addToFlatlist = (feedData, data) => {
+    var that = this;
+    feedData.push({
+      fullName: data.fullName,
+      profilePicture: data.profilePicture,
+      email: data.email,
+      docRef: data.docRef
+    });
+    console.log(feedData)
+    that.setState({
+      feedData: feedData,
+      feedRefresh: false,
+      loading: false,
+    });
+  }
+
+  viewProfile(item) {
+    this.props.screenProps.navigation({ item, email: this.state.email.trim(), isSameProfile: false }, false, false, true)
+  }
+
+  acceptRequest(item) {
+    console.log('werwer', item)
+    let db = firebase.firestore();
+    const context = this;
+    db.collection("signup").doc(this.state.user.docRef).collection('following').doc(item.email.trim()).set({ email: item.email.trim() }).then((dat) => alert('done'))
+    db.collection("signup").doc(item.docRef).collection('followers').doc(this.state.user.email.trim()).set({ email: this.state.user.email.trim() })
+    db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(this.state.user.email.trim()).update({ email: this.state.user.email.trim() + '_accepted' }).then(() => {
+        context.getFollowers();
+      })
+    }
+
   render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <View
-          style={{
-          borderBottomColor: '#22222C',
-          borderBottomWidth: 1.5,
-        }}/>
-          <Text style={{
-            fontSize: hp('3.5'),
-            color: '#FF7200',
-            paddingVertical: 7,
-            left: 25
-          }}>Connect</Text>
-        <View
-          style={{
-          borderBottomColor: '#22222C',
-          borderBottomWidth: wp('0.2'),
-        }}/>
-	    <View style={{ flexDirection: 'row', 
-      paddingVertical:10, 
-      paddingHorizontal:10 }}
-      >
-          <TouchableOpacity style={{ paddingHorizontal:10 }}>
-            <UserAvatar size="70" name="Avishay Bar" 
-            src="https://images.jansatta.com/2017/08/1-73-616x550.jpg" />
-          </TouchableOpacity>
-          <View>
-            <View style={{ paddingBottom: 10}}>
-              <Text style={{ color:'#22222C',
-                          fontSize: hp('2.5%'), }}>Hrithik roshan</Text>
-            </View>
-            <View style={{ flexDirection: 'row'}}>
-              <TouchableOpacity style={styles.accept}>
-                <Text style={{ color:'#fff',
-                fontSize: 12, }}>Accept</Text>
+      return(
+      <View style = {{ flex: 1 }} >
+    <View
+      style={{
+        borderBottomColor: '#22222C',
+        borderBottomWidth: 1.5,
+      }}>
+      <Text style={{
+        fontSize: hp('3.5'),
+        color: '#FF7200',
+        paddingVertical: 7,
+        left: 25
+      }}>Connect</Text></View>
+    <View
+      style={{
+        borderBottomColor: '#22222C',
+        borderBottomWidth: wp('0.2'),
+      }}>
+      <FlatList
+        style={styles.root}
+        data={this.state.feedData}
+        extraData={this.state}
+        ItemSeparatorComponent={
+          () => { return <View style={styles.separator} /> }
+        }
+        keyExtractor={(item) => {
+          return item.id;
+        }}
+        renderItem={(item) => {
+          const Notification = item.item;
+          return (
+            <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 10 }}>
+              <TouchableOpacity style={{ paddingHorizontal: 10 }} onPress={() => { this.viewProfile(Notification) }}>
+                <UserAvatar size="70" name="Avishay Bar"
+                  src={Notification.profilePicture} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.ignore}>
-                <Text>Ignore</Text>
-              </TouchableOpacity>
+              <View>
+                <View style={{ paddingBottom: 10 }}>
+                  <Text style={{
+                    color: '#22222C',
+                    fontSize: hp('2.5%'),
+                  }}>{Notification.fullName}</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                  <TouchableOpacity style={styles.accept} onPress={() => { this.acceptRequest(Notification) }}>
+                    <Text style={{
+                      color: '#fff',
+                      fontSize: 12,
+                    }}>Accept</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.ignore}>
+                    <Text>Ignore</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
-        {/* <View style={{ flexDirection: 'row', paddingVertical:10, paddingHorizontal:10 }}>
-          <TouchableOpacity style={{ paddingHorizontal:10 }}>
-            <UserAvatar size="70" name="Avishay Bar" 
-            src="https://pbs.twimg.com/profile_images/780079944118444032/cEl3YHYW_400x400.jpg" />
-          </TouchableOpacity>
-          <View>
-            <View style={{ paddingBottom: 10}}>
-              <Text style={{ color:'#22222C',
-                          fontSize: hp('2.5%'), }}>Shahrukh Khan</Text>
-            </View>
-            <View style={{ flexDirection: 'row'}}>
-              <TouchableOpacity style={styles.accept}>
-                <Text style={{ color:'#fff',
-                fontSize: 12, }}>Accept</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.ignore}>
-                <Text>Ignore</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View> */}
-      </View>  
+          );
+        }} />
+    </View>
+      </View >
     );
   }
 }
 
 connect.navigationOptions = {
-  tabBarIcon: ({tintColor, focused}) => (
-    <FontAwesome5 name={'user-friends'} 
-    style={styles.connectUsers}
-    color={tintColor}/>
-    )
+  tabBarIcon: ({ tintColor, focused }) => (
+    <FontAwesome5 name={'user-friends'}
+      style={styles.connectUsers}
+      color={tintColor} />
+  )
 }
 
-const styles = StyleSheet. create ({
+const styles = StyleSheet.create({
   connectUsers: {
     fontSize: hp('3%'),
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#FF7200',
+    width: wp('90%')
+  },
+  root: {
+    backgroundColor: '#fff2e7',
+    paddingTop: 10,
+    paddingLeft: '5.5%',
   },
   accept: {
     borderRadius: 50,

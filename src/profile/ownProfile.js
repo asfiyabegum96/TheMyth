@@ -214,8 +214,14 @@ export default class profile extends React.Component {
     if (this.state.followText === 'Follow') {
       console.log(searchedUserData)
       if (searchedUserData.isPrivateAccount === true) {
+        const saveObj = {
+          email: userData.email.trim(),
+          fullName: userData.fullName,
+          profilePicture: userData.profilePicture,
+          docRef: searchedUserData.docRef
+        }
         this.setState({ followText: 'Requested' });
-        db.collection("signup").doc(searchedUserData.docRef).collection('pendingFollowers').doc(userData.email.trim()).set({ email: userData.email.trim() })
+        db.collection("signup").doc(searchedUserData.docRef).collection('pendingFollowers').doc(userData.email.trim()).set(saveObj)
       } else {
         this.setState({ followText: 'Unfollow' });
         db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => alert('done'))
