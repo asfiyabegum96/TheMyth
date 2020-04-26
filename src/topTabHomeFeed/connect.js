@@ -61,6 +61,7 @@ export default class connect extends React.Component {
   }
 
   getFollowers() {
+    this.setState({ feedData: [] });
     if (this.state.user.isPrivateAccount === true) {
       let db = firebase.firestore();
       const context = this;
@@ -71,9 +72,23 @@ export default class connect extends React.Component {
           const docNotEmpty = (doc.id, " => ", doc.data() != null);
           if (docNotEmpty) {
             data = (doc.id, " => ", doc.data());
-            context.addToFlatlist(feedData, data);
-            console.log('esfdsf', data);
-          }
+            // accepted - accepted request
+            // cancelled - Ignored request
+            // removed - removed by requestor
+            if (!data.email.includes('accepted') || !data.email.includes('cancelled') || !data.email.includes('removed')) {
+              context.addToFlatlist(feedData, data);
+            } else {
+              context.setState({
+                feedData: [],
+                feedRefresh: false,
+                loading: false,
+              })
+            }
+          } context.setState({
+            feedData: [],
+            feedRefresh: false,
+            loading: false,
+          })
         })
       })
     } else {
@@ -93,7 +108,6 @@ export default class connect extends React.Component {
       email: data.email,
       docRef: data.docRef
     });
-    console.log(feedData)
     that.setState({
       feedData: feedData,
       feedRefresh: false,
@@ -106,76 +120,82 @@ export default class connect extends React.Component {
   }
 
   acceptRequest(item) {
-    console.log('werwer', item)
     let db = firebase.firestore();
     const context = this;
-    db.collection("signup").doc(this.state.user.docRef).collection('following').doc(item.email.trim()).set({ email: item.email.trim() }).then((dat) => alert('done'))
-    db.collection("signup").doc(item.docRef).collection('followers').doc(this.state.user.email.trim()).set({ email: this.state.user.email.trim() })
-    db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(this.state.user.email.trim()).update({ email: this.state.user.email.trim() + '_accepted' }).then(() => {
-        context.getFollowers();
-      })
-    }
+    db.collection("signup").doc(item.docRef).collection('followers').doc(item.email.trim()).set({ email: item.email.trim() })
+    db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(item.email.trim()).update({ email: item.email.trim() + '_accepted' }).then(() => {
+      context.getFollowers();
+    })
+  }
+
+  cancelRequest(item) {
+    let db = firebase.firestore();
+    const context = this;
+    db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(item.email.trim()).update({ email: item.email.trim() + '_cancelled' }).then(() => {
+      context.getFollowers();
+    })
+  }
 
   render() {
-      return(
-      <View style = {{ flex: 1 }} >
-    <View
-      style={{
-        borderBottomColor: '#22222C',
-        borderBottomWidth: 1.5,
-      }}>
-      <Text style={{
-        fontSize: hp('3.5'),
-        color: '#FF7200',
-        paddingVertical: 7,
-        left: 25
-      }}>Connect</Text></View>
-    <View
-      style={{
-        borderBottomColor: '#22222C',
-        borderBottomWidth: wp('0.2'),
-      }}>
-      <FlatList
-        style={styles.root}
-        data={this.state.feedData}
-        extraData={this.state}
-        ItemSeparatorComponent={
-          () => { return <View style={styles.separator} /> }
-        }
-        keyExtractor={(item) => {
-          return item.id;
-        }}
-        renderItem={(item) => {
-          const Notification = item.item;
-          return (
-            <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 10 }}>
-              <TouchableOpacity style={{ paddingHorizontal: 10 }} onPress={() => { this.viewProfile(Notification) }}>
-                <UserAvatar size="70" name="Avishay Bar"
-                  src={Notification.profilePicture} />
-              </TouchableOpacity>
-              <View>
-                <View style={{ paddingBottom: 10 }}>
-                  <Text style={{
-                    color: '#22222C',
-                    fontSize: hp('2.5%'),
-                  }}>{Notification.fullName}</Text>
-                </View>
-                <View style={{ flexDirection: 'row' }}>
-                  <TouchableOpacity style={styles.accept} onPress={() => { this.acceptRequest(Notification) }}>
-                    <Text style={{
-                      color: '#fff',
-                      fontSize: 12,
-                    }}>Accept</Text>
+    return (
+      <View style={{ flex: 1 }} >
+        <View
+          style={{
+            borderBottomColor: '#22222C',
+            borderBottomWidth: 1.5,
+          }}>
+          <Text style={{
+            fontSize: hp('3.5'),
+            color: '#FF7200',
+            paddingVertical: 7,
+            left: 25
+          }}>Connect</Text></View>
+        <View
+          style={{
+            borderBottomColor: '#22222C',
+            borderBottomWidth: wp('0.2'),
+          }}>
+          <FlatList
+            style={styles.root}
+            data={this.state.feedData}
+            extraData={this.state}
+            ItemSeparatorComponent={
+              () => { return <View style={styles.separator} /> }
+            }
+            keyExtractor={(item) => {
+              return item.id;
+            }}
+            renderItem={(item) => {
+              const Notification = item.item;
+              return (
+                <View style={{ flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 10 }}>
+                  <TouchableOpacity style={{ paddingHorizontal: 10 }} onPress={() => { this.viewProfile(Notification) }}>
+                    <UserAvatar size="70" name="Avishay Bar"
+                      src={Notification.profilePicture} />
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.ignore}>
-                    <Text>Ignore</Text>
-                  </TouchableOpacity>
+                  <View>
+                    <View style={{ paddingBottom: 10 }}>
+                      <Text style={{
+                        color: '#22222C',
+                        fontSize: hp('2.5%'),
+                      }}>{Notification.fullName}</Text>
+                    </View>
+                    <View style={{ flexDirection: 'row' }}>
+                      <TouchableOpacity style={styles.accept} onPress={() => { this.acceptRequest(Notification) }}>
+                        <Text style={{
+                          color: '#fff',
+                          fontSize: 12,
+                        }}>Accept</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.ignore} onPress={() => { this.cancelRequest(Notification) }}>
+                        <Text>Ignore</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
-              </View>
-            </View>
-          );
-        }} />
-    </View>
+              );
+            }} />
+        </View>
       </View >
     );
   }

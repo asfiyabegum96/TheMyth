@@ -70,6 +70,7 @@ export default class search extends React.Component {
     }
 
     getFollowers(searchArray) {
+        let isFollower = false;
         const context = this;
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
@@ -80,6 +81,7 @@ export default class search extends React.Component {
                         const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                         if (docNotEmpty) {
                             if (context.state.email === followerDoc.data().email) {
+                                isFollower = true;
                                 searchElement.isFollowed = true
                             } else {
                                 searchElement.isFollowed = false
@@ -87,13 +89,34 @@ export default class search extends React.Component {
                         }
                     })
                     context.setState({ feedData: searchArray })
-                })
+                });
+
+                if (isFollower === false) {
+                    context.fetchPendingFollowers(photosRef, searchElement, searchArray);
+                }
             });
 
         } else {
             this.setState({ feedData: [] })
         }
 
+    }
+
+    fetchPendingFollowers(photosRef, searchElement, searchArray) {
+        const context = this;
+        photosRef.doc(searchElement.docRef).collection('pendingFollowers').get().then(function (pendingSnapshot) {
+            pendingSnapshot.forEach(function (pendingDoc) {
+                const docNotEmpty = (pendingDoc.id, " => ", pendingDoc.data() != null);
+                if (docNotEmpty) {
+                    if (context.state.email === pendingDoc.data().email) {
+                        searchElement.isPending = true
+                    } else {
+                        searchElement.isPending = false
+                    }
+                }
+            })
+            context.setState({ feedData: searchArray })
+        });
     }
 
     navigateToOtherUser(selectedItem) {
@@ -107,9 +130,13 @@ export default class search extends React.Component {
             ? selectedItem.item.isFollowed
             : selectedItem.isFollowed
             ;
+        const isPending = selectedItem.item
+            ? selectedItem.item.isPending
+            : selectedItem.isPending
+            ;
         const isSameProfile = this.state.email.trim() === searchedEmail.trim();
         this.setState(this.baseState);
-        this.props.navigation.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile, isFollowed: isFollowed })
+        this.props.navigation.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile, isFollowed: isFollowed, isPending: isPending })
     }
 
     render() {

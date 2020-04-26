@@ -64,6 +64,8 @@ export default class profile extends React.Component {
       email = params.searchedEmail
       if (params.isFollowed === true) {
         this.setState({ followText: 'Unfollow' })
+      } else if (params.isPending === true) {
+        this.setState({ followText: 'Requested' })
       }
     }
     photosRef.where('email', '==', email).get().then(function (querySnapshot) {
@@ -212,7 +214,6 @@ export default class profile extends React.Component {
   updateFollowers(userData, searchedUserData) {
     let db = firebase.firestore();
     if (this.state.followText === 'Follow') {
-      console.log(searchedUserData)
       if (searchedUserData.isPrivateAccount === true) {
         const saveObj = {
           email: userData.email.trim(),
@@ -227,6 +228,15 @@ export default class profile extends React.Component {
         db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => alert('done'))
         db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
       }
+    } else if (this.state.followText === 'Requested') {
+      const saveObj = {
+        email: userData.email.trim() + '_removed',
+        fullName: userData.fullName,
+        profilePicture: userData.profilePicture,
+        docRef: searchedUserData.docRef
+      }
+      this.setState({ followText: 'Follow' });
+      db.collection("signup").doc(searchedUserData.docRef).collection('pendingFollowers').doc(userData.email.trim()).update(saveObj)
     } else {
       this.setState({ followText: 'Follow' })
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => alert('done'))

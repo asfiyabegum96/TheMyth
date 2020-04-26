@@ -83,7 +83,7 @@ export default class homeFixed extends React.Component {
     } else if (isSavedCollection) {
       this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim(), isSavedCollection: true })
     } else if (viewOthers) {
-      this.props.navigation.navigate('profile', { email: item.email, searchedEmail: item.item.email.trim(), privateAccount: item.item.isPrivateAccount, isSameProfile: item.isSameProfile, isFollowed: item.item.isFollowed })
+      this.props.navigation.navigate('profile', { email: item.email, searchedEmail: item.item.email.trim(), privateAccount: item.item.isPrivateAccount, isSameProfile: item.isSameProfile, isFollowed: item.item.isFollowed, isPending: false })
     } else if (notification) {
       this.props.navigation.navigate('mainFeed', { selectedItem: item, email: item.item.email.trim(), notification: true })
     }
