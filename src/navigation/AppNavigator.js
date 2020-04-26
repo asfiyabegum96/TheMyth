@@ -12,11 +12,16 @@ import Comments from '../topTabHomeFeed/comments';
 import sideNavigator from './sideDrawerNavigator'
 import editProfile from '../sideDrawer/editProfile'
 import updatePassword from '../sideDrawer/updatePassword';
+import account from '../sideDrawer/accountSettings';
 import search from '../topTabHomeFeed/search';
 
 const AppNavigator = createStackNavigator({
     Home: {
         screen: Home,
+        navigationOptions: { header: null },
+    },
+    account: {
+        screen: account,
         navigationOptions: { header: null },
     },
     editProfile: {

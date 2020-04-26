@@ -102,20 +102,25 @@ class Settings extends Component {
           <View>
             <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
               Edit Profile
-              </Text>
+            </Text>
           </View>
           <View>
             <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('updatePassword')}>
               Update Password
-              </Text>
+            </Text>
             <Text style={styles.navItemStyle} onPress={() => this.confirmDeactivate()}>
               De-activate Account
-              </Text>
+            </Text>
+          </View>
+          <View>
+            <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('account')}>
+              Account Settings
+            </Text>
           </View>
           <View>
             <Text style={styles.navItemStyle} onPress={() => this.logout()}>
               Logout
-              </Text>
+            </Text>
           </View>
         </ScrollView>
         <View style={styles.footerContainer}>
