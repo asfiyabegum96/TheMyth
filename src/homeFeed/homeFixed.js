@@ -155,7 +155,7 @@ export default class homeFixed extends React.Component {
             <FontAwesome5 style={styles.profile} name={'user-alt'} />
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate("chat")}
+        <TouchableOpacity onPress={() => this.props.navigation.navigate("chat", { email: this.props.navigation.state.params.email.trim() })}
           style={styles.fabDiv}>
           <View style={styles.fab}>
             <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />

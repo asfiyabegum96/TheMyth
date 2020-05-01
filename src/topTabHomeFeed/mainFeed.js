@@ -178,7 +178,6 @@ export default class mainFeed extends React.Component {
           if (doc.data().isDeleted === false) {
             that.fetchUserFeed(email, data, that)
           } else {
-            that.setPhoto([]);
             that.setState({
               feedRefresh: false,
               loading: false,
