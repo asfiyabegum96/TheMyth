@@ -5,7 +5,8 @@ import signup from '../authentication/signUp';
 import profile from '../profile/ownProfile';
 import TabNavigator from '../camera/cameraBottomTab';
 import homeFixed from '../homeFeed/homeFixed';
-import chat from '../chat/chat';
+import chatLanding from '../chat/chatLanding';
+import chatScreen from '../chat/chat';
 import mainFeed from '../topTabHomeFeed/mainFeed'
 import forgotPassword from '../authentication/forgotPassword';
 import Comments from '../topTabHomeFeed/comments';
@@ -60,7 +61,10 @@ const AppNavigator = createStackNavigator({
         navigationOptions: { header: null },
     },
     chat: {
-        screen: chat,
+        screen: chatLanding,
+    },
+    chatScreen: {
+        screen: chatScreen,
     },
     comments: {
         screen: Comments,

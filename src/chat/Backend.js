@@ -35,13 +35,14 @@ class Backend {
         const onReceive = (data) => {
             const message = data.val();
             callback({
-                _id: this.getUid(),
+                _id: data.key,
+                userid: message.userid,
                 text: message.text,
                 createdAt: new Date(message.createdAt),
                 user: {
                     _id: message.user._id,
                     name: message.user.name,
-                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                    avatar: message.user.avatar,
                 }
             });
         };
@@ -49,15 +50,14 @@ class Backend {
     }
 
     // sends message
-    sendMessage(message) {
+    sendMessage(message, uid) {
         for (let i = 0; i < message.length; i++) {
             this.messagesRef.push({
-                _id: 'dCWBAypQ67XC8oWgGuhxneJnKXq2',// senders id
+                userid: uid,
                 text: message[i].text,
                 user: message[i].user,
                 createdAt: new Date(),
             });
-
         }
     }
 
