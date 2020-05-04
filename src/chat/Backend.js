@@ -14,8 +14,6 @@ class Backend {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 this.setUid(user.uid)
-            } else {
-                firebase.auth().signInAnonymously().catch((error) => console.log('error', error))
             }
         });
     }

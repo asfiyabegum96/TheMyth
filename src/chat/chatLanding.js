@@ -34,7 +34,6 @@ export default class chatLanding extends React.Component {
         })
     }
     componentDidMount() {
-        console.log('sadasdsd')
         loc(this);
         this.fetchUserDetails()
     }
@@ -59,7 +58,7 @@ export default class chatLanding extends React.Component {
     }
 
     getFollowers = () => {
-        let isFollower = false, searchArray = [];
+        let isFollower = false, searchArray = [], emailArray = [];
         const context = this;
         this.setState({ feedData: [], feedRefresh: false, })
         let db = firebase.firestore();
@@ -69,19 +68,26 @@ export default class chatLanding extends React.Component {
                 const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                 if (docNotEmpty) {
                     isFollower = true;
+                    console.log(followerDoc.data())
+                    emailArray.push(followerDoc.data().email);
                     searchArray.push(followerDoc.data())
                 }
-            })
+            });
+            context.fetchFollowing(photosRef, emailArray, searchArray);
             context.setState({ searchArray: searchArray });
-            context.fetchFollowers();
         });
+    }
 
+    fetchFollowing(photosRef, emailArray, searchArray) {
+        const context = this;
         photosRef.doc(this.state.user.docRef).collection('following').get().then(function (followerSnapshot) {
             followerSnapshot.forEach(function (followerDoc) {
                 const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                 if (docNotEmpty) {
-                    isFollower = true;
-                    searchArray.push(followerDoc.data())
+                    console.log(emailArray)
+                    if (!emailArray.includes(followerDoc.data().email)) {
+                        searchArray.push(followerDoc.data());
+                    }
                 }
             })
             context.setState({ searchArray: searchArray });

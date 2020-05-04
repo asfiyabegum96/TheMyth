@@ -3,7 +3,7 @@ import {
     View,
     ActivityIndicator,
 } from 'react-native';
-import { GiftedChat } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import Backend from './Backend'
 
 export default class chatScreen extends React.Component {
@@ -27,7 +27,7 @@ export default class chatScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.setState({messages: []})
+        this.setState({ messages: [] });
         Backend.loadMessages((message) => {
             if ((message.userid === this.state.docRef && message.user._id === Backend.getUid()) ||
                 (message.userid === Backend.getUid() && message.user._id === this.state.docRef)) {
@@ -35,9 +35,6 @@ export default class chatScreen extends React.Component {
                     return {
                         messages: GiftedChat.append(previousState.messages, message),
                     };
-                });
-                this.setState({
-                    loading: false,
                 });
             } else {
                 this.setState({
@@ -54,6 +51,25 @@ export default class chatScreen extends React.Component {
         Backend.closeChat()
     }
 
+    renderBubble = (props) => {
+
+        return (
+            <Bubble
+                {...props}
+                textStyle={{
+                    right: {
+                        color: 'white',
+                    },
+                }}
+                wrapperStyle={{
+                    right: {
+                        backgroundColor: '#FF7200',
+                    },
+                }}
+            />
+        );
+    }
+
     render() {
         return (
             <View style={{ flex: 1, }}>
@@ -67,6 +83,7 @@ export default class chatScreen extends React.Component {
                             onSend={(message) => {
                                 Backend.sendMessage(message, this.state.docRef)
                             }}
+                            renderBubble={this.renderBubble}
                             user={{
                                 _id: Backend.getUid(),
                                 name: this.state.selectedItem.fullName,
