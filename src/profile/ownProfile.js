@@ -248,12 +248,13 @@ export default class profile extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff2e7' }}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate("chat", { email: this.props.navigation.state.params.email })}
-          style={styles.fabDiv}>
-          <View style={styles.fab}>
-            <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />
-          </View>
-        </TouchableOpacity>
+        {this.props.navigation.state.params.isSameProfile === true ? <View></View> : (
+          <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', { selectedItem: this.state.user, userDetails: this.state.user, email: this.props.navigation.state.params.email })}
+            style={styles.fabDiv}>
+            <View style={styles.fab}>
+              <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />
+            </View>
+          </TouchableOpacity>)}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
             <Icon name={'home'} size={30} color="#FF7200" />

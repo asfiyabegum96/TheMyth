@@ -14,7 +14,8 @@ export default class chatScreen extends React.Component {
             loading: true, messages: [],
             email: props.navigation.state.params.selectedItem.email,
             docRef: props.navigation.state.params.selectedItem.docRef,
-            selectedItem: props.navigation.state.params.selectedItem
+            selectedItem: props.navigation.state.params.selectedItem,
+            userDetails: props.navigation.state.params.userDetails,
         };
     }
 
@@ -86,8 +87,8 @@ export default class chatScreen extends React.Component {
                             renderBubble={this.renderBubble}
                             user={{
                                 _id: Backend.getUid(),
-                                name: this.state.selectedItem.fullName,
-                                avatar: this.state.selectedItem.profilePicture
+                                name: this.state.userDetails.fullName,
+                                avatar: this.state.userDetails.profilePicture
                             }}
                         />
                     )

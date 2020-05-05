@@ -130,7 +130,7 @@ export default class chatLanding extends React.Component {
     navigateToChat(selectedItem) {
         const item = selectedItem.item ? selectedItem.item : selectedItem;
         this.setState(this.baseState);
-        this.props.navigation.navigate('chatScreen', { selectedItem: item, email: this.state.email })
+        this.props.navigation.navigate('chatScreen', { selectedItem: item, email: this.state.email, userDetails: this.state.user })
     }
 
     render() {
