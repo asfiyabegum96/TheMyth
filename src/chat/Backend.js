@@ -36,6 +36,7 @@ class Backend {
                 _id: data.key,
                 userid: message.userid,
                 text: message.text,
+                image: message.image,
                 createdAt: new Date(message.createdAt),
                 user: {
                     _id: message.user._id,
@@ -53,6 +54,7 @@ class Backend {
             this.messagesRef.push({
                 userid: uid,
                 text: message[i].text,
+                image: 'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
                 user: message[i].user,
                 createdAt: new Date(),
             });

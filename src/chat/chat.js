@@ -97,3 +97,7 @@ export default class chatScreen extends React.Component {
         );
     }
 }
+
+chatScreen.navigationOptions = ({ navigation }) => ({
+    headerTitle: (navigation.state.params || {}).userDetails.fullName || 'Chat! ',
+});

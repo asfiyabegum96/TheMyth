@@ -62,9 +62,11 @@ const AppNavigator = createStackNavigator({
     },
     chat: {
         screen: chatLanding,
+        navigationOptions: { headerTitle: 'Chat' }
     },
     chatScreen: {
         screen: chatScreen,
+        navigationOptions: {}
     },
     comments: {
         screen: Comments,

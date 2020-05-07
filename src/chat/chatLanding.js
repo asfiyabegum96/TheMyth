@@ -68,7 +68,6 @@ export default class chatLanding extends React.Component {
                 const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                 if (docNotEmpty) {
                     isFollower = true;
-                    console.log(followerDoc.data())
                     emailArray.push(followerDoc.data().email);
                     searchArray.push(followerDoc.data())
                 }
@@ -84,7 +83,6 @@ export default class chatLanding extends React.Component {
             followerSnapshot.forEach(function (followerDoc) {
                 const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                 if (docNotEmpty) {
-                    console.log(emailArray)
                     if (!emailArray.includes(followerDoc.data().email)) {
                         searchArray.push(followerDoc.data());
                     }
