@@ -1,16 +1,35 @@
 import React from 'react';
 import {
     View,
+    TouchableOpacity,
     ActivityIndicator,
 } from 'react-native';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import ImagePicker from 'react-native-image-picker';
 import Backend from './Backend'
-
+import {
+    heightPercentageToDP as hp,
+}
+    from 'react-native-responsive-screen';
 export default class chatScreen extends React.Component {
+    static navigationOptions = ({ navigation }) => ({
+        headerTitle: (navigation.state.params || {}).selectedItem.fullName || 'Chat! ',
+        headerRight:
+            <TouchableOpacity onPress={() => navigation.state.params.handleImageClick()}>
+                <FontAwesome5 style={{
+                    color: '#FF7200',
+                    fontSize: hp('3%'),
+                    paddingRight: 8,
+                    marginTop: 5,
+                }} name={'camera'} />
+            </TouchableOpacity>,
+    });
 
     constructor(props) {
         super(props);
         this.state = {
+            uri: '',
             loading: true, messages: [],
             email: props.navigation.state.params.selectedItem.email,
             docRef: props.navigation.state.params.selectedItem.docRef,
@@ -27,7 +46,49 @@ export default class chatScreen extends React.Component {
         });
     }
 
+    selectImage = () => {
+        const options = {
+            title: 'Select photo',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+                allowsEditing: true,
+            },
+        };
+
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+            this.setState({ fieldNotEmpty: true })
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+
+            }
+            else {
+                this.setState({
+                    path: response.path.toString(),
+                    uri: response.uri,
+                });
+                const message = [{
+                    user: {
+                        _id: Backend.getUid(),
+                        name: this.state.userDetails.fullName,
+                        avatar: this.state.userDetails.profilePicture
+                    }
+                }]
+                Backend.sendMessage(message, this.state.docRef, this.state.uri)
+
+            }
+        });
+    }
+
     componentDidMount() {
+        this.props.navigation.setParams({ handleImageClick: this.selectImage });
         this.setState({ messages: [] });
         Backend.loadMessages((message) => {
             if ((message.userid === this.state.docRef && message.user._id === Backend.getUid()) ||
@@ -82,7 +143,7 @@ export default class chatScreen extends React.Component {
                         <GiftedChat
                             messages={this.state.messages}
                             onSend={(message) => {
-                                Backend.sendMessage(message, this.state.docRef)
+                                Backend.sendMessage(message, this.state.docRef, this.state.uri)
                             }}
                             renderBubble={this.renderBubble}
                             user={{
@@ -97,7 +158,3 @@ export default class chatScreen extends React.Component {
         );
     }
 }
-
-chatScreen.navigationOptions = ({ navigation }) => ({
-    headerTitle: (navigation.state.params || {}).userDetails.fullName || 'Chat! ',
-});

@@ -49,12 +49,12 @@ class Backend {
     }
 
     // sends message
-    sendMessage(message, uid) {
+    sendMessage(message, uid, imageUrl) {
         for (let i = 0; i < message.length; i++) {
             this.messagesRef.push({
                 userid: uid,
                 text: message[i].text,
-                image: 'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+                image: imageUrl,
                 user: message[i].user,
                 createdAt: new Date(),
             });
