@@ -73,16 +73,8 @@ export default class chatScreen extends React.Component {
                 this.setState({
                     path: response.path.toString(),
                     uri: response.uri,
+                    text: '    '
                 });
-                const message = [{
-                    user: {
-                        _id: Backend.getUid(),
-                        name: this.state.userDetails.fullName,
-                        avatar: this.state.userDetails.profilePicture
-                    }
-                }]
-                Backend.sendMessage(message, this.state.docRef, this.state.uri)
-
             }
         });
     }
@@ -97,6 +89,7 @@ export default class chatScreen extends React.Component {
             if ((message.userid === this.state.docRef && message.user._id === Backend.getUid()) ||
                 (message.userid === Backend.getUid() && message.user._id === this.state.docRef)) {
                 this.messageIds.push(message._id);
+                this.setState({ uri: '' })
                 this.setState((previousState) => {
                     return {
                         messages: GiftedChat.append(previousState.messages, message),
@@ -196,6 +189,8 @@ export default class chatScreen extends React.Component {
                     </View>
                 ) : (
                         <GiftedChat
+                            text={this.state.text}
+                            onInputTextChanged={text => this.setState({ text: text })}
                             messages={this.state.messages}
                             onSend={(message) => {
                                 Backend.sendMessage(message, this.state.docRef, this.state.uri)
@@ -209,7 +204,10 @@ export default class chatScreen extends React.Component {
                             extraData={this.state}
                             loadEarlier={true}
                             onLoadEarlier={this.onLoadEarlier}
-                            isLoadingEarlier={this.state.isLoadingEarlier}
+                            isLoadingEarlier={this.state.messages.length >= 20}
+                            alwaysShowSend={
+                                this.state.text ? true : false || this.state.uri ? true : false
+                            }
                         />
                     )
                 }
