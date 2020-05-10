@@ -88,11 +88,15 @@ export default class chatScreen extends React.Component {
     }
 
     componentDidMount() {
+        this.firstTime = true;
+        this.allMessages = [];
+        this.messageIds = [];
         this.props.navigation.setParams({ handleImageClick: this.selectImage });
         this.setState({ messages: [] });
         Backend.loadMessages((message) => {
             if ((message.userid === this.state.docRef && message.user._id === Backend.getUid()) ||
                 (message.userid === Backend.getUid() && message.user._id === this.state.docRef)) {
+                this.messageIds.push(message._id);
                 this.setState((previousState) => {
                     return {
                         messages: GiftedChat.append(previousState.messages, message),
@@ -110,6 +114,7 @@ export default class chatScreen extends React.Component {
     }
 
     componentWillUnmount() {
+        this.messageIds = [];
         Backend.closeChat()
     }
 
@@ -132,6 +137,56 @@ export default class chatScreen extends React.Component {
         );
     }
 
+    onLoadEarlier = () => {
+        this.setState(() => {
+            return {
+                isLoadingEarlier: true,
+            }
+        });
+        const context = this;
+        setTimeout(() => {
+            this.setState((previousState) => {
+                return {
+                    messages: GiftedChat.prepend(
+                        previousState.messages,
+                        context.fetchEarlierMessages()
+                        // {
+                        //     _id: 1,
+                        //     text: 'Hello developer',
+                        //     createdAt: new Date(),
+                        //     user: {
+                        //         _id: 2,
+                        //         name: 'React Native',
+                        //         avatar: 'https://placeimg.com/140/140/any',
+                        //     },
+                        // },
+                    ),
+                    loadEarlier: true,
+                    isLoadingEarlier: false,
+                }
+            })
+        }, 1500) // simulating network
+    }
+
+    fetchEarlierMessages() {
+        let counter = 0;
+        const earlierMessage = [];
+        if (this.firstTime === true) {
+            this.firstTime = false;
+            this.allMessages = Backend.allMessagesArray.reverse();
+        }
+        this.allMessages.forEach(element => {
+            if (!this.messageIds.includes(element.key) && counter < 9) {
+                counter++;
+                let value = element.val();
+                value['_id'] = element.key;
+                earlierMessage.push(value);
+                this.messageIds.push(element.key);
+            }
+        });
+        return earlierMessage;
+    }
+
     render() {
         return (
             <View style={{ flex: 1, }}>
@@ -151,6 +206,10 @@ export default class chatScreen extends React.Component {
                                 name: this.state.userDetails.fullName,
                                 avatar: this.state.userDetails.profilePicture
                             }}
+                            extraData={this.state}
+                            loadEarlier={true}
+                            onLoadEarlier={this.onLoadEarlier}
+                            isLoadingEarlier={this.state.isLoadingEarlier}
                         />
                     )
                 }
