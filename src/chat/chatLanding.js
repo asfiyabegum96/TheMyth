@@ -17,6 +17,7 @@ import {
 }
     from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
+import Backend from './Backend';
 export default class chatLanding extends React.Component {
     constructor(props) {
         super(props);
@@ -129,7 +130,22 @@ export default class chatLanding extends React.Component {
         const uri = this.props.navigation.state.params.selectedItem && this.props.navigation.state.params.selectedItem.item.url ? this.props.navigation.state.params.selectedItem.item.url : '';
         const item = selectedItem.item ? selectedItem.item : selectedItem;
         this.setState(this.baseState);
-        this.props.navigation.navigate('chatScreen', { selectedItem: item, uri: uri, email: this.state.email, userDetails: this.state.user })
+        if (uri) {
+            const message = [{
+                user: {
+                    _id: Backend.getUid(),
+                    name: this.state.user.fullName,
+                    avatar: this.state.user.profilePicture
+                }
+            }]
+            Backend.sendMessage(message, item.docRef, uri);
+            this.props.navigation.goBack(null)
+            alert('Post sent');
+
+        }
+        else {
+            this.props.navigation.navigate('chatScreen', { selectedItem: item, email: this.state.email, userDetails: this.state.user })
+        }
     }
 
     render() {

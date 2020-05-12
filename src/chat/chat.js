@@ -29,7 +29,7 @@ export default class chatScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            uri: props.navigation.state.params.uri,
+            uri: '',
             loading: true, messages: [],
             email: props.navigation.state.params.selectedItem.email,
             docRef: props.navigation.state.params.selectedItem.docRef,
@@ -74,24 +74,27 @@ export default class chatScreen extends React.Component {
                     path: response.path.toString(),
                     uri: response.uri,
                 });
-                const message = [{
-                    user: {
-                        _id: Backend.getUid(),
-                        name: this.state.userDetails.fullName,
-                        avatar: this.state.userDetails.profilePicture
-                    }
-                }]
-                Backend.sendMessage(message, this.state.docRef, this.state.uri)
-
+                this.proceedToSend();
             }
         });
+    }
+
+    proceedToSend() {
+        const message = [{
+            user: {
+                _id: Backend.getUid(),
+                name: this.state.userDetails.fullName,
+                avatar: this.state.userDetails.profilePicture
+            }
+        }]
+        Backend.sendMessage(message, this.state.docRef, this.state.uri);
+        this.setState({ uri: '' })
     }
 
     componentDidMount() {
         this.firstTime = true;
         this.allMessages = [];
         this.messageIds = [];
-        this.sendSelectedImage();
         this.props.navigation.setParams({ handleImageClick: this.selectImage });
         this.setState({ messages: [] });
         Backend.loadMessages((message) => {
@@ -115,21 +118,9 @@ export default class chatScreen extends React.Component {
         });
     }
 
-    sendSelectedImage() {
-        if (this.state.uri) {
-            const message = [{
-                user: {
-                    _id: Backend.getUid(),
-                    name: this.state.userDetails.fullName,
-                    avatar: this.state.userDetails.profilePicture
-                }
-            }]
-            Backend.sendMessage(message, this.state.docRef, this.state.uri)
-        }
-    }
-
     componentWillUnmount() {
         this.messageIds = [];
+        this.setState({ uri: '' })
         Backend.closeChat()
     }
 
