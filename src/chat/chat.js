@@ -29,7 +29,7 @@ export default class chatScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            uri: '',
+            uri: props.navigation.state.params.uri,
             loading: true, messages: [],
             email: props.navigation.state.params.selectedItem.email,
             docRef: props.navigation.state.params.selectedItem.docRef,
@@ -91,11 +91,13 @@ export default class chatScreen extends React.Component {
         this.firstTime = true;
         this.allMessages = [];
         this.messageIds = [];
+        this.sendSelectedImage();
         this.props.navigation.setParams({ handleImageClick: this.selectImage });
         this.setState({ messages: [] });
         Backend.loadMessages((message) => {
             if ((message.userid === this.state.docRef && message.user._id === Backend.getUid()) ||
                 (message.userid === Backend.getUid() && message.user._id === this.state.docRef)) {
+                this.setState({ uri: '' })
                 this.messageIds.push(message._id);
                 this.setState((previousState) => {
                     return {
@@ -111,6 +113,19 @@ export default class chatScreen extends React.Component {
         this.setState({
             loading: false,
         });
+    }
+
+    sendSelectedImage() {
+        if (this.state.uri) {
+            const message = [{
+                user: {
+                    _id: Backend.getUid(),
+                    name: this.state.userDetails.fullName,
+                    avatar: this.state.userDetails.profilePicture
+                }
+            }]
+            Backend.sendMessage(message, this.state.docRef, this.state.uri)
+        }
     }
 
     componentWillUnmount() {
@@ -207,7 +222,7 @@ export default class chatScreen extends React.Component {
                                 avatar: this.state.userDetails.profilePicture
                             }}
                             extraData={this.state}
-                            loadEarlier={true}
+                            loadEarlier={this.state.messages.length >= 20}
                             onLoadEarlier={this.onLoadEarlier}
                             isLoadingEarlier={this.state.isLoadingEarlier}
                         />

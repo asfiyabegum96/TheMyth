@@ -78,7 +78,9 @@ export default class homeFixed extends React.Component {
   }
 
   navigateToPage = (item, isComment, isSavedCollection, viewOthers, notification) => {
-    if (isComment) {
+    if (isComment === 'send') {
+      this.props.navigation.navigate('chat', { selectedItem: item, email: item.item.email.trim()})
+    } else if (isComment) {
       this.props.navigation.navigate('comments', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })
     } else if (isSavedCollection) {
       this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim(), isSavedCollection: true })

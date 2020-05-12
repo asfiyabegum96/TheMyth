@@ -319,6 +319,12 @@ export default class mainFeed extends React.Component {
     }
   }
 
+  sendImage = ({ item, index }) => {
+    if (this.props.screenProps) {
+      this.props.screenProps.navigation({ item, index, context: this }, 'send')
+    }
+  }
+
   viewOtherUserProfiles = ({ item }) => {
     const isSameProfile = this.state.email.trim() === item.email.trim();
     this.props.screenProps.navigation({ item, email: this.state.email.trim(), isSameProfile: isSameProfile }, false, false, true)
@@ -463,6 +469,9 @@ export default class mainFeed extends React.Component {
                           <Fontisto name="bookmark" size={22} />
                         </TouchableOpacity>
                       }
+                      <TouchableOpacity onPress={() => this.sendImage({ item, index })} style={{ paddingLeft: wp('1%') }}>
+                        <FontAwesome5 style={styles.fabIcon} name="telegram-plane" size={22} />
+                      </TouchableOpacity>
                       <View>
                       </View>
                     </View>
@@ -481,26 +490,7 @@ export default class mainFeed extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  // elevation:{
-  //   marginBottom: hp('2%'),
-  //   borderColor:'#ffffff',
-  //   paddingVertical: wp('1%'),
-  //   borderWidth: wp('1%'),
-  //   borderBottomEndRadius : 8,
-  //   borderTopStartRadius: 8,
-  //   borderTopEndRadius: 8,
-  //   borderBottomStartRadius: 8,
-  //   borderBottomLeftRadius:8,
-  //   borderBottomRightRadius:8,
-  //   shadowColor: '#000',
-  //   shadowOffset: { width: 0, height: 1 },
-  //   shadowOpacity: 0.5,
-  //   shadowRadius: 0.5,
-  //   elevation:5,
-  // },
   feedBorder: {
-    // borderTopWidth:wp('0.1%'),
-    // borderTopColor: '#121212',
     borderBottomWidth: wp('0.1%'),
     borderBottomColor: '#121212'
   },
@@ -523,11 +513,8 @@ const styles = StyleSheet.create({
     width: wp('91%'),
     height: wp('60%'),
     marginLeft: wp('3.5%'),
-    // height: 275, 
-    // resizeMode:'center',
     borderWidth: 1,
     borderRadius: wp('3%'),
-    // borderColor: '#FCD705',
   },
   foodNameDiv: {
     left: 16,
@@ -553,5 +540,11 @@ const styles = StyleSheet.create({
     fontSize: hp('2.5%'),
     paddingHorizontal: wp('2%'),
     paddingBottom: wp('4%'),
+  },
+  fabIcon: {
+    color: '#FF7200',
+    fontSize: hp('2.5%'),
+    marginLeft: wp('60%'),
+    fontSize: 26,
   },
 });
