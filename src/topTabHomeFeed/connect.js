@@ -75,20 +75,16 @@ export default class connect extends React.Component {
             // accepted - accepted request
             // cancelled - Ignored request
             // removed - removed by requestor
-            if (!data.email.includes('accepted') || !data.email.includes('cancelled') || !data.email.includes('removed')) {
-              context.addToFlatlist(feedData, data);
-            } else {
+            if (data.email.includes('accepted') || data.email.includes('cancelled') || data.email.includes('removed')) {
               context.setState({
                 feedData: [],
                 feedRefresh: false,
                 loading: false,
               })
+            } else {
+              context.addToFlatlist(feedData, data);
             }
-          } context.setState({
-            feedData: [],
-            feedRefresh: false,
-            loading: false,
-          })
+          }
         })
       })
     } else {

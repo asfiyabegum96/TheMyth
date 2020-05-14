@@ -88,7 +88,7 @@ export default class profile extends React.Component {
     let params = context.props.navigation.state.params;
     if (params.isSameProfile === true) {
       email = params.email;
-    } else if (params.privateAccount === false || params.isFollowed === true) {
+    } else {
       email = params.searchedEmail
     }
     if (email) {
