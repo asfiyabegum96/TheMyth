@@ -156,31 +156,40 @@ export default class chatLanding extends React.Component {
                         <ActivityIndicator size="large" color='red' />
                     </View>
                 ) : (
-                        <FlatList
-                            style={{ flex: 1 }}
-                            refreshing={this.state.feedRefresh}
-                            onRefresh={this.getFollowers}
-                            data={this.state.feedData}
-                            extraData={this.state}
-                            ItemSeparatorComponent={
-                                () => { return <View style={styles.separator} /> }
-                            }
-                            keyExtractor={(item) => {
-                                return item.id;
-                            }}
-                            renderItem={(item) => {
-                                const Notification = item.item;
-                                return (
-                                    <View style={styles.container}>
-                                        <TouchableOpacity onPress={() => { }}>
-                                            <Image style={styles.image} source={{ uri: Notification.profilePicture }} />
-                                        </TouchableOpacity>
-                                        <View style={styles.content}>
-                                            <Text onPress={(selectedItem) => this.navigateToChat(item)} style={styles.name}>{Notification.fullName}</Text>
-                                        </View>
-                                    </View>
-                                );
-                            }} />)}
+                        <ScrollView>
+                            <View style={{ flex: 1, }}>
+                                {this.state.user.isPrivateAccount == true ?
+                                    <TouchableOpacity onPress={() => { }}>
+                                        <Text style={styles.butText}>Message request</Text>
+                                    </TouchableOpacity>
+                                    : <View></View>}
+                                <FlatList
+                                    style={{ flex: 1 }}
+                                    refreshing={this.state.feedRefresh}
+                                    onRefresh={this.getFollowers}
+                                    data={this.state.feedData}
+                                    extraData={this.state}
+                                    ItemSeparatorComponent={
+                                        () => { return <View style={styles.separator} /> }
+                                    }
+                                    keyExtractor={(item) => {
+                                        return item.id;
+                                    }}
+                                    renderItem={(item) => {
+                                        const Notification = item.item;
+                                        return (
+                                            <View style={styles.container}>
+                                                <TouchableOpacity onPress={() => { }}>
+                                                    <Image style={styles.image} source={{ uri: Notification.profilePicture }} />
+                                                </TouchableOpacity>
+                                                <View style={styles.content}>
+                                                    <Text onPress={(selectedItem) => this.navigateToChat(item)} style={styles.name}>{Notification.fullName}</Text>
+                                                </View>
+                                            </View>
+                                        );
+                                    }} />
+                            </View>
+                        </ScrollView>)}
             </View>
 
         );
@@ -219,5 +228,18 @@ const styles = StyleSheet.create({
         height: 45,
         borderRadius: 20,
         marginLeft: 20
+    },
+    butText: {
+        color: '#fff2e7',
+        fontSize: hp('2%'),
+        marginTop: 10,
+        borderColor: '#A9A9A9',
+        backgroundColor: '#FF7200',
+        paddingVertical: 8,
+        paddingHorizontal: 20,
+        fontWeight: 'bold',
+        borderRadius: 6,
+        borderWidth: 1,
+        borderColor: '#FF7200'
     },
 });

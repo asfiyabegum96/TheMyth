@@ -23,11 +23,11 @@ const AppNavigator = createStackNavigator({
     },
     account: {
         screen: account,
-        navigationOptions: { header: null },
+        navigationOptions: { headerTitle: 'Account Settings' }
     },
     editProfile: {
         screen: editProfile,
-        navigationOptions: { header: null },
+        navigationOptions: { headerTitle: 'Edit Profile' }
     },
     search: {
         screen: search,
@@ -35,15 +35,15 @@ const AppNavigator = createStackNavigator({
     },
     updatePassword: {
         screen: updatePassword,
-        navigationOptions: { header: null },
+        navigationOptions: { headerTitle: 'Update Password' }
     },
     signup: {
         screen: signup,
-        navigationOptions: { header: null },
+        navigationOptions: { headerTitle: 'Create Account' }
     },
     forgotPassword: {
         screen: forgotPassword,
-        navigationOptions: { header: null }
+        navigationOptions: { headerTitle: 'Forgot Password' }
     },
     profile: {
         screen: profile,

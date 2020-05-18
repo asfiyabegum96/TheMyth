@@ -194,7 +194,6 @@ export default class profile extends React.Component {
         }
       });
     });
-
   }
 
   fetchSeachedUser(userData) {
