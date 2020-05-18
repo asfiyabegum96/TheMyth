@@ -119,7 +119,9 @@ export default class profile extends React.Component {
         let data;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) data = (doc.id, " => ", doc.data());
-        context.setState({ followingCount: ++followingCount })
+        if (!data.email.includes('removed') && !data.email.includes('cancelled')) {
+          context.setState({ followingCount: ++followingCount })
+        }
       })
     })
     db.collection("signup").doc(this.state.user.docRef).collection('followers').get().then(function (followerSnapshot) {
@@ -127,7 +129,9 @@ export default class profile extends React.Component {
         let data;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) data = (doc.id, " => ", doc.data());
-        context.setState({ followersCount: ++followerCount })
+        if (!data.email.includes('removed') && !data.email.includes('cancelled')) {
+          context.setState({ followersCount: ++followerCount })
+        }
       })
     })
   }
