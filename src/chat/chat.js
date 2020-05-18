@@ -213,7 +213,7 @@ export default class chatScreen extends React.Component {
                                 avatar: this.state.userDetails.profilePicture
                             }}
                             extraData={this.state}
-                            loadEarlier={this.state.messages.length >= 20}
+                            loadEarlier={this.state.messages.length >= 9}
                             onLoadEarlier={this.onLoadEarlier}
                             isLoadingEarlier={this.state.isLoadingEarlier}
                         />

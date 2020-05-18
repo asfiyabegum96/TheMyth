@@ -48,7 +48,7 @@ class Backend {
                 }
             });
         };
-        this.messagesRef.limitToLast(20).on('child_added', onReceive);
+        this.messagesRef.limitToLast(10).on('child_added', onReceive);
     }
 
     allMessages() {
@@ -77,7 +77,6 @@ class Backend {
     // closed backend connection
     closeChat() {
         if (this.messagesRef) {
-            this.allMessagesArray = [];
             this.messagesRef.off()
         }
     }
