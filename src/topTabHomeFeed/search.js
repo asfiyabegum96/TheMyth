@@ -92,7 +92,7 @@ export default class search extends React.Component {
                 });
 
                 if (isFollower === false) {
-                    context.fetchPendingFollowers(photosRef, searchElement, searchArray);
+                    context.setState({ feedData: searchArray })
                 }
             });
 
@@ -100,23 +100,6 @@ export default class search extends React.Component {
             this.setState({ feedData: [] })
         }
 
-    }
-
-    fetchPendingFollowers(photosRef, searchElement, searchArray) {
-        const context = this;
-        photosRef.doc(searchElement.docRef).collection('pendingFollowers').get().then(function (pendingSnapshot) {
-            pendingSnapshot.forEach(function (pendingDoc) {
-                const docNotEmpty = (pendingDoc.id, " => ", pendingDoc.data() != null);
-                if (docNotEmpty) {
-                    if (context.state.email === pendingDoc.data().email) {
-                        searchElement.isPending = true
-                    } else {
-                        searchElement.isPending = false
-                    }
-                }
-            })
-            context.setState({ feedData: searchArray })
-        });
     }
 
     navigateToOtherUser(selectedItem) {
@@ -130,13 +113,9 @@ export default class search extends React.Component {
             ? selectedItem.item.isFollowed
             : selectedItem.isFollowed
             ;
-        const isPending = selectedItem.item
-            ? selectedItem.item.isPending
-            : selectedItem.isPending
-            ;
         const isSameProfile = this.state.email.trim() === searchedEmail.trim();
         this.setState(this.baseState);
-        this.props.navigation.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile, isFollowed: isFollowed, isPending: isPending })
+        this.props.navigation.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile, isFollowed: isFollowed })
     }
 
     render() {

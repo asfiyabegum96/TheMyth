@@ -64,8 +64,6 @@ export default class profile extends React.Component {
       email = params.searchedEmail
       if (params.isFollowed === true) {
         this.setState({ followText: 'Unfollow' })
-      } else if (params.isPending === true) {
-        this.setState({ followText: 'Requested' })
       }
     }
     photosRef.where('email', '==', email).get().then(function (querySnapshot) {
@@ -214,6 +212,7 @@ export default class profile extends React.Component {
   updateFollowers(userData, searchedUserData) {
     let db = firebase.firestore();
     if (this.state.followText === 'Follow') {
+      this.setState({ followText: 'Unfollow' });
       if (searchedUserData.isPrivateAccount === true) {
         const saveObj = {
           email: userData.email.trim(),
@@ -221,22 +220,11 @@ export default class profile extends React.Component {
           profilePicture: userData.profilePicture,
           docRef: searchedUserData.docRef
         }
-        this.setState({ followText: 'Requested' });
         db.collection("signup").doc(searchedUserData.docRef).collection('pendingFollowers').doc(userData.email.trim()).set(saveObj)
-      } else {
-        this.setState({ followText: 'Unfollow' });
-        db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => alert('done'))
-        db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
       }
-    } else if (this.state.followText === 'Requested') {
-      const saveObj = {
-        email: userData.email.trim() + '_removed',
-        fullName: userData.fullName,
-        profilePicture: userData.profilePicture,
-        docRef: searchedUserData.docRef
-      }
-      this.setState({ followText: 'Follow' });
-      db.collection("signup").doc(searchedUserData.docRef).collection('pendingFollowers').doc(userData.email.trim()).update(saveObj)
+      db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => alert('done'))
+      db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
+
     } else {
       this.setState({ followText: 'Follow' })
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => alert('done'))
@@ -265,11 +253,6 @@ export default class profile extends React.Component {
             inputStyle={{ color: '#FF7200' }}
             onFocus={() => this.updateSearch()}
           />
-          {/* <TextInput style={styles.inputSearch}
-            selectionColor='#FF7200'
-            placeholder="Search"
-            placeholderTextColor='#FF7200'
-          /> */}
           <TouchableOpacity onPress={() => this.props.navigation.navigate('sideNavigator', { email: this.props.navigation.state.params.email })}>
             <MaterialCommunityIcons name="settings" size={35} color="#FF7200" />
           </TouchableOpacity>

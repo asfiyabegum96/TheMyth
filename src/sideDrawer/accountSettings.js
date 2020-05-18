@@ -21,12 +21,30 @@ export default class account extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            switchValue: false
+            switchValue: false,
+            email: props.navigation.state.params.email
         }
     }
 
     componentDidMount() {
         loc(this);
+        this.fetchCurrentUserDetails();
+    }
+
+    fetchCurrentUserDetails() {
+        const context = this;
+        let db = firebase.firestore();
+        let userData;
+        db.collection("signup").where('email', '==', this.state.email.trim()).get().then(function (userQuerySnapshot) {
+            userQuerySnapshot.forEach(function (doc) {
+                const docNotEmpty = (doc.id, " => ", doc.data() != null);
+                if (docNotEmpty) {
+                    userData = (doc.id, " => ", doc.data());
+                    context.setState({ switchValue: userData.isPrivateAccount })
+                }
+            });
+        });
+
     }
 
     componentWillUnMount() {
