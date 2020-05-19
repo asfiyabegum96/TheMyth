@@ -3,6 +3,7 @@ import {
     View,
     TouchableOpacity,
     ActivityIndicator,
+    AsyncStorage
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { GiftedChat, Bubble } from 'react-native-gifted-chat';
@@ -12,6 +13,8 @@ import {
     heightPercentageToDP as hp,
 }
     from 'react-native-responsive-screen';
+import firebase from 'react-native-firebase';
+
 export default class chatScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
         headerTitle: (navigation.state.params || {}).selectedItem.fullName || 'Chat! ',
@@ -97,6 +100,7 @@ export default class chatScreen extends React.Component {
         this.messageIds = [];
         this.props.navigation.setParams({ handleImageClick: this.selectImage });
         this.setState({ messages: [] });
+        this.checkUserAuthorization();
         Backend.loadMessages((message) => {
             if ((message.userid === this.state.docRef && message.user._id === Backend.getUid()) ||
                 (message.userid === Backend.getUid() && message.user._id === this.state.docRef)) {
@@ -116,6 +120,39 @@ export default class chatScreen extends React.Component {
         this.setState({
             loading: false,
         });
+    }
+
+    async checkUserAuthorization() {
+        firebase.messaging().hasPermission()
+            .then((enabled) => {
+                if (enabled) {
+                    console.log('user has permission');
+                } else {
+                    console.log('user does not have permission');
+                    this.getPermission()
+                }
+            });
+        let fcmToken = await AsyncStorage.getItem('fcmToken');
+        this.setState({ token: fcmToken })
+        console.log('token from async storage', fcmToken);
+        if (!fcmToken) {
+            fcmToken = await firebase.messaging().getToken();
+            if (fcmToken) {
+                console.log('token from firebase', fcmToken);
+                this.setState({ token: fcmToken })
+                await AsyncStorage.setItem("fcmToken", fcmToken, this.state.token); // store in db during installing and access that token
+            }
+        }
+    }
+
+    async getPermission() {
+        firebase.messaging().requestPermission()
+            .then(() => {
+                console.log('user has authorized')
+            })
+            .catch(() => {
+                console.log('rejected permission')
+            })
     }
 
     componentWillUnmount() {
@@ -204,7 +241,7 @@ export default class chatScreen extends React.Component {
                         <GiftedChat
                             messages={this.state.messages}
                             onSend={(message) => {
-                                Backend.sendMessage(message, this.state.docRef, this.state.uri)
+                                Backend.sendMessage(message, this.state.docRef, this.state.uri, this.state.token)
                             }}
                             renderBubble={this.renderBubble}
                             user={{
