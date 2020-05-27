@@ -216,15 +216,15 @@ export default class profile extends React.Component {
     let db = firebase.firestore();
     if (this.state.followText === 'Follow') {
       this.setState({ followText: 'Unfollow' });
-      if (searchedUserData.isPrivateAccount === true) {
-        const saveObj = {
-          email: userData.email.trim(),
-          fullName: userData.fullName,
-          profilePicture: userData.profilePicture,
-          docRef: searchedUserData.docRef
-        }
-        db.collection("signup").doc(searchedUserData.docRef).collection('pendingFollowers').doc(userData.email.trim()).set(saveObj)
-      }
+      // if (searchedUserData.isPrivateAccount === true) {
+      //   const saveObj = {
+      //     email: userData.email.trim(),
+      //     fullName: userData.fullName,
+      //     profilePicture: userData.profilePicture,
+      //     docRef: searchedUserData.docRef
+      //   }
+      //   db.collection("signup").doc(userData.docRef).collection('pendingFollowers').doc(userData.email.trim()).set(saveObj)
+      // }
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => alert('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
 

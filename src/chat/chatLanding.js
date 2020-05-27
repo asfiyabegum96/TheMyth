@@ -27,6 +27,7 @@ export default class chatLanding extends React.Component {
             feedRefresh: false,
             feedData: [],
             searchArray: [],
+            pendingArray: [],
             email: props.navigation.state.params.email
         }
         this.baseState = this.state;
@@ -91,6 +92,24 @@ export default class chatLanding extends React.Component {
             })
             context.setState({ searchArray: searchArray });
             context.fetchFollowers();
+            context.fetchPendingFollowers(photosRef, emailArray);
+        });
+    }
+
+    fetchPendingFollowers(photosRef, emailArray) {
+        const context = this;
+        const pendingArray = [];
+        photosRef.doc(this.state.user.docRef).collection('pendingFollowers').get().then(function (followerSnapshot) {
+
+            followerSnapshot.forEach(function (followerDoc) {
+                const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
+                if (docNotEmpty) {
+                    if (!emailArray.includes(followerDoc.data().email)) {
+                        pendingArray.push(followerDoc.data());
+                    }
+                    context.setState({ pendingArray: pendingArray });
+                }
+            })
         });
     }
 
@@ -148,6 +167,13 @@ export default class chatLanding extends React.Component {
         }
     }
 
+    displayPendingMessageRequest() {
+        this.setState({ searchArray: this.state.pendingArray });
+        setTimeout(() => {
+            this.fetchFollowers();
+        }, 100);
+    }
+
     render() {
         return (
             <View style={{ flex: 1, }}>
@@ -159,7 +185,7 @@ export default class chatLanding extends React.Component {
                         <ScrollView>
                             <View style={{ flex: 1, }}>
                                 {this.state.user.isPrivateAccount == true ?
-                                    <TouchableOpacity onPress={() => { }}>
+                                    <TouchableOpacity onPress={() => { this.displayPendingMessageRequest() }}>
                                         <Text style={styles.butText}>Message request</Text>
                                     </TouchableOpacity>
                                     : <View></View>}

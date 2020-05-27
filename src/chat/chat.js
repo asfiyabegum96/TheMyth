@@ -34,6 +34,7 @@ export default class chatScreen extends React.Component {
         this.state = {
             uri: '',
             loading: true, messages: [],
+            userEmail: props.navigation.state.params.email,
             email: props.navigation.state.params.selectedItem.email,
             docRef: props.navigation.state.params.selectedItem.docRef,
             selectedItem: props.navigation.state.params.selectedItem,
@@ -241,7 +242,7 @@ export default class chatScreen extends React.Component {
                         <GiftedChat
                             messages={this.state.messages}
                             onSend={(message) => {
-                                Backend.sendMessage(message, this.state.docRef, this.state.uri, this.state.token)
+                                Backend.sendMessage(message, this.state.docRef, this.state.uri, this.state.token, this.state.selectedItem, this.state.userEmail)
                             }}
                             renderBubble={this.renderBubble}
                             user={{

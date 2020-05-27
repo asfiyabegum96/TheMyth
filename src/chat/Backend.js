@@ -62,7 +62,7 @@ class Backend {
     }
 
     // sends message
-    sendMessage(message, uid, imageUrl, token) {
+    sendMessage(message, uid, imageUrl, token, selectedItem, userEmail) {
         for (let i = 0; i < message.length; i++) {
             this.messagesRef.push({
                 userid: uid,
@@ -71,10 +71,20 @@ class Backend {
                 user: message[i].user,
                 createdAt: new Date(),
             });
+            this.handlePrivateAccount(selectedItem, userEmail)
             this.sendNotification(token, message[i].text, message[i].user.name);
         }
     }
 
+    handlePrivateAccount(selectedItem, userEmail) {
+        const saveObj = {
+            email: userEmail.trim(),
+        }
+        let db = firebase.firestore();
+        if (selectedItem.isPrivateAccount === true) {
+            db.collection("signup").doc(selectedItem.docRef).collection('pendingFollowers').doc(userEmail.trim()).set(saveObj)
+        }
+    }
     async sendNotification(token, textMessage, name) {
         const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
         const message = {
