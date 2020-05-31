@@ -1,8 +1,8 @@
 import React from 'react';
 import AppNavigator from './navigation/AppNavigator';
 import { createAppContainer } from 'react-navigation';
-import { View, Text } from 'react-native';
 import PushNotification from 'react-native-push-notification';
+import SplashScreen from 'react-native-splash-screen';
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
@@ -12,12 +12,13 @@ export default class App extends React.Component {
   }
 
   async componentDidMount() {
+    SplashScreen.hide()
     PushNotification.configure({
 
       // (required) Called when a remote or local notification is opened or received
       onNotification: function (notification) {
         console.log("NOTIFICATION:", notification);
-      
+
       },
     });
   }
