@@ -84,18 +84,6 @@ export default class forgotPassword extends React.Component {
 
     fieldRef = React.createRef();
 
-    onSubmit = () => {
-        let { current: field } = this.fieldRef;
-
-        console.log(field.value());
-    };
-
-    formatText = (text) => {
-        // return text.replace(/[^+\d]/g, '');
-        return text.clear();
-    };
-
-
     componentDidMount() {
         loc(this);
     }
@@ -107,8 +95,6 @@ export default class forgotPassword extends React.Component {
         return (
             <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
                 <View style={styles.TitleDiv}>
-                    {/* <Text style={styles.title}>TheMyth</Text>
-                    <Text style={styles.titleSub}>Reset Password</Text> */}
                     <Image
                         source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
                         style={{
@@ -116,25 +102,24 @@ export default class forgotPassword extends React.Component {
                             height: hp('15%'),
                             borderRadius: wp('30%'),
                             resizeMode: 'cover',
-                            marginLeft: wp('20%'),
-                            marginTop: wp('20%')
+                            marginLeft: wp('25%'),
+                            marginTop: wp('10%')
                         }} />
                 </View>
                 <View style={styles.TextInputDiv}>
                     <TextField
                         placeholder='Enter your email ID to reset'
                         placeholderTextColor='#000'
-                        onSubmitEditing={this.onSubmit}
                         ref={input => { this.fieldRef = input }}
-                        containerStyle={{ width: wp('70%') }}
+                        containerStyle={{ width: wp('75%') }}
                         textColor='#FF7200'
-                        baseColor="black"
+                        baseColor="#FF7200"
                         tintColor="#FF7200"
                         onChangeText={(text) => this.setState({ email: text })}
                         value={this.state.email}
                     />
                     {this.state.fieldNotEmpty == true ? (
-                        <Text style={{ color: 'red' }}>Please enter email and password</Text>
+                        <Text style={{ color: 'red' }}>Please enter your registered email ID!</Text>
                     ) : (
                             <View></View>
                         )}
@@ -152,92 +137,36 @@ export default class forgotPassword extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff2e7',
+        backgroundColor: '#fff',
         flex: 1,
     },
     TitleDiv: {
         left: 55,
         marginTop: wp('30%')
     },
-    title: {
-        color: '#FF7200',
-        fontSize: hp('6%'),
-        fontWeight: 'bold',
-    },
-    titleSub: {
-        color: '#FF7200',
-        fontSize: hp('3%'),
-        marginBottom: 10,
-        marginTop: 5,
-    },
     TextInputDiv: {
         alignItems: 'center',
         marginTop: wp('10%'),
     },
-    ForgotPassDiv: {
-        left: 210,
-        marginTop: wp('3%')
-    },
-    ForgotPass: {
-        color: 'white',
-        fontSize: hp('2.5%'),
-    },
     but: {
-        left: 130,
-        width: wp('35%'),
-        marginTop: wp('3%'),
-        alignItems: 'center'
+        width: wp('80%'),
+        marginTop: wp('60%'),
+        marginLeft: wp('10%'),
+        alignItems: 'center',
+        backgroundColor: '#FF7200',
+        borderRadius: 17,
+        borderWidth: 1,
+        borderColor: '#FF7200'
+
     },
     butText: {
         color: '#fff2e7',
-        fontSize: hp('3%'),
-        marginTop: 10,
-        borderColor: '#A9A9A9',
-        backgroundColor: '#FF7200',
+        width: wp('80%'),
+        alignItems: 'center',
+        fontSize: hp('2.5%'),
+        marginLeft: wp('55%'),
         paddingVertical: 8,
         paddingHorizontal: 20,
         fontWeight: 'bold',
-        borderRadius: 6,
-        borderWidth: 1,
-        borderColor: '#FF7200'
-    },
-    socialAccount: {
-        paddingTop: 5,
-        paddingBottom: 5,
-        textAlign: 'center',
-        color: 'white',
-        marginTop: wp('3%')
-    },
-    socialIconDiv: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: wp('3%'),
-        zIndex: 10,
-    },
-    fontFacebook: {
-        fontSize: 30,
-        color: '#FAFBFF',
-    },
-    fontInsta: {
-        fontSize: 30,
-        color: '#FAFBFF',
-    },
-    fontGoogle: {
-        fontSize: 30,
-        color: '#FAFBFF',
-    },
-    CreateDiv: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: wp('3%')
-    },
-    pass: {
-        color: 'white',
-        fontSize: hp('2.5%'),
-    },
-    pass2: {
-        color: '#FF7200',
-        fontSize: hp('2.5%'),
-        paddingLeft: 5,
     },
 });

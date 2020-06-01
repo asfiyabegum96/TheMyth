@@ -79,7 +79,7 @@ export default class homeFixed extends React.Component {
 
   navigateToPage = (item, isComment, isSavedCollection, viewOthers, notification) => {
     if (isComment === 'send') {
-      this.props.navigation.navigate('chat', { selectedItem: item, email: item.item.email.trim()})
+      this.props.navigation.navigate('chat', { selectedItem: item, email: item.item.email.trim() })
     } else if (isComment) {
       this.props.navigation.navigate('comments', { selectedItem: item, email: this.props.navigation.state.params.email.trim() })
     } else if (isSavedCollection) {
@@ -142,17 +142,11 @@ export default class homeFixed extends React.Component {
           <TouchableOpacity onPress={() => this.props.navigation.navigate('bottomTab', { email: this.props.navigation.state.params.email.trim() })}>
             <FontAwesome5 style={styles.camera} name={'camera'} />
           </TouchableOpacity>
-          <SearchBar containerStyle={{ backgroundColor: 'fff2e7', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
-            placeholder="Search"
-            placeholderTextColor="#FF7200"
-            inputStyle={{ color: '#FF7200' }}
+          <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#FF7200', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
+            placeholderTextColor="#fff"
+            inputStyle={{ color: '#fff' }}
             onFocus={() => this.updateSearch()}
           />
-          {/* <TextInput style={styles.inputSearch}
-            selectionColor={orange}
-            placeholder="Search"
-            placeholderTextColor='#FF7200'
-          /> */}
           <TouchableOpacity onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim(), searchedEmail: this.props.navigation.state.params.email.trim(), privateAccount: false, isSameProfile: true })}>
             <FontAwesome5 style={styles.profile} name={'user-alt'} />
           </TouchableOpacity>
@@ -173,34 +167,41 @@ export default class homeFixed extends React.Component {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1.0,
-    backgroundColor: '#fff2e7'
+    backgroundColor: '#fff'
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#fff2e7',
+    backgroundColor: '#FF7200',
     padding: 10,
   },
   camera: {
-    color: '#FF7200',
+    color: '#fff',
     fontSize: hp('3.5%'),
     paddingLeft: 8,
     marginTop: 5,
   },
   profile: {
     color: '#FF7200',
-    fontSize: hp('3.5%'),
+    fontSize: hp('3%'),
+    backgroundColor: '#fff',
+    paddingVertical: wp('0.5%'),
+    paddingHorizontal: wp('0.8%'),
     marginTop: 5,
+    marginRight: wp('1.5%'),
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff'
   },
   inputSearch: {
     width: wp('70%'),
     paddingVertical: 2,
-    borderBottomWidth: 1,
-    borderBottomColor: '#FF7200',
-    backgroundColor: '#fff2e7',
+    borderBottomWidth: wp('0.1%'),
+    borderBottomColor: '#fff',
+    backgroundColor: '#FF7200',
     fontSize: 20,
-    color: '#FF7200',
-    height: hp('4%')
+    color: '#fff',
+    height: hp('4%'),
   },
   fabDiv: {
     position: 'absolute',
@@ -210,14 +211,14 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   fab: {
-    backgroundColor: '#fff2e7',
+    backgroundColor: '#FF7200',
     alignItems: 'center',
     width: wp('15%'),
     borderRadius: wp('10%'),
     justifyContent: 'center'
   },
   fabIcon: {
-    color: '#FF7200',
+    color: '#fff',
     padding: wp('3%'),
     marginRight: wp('1%')
   },

@@ -91,7 +91,6 @@ const TopNavigator = createMaterialTopTabNavigator(
       },
       style: {
         backgroundColor: 'transparent',
-        borderBottomColor: wp('0.5%'),
       }
     },
   },

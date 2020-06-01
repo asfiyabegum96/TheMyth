@@ -4,15 +4,10 @@ import {
     Text,
     Image,
     View,
-    Button,
-    TextInput,
     TouchableOpacity,
-    ScrollView,
     FlatList
 } from 'react-native';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Entypo';
-import UserAvatar from 'react-native-user-avatar';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -22,8 +17,6 @@ import {
     from 'react-native-responsive-screen';
 import { SearchBar } from 'react-native-elements';
 import firebase from 'react-native-firebase';
-
-const Jaguar = '#22222C';
 
 export default class search extends React.Component {
 

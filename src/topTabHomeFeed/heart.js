@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         ]
     },
     emptyFill: {
-        backgroundColor: '#fff2e7'
+        backgroundColor: '#fff'
     },
     empty: {
         backgroundColor:'#121212'

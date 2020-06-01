@@ -4,19 +4,13 @@ import {
   Text,
   Image,
   View,
-  Button,
-  TextInput,
   TouchableOpacity,
-  ScrollView,
-  Dimensions,
   FlatList,
   Animated,
   TouchableWithoutFeedback,
   ActivityIndicator
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import Ionicon from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import UserAvatar from 'react-native-user-avatar';
 import {
@@ -28,8 +22,6 @@ import {
   from 'react-native-responsive-screen';
 import Heart from "./heart";
 import firebase from 'react-native-firebase';
-
-const Jaguar = '#22222C';
 
 export default class mainFeed extends React.Component {
 
@@ -405,8 +397,8 @@ export default class mainFeed extends React.Component {
       <View style={{ flex: 1, }}>
         <View
           style={{
-            borderBottomColor: '#22222C',
-            borderBottomWidth: 1.5,
+            borderBottomColor: '#FF7200',
+            borderBottomWidth: 0.5,
           }} />
         {this.state.loading == true ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

@@ -177,7 +177,7 @@ export default class Home extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff2e7',
+    backgroundColor: '#fff',
     flex: 1,
   },
   TitleDiv: {

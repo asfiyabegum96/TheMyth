@@ -58,7 +58,7 @@ const AppNavigator = createStackNavigator({
     },
     bottomTab: {
         screen: TabNavigator,
-        navigationOptions: { header: null },
+        navigationOptions: { headerTitle: 'Upload' },
     },
     chat: {
         screen: chatLanding,
