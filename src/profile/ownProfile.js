@@ -2,10 +2,7 @@ import React from 'react';
 import {
   StyleSheet,
   Text,
-  Image,
   View,
-  Button,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   Alert,
@@ -27,7 +24,6 @@ import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react
 import firebase from 'react-native-firebase';
 import { SearchBar } from 'react-native-elements';
 
-const Jaguar = '#22222C';
 
 export default class profile extends React.Component {
   constructor(props) {
@@ -37,7 +33,7 @@ export default class profile extends React.Component {
       images: [],
       loading: true,
       navProps: props.navigation.state.params,
-      followText: 'Follow',
+      followText: '+',
       followersCount: 0,
       followingCount: 0
     }
@@ -63,7 +59,7 @@ export default class profile extends React.Component {
     } else {
       email = params.searchedEmail
       if (params.isFollowed === true) {
-        this.setState({ followText: 'Unfollow' })
+        this.setState({ followText: '-' })
       }
     }
     photosRef.where('email', '==', email).get().then(function (querySnapshot) {
@@ -177,6 +173,7 @@ export default class profile extends React.Component {
   };
 
   followPressed = () => {
+    console.log('fsdfsdf')
     this.setState({ navProps: this.props.navigation.state.params });
     this.fetchCurrentUserDetails();
   }
@@ -214,22 +211,13 @@ export default class profile extends React.Component {
 
   updateFollowers(userData, searchedUserData) {
     let db = firebase.firestore();
-    if (this.state.followText === 'Follow') {
-      this.setState({ followText: 'Unfollow' });
-      // if (searchedUserData.isPrivateAccount === true) {
-      //   const saveObj = {
-      //     email: userData.email.trim(),
-      //     fullName: userData.fullName,
-      //     profilePicture: userData.profilePicture,
-      //     docRef: searchedUserData.docRef
-      //   }
-      //   db.collection("signup").doc(userData.docRef).collection('pendingFollowers').doc(userData.email.trim()).set(saveObj)
-      // }
+    if (this.state.followText === '+') {
+      this.setState({ followText: '-' });
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => alert('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
 
     } else {
-      this.setState({ followText: 'Follow' })
+      this.setState({ followText: '+' })
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => alert('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).update({ email: userData.email.trim() + '_removed' })
 
@@ -248,99 +236,61 @@ export default class profile extends React.Component {
           </TouchableOpacity>)}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
-            <Icon name={'home'} size={30} color="#FF7200" />
+            <Icon name={'home'} size={30} color="#fff" />
           </TouchableOpacity>
-          <SearchBar containerStyle={{ backgroundColor: 'fff2e7', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
-            placeholder="Search"
-            placeholderTextColor="#FF7200"
-            inputStyle={{ color: '#FF7200' }}
+          <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#FF7200', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
+            placeholderTextColor="#fff"
+            inputStyle={{ color: '#fff' }}
             onFocus={() => this.updateSearch()}
           />
           <TouchableOpacity onPress={() => this.props.navigation.navigate('sideNavigator', { email: this.props.navigation.state.params.email })}>
-            <MaterialCommunityIcons name="settings" size={35} color="#FF7200" />
+            <MaterialCommunityIcons name="settings" size={35} color="#fff" />
           </TouchableOpacity>
         </View>
-        <View style={styles.countDiv}>
-          <CollapseBody>
 
-          </CollapseBody>
-          <Collapse style={{ flexDirection: 'row' }}>
-            <CollapseHeader>
-              <View style={styles.countDesign}>
+        <View style={styles.countDiv}>
+          <View style={styles.but}>
+            <Text style={styles.butText}>{this.state.followersCount}</Text>
+          </View>
+          <View style={styles.but}>
+            <Text style={styles.butText}>{this.state.followingCount}</Text>
+          </View>
+        </View>
+        <View style={styles.countDivs}>
+          {this.props.navigation.state.params.isSameProfile === true ?
+            <View style={styles.circleFirst}>
+              <View style={styles.follow}>
                 <Text style={{
-                  fontSize: wp('5%'),
-                  color: '#FF7200'
+                  color: '#FF7200',
+                  fontSize: wp('3%'),
+                  marginTop: wp('1.5%')
                 }}>{this.state.images.length}</Text>
               </View>
-            </CollapseHeader>
-            <CollapseBody style={{ alignItems: 'center', justifyContent: 'center', }}>
-              <View style={styles.countTextDesign}>
-                <Text style={{
-                  fontSize: wp('5%'),
-                  color: '#FF7200'
-                }}>Posts</Text>
+            </View> :
+            <TouchableOpacity style={{ marginTop: wp('8%'), width: wp('10%') }} onPress={() => { this.followPressed() }}>
+              <View style={styles.circle}>
+                <View style={styles.follow}>
+                  <Text style={{
+                    color: '#FF7200',
+                    fontSize: wp('5%'),
+                  }}>{this.state.followText}</Text>
+                </View>
               </View>
-            </CollapseBody>
-          </Collapse>
-          <Collapse style={{ flexDirection: 'row' }}>
-            <CollapseHeader>
-              <View style={styles.countDesign}>
-                <Text style={{
-                  fontSize: wp('5%'),
-                  color: '#FF7200'
-                }}>{this.state.followersCount}</Text>
-              </View>
-            </CollapseHeader>
-            <CollapseBody style={{ alignItems: 'center', justifyContent: 'center', }}>
-              <View style={styles.countTextDesign}>
-                <Text style={{
-                  fontSize: wp('5%'),
-                  color: '#FF7200'
-                }}>Followers</Text>
-              </View>
-            </CollapseBody>
-          </Collapse>
-          <Collapse style={{ flexDirection: 'row' }}>
-            <CollapseHeader>
-              <View style={styles.countDesign}>
-                <Text style={{
-                  fontSize: wp('5%'),
-                  color: '#FF7200'
-                }}>{this.state.followingCount}</Text>
-              </View>
-            </CollapseHeader>
-            <CollapseBody style={{ alignItems: 'center', justifyContent: 'center', }}>
-              <View style={styles.countTextDesign}>
-                <Text style={{
-                  fontSize: wp('5%'),
-                  color: '#FF7200'
-                }}>Following</Text>
-              </View>
-            </CollapseBody>
-          </Collapse>
+            </TouchableOpacity>
+
+          }
         </View>
         <ScrollView>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={{ padding: 20, }}>
+          <View style={{ flexDirection: 'row', backgroundColor: '#FF7200', paddingBottom: wp('3%') }}>
+            <View style={{ marginLeft: wp('10%'), marginRight: wp('70%'), alignItems: 'center' }}>
               <UserAvatar size="100" name="Avishay Bar"
                 src={this.state.user.profilePicture} />
-            </View>
-            <View style={{ padding: 20 }} >
               <Text style={styles.profileName}>{this.state.user.fullName}</Text>
               <Text style={{
-                fontSize: hp('2.5%'),
+                fontSize: hp('2%'),
                 marginLeft: 4,
-              }}>{this.state.user.description}</Text>
-              {this.props.navigation.state.params.isSameProfile === true ? <View></View> :
-                <TouchableOpacity onPress={() => { this.followPressed() }}>
-                  <View style={styles.follow}>
-                    <Text style={{
-                      color: '#FF7200',
-                      fontSize: 17,
-                    }}>{this.state.followText}</Text>
-                  </View>
-                </TouchableOpacity>
-              }
+                color: '#fff',
+              }} >{this.state.user.description}</Text>
             </View>
           </View>
           <View style={{ padding: 10 }}>
@@ -387,7 +337,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#fff2e7',
+    backgroundColor: '#FF7200',
     padding: 10,
   },
   backArrow: {
@@ -398,29 +348,38 @@ const styles = StyleSheet.create({
   inputSearch: {
     width: wp('70%'),
     paddingVertical: 2,
-    borderBottomWidth: 1,
-    borderBottomColor: '#FF7200',
-    backgroundColor: '#fff2e7',
+    borderBottomWidth: wp('0.1%'),
+    borderBottomColor: '#fff',
+    backgroundColor: '#FF7200',
     fontSize: 20,
     color: '#FF7200',
     height: hp('4%')
   },
   profileName: {
-    fontSize: hp('4%'),
+    fontSize: hp('3%'),
     fontWeight: 'bold',
+    color: '#fff'
   },
   follow: {
-    marginTop: 10,
-    width: wp('30%'),
+    // marginTop: wp('-0.8%'),
+    // width: wp('9%'),
     alignItems: 'center',
     backgroundColor: '#fff',
+    // paddingVertical: wp('3%'),
     borderRadius: 50,
   },
   countDiv: {
     position: 'absolute',
-    right: 0,
-    top: 70,
-    zIndex: 1
+    marginLeft: wp('37%'),
+    top: wp('18%'),
+    zIndex: 1,
+    flexDirection: 'row',
+  },
+  countDivs: {
+    position: 'absolute',
+    marginLeft: wp('58%'),
+    zIndex: 1,
+    marginTop: wp('17%')
   },
   countDesign: {
     backgroundColor: '#fff2e7',
@@ -456,6 +415,48 @@ const styles = StyleSheet.create({
     borderColor: '#FF7200',
     borderRadius: 20,
   },
+  but: {
+    width: wp('25%'),
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 25,
+    borderWidth: 1,
+    borderColor: '#fff'
+
+  },
+  butText: {
+    color: '#FF7200',
+    width: wp('50%'),
+    alignItems: 'center',
+    fontSize: hp('2.5%'),
+    marginLeft: wp('28%'),
+    paddingVertical: wp('8.5%'),
+    paddingHorizontal: 40,
+    fontWeight: 'bold',
+  },
+  circle: {
+    width: wp('10%'),
+    // top: wp('9%'),
+    height: hp('5%'),
+    borderRadius: 50,
+    backgroundColor: '#fff',
+    zIndex: 1,
+    alignItems: 'center',
+    borderWidth: wp('1%'),
+    borderColor: '#FF7200'
+  },
+  circleFirst: {
+    width: wp('10%'),
+    top: wp('9%'),
+    height: hp('5%'),
+    borderRadius: 50,
+    backgroundColor: '#fff',
+    zIndex: 1,
+    alignItems: 'center',
+    borderWidth: wp('1%'),
+    borderColor: '#FF7200'
+  }
 
 });
 
