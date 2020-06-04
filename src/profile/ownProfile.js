@@ -173,7 +173,6 @@ export default class profile extends React.Component {
   };
 
   followPressed = () => {
-    console.log('fsdfsdf')
     this.setState({ navProps: this.props.navigation.state.params });
     this.fetchCurrentUserDetails();
   }
@@ -213,12 +212,12 @@ export default class profile extends React.Component {
     let db = firebase.firestore();
     if (this.state.followText === '+') {
       this.setState({ followText: '-' });
-      db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => alert('done'))
+      db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => console.log('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
 
     } else {
       this.setState({ followText: '+' })
-      db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => alert('done'))
+      db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => console.log('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).update({ email: userData.email.trim() + '_removed' })
 
     }
@@ -226,7 +225,7 @@ export default class profile extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff2e7' }}>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
         {this.props.navigation.state.params.isSameProfile === true ? <View></View> : (
           <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', { selectedItem: this.state.user, userDetails: this.state.user, email: this.props.navigation.state.params.email })}
             style={styles.fabDiv}>
@@ -250,9 +249,11 @@ export default class profile extends React.Component {
 
         <View style={styles.countDiv}>
           <View style={styles.but}>
+            <Text style={styles.followTextStyle}>Followers</Text>
             <Text style={styles.butText}>{this.state.followersCount}</Text>
           </View>
           <View style={styles.but}>
+            <Text style={styles.followTextStyle}>Following</Text>
             <Text style={styles.butText}>{this.state.followingCount}</Text>
           </View>
         </View>
@@ -263,17 +264,16 @@ export default class profile extends React.Component {
                 <Text style={{
                   color: '#FF7200',
                   fontSize: wp('3%'),
-                  marginTop: wp('1.5%')
+                  marginTop: wp('1.8%')
                 }}>{this.state.images.length}</Text>
               </View>
             </View> :
             <TouchableOpacity style={{ marginTop: wp('8%'), width: wp('10%') }} onPress={() => { this.followPressed() }}>
               <View style={styles.circle}>
                 <View style={styles.follow}>
-                  <Text style={{
-                    color: '#FF7200',
-                    fontSize: wp('5%'),
-                  }}>{this.state.followText}</Text>
+                  {this.state.followText === '+' ?
+                    <FontAwesome5 style={{ color: '#ff7200', marginTop: wp('1.8%') }} name='plus' size={15} /> :
+                    <FontAwesome5 style={{ color: '#ff7200', marginTop: wp('1.8%') }} name='check' size={15} />}
                 </View>
               </View>
             </TouchableOpacity>
@@ -300,7 +300,7 @@ export default class profile extends React.Component {
               </View>
             ) : (
                 <MasonryList
-                  backgroundColor={'#fff2e7'}
+                  backgroundColor={'#fff'}
                   onRefresh={this.fetchImages}
                   columns={3}
                   images={this.state.images}
@@ -314,7 +314,6 @@ export default class profile extends React.Component {
   }
 }
 
-
 const styles = StyleSheet.create({
   fabDiv: {
     position: 'absolute',
@@ -324,14 +323,14 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   fab: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FF7200',
     alignItems: 'center',
     width: wp('15%'),
     borderRadius: wp('10%'),
     justifyContent: 'center'
   },
   fabIcon: {
-    color: '#FF7200',
+    color: '#fff',
     padding: wp('3%'),
   },
   header: {
@@ -361,59 +360,26 @@ const styles = StyleSheet.create({
     color: '#fff'
   },
   follow: {
-    // marginTop: wp('-0.8%'),
-    // width: wp('9%'),
     alignItems: 'center',
     backgroundColor: '#fff',
-    // paddingVertical: wp('3%'),
     borderRadius: 50,
   },
   countDiv: {
     position: 'absolute',
-    marginLeft: wp('37%'),
+    marginLeft: wp('45%'),
     top: wp('18%'),
     zIndex: 1,
     flexDirection: 'row',
   },
   countDivs: {
     position: 'absolute',
-    marginLeft: wp('58%'),
+    marginLeft: wp('64%'),
     zIndex: 1,
-    marginTop: wp('17%')
+    marginTop: wp('17.5%')
   },
-  countDesign: {
-    backgroundColor: '#fff2e7',
-    paddingLeft: wp('3%'),
-    paddingVertical: wp('1%'),
-    borderTopLeftRadius: wp('2%'),
-    borderBottomLeftRadius: wp('2%')
-  },
-  countTextDesign: {
-    backgroundColor: '#fff2e7',
-    paddingLeft: wp('1.5%'),
-    paddingRight: wp('2%'),
-    paddingVertical: wp('1%'),
-    borderTopRightRadius: wp('2%'),
-    borderBottomRightRadius: wp('2%')
-  },
-  coutnText: {
-    fontSize: hp('2%'),
-  },
-  ZigZagContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    height: hp('35%'),
-  },
-  zigZagImage2: {
-    position: 'relative',
-    top: 30,
-  },
-  InlineImg: {
-    width: wp('40%'),
-    height: hp('30%'),
-    borderWidth: 1,
-    borderColor: '#FF7200',
-    borderRadius: 20,
+  followTextStyle: {
+    marginTop: wp('3%'),
+    color: '#FF7200'
   },
   but: {
     width: wp('25%'),
@@ -422,7 +388,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 25,
     borderWidth: 1,
-    borderColor: '#fff'
+    borderColor: '#fff',
 
   },
   butText: {
@@ -431,20 +397,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: hp('2.5%'),
     marginLeft: wp('28%'),
-    paddingVertical: wp('8.5%'),
+    paddingVertical: wp('5%'),
     paddingHorizontal: 40,
     fontWeight: 'bold',
   },
   circle: {
     width: wp('10%'),
-    // top: wp('9%'),
     height: hp('5%'),
     borderRadius: 50,
     backgroundColor: '#fff',
     zIndex: 1,
     alignItems: 'center',
     borderWidth: wp('1%'),
-    borderColor: '#FF7200'
+    borderColor: '#FF7200',
   },
   circleFirst: {
     width: wp('10%'),
@@ -457,6 +422,4 @@ const styles = StyleSheet.create({
     borderWidth: wp('1%'),
     borderColor: '#FF7200'
   }
-
 });
-

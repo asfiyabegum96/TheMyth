@@ -70,7 +70,7 @@ const AppNavigator = createStackNavigator({
     },
     comments: {
         screen: Comments,
-        navigationOptions: { header: null }
+        navigationOptions: { headerTitle: 'Comments' }
     },
     sideNavigator: {
         screen: sideNavigator,

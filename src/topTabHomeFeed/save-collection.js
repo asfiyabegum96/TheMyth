@@ -115,7 +115,7 @@ export default class SaveCollection extends Component {
 
     render() {
         return (
-            <ScrollView style={{ backgroundColor: '#fff2e7' }}>
+            <ScrollView style={{ backgroundColor: '#fff' }}>
                 <View style={{ padding: 10, minHeight: hp('50%') }}>
                     {this.state.loading == true ? (
                         <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
@@ -127,7 +127,7 @@ export default class SaveCollection extends Component {
                                     <MasonryList
                                         rerender={true}
                                         masonryFlatListColProps={{ refreshing: this.state.feedRefresh, onRefresh: () => this.fetchUserDetails() }}
-                                        backgroundColor={'#fff2e7'}
+                                        backgroundColor={'#fff'}
                                         columns={3}
                                         images={this.state.images}
                                         keyExtractor={(item, index) => index.toString()}

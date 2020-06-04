@@ -5,13 +5,10 @@ import {
     View,
     TouchableOpacity,
     Image,
-    ScrollView,
     FlatList,
     TextInput,
-    Button,
     ActivityIndicator
 } from 'react-native';
-import { TextField } from 'react-native-material-textfield';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -251,18 +248,18 @@ export default class Comments extends Component {
 
 const styles = StyleSheet.create({
     root: {
-        backgroundColor: '#fff2e7',
-        paddingTop: 10,
+        backgroundColor: '#fff',
+        paddingTop: wp('1%'),
     },
     container: {
-        paddingLeft: 19,
+        // paddingLeft: 19,
         paddingRight: 16,
         paddingVertical: 12,
         flexDirection: 'row',
         alignItems: 'flex-start',
     },
     content: {
-        marginLeft: 16,
+        marginLeft: wp('4%'),
         flex: 1,
     },
     contentHeader: {
@@ -271,8 +268,10 @@ const styles = StyleSheet.create({
         marginBottom: 6
     },
     separator: {
-        height: 1,
-        backgroundColor: '#FF7200'
+        height: wp('0.1%'),
+        marginLeft: wp('20%'),
+        backgroundColor: '#FF7200',
+        width: wp('71%'),
     },
     image: {
         width: 45,
@@ -283,6 +282,7 @@ const styles = StyleSheet.create({
     time: {
         fontSize: 11,
         color: "#808080",
+        marginRight: wp('5%')
     },
     name: {
         fontSize: 16,
@@ -292,26 +292,22 @@ const styles = StyleSheet.create({
     commentSection: {
         color: "#FF7200",
     },
-    addcomment: {
-        // height: '40%',
-        marginLeft: 100,
-    },
     viewcomment: {
-        backgroundColor: '#fff2e7',
+        backgroundColor: '#fff',
         flexDirection: 'row'
     },
     butText: {
         color: '#22222C',
-        marginTop: 15,
+        marginTop: wp('5%'),
         borderBottomColor: '#FF7200', // Add this to specify bottom border color
-        borderBottomWidth: 1
+        borderBottomWidth: wp('0.1%')
     },
     inputStyle: {
-        marginLeft: 30,
-        width: 210,
+        marginLeft: wp('4%'),
+        width: wp('55%'),
         color: '#FF7200',
         borderBottomColor: '#FF7200', // Add this to specify bottom border color
-        borderBottomWidth: 1
+        borderBottomWidth: wp('0.1%')
     },
     buttonText: {
         color: '#FF7200'
@@ -320,8 +316,8 @@ const styles = StyleSheet.create({
         width: 45,
         height: 45,
         borderRadius: 20,
-        marginLeft: 35,
-        marginTop: 15,
+        marginLeft: wp('5%'),
+        marginTop: wp('3%'),
     },
     mainContainer: {
         height: 762

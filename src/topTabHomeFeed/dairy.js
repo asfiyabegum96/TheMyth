@@ -38,7 +38,7 @@ const diary = createMaterialTopTabNavigator({
 },
   {
     tabBarOptions: {
-      activeTintColor: '#fff2e7',
+      activeTintColor: '#FF7200',
       inactiveTintColor: '#22222C',
       showIcon: false,
       showLabel: true,
@@ -46,9 +46,11 @@ const diary = createMaterialTopTabNavigator({
         opacity: 0,
       },
       style: {
-        backgroundColor: '#ff9380',
-        borderBottomColor: '#fff2e7',
-        borderBottomWidth: wp('0.5%')
+        backgroundColor: '#fff',
+        borderTopColor: '#FF7200',
+        borderTopWidth: wp('0.1%'),
+        borderBottomColor: '#FF7200',
+        borderBottomWidth: wp('0.1%')
       }
     },
   },

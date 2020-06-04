@@ -17,7 +17,7 @@ import {
     from 'react-native-responsive-screen';
 import { SearchBar } from 'react-native-elements';
 import firebase from 'react-native-firebase';
-
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 export default class search extends React.Component {
 
     constructor(props) {
@@ -108,6 +108,7 @@ export default class search extends React.Component {
             ;
         const isSameProfile = this.state.email.trim() === searchedEmail.trim();
         this.setState(this.baseState);
+        this.setState({ feedData: [] })
         this.props.navigation.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile, isFollowed: isFollowed })
     }
 
@@ -116,19 +117,22 @@ export default class search extends React.Component {
         return (
             <View style={{ flex: 1, }}>
                 <View style={styles.header}>
-                    <TouchableOpacity style={{ marginTop: '3%', marginLeft: '3%' }} onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
-                        <Icon name={'home'} size={30} color="#FF7200" />
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
+                        <Icon name={'home'} size={30} color="#fff" />
                     </TouchableOpacity>
-                    <SearchBar containerStyle={{ backgroundColor: '#fff2e7', height: hp('8%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
-                        placeholder="Search"
+                    <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#FF7200', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
                         autoFocus="true"
-                        placeholderTextColor="#FF7200"
-                        inputStyle={{ color: '#FF7200' }}
+                        placeholderTextColor="#fff"
+                        inputStyle={{ color: '#fff' }}
+                        clearIcon={{ color: 'white' }}
                         onChangeText={(text) => this.updateSearch(text)}
                         onSubmitEditing={() => this.fetchSearchList()}
                         onClear={() => this.setState({ feedData: [] })}
                         value={search}
                     />
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim(), searchedEmail: this.props.navigation.state.params.email.trim(), privateAccount: false, isSameProfile: true })}>
+                        <FontAwesome5 style={styles.profile} name={'user-alt'} />
+                    </TouchableOpacity>
                 </View>
                 <FlatList
                     style={styles.root}
@@ -160,7 +164,7 @@ export default class search extends React.Component {
 
 const styles = StyleSheet.create({
     root: {
-        backgroundColor: '#fff2e7',
+        backgroundColor: '#fff',
         paddingTop: 10,
         paddingLeft: '5.5%',
     },
@@ -186,28 +190,38 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     inputSearch: {
-        width: wp('90%'),
-        marginLeft: '4%',
+        width: wp('70%'),
         paddingVertical: 2,
-        paddingLeft: '5%',
-        borderBottomWidth: 1,
-        borderBottomColor: '#FF7200',
-        backgroundColor: '#fff2e7',
+        borderBottomWidth: wp('0.1%'),
+        borderBottomColor: '#fff',
+        backgroundColor: '#FF7200',
         fontSize: 20,
         color: '#FF7200',
-        height: hp('6%')
+        height: hp('4%')
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: '#fff2e7',
-        padding: 5,
+        backgroundColor: '#FF7200',
+        padding: 10,
     },
     image: {
         width: 45,
         height: 45,
         borderRadius: 20,
         marginLeft: 20
+    },
+    profile: {
+        color: '#FF7200',
+        fontSize: hp('3%'),
+        backgroundColor: '#fff',
+        paddingVertical: wp('0.5%'),
+        paddingHorizontal: wp('0.8%'),
+        marginTop: 5,
+        marginRight: wp('1.5%'),
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#fff'
     },
 });
 
