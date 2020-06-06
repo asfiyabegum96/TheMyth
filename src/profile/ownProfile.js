@@ -246,54 +246,57 @@ export default class profile extends React.Component {
             <MaterialCommunityIcons name="settings" size={35} color="#fff" />
           </TouchableOpacity>
         </View>
-
-        <View style={styles.countDiv}>
-          <View style={styles.but}>
-            <Text style={styles.followTextStyle}>Followers</Text>
-            <Text style={styles.butText}>{this.state.followersCount}</Text>
-          </View>
-          <View style={styles.but}>
-            <Text style={styles.followTextStyle}>Following</Text>
-            <Text style={styles.butText}>{this.state.followingCount}</Text>
-          </View>
-        </View>
-        <View style={styles.countDivs}>
-          {this.props.navigation.state.params.isSameProfile === true ?
-            <View style={styles.circleFirst}>
-              <View style={styles.follow}>
-                <Text style={{
-                  color: '#FF7200',
-                  fontSize: wp('3%'),
-                  marginTop: wp('1.8%')
-                }}>{this.state.images.length}</Text>
-              </View>
-            </View> :
-            <TouchableOpacity style={{ marginTop: wp('8%'), width: wp('10%') }} onPress={() => { this.followPressed() }}>
-              <View style={styles.circle}>
-                <View style={styles.follow}>
-                  {this.state.followText === '+' ?
-                    <FontAwesome5 style={{ color: '#ff7200', marginTop: wp('1.8%') }} name='plus' size={15} /> :
-                    <FontAwesome5 style={{ color: '#ff7200', marginTop: wp('1.8%') }} name='check' size={15} />}
-                </View>
-              </View>
-            </TouchableOpacity>
-
-          }
-        </View>
         <ScrollView>
-          <View style={{ flexDirection: 'row', backgroundColor: '#FF7200', paddingBottom: wp('3%') }}>
-            <View style={{ marginLeft: wp('10%'), marginRight: wp('70%'), alignItems: 'center' }}>
-              <UserAvatar size="100" name="Avishay Bar"
+          <View style={{ backgroundColor: '#FF7200', paddingBottom: wp('3%') }}>
+            <View style={{ flexDirection: 'row', marginLeft: wp('10%'), alignItems: 'center' }}>
+              <UserAvatar size="70" name="Avishay Bar"
                 src={this.state.user.profilePicture} />
               <Text style={styles.profileName}>{this.state.user.fullName}</Text>
+            </View>
+            <View style={{ flexDirection: 'row', marginLeft: wp('32%'), backgroundColor: '#FF7200', paddingBottom: wp('3%') }}>
               <Text style={{
                 fontSize: hp('2%'),
                 marginLeft: 4,
                 color: '#fff',
+                marginTop: wp('-10%'),
               }} >{this.state.user.description}</Text>
             </View>
           </View>
-          <View style={{ padding: 10 }}>
+
+          <View style={styles.countDiv}>
+            <View style={styles.but}>
+              <Text style={styles.followTextStyle}>Followers</Text>
+              <Text style={styles.butText}>{this.state.followersCount}</Text>
+            </View>
+            <View style={styles.butFollow}>
+              <Text style={styles.followTextStyle}>Following</Text>
+              <Text style={styles.butText}>{this.state.followingCount}</Text>
+            </View>
+          </View>
+          <View style={styles.countDivs}>
+            {this.props.navigation.state.params.isSameProfile === true ?
+              <View style={styles.circleFirst}>
+                <View style={styles.follow}>
+                  <Text style={{
+                    color: '#FF7200',
+                    fontSize: wp('5%'),
+                    paddingTop: wp('1.8%')
+                  }}>{this.state.images.length}</Text>
+                </View>
+              </View> :
+              <TouchableOpacity style={{ paddingTop: wp('8%'), width: wp('10%') }} onPress={() => { this.followPressed() }}>
+                <View style={styles.circle}>
+                  <View style={styles.follow}>
+                    {this.state.followText === '+' ?
+                      <FontAwesome5 style={{ color: '#ff7200', paddingTop: wp('2.8%') }} name='plus' size={15} /> :
+                      <FontAwesome5 style={{ color: '#ff7200', paddingTop: wp('2.8%') }} name='check' size={15} />}
+                  </View>
+                </View>
+              </TouchableOpacity>
+
+            }
+          </View>
+          <View style={{ padding: 10, marginTop: wp('32%') }}>
             {this.state.loading == true ? (
               <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color='red' />
@@ -357,7 +360,9 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: hp('3%'),
     fontWeight: 'bold',
-    color: '#fff'
+    color: '#fff',
+    marginLeft: wp('5%'),
+    marginTop: wp('-10%')
   },
   follow: {
     alignItems: 'center',
@@ -366,60 +371,75 @@ const styles = StyleSheet.create({
   },
   countDiv: {
     position: 'absolute',
-    marginLeft: wp('45%'),
-    top: wp('18%'),
+    paddingLeft: wp('32%'),
+    paddingRight: wp('20%'),
+    top: wp('20%'),
     zIndex: 1,
     flexDirection: 'row',
+    backgroundColor: '#FF7200',
   },
   countDivs: {
     position: 'absolute',
-    marginLeft: wp('64%'),
+    marginLeft: wp('56%'),
     zIndex: 1,
-    marginTop: wp('17.5%')
+    marginTop: wp('27.5%'),
+
   },
   followTextStyle: {
-    marginTop: wp('3%'),
-    color: '#FF7200'
+    marginTop: wp('6%'),
+    color: '#FF7200',
   },
   but: {
-    width: wp('25%'),
+    width: wp('30%'),
     display: 'flex',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 25,
+    borderRadius: 35,
     borderWidth: 1,
     borderColor: '#fff',
-
+    marginBottom: wp('2%')
+  },
+  butFollow: {
+    width: wp('30%'),
+    display: 'flex',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 35,
+    borderWidth: 1,
+    borderColor: '#fff',
+    marginLeft: wp('2%'),
+    marginBottom: wp('2%')
   },
   butText: {
     color: '#FF7200',
     width: wp('50%'),
     alignItems: 'center',
-    fontSize: hp('2.5%'),
+    fontSize: hp('3%'),
     marginLeft: wp('28%'),
-    paddingVertical: wp('5%'),
+    paddingVertical: wp('7%'),
     paddingHorizontal: 40,
-    fontWeight: 'bold',
+
   },
   circle: {
-    width: wp('10%'),
-    height: hp('5%'),
+    width: wp('14%'),
+    height: hp('7%'),
     borderRadius: 50,
     backgroundColor: '#fff',
     zIndex: 1,
     alignItems: 'center',
-    borderWidth: wp('1%'),
+    borderWidth: wp('1.5%'),
     borderColor: '#FF7200',
+    bottom: wp('5%'),
   },
   circleFirst: {
-    width: wp('10%'),
-    top: wp('9%'),
-    height: hp('5%'),
+    width: wp('14%'),
+    top: wp('3%'),
+    height: hp('7%'),
     borderRadius: 50,
     backgroundColor: '#fff',
     zIndex: 1,
     alignItems: 'center',
-    borderWidth: wp('1%'),
+    borderWidth: wp('1.5%'),
     borderColor: '#FF7200'
   }
 });
