@@ -494,9 +494,11 @@ const styles = StyleSheet.create({
     fontSize: hp('3%'),
     fontWeight: 'bold',
     color: '#22222C',
+    marginRight: wp('5%')
   },
   listProfileSubName: {
-    color: '#22222C'
+    color: '#22222C',
+    marginRight: wp('15%'),
   },
   listViewImg: {
     paddingVertical: wp('2%'),
@@ -529,7 +531,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('2%')
   },
   likeText: {
-    fontSize: hp('2.5%'),
     paddingHorizontal: wp('2%'),
     paddingBottom: wp('4%'),
   },

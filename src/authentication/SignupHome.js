@@ -18,7 +18,7 @@ import {
 }
   from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
-
+import main from "./styles/main";
 
 export default class SignupHome extends React.Component {
   fieldRef = React.createRef();
@@ -155,15 +155,12 @@ export default class SignupHome extends React.Component {
                     marginTop: wp('5%')
                   }} />
               </View>
-              <View style={styles.TitleDiv}>
-                <Text style={styles.title}>Create Account</Text>
-              </View>
               <View style={styles.TextInputDiv}>
                 <TextField
                   label='Full Name *'
                   onSubmitEditing={this.onSubmit}
                   ref={this.fieldRef}
-                  containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                  containerStyle={{ width: wp('80%'), height: hp('11%') }}
                   textColor='#FF7200'
                   baseColor="black"
                   tintColor="#FF7200"
@@ -174,7 +171,7 @@ export default class SignupHome extends React.Component {
                 <TextField
                   label='Email *'
                   ref="email"
-                  containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                  containerStyle={{ width: wp('80%'), height: hp('11%') }}
                   textColor='#FF7200'
                   baseColor="black"
                   autoCapitalize="false"
@@ -198,7 +195,7 @@ export default class SignupHome extends React.Component {
                   <TextField
                     label='Password *'
                     ref="password"
-                    containerStyle={{ width: wp('65%'), height: hp('11%') }}
+                    containerStyle={{ width: wp('75%'), height: hp('11%') }}
                     textColor='#FF7200'
                     baseColor="black"
                     tintColor="#FF7200"
@@ -218,7 +215,7 @@ export default class SignupHome extends React.Component {
                 <TextField
                   label='Confirm Password *'
                   ref="confirmPassword"
-                  containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                  containerStyle={{ width: wp('80%'), height: hp('11%') }}
                   textColor='#FF7200'
                   baseColor="black"
                   tintColor="#FF7200"
@@ -242,18 +239,9 @@ export default class SignupHome extends React.Component {
                     <View></View>
                   )}
               </View>
-
-              <View style={styles.checkboxDiv}>
-                {/* <CheckBox
-                    checkedImage={require('../images/Checked.png')}
-                    uncheckedImage={require('../images/unChecked.png')}
-                    label='I accept all terms and conditions'
-                    labelStyle={{ color:'white' }}
-                    /> */}
-              </View>
-              <View style={styles.but}>
+              <View style={main.buttonContainer}>
                 <TouchableOpacity disabled={this.state.clicked} >
-                  <Text style={styles.butText} onPress={this.requireField}>Continue</Text>
+                  <Text style={main.buttonText} onPress={this.requireField}>Continue</Text>
                 </TouchableOpacity>
               </View>
               {/* <View style={styles.socialIconDiv}>
@@ -280,12 +268,8 @@ export default class SignupHome extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff2e7',
+    backgroundColor: '#fff',
     flex: 1,
-  },
-  TitleDiv: {
-    alignItems: 'center',
-    marginTop: wp('5%')
   },
   title: {
     color: '#FF7200',
@@ -294,7 +278,8 @@ const styles = StyleSheet.create({
   },
   TextInputDiv: {
     alignItems: 'center',
-    marginTop: wp('10%')
+    marginTop: wp('10%'),
+    marginBottom: wp('30%')
   },
   inputfield: {
     width: wp('88%'),

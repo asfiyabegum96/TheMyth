@@ -147,7 +147,7 @@ const styles = {
     opacity: 0.5,
     width: 400,
     height: '100%',
-    backgroundColor: '#fff2e7'
+    backgroundColor: '#fff'
   },
   navItemStyle: {
     padding: wp('8%'),

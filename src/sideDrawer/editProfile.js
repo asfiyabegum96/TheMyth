@@ -18,8 +18,7 @@ import {
     from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
 import ImagePicker from 'react-native-image-picker';
-import { StackActions, NavigationActions } from 'react-navigation';
-
+import main from "../authentication/styles/main";
 export default class editProfile extends React.Component {
     fieldRef = React.createRef();
 
@@ -135,8 +134,6 @@ export default class editProfile extends React.Component {
                 ) :
                     <View >
                         <View style={styles.logo}>
-                            {/* <Text style={styles.title}>TheMyth</Text>
-                    <Text style={styles.titleSub}>Reset Password</Text> */}
                             <Image
                                 source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
                                 style={{
@@ -145,56 +142,46 @@ export default class editProfile extends React.Component {
                                     borderRadius: wp('30%'),
                                     resizeMode: 'cover',
                                     marginLeft: wp('20%'),
-                                    marginTop: wp('5%')
+                                    marginTop: wp('5%'),
+                                    marginBottom: wp('10%')
                                 }} />
-                        </View>
-                        <View style={styles.TitleDiv}>
-                            <Text style={styles.title}>Update Account</Text>
-                        </View>
-                        <View style={{
-                            marginTop: wp('10%'),
-                            marginBottom: wp('5%'),
-                            left: 60
-                        }}>
-                            <Text style={{ color: 'black', fontSize: wp('4.5%'), marginBottom: wp('1%') }}>Profile picture:</Text>
                         </View>
                         <View style={{
                             flexDirection: 'row',
                             justifyContent: 'space-around',
                             alignItems: "center",
                         }}>
-                            <View style={{ left: 25 }}>
+                            <View>
                                 {this.state.imageSelected == true ? (
-                                    <Image
-                                        source={{ uri: this.state.uri }}
-                                        style={{
-                                            width: wp('25%'),
-                                            height: hp('15%'),
-                                            borderRadius: wp('30%'),
-                                            resizeMode: 'cover'
-                                        }} />
-                                ) : (
+                                    <TouchableOpacity onPress={this.selectImage}>
                                         <Image
-                                            source={{ uri: this.state.user.profilePicture }}
+                                            source={{ uri: this.state.uri }}
                                             style={{
                                                 width: wp('25%'),
                                                 height: hp('15%'),
                                                 borderRadius: wp('30%'),
                                                 resizeMode: 'cover'
                                             }} />
+                                    </TouchableOpacity>
+                                ) : (
+                                        <TouchableOpacity onPress={this.selectImage}>
+                                            <Image
+                                                source={{ uri: this.state.user.profilePicture }}
+                                                style={{
+                                                    width: wp('25%'),
+                                                    height: hp('15%'),
+                                                    borderRadius: wp('30%'),
+                                                    resizeMode: 'cover'
+                                                }} />
+                                        </TouchableOpacity>
                                     )}
-                            </View>
-                            <View style={{ right: 25 }}>
-                                <TouchableOpacity onPress={this.selectImage}>
-                                    <Text style={styles.selectImage}>Edit Image</Text>
-                                </TouchableOpacity>
                             </View>
                         </View>
                         <View style={styles.TextInputDiv}>
                             <TextField
                                 label='Full Name'
                                 ref={this.fieldRef}
-                                containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                                containerStyle={{ width: wp('80%'), height: hp('11%') }}
                                 textColor='#FF7200'
                                 baseColor="black"
                                 tintColor="#FF7200"
@@ -202,9 +189,10 @@ export default class editProfile extends React.Component {
                                 defaultValue={this.state.user.fullName}
                             />
                             <TextField
+                                maxLength={50}
                                 label='Description'
                                 ref="description"
-                                containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                                containerStyle={{ width: wp('80%'), height: hp('11%') }}
                                 textColor='#FF7200'
                                 baseColor="black"
                                 autoCapitalize="false"
@@ -213,9 +201,9 @@ export default class editProfile extends React.Component {
                                 defaultValue={this.state.user.description}
                             />
                         </View>
-                        <View style={styles.but}>
+                        <View style={main.buttonContainer}>
                             <TouchableOpacity onPress={() => this.updateProfileDetails()}>
-                                <Text style={styles.butText}>Make Changes</Text>
+                                <Text style={main.buttonText}>Update</Text>
                             </TouchableOpacity>
                         </View>
                     </View>}
@@ -226,7 +214,7 @@ export default class editProfile extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff2e7',
+        backgroundColor: '#fff',
         flex: 1,
     },
     TitleDiv: {
@@ -240,7 +228,8 @@ const styles = StyleSheet.create({
     },
     TextInputDiv: {
         alignItems: 'center',
-        marginTop: wp('10%')
+        marginTop: wp('10%'),
+        marginBottom: wp('30%')
     },
     inputfield: {
         width: wp('88%'),

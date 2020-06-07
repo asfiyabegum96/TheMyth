@@ -19,7 +19,7 @@ import {
 import firebase from 'react-native-firebase';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { StackActions, NavigationActions } from 'react-navigation';
-
+import main from "../authentication/styles/main";
 export default class updatePassword extends React.Component {
 
     constructor(props) {
@@ -147,15 +147,12 @@ export default class updatePassword extends React.Component {
                                     marginTop: wp('20%')
                                 }} />
                         </View>
-                        <View style={styles.TitleDiv}>
-                            <Text style={styles.title}>Update Password</Text>
-                        </View>
                         <View style={styles.TextInputDiv}>
                             <View style={{ flexDirection: 'row', }}>
                                 <TextField
                                     label='Old Password *'
                                     ref="password"
-                                    containerStyle={{ width: wp('65%'), height: hp('11%') }}
+                                    containerStyle={{ width: wp('75%'), height: hp('11%') }}
                                     textColor='#FF7200'
                                     baseColor="black"
                                     tintColor="#FF7200"
@@ -175,7 +172,7 @@ export default class updatePassword extends React.Component {
                                 <TextField
                                     label='New Password *'
                                     ref="password"
-                                    containerStyle={{ width: wp('65%'), height: hp('11%') }}
+                                    containerStyle={{ width: wp('75%'), height: hp('11%') }}
                                     textColor='#FF7200'
                                     baseColor="black"
                                     tintColor="#FF7200"
@@ -194,7 +191,7 @@ export default class updatePassword extends React.Component {
                             <TextField
                                 label='Re-enter New Password *'
                                 ref="confirmPassword"
-                                containerStyle={{ width: wp('70%'), height: hp('11%') }}
+                                containerStyle={{ width: wp('80%'), height: hp('11%') }}
                                 textColor='#FF7200'
                                 baseColor="black"
                                 tintColor="#FF7200"
@@ -222,9 +219,9 @@ export default class updatePassword extends React.Component {
                                     <View></View>
                                 )}
                         </View>
-                        <View style={styles.but}>
+                        <View style={main.buttonContainer}>
                             <TouchableOpacity onPress={() => this.requireField()}>
-                                <Text style={styles.butText}>Update</Text>
+                                <Text style={main.buttonText}>Update</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>}
@@ -236,7 +233,7 @@ export default class updatePassword extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff2e7',
+        backgroundColor: '#fff',
         flex: 1,
     },
     TitleDiv: {
@@ -257,6 +254,7 @@ const styles = StyleSheet.create({
     TextInputDiv: {
         alignItems: 'center',
         marginTop: wp('10%'),
+        marginBottom: wp('35%')
     },
     ForgotPassDiv: {
         left: 210,

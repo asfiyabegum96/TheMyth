@@ -26,7 +26,6 @@ import ImagePicker from 'react-native-image-picker';
 import firebase from 'react-native-firebase';
 import PushNotification from 'react-native-push-notification';
 
-
 class photosUpload extends React.Component {
     constructor(props) {
         super(props)
@@ -52,7 +51,6 @@ class photosUpload extends React.Component {
             onNotification: function (notification) {
                 console.log("NOTIFICATION:", notification);
                 if (notification.userInteraction === true) {
-                    console.log('sdf', context.props)
                     context.props.screenProps.navigation.navigate('homeFixed', { email: context.props.screenProps.navigation.state.params.email })
                 }
 
@@ -320,8 +318,6 @@ class photosUpload extends React.Component {
         return (
             <ScrollView keyboardShouldPersistTaps={true} style={{ flex: 1, padding: wp('3%') }}>
                 <View style={styles.logo}>
-                    {/* <Text style={styles.title}>TheMyth</Text>
-                    <Text style={styles.titleSub}>Reset Password</Text> */}
                     <Image
                         source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
                         style={{
@@ -333,13 +329,6 @@ class photosUpload extends React.Component {
                             marginTop: wp('5%')
                         }} />
                 </View>
-                <Text style={{
-                    fontSize: wp('5%'),
-                    textAlign: 'center',
-                    fontWeight: 'bold',
-                    color: '#FF7200',
-                    marginTop: wp('10%')
-                }}>Photos Upload </Text>
                 <View
                     style={{
                         borderBottomColor: '#FF7200',
@@ -347,28 +336,26 @@ class photosUpload extends React.Component {
                         marginTop: wp('3%')
                     }} />
                 <View style={{ alignItems: 'center' }}>
-                    <View style={{ paddingTop: wp('5%'), }}>
+                    <View style={{ paddingTop: wp('15%'), }}>
                         {
-                            this.state.uri &&
-                            <Image
-                                source={{ uri: this.state.uri }}
-                                style={{
-                                    width: wp('40%'),
-                                    height: hp('20%'),
-                                    resizeMode: 'cover',
-                                }} />
+                            this.state.uri ?
+                                <Image
+                                    source={{ uri: this.state.uri }}
+                                    style={{
+                                        width: wp('40%'),
+                                        height: hp('20%'),
+                                        resizeMode: 'cover',
+                                    }} /> :
+                                <TouchableOpacity onPress={this.selectImage}>
+                                    <Image
+                                        source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" }}
+                                        style={{
+                                            width: wp('25%'),
+                                            height: hp('15%'),
+                                            resizeMode: 'cover'
+                                        }} />
+                                </TouchableOpacity>
                         }
-                    </View>
-                    <View style={styles.imagePick}>
-                        <TouchableOpacity style={styles.uploadImageButton}
-                            onPress={this.selectImage}>
-                            <View>
-                                <FontAwesome5 name='images' style={styles.images} />
-                            </View>
-                            <View>
-                                <Text style={styles.buttonText}>PICK IMAGE</Text>
-                            </View>
-                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={{ paddingVertical: wp('1%'), alignItems: 'center' }}>
@@ -401,16 +388,6 @@ class photosUpload extends React.Component {
                         tintColor="#FF7200"
                     />
                 </View>
-                {/* <View>
-                <TouchableOpacity style={styles.uploadButton}>
-                    <View>
-                    <FontAwesome5 name='map-marker' style={styles.location}/>
-                    </View>
-                    <View>
-                        <Text>LOCATION</Text>
-                    </View>
-                </TouchableOpacity>
-            </View> */}
                 <View>
                     {this.state.uploading == true ? (
                         <View style={{ marginTop: wp('2%'), }}>
@@ -484,19 +461,12 @@ const styles = StyleSheet.create({
     logo: {
         left: 55,
     },
-    imagePick: {
-        marginTop: wp('5%'),
-        paddingTop: wp('1%'), backgroundColor: '#FF7200',
-        borderRadius: wp('1%'),
-        borderWidth: wp('0.5%'),
-        borderColor: '#FF7200',
-    },
     uploadImageStyle: {
-        marginTop: wp('5%'),
+        marginTop: wp('35%'),
         paddingTop: wp('1%'),
         paddingBottom: wp('1%'),
         backgroundColor: '#FF7200',
-        borderRadius: wp('1%'),
+        borderRadius: 17,
         borderWidth: wp('0.5%'),
         borderColor: '#FF7200',
     },

@@ -78,7 +78,7 @@ export default class account extends React.Component {
 
     render() {
         return (
-            <ScrollView style={{ backgroundColor: '#fff2e7' }}>
+            <ScrollView style={{ backgroundColor: '#fff' }}>
                 <View style={styles.TitleDiv}>
                     <Image
                         source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
@@ -89,9 +89,6 @@ export default class account extends React.Component {
                             resizeMode: 'cover',
                             marginTop: wp('10%')
                         }} />
-                </View>
-                <View style={styles.TitleDiv}>
-                    <Text style={styles.title}>Account Settings</Text>
                 </View>
                 <View style={styles.container}>
                     <View style={styles.contentHeader}>
@@ -112,13 +109,13 @@ export default class account extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff2e7',
+        backgroundColor: '#fff',
         flex: 1,
         marginTop: 100,
         marginLeft: wp('10%')
     },
     TitleDiv: {
-        backgroundColor: '#fff2e7',
+        backgroundColor: '#fff',
         alignItems: 'center',
     },
     title: {

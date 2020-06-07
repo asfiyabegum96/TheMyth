@@ -16,7 +16,7 @@ import {
 }
     from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
-
+import main from "./styles/main";
 
 export default class forgotPassword extends React.Component {
 
@@ -124,9 +124,9 @@ export default class forgotPassword extends React.Component {
                             <View></View>
                         )}
                 </View>
-                <View style={styles.but}>
+                <View style={main.buttonContainer}>
                     <TouchableOpacity onPress={() => this.updatePassword()}>
-                        <Text style={styles.butText}>Reset</Text>
+                        <Text style={main.buttonText}>Reset</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -147,26 +147,6 @@ const styles = StyleSheet.create({
     TextInputDiv: {
         alignItems: 'center',
         marginTop: wp('10%'),
-    },
-    but: {
-        width: wp('80%'),
-        marginTop: wp('60%'),
-        marginLeft: wp('10%'),
-        alignItems: 'center',
-        backgroundColor: '#FF7200',
-        borderRadius: 17,
-        borderWidth: 1,
-        borderColor: '#FF7200'
-
-    },
-    butText: {
-        color: '#fff2e7',
-        width: wp('80%'),
-        alignItems: 'center',
-        fontSize: hp('2.5%'),
-        marginLeft: wp('55%'),
-        paddingVertical: 8,
-        paddingHorizontal: 20,
-        fontWeight: 'bold',
+        marginBottom: wp('60%')
     },
 });
