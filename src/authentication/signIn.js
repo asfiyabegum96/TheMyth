@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Image
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -16,8 +17,8 @@ import {
 }
   from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
-
-
+import main from "../authentication/styles/main";
+import Icon from 'react-native-vector-icons/Entypo';
 export default class Home extends React.Component {
 
   constructor(props) {
@@ -94,32 +95,50 @@ export default class Home extends React.Component {
   render() {
     return (
       <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
-        <View style={styles.TitleDiv}>
-          <Text style={styles.title}>Myth</Text>
-          <Text style={styles.titleSub}>Sign in to your account</Text>
+        <View style={styles.logo}>
+          <Image
+            source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+            style={{
+              width: wp('25%'),
+              height: hp('15%'),
+              borderRadius: wp('30%'),
+              resizeMode: 'cover',
+              marginLeft: wp('20%'),
+              marginTop: wp('5%')
+            }} />
         </View>
         <View style={styles.TextInputDiv}>
-          <TextField
-            label='Email *'
-            onSubmitEditing={this.onSubmit}
-            ref={input => { this.fieldRef = input }}
-            containerStyle={{ width: wp('70%') }}
-            textColor='#FF7200'
-            baseColor="black"
-            tintColor="#FF7200"
-            onChangeText={(text) => this.setState({ email: text })}
-            value={this.state.email}
-          />
           <View style={{ flexDirection: 'row', }}>
+            <Icon name={'email'} size={17} color="#000" style={styles.iconStyle} />
+            <TextField
+              label='Email *'
+              onSubmitEditing={this.onSubmit}
+              ref={input => { this.fieldRef = input }}
+              containerStyle={{ width: wp('70%') }}
+              textColor='#FF7200'
+              baseColor="black"
+              tintColor="#FF7200"
+              style={{ paddingLeft: wp('2%') }}
+              labelTextStyle={{ fontSize: wp('2%'), paddingLeft: wp('2%') }}
+              fontSize={14}
+              onChangeText={(text) => this.setState({ email: text })}
+              value={this.state.email}
+            />
+          </View>
+          <View style={{ flexDirection: 'row', }}>
+            <Icon name={'lock'} size={17} color="#000" style={styles.iconStyle} />
             <TextField
               label='Password *'
+              style={{ paddingLeft: wp('2%') }}
               onSubmitEditing={this.onSubmit}
               ref={input => { this.fieldRef = input }}
               containerStyle={{ width: wp('65%'), }}
+              labelTextStyle={{ fontSize: wp('2%'), paddingLeft: wp('2%') }}
               underlineColorAndroid="transparent"
               textColor='#FF7200'
               baseColor="black"
               tintColor="#FF7200"
+              fontSize={14}
               minLength={8}
               secureTextEntry={this.state.hidePassword}
               onChangeText={(text) => this.setState({ password: text })}
@@ -151,9 +170,9 @@ export default class Home extends React.Component {
           <Text style={styles.ForgotPass}
           >Forgot Password?</Text>
         </TouchableOpacity>
-        <View style={styles.but}>
+        <View style={main.buttonContainer}>
           <TouchableOpacity onPress={() => this.requireField()}>
-            <Text style={styles.butText}>SIGN IN</Text>
+            <Text style={main.buttonText}>SIGN IN</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.CreateDiv}>
@@ -180,97 +199,57 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flex: 1,
   },
-  TitleDiv: {
-    left: 55,
-    marginTop: wp('10%')
-  },
-  title: {
-    color: '#FF7200',
-    fontSize: hp('6%'),
-    fontWeight: 'bold',
-  },
-  titleSub: {
-    color: '#FF7200',
-    fontSize: hp('3%'),
-    marginBottom: 10,
-    marginTop: 5,
-  },
   TextInputDiv: {
     alignItems: 'center',
-    marginTop: wp('20%')
+    marginTop: wp('15%'),
   },
   ForgotPassDiv: {
-    left: 210,
-    marginTop: wp('3%')
+    left: wp('35%'),
+    marginTop: wp('3%'),
+    marginBottom: wp('5%')
+
   },
   ForgotPass: {
     color: '#FF7200',
-    fontSize: hp('2.2%'),
+    fontSize: hp('2%'),
   },
   but: {
     left: 130,
     width: wp('35%'),
     marginTop: wp('3%'),
     alignItems: 'center',
-    
-  },
-  butText: {
-    color: '#fff2e7',
-    fontSize: hp('3%'),
-    marginTop: 10,
-    borderColor: '#A9A9A9',
-    backgroundColor: '#FF7200',
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    fontWeight: 'bold',
-    borderRadius:6,
-    borderWidth: 1,
-    borderColor: '#FF7200'
-  },
-  socialAccount: {
-    paddingTop: 5,
-    paddingBottom: 5,
-    textAlign: 'center',
-    color: 'white',
-    marginTop: wp('3%')
-  },
-  socialIconDiv: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: wp('3%'),
-    zIndex: 10,
-  },
-  fontFacebook: {
-    fontSize: 30,
-    color: '#FAFBFF',
+
   },
   hideIcon: {
     fontSize: 18,
     color: '#000',
-    marginTop: wp('10.3%'),
+    marginTop: wp('9.6%'),
     paddingBottom: wp('1%'),
     borderBottomColor: '#000', borderBottomWidth: 0.5,
-  },
-  fontInsta: {
-    fontSize: 30,
-    color: '#FAFBFF',
-  },
-  fontGoogle: {
-    fontSize: 30,
-    color: '#FAFBFF',
   },
   CreateDiv: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: wp('3%')
+    marginTop: wp('8%')
   },
   pass: {
     color: 'black',
-    fontSize: hp('2.3%'),
+    fontSize: hp('2%'),
   },
   pass2: {
     color: '#FF7200',
-    fontSize: hp('2.3%'),
+    fontSize: hp('2%'),
     paddingLeft: 5,
   },
+  logo: {
+    left: wp('20%'),
+    marginTop: wp('15%')
+  },
+  iconStyle: {
+    marginTop: wp('8.5%'), borderBottomColor: '#000', borderBottomWidth: 0.5,
+    borderRightWidth: 0.5,
+    borderRightColor: '#000',
+    height: hp('3.75%'),
+    paddingRight: wp('3%'),
+  }
 });
