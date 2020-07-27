@@ -5,9 +5,9 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image
+  Image,
+  TextInput
 } from 'react-native';
-import { TextField } from 'react-native-material-textfield';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {
   widthPercentageToDP as wp,
@@ -108,38 +108,29 @@ export default class Home extends React.Component {
             }} />
         </View>
         <View style={styles.TextInputDiv}>
+          {/* <View style={{ flexDirection: 'row', }}> */}
+          <Text style={main.labelContainer}>Email *</Text>
+          <TextInput
+            ref={input => { this.fieldRef = input }}
+            maxLength={50}
+            style={main.inputContainer}
+            textColor='white'
+            baseColor="white"
+            tintColor="white"
+            onChangeText={(text) => this.setState({ email: text })}
+            value={this.state.email}
+          />
+          <Text style={main.labelContainer}>Password *</Text>
           <View style={{ flexDirection: 'row', }}>
-            <Icon name={'email'} size={17} color="#000" style={styles.iconStyle} />
-            <TextField
-              label='Email *'
-              onSubmitEditing={this.onSubmit}
+            <TextInput
               ref={input => { this.fieldRef = input }}
-              containerStyle={{ width: wp('70%') }}
-              textColor='#FF7200'
-              baseColor="black"
-              tintColor="#FF7200"
-              style={{ paddingLeft: wp('2%') }}
-              labelTextStyle={{ fontSize: wp('2%'), paddingLeft: wp('2%') }}
-              fontSize={14}
-              onChangeText={(text) => this.setState({ email: text })}
-              value={this.state.email}
-            />
-          </View>
-          <View style={{ flexDirection: 'row', }}>
-            <Icon name={'lock'} size={17} color="#000" style={styles.iconStyle} />
-            <TextField
-              label='Password *'
-              style={{ paddingLeft: wp('2%') }}
-              onSubmitEditing={this.onSubmit}
-              ref={input => { this.fieldRef = input }}
-              containerStyle={{ width: wp('65%'), }}
-              labelTextStyle={{ fontSize: wp('2%'), paddingLeft: wp('2%') }}
-              underlineColorAndroid="transparent"
-              textColor='#FF7200'
-              baseColor="black"
-              tintColor="#FF7200"
-              fontSize={14}
+              maxLength={50}
               minLength={8}
+              onSubmitEditing={this.onSubmit}
+              style={main.passwordContainer}
+              textColor='white'
+              baseColor="white"
+              tintColor="white"
               secureTextEntry={this.state.hidePassword}
               onChangeText={(text) => this.setState({ password: text })}
               value={this.state.password}
@@ -166,15 +157,6 @@ export default class Home extends React.Component {
             )}
 
         </View>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('forgotPassword')} style={styles.ForgotPassDiv}>
-          <Text style={styles.ForgotPass}
-          >Forgot Password?</Text>
-        </TouchableOpacity>
-        <View style={main.buttonContainer}>
-          <TouchableOpacity onPress={() => this.requireField()}>
-            <Text style={main.buttonText}>SIGN IN</Text>
-          </TouchableOpacity>
-        </View>
         <View style={styles.CreateDiv}>
           <View>
             <Text style={styles.pass}>Don't have an account?</Text>
@@ -183,6 +165,16 @@ export default class Home extends React.Component {
             <Text style={styles.pass2}>Create</Text>
           </TouchableOpacity>
         </View>
+        <View style={main.buttonContainer}>
+          <TouchableOpacity onPress={() => this.requireField()}>
+            <Text style={main.buttonText}>Log In</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('forgotPassword')} style={styles.ForgotPassDiv}>
+          <Text style={styles.ForgotPass}
+          >Trouble looging in?</Text>
+        </TouchableOpacity>
         {this.state.loading == true ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" color='red' />
@@ -196,12 +188,12 @@ export default class Home extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ed5720',
     flex: 1,
   },
   TextInputDiv: {
-    alignItems: 'center',
-    marginTop: wp('15%'),
+    marginLeft: wp('10%'),
+    marginTop: wp('10%'),
   },
   ForgotPassDiv: {
     left: wp('35%'),
@@ -210,7 +202,7 @@ const styles = StyleSheet.create({
 
   },
   ForgotPass: {
-    color: '#FF7200',
+    color: '#fff',
     fontSize: hp('2%'),
   },
   but: {
@@ -221,23 +213,21 @@ const styles = StyleSheet.create({
 
   },
   hideIcon: {
+    color: '#fff',
+    padding: wp('2%'),
     fontSize: 18,
-    color: '#000',
-    marginTop: wp('9.6%'),
-    paddingBottom: wp('1%'),
-    borderBottomColor: '#000', borderBottomWidth: 0.5,
   },
   CreateDiv: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: wp('8%')
+    margin: wp('10%'),
   },
   pass: {
-    color: 'black',
+    color: 'white',
     fontSize: hp('2%'),
   },
   pass2: {
-    color: '#FF7200',
+    color: '#fff',
     fontSize: hp('2%'),
     paddingLeft: 5,
   },

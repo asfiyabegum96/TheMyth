@@ -5,9 +5,9 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  TextInput
 } from 'react-native';
-import { TextField } from 'react-native-material-textfield';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -117,7 +117,7 @@ export default class SignupSecond extends React.Component {
               resizeMode: 'cover',
               marginLeft: wp('20%'),
               marginTop: wp('5%'),
-              marginBottom: wp('10%')
+              marginBottom: wp('5%')
             }} />
         </View>
         <View style={{
@@ -153,20 +153,20 @@ export default class SignupSecond extends React.Component {
           </View>
         </View>
         <View style={styles.TextInputDiv}>
-          <TextField
-            maxLength={50}
-            label='Description'
+          <Text style={main.labelContainer}>Description</Text>
+          <TextInput
             ref="Description"
-            containerStyle={{ width: wp('80%'), height: hp('11%') }}
-            textColor='#FF7200'
-            baseColor="black"
-            tintColor="#FF7200"
+            maxLength={50}
+            style={main.inputContainer}
+            textColor='white'
+            baseColor="white"
+            tintColor="white"
             onChangeText={text => handleChange('description', text)}
             defaultValue={values.description}
           />
         </View>
-        <View style={{ marginBottom: wp('35%') }}>
-          <Text style={{ color: 'black', left: 60, marginBottom: 8, fontSize: wp('4.5%'), marginTop: wp('1%') }}>Gender :</Text>
+        <View style={{ marginBottom: wp('5%') }}>
+          <Text style={{ color: 'white', left: 60, marginBottom: 8, fontSize: wp('4.5%'), marginTop: wp('1%') }}>Gender :</Text>
           <View>
             {options.map(item => {
               return (
@@ -185,7 +185,7 @@ export default class SignupSecond extends React.Component {
                     </TouchableOpacity>
                   </View>
                   <View>
-                    <Text style={{ color: 'black', marginLeft: 10 }}>{item.text}</Text>
+                    <Text style={{ color: 'white', marginLeft: 10 }}>{item.text}</Text>
                   </View>
                 </View>
               );
@@ -209,11 +209,11 @@ export default class SignupSecond extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ed5720',
     flex: 1,
   },
   title: {
-    color: '#FF7200',
+    color: '#ed5720',
     fontSize: hp('4%'),
     fontWeight: 'bold',
   },
@@ -222,17 +222,17 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     marginTop: 10,
     borderColor: '#A9A9A9',
-    backgroundColor: '#FF7200',
+    backgroundColor: '#ed5720',
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#FF7200',
+    borderColor: '#ed5720',
     fontWeight: 'bold',
   },
   TextInputDiv: {
-    alignItems: 'center',
-
+    marginLeft: wp('10%'),
+    marginTop: wp('10%'),
   },
   inputfield: {
     width: wp('88%'),
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#22222C',
     marginBottom: 10,
-    borderColor: '#FF7200',
+    borderColor: '#ed5720',
     backgroundColor: '#A19FA3',
   },
   buttonContainer: {
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     width: 20,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#ACACAC',
+    borderColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -265,7 +265,8 @@ const styles = StyleSheet.create({
     width: 14,
     height: 14,
     borderRadius: 7,
-    backgroundColor: '#FF7200',
+    borderColor: 'white',
+    backgroundColor: 'white',
   },
   checkboxDiv: {
     marginLeft: 35,

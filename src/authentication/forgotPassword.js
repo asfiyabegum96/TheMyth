@@ -5,9 +5,9 @@ import {
     StyleSheet,
     ScrollView,
     TouchableOpacity,
-    Image
+    Image,
+    TextInput
 } from 'react-native';
-import { TextField } from 'react-native-material-textfield';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -107,14 +107,14 @@ export default class forgotPassword extends React.Component {
                         }} />
                 </View>
                 <View style={styles.TextInputDiv}>
-                    <TextField
-                        placeholder='Enter your email ID to reset'
-                        placeholderTextColor='#000'
+                    <Text style={main.labelContainer}>Enter your email ID to reset</Text>
+                    <TextInput
                         ref={input => { this.fieldRef = input }}
-                        containerStyle={{ width: wp('75%') }}
-                        textColor='#FF7200'
-                        baseColor="#FF7200"
-                        tintColor="#FF7200"
+                        maxLength={50}
+                        style={main.inputContainer}
+                        textColor='white'
+                        baseColor="white"
+                        tintColor="white"
                         onChangeText={(text) => this.setState({ email: text })}
                         value={this.state.email}
                     />
@@ -137,16 +137,16 @@ export default class forgotPassword extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: '#ed5720',
         flex: 1,
     },
     TitleDiv: {
         left: 55,
-        marginTop: wp('30%')
+        marginTop: wp('10%')
     },
     TextInputDiv: {
-        alignItems: 'center',
+        marginLeft: wp('10%'),
         marginTop: wp('10%'),
-        marginBottom: wp('60%')
+        marginBottom: wp('50%')
     },
 });

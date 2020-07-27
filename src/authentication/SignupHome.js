@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
-  Image
+  Image,
+  TextInput
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { TextField } from 'react-native-material-textfield';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -142,8 +142,6 @@ export default class SignupHome extends React.Component {
           <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
             <View >
               <View style={styles.logo}>
-                {/* <Text style={styles.title}>TheMyth</Text>
-                    <Text style={styles.titleSub}>Reset Password</Text> */}
                 <Image
                   source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
                   style={{
@@ -156,28 +154,26 @@ export default class SignupHome extends React.Component {
                   }} />
               </View>
               <View style={styles.TextInputDiv}>
-                <TextField
-                  label='Full Name *'
+                <Text style={main.labelContainer}>Full Name *</Text>
+                <TextInput
                   onSubmitEditing={this.onSubmit}
                   ref={this.fieldRef}
-                  containerStyle={{ width: wp('80%'), height: hp('11%') }}
-                  textColor='#FF7200'
-                  baseColor="black"
-                  tintColor="#FF7200"
-                  // onChange={handleChange('fullName')}
+                  style={main.inputContainer}
+                  textColor='white'
+                  baseColor="white"
+                  tintColor="white"
                   onChangeText={text => handleChange('fullName', text)}
                   defaultValue={values.fullName}
                 />
-                <TextField
-                  label='Email *'
+                <Text style={main.labelContainer}>Email *</Text>
+                <TextInput
+                  onSubmitEditing={this.onSubmit}
                   ref="email"
-                  containerStyle={{ width: wp('80%'), height: hp('11%') }}
-                  textColor='#FF7200'
-                  baseColor="black"
-                  autoCapitalize="false"
-                  tintColor="#FF7200"
+                  style={main.inputContainer}
+                  textColor='white'
+                  baseColor="white"
+                  tintColor="white"
                   keyboardType={'email-address'}
-                  // onChange={handleChange('email')}
                   onChangeText={text => handleChange('email', text)}
                   defaultValue={values.email}
                 />
@@ -191,14 +187,15 @@ export default class SignupHome extends React.Component {
                 ) : (
                     <View></View>
                   )}
-                <View style={{ flexDirection: 'row', }}>
-                  <TextField
-                    label='Password *'
+                <Text style={main.labelContainer}>Password *</Text>
+                <View style={{ flexDirection: 'row' }}>
+                  <TextInput
+                    onSubmitEditing={this.onSubmit}
                     ref="password"
-                    containerStyle={{ width: wp('75%'), height: hp('11%') }}
-                    textColor='#FF7200'
-                    baseColor="black"
-                    tintColor="#FF7200"
+                    style={main.passwordContainer}
+                    textColor='white'
+                    baseColor="white"
+                    tintColor="white"
                     secureTextEntry={this.state.hidePassword}
                     onChangeText={text => handleChange('password', text)}
                     defaultValue={values.password}
@@ -212,13 +209,14 @@ export default class SignupHome extends React.Component {
                     }
                   </TouchableOpacity>
                 </View>
-                <TextField
-                  label='Confirm Password *'
+                <Text style={main.labelContainer}>Confirm Password *</Text>
+                <TextInput
+                  onSubmitEditing={this.onSubmit}
                   ref="confirmPassword"
-                  containerStyle={{ width: wp('80%'), height: hp('11%') }}
-                  textColor='#FF7200'
+                  style={main.inputContainer}
+                  textColor='#ed5720'
                   baseColor="black"
-                  tintColor="#FF7200"
+                  tintColor="#ed5720"
                   secureTextEntry={true}
                   onChangeText={text => handleChange('confirmPassword', text)}
                   defaultValue={values.confirmPassword}
@@ -268,29 +266,18 @@ export default class SignupHome extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#ed5720',
     flex: 1,
   },
   title: {
-    color: '#FF7200',
+    color: '#fff',
     fontSize: hp('4%'),
     fontWeight: 'bold',
   },
   TextInputDiv: {
-    alignItems: 'center',
+    marginLeft: wp('10%'),
     marginTop: wp('10%'),
-    marginBottom: wp('30%')
-  },
-  inputfield: {
-    width: wp('88%'),
-    paddingRight: 25,
-    paddingLeft: 25,
-    fontSize: hp('3%'),
-    fontWeight: 'bold',
-    color: '#22222C',
-    marginBottom: 10,
-    borderColor: '#FF7200',
-    backgroundColor: '#A19FA3',
+    marginBottom: wp('10%')
   },
   checkboxDiv: {
     marginLeft: 35,
@@ -305,13 +292,13 @@ const styles = StyleSheet.create({
     fontSize: hp('3%'),
     marginTop: 10,
     borderColor: '#A9A9A9',
-    backgroundColor: '#FF7200',
+    backgroundColor: '#ed5720',
     paddingVertical: 8,
     paddingHorizontal: 20,
     fontWeight: 'bold',
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#FF7200'
+    borderColor: '#ed5720'
   },
   socialIconDiv: {
     flexDirection: 'row',
@@ -333,10 +320,8 @@ const styles = StyleSheet.create({
   },
   hideIcon: {
     fontSize: 18,
-    color: '#000',
-    marginTop: wp('11.7%'),
-    paddingBottom: wp('2%'),
-    borderBottomColor: '#000', borderBottomWidth: 0.5,
+    color: '#fff',
+    padding: wp('2%'),
   },
   logo: {
     left: 55,
