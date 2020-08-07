@@ -19,6 +19,8 @@ import {
 import firebase from 'react-native-firebase';
 import main from "../authentication/styles/main";
 import Icon from 'react-native-vector-icons/Entypo';
+import RadialGradient from 'react-native-radial-gradient';
+
 export default class Home extends React.Component {
 
   constructor(props) {
@@ -94,93 +96,101 @@ export default class Home extends React.Component {
   }
   render() {
     return (
-      <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
-        <View style={styles.logo}>
-          <Image
-            source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-            style={{
-              width: wp('25%'),
-              height: hp('15%'),
-              borderRadius: wp('30%'),
-              resizeMode: 'cover',
-              marginLeft: wp('20%'),
-              marginTop: wp('5%')
-            }} />
-        </View>
-        <View style={styles.TextInputDiv}>
-          {/* <View style={{ flexDirection: 'row', }}> */}
-          <Text style={main.labelContainer}>Email *</Text>
-          <TextInput
-            ref={input => { this.fieldRef = input }}
-            maxLength={50}
-            style={main.inputContainer}
-            textColor='white'
-            baseColor="white"
-            tintColor="white"
-            onChangeText={(text) => this.setState({ email: text })}
-            value={this.state.email}
-          />
-          <Text style={main.labelContainer}>Password *</Text>
-          <View style={{ flexDirection: 'row', }}>
-            <TextInput
-              ref={input => { this.fieldRef = input }}
-              maxLength={50}
-              minLength={8}
-              onSubmitEditing={this.onSubmit}
-              style={main.passwordContainer}
-              textColor='white'
-              baseColor="white"
-              tintColor="white"
-              secureTextEntry={this.state.hidePassword}
-              onChangeText={(text) => this.setState({ password: text })}
-              value={this.state.password}
-            />
-            <TouchableOpacity onPress={this.setPasswordVisibility}>
-              {this.state.hidePassword === true ?
-                <FontAwesome5 style={styles.hideIcon} name={'eye'} />
-                :
-                <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
+      <RadialGradient style={{ width: '100%', height: '100%' }}
+        colors={['#FE7948', '#E23E00']}
+        stops={[0.1, 0.95]}
+        center={[180, 270]}
+        radius={400}>
+        {
+          <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
+            <View style={styles.logo}>
+              <Image
+                source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+                style={{
+                  width: wp('25%'),
+                  height: hp('15%'),
+                  borderRadius: wp('30%'),
+                  resizeMode: 'cover',
+                  marginLeft: wp('20%'),
+                  marginTop: wp('5%')
+                }} />
+            </View>
+            <View style={styles.TextInputDiv}>
+              {/* <View style={{ flexDirection: 'row', }}> */}
+              <Text style={main.labelContainer}>Email *</Text>
+              <TextInput
+                ref={input => { this.fieldRef = input }}
+                maxLength={50}
+                style={main.inputContainer}
+                textColor='white'
+                baseColor="white"
+                tintColor="white"
+                onChangeText={(text) => this.setState({ email: text })}
+                value={this.state.email}
+              />
+              <Text style={main.labelContainer}>Password *</Text>
+              <View style={{ flexDirection: 'row', }}>
+                <TextInput
+                  ref={input => { this.fieldRef = input }}
+                  maxLength={50}
+                  minLength={8}
+                  onSubmitEditing={this.onSubmit}
+                  style={main.passwordContainer}
+                  textColor='white'
+                  baseColor="white"
+                  tintColor="white"
+                  secureTextEntry={this.state.hidePassword}
+                  onChangeText={(text) => this.setState({ password: text })}
+                  value={this.state.password}
+                />
+                <TouchableOpacity onPress={this.setPasswordVisibility}>
+                  {this.state.hidePassword === true ?
+                    <FontAwesome5 style={styles.hideIcon} name={'eye'} />
+                    :
+                    <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
 
-              }
+                  }
+                </TouchableOpacity>
+              </View>
+              {this.state.fieldNotEmpty == true ? (
+                <Text style={{ color: 'red' }}>Please enter email and password</Text>
+              ) : (
+                  <View></View>
+                )}
+
+              {this.state.isInvalid == true ? (
+                <Text style={{ color: 'red' }}>Incorrect email ID or password</Text>
+              ) : (
+                  <View></View>
+                )}
+
+            </View>
+            <View style={styles.CreateDiv}>
+              <View>
+                <Text style={styles.pass}>Don't have an account?</Text>
+              </View>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('signup')} >
+                <Text style={styles.pass2}>Create</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={main.buttonContainer}>
+              <TouchableOpacity onPress={() => this.requireField()}>
+                <Text style={main.buttonText}>Log In</Text>
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('forgotPassword')} style={styles.ForgotPassDiv}>
+              <Text style={styles.ForgotPass}
+              >Trouble logging in?</Text>
             </TouchableOpacity>
-          </View>
-          {this.state.fieldNotEmpty == true ? (
-            <Text style={{ color: 'red' }}>Please enter email and password</Text>
-          ) : (
-              <View></View>
-            )}
+            {this.state.loading == true ? (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" color='red' />
+              </View>
+            ) : <View></View>}
+          </ScrollView>}
+      </RadialGradient>
 
-          {this.state.isInvalid == true ? (
-            <Text style={{ color: 'red' }}>Incorrect email ID or password</Text>
-          ) : (
-              <View></View>
-            )}
-
-        </View>
-        <View style={styles.CreateDiv}>
-          <View>
-            <Text style={styles.pass}>Don't have an account?</Text>
-          </View>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('signup')} >
-            <Text style={styles.pass2}>Create</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={main.buttonContainer}>
-          <TouchableOpacity onPress={() => this.requireField()}>
-            <Text style={main.buttonText}>Log In</Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('forgotPassword')} style={styles.ForgotPassDiv}>
-          <Text style={styles.ForgotPass}
-          >Trouble looging in?</Text>
-        </TouchableOpacity>
-        {this.state.loading == true ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" color='red' />
-          </View>
-        ) : <View></View>}
-      </ScrollView >
     );
   }
 }
@@ -188,7 +198,6 @@ export default class Home extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ed5720',
     flex: 1,
   },
   TextInputDiv: {
