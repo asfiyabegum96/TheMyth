@@ -14,16 +14,34 @@ const main = StyleSheet.create({
         width: wp('80%'),
         marginLeft: wp('10%'),
         alignItems: 'center',
-      
-           marginTop: wp('3%'),
+        marginTop: wp('3%'),
         borderRadius: wp('2%'),
         borderWidth: 2,
         borderColor: 'white',
-
-
+    },
+    primaryButtonContanier: {
+        width: wp('80%'),
+        color: '#ed5720',
+        backgroundColor: 'white',
+        marginLeft: wp('10%'),
+        alignItems: 'center',
+        marginTop: wp('3%'),
+        borderRadius: wp('2%'),
+        borderWidth: 2,
+        borderColor: 'white',
     },
     buttonText: {
         color: 'white',
+        width: wp('80%'),
+        alignItems: 'center',
+        fontSize: hp('2.5%'),
+        marginLeft: wp('55%'),
+        paddingVertical: 8,
+        paddingHorizontal: 20,
+        fontWeight: 'bold',
+    },
+    primaryButtonText: {
+        color: '#ed5720',
         width: wp('80%'),
         alignItems: 'center',
         fontSize: hp('2.5%'),
@@ -72,6 +90,12 @@ const main = StyleSheet.create({
     },
     labelContainer: {
         textAlign: 'left', color: 'white', paddingBottom: wp('2%')
+    },
+    logo: {
+        width: wp('50%'),
+        height: hp('40%'),
+        resizeMode: 'cover',
+        marginLeft: wp('10%'),
     }
 });
 

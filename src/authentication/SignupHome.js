@@ -148,15 +148,8 @@ export default class SignupHome extends React.Component {
               <View >
                 <View style={styles.logo}>
                   <Image
-                    source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                    style={{
-                      width: wp('25%'),
-                      height: hp('15%'),
-                      borderRadius: wp('30%'),
-                      resizeMode: 'cover',
-                      marginLeft: wp('20%'),
-                      marginTop: wp('5%')
-                    }} />
+                    source={require('../images/mythlogo.png')}
+                    style={main.logo} />
                 </View>
                 <View style={styles.TextInputDiv}>
                   <Text style={main.labelContainer}>Full Name *</Text>
@@ -205,13 +198,13 @@ export default class SignupHome extends React.Component {
                       onChangeText={text => handleChange('password', text)}
                       defaultValue={values.password}
                     />
-                    <TouchableOpacity style={{ zIndex: 999999, }} onPress={this.setPasswordVisibility}>
+                    {/* <TouchableOpacity style={{ zIndex: 999999, }} onPress={this.setPasswordVisibility}>
                       {this.state.hidePassword === true ?
                         <FontAwesome5 style={styles.hideIcon} name={'eye'} />
                         :
                         <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
                       }
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                   </View>
                   <Text style={main.labelContainer}>Confirm Password *</Text>
                   <TextInput
@@ -241,9 +234,9 @@ export default class SignupHome extends React.Component {
                       <View></View>
                     )}
                 </View>
-                <View style={main.buttonContainer}>
+                <View style={main.primaryButtonContanier}>
                   <TouchableOpacity disabled={this.state.clicked} >
-                    <Text style={main.buttonText} onPress={this.requireField}>Continue</Text>
+                    <Text style={main.primaryButtonText} onPress={this.requireField}>Continue</Text>
                   </TouchableOpacity>
                 </View>
                 {/* <View style={styles.socialIconDiv}>
@@ -281,7 +274,7 @@ const styles = StyleSheet.create({
   },
   TextInputDiv: {
     marginLeft: wp('10%'),
-    marginTop: wp('10%'),
+    marginTop: wp('-10%'),
     marginBottom: wp('10%')
   },
   checkboxDiv: {

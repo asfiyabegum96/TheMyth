@@ -20,13 +20,12 @@ import firebase from 'react-native-firebase';
 import main from "../authentication/styles/main";
 import Icon from 'react-native-vector-icons/Entypo';
 import RadialGradient from 'react-native-radial-gradient';
-
 export default class Home extends React.Component {
 
   constructor(props) {
     super(props)
     this.state = {
-   
+
 
     }
     this.ref = firebase.firestore().collection('signup')
@@ -53,11 +52,11 @@ export default class Home extends React.Component {
 
   login = () => {
     const context = this;
-      context.props.navigation.navigate('signIn', { email: context.state.email })
+    context.props.navigation.navigate('signIn', { email: context.state.email })
   }
-signUp = () => {
+  signUp = () => {
     const context = this;
-      context.props.navigation.navigate('signUp', { email: context.state.email })
+    context.props.navigation.navigate('signUp', { email: context.state.email })
   }
 
   handleLogin = () => {
@@ -90,31 +89,23 @@ signUp = () => {
           <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
             <View style={styles.logo}>
               <Image
-                source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                style={{
-                  width: wp('25%'),
-                  height: hp('15%'),
-                  borderRadius: wp('30%'),
-                  resizeMode: 'cover',
-                  marginLeft: wp('20%'),
-
-                  marginTop: wp('5%')
-                }} />
+                source={require('../images/mythlogo.png')}
+                style={main.logo} />
             </View>
 
-         
-            <View style={main.buttonContainer}>
+
+            <View style={main.primaryButtonContanier}>
               <TouchableOpacity onPress={() => this.login()}>
-                <Text style={main.buttonText}>Log In</Text>
+                <Text style={main.primaryButtonText}>Sign In</Text>
               </TouchableOpacity>
             </View>
             <View style={main.buttonContainer}>
-                 <TouchableOpacity onPress={() => this.signUp()}>
+              <TouchableOpacity onPress={() => this.signUp()}>
                 <Text style={main.buttonText}>Sign up</Text>
               </TouchableOpacity>
             </View>
 
-       
+
             {this.state.loading == true ? (
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color='red' />
@@ -173,9 +164,9 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   logo: {
-    left: wp('20%'),
-    marginTop: wp('50%'),
-     marginBottom: wp('50%')
+    left: wp('14%'),
+    marginBottom: wp('20%'),
+    marginTop: wp('30%')
   },
   iconStyle: {
     marginTop: wp('8.5%'), borderBottomColor: '#000', borderBottomWidth: 0.5,

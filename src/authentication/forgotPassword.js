@@ -103,15 +103,8 @@ export default class forgotPassword extends React.Component {
                     <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
                         <View style={styles.TitleDiv}>
                             <Image
-                                source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                                style={{
-                                    width: wp('25%'),
-                                    height: hp('15%'),
-                                    borderRadius: wp('30%'),
-                                    resizeMode: 'cover',
-                                    marginLeft: wp('25%'),
-                                    marginTop: wp('10%')
-                                }} />
+                                source={require('../images/mythlogo.png')}
+                                style={main.logo} />
                         </View>
                         <View style={styles.TextInputDiv}>
                             <Text style={main.labelContainer}>Enter your email ID to reset</Text>
@@ -131,9 +124,9 @@ export default class forgotPassword extends React.Component {
                                     <View></View>
                                 )}
                         </View>
-                        <View style={main.buttonContainer}>
+                        <View style={main.primaryButtonContanier}>
                             <TouchableOpacity onPress={() => this.updatePassword()}>
-                                <Text style={main.buttonText}>Reset</Text>
+                                <Text style={main.primaryButtonText}>Reset</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>
@@ -155,7 +148,7 @@ const styles = StyleSheet.create({
     },
     TextInputDiv: {
         marginLeft: wp('10%'),
-        marginTop: wp('10%'),
-        marginBottom: wp('50%')
+        marginTop: wp('5%'),
+        marginBottom: wp('40%')
     },
 });

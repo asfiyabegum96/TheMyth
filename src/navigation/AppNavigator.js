@@ -49,15 +49,17 @@ const AppNavigator = createStackNavigator({
     signup: {
         screen: signup,
         navigationOptions: {
-            headerTitle: 'Create Account',
-            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white' },
+            header: null
+            // headerTitle: 'Create Account',
+            // headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white' },
         }
     },
     forgotPassword: {
         screen: forgotPassword,
         navigationOptions: {
-            headerTitle: 'Forgot Password',
-            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white' }
+            header: null
+            // headerTitle: 'Forgot Password',
+            // headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white' }
         }
     },
     profile: {

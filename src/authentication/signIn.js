@@ -104,15 +104,8 @@ export default class Home extends React.Component {
           <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
             <View style={styles.logo}>
               <Image
-                source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                style={{
-                  width: wp('25%'),
-                  height: hp('15%'),
-                  borderRadius: wp('30%'),
-                  resizeMode: 'cover',
-                  marginLeft: wp('20%'),
-                  marginTop: wp('5%')
-                }} />
+                source={require('../images/mythlogo.png')}
+                style={main.logo} />
             </View>
             <View style={styles.TextInputDiv}>
               {/* <View style={{ flexDirection: 'row', }}> */}
@@ -171,9 +164,9 @@ export default class Home extends React.Component {
                 <Text style={styles.pass2}>Create</Text>
               </TouchableOpacity>
             </View>
-            <View style={main.buttonContainer}>
+            <View style={main.primaryButtonContanier}>
               <TouchableOpacity onPress={() => this.requireField()}>
-                <Text style={main.buttonText}>Sign In</Text>
+                <Text style={main.primaryButtonText}>Sign In</Text>
               </TouchableOpacity>
             </View>
 
@@ -200,7 +193,7 @@ const styles = StyleSheet.create({
   },
   TextInputDiv: {
     marginLeft: wp('10%'),
-    marginTop: wp('10%'),
+    // marginTop: wp('10%'),
   },
   ForgotPassDiv: {
     left: wp('35%'),
@@ -211,6 +204,7 @@ const styles = StyleSheet.create({
   ForgotPass: {
     color: '#fff',
     fontSize: hp('2%'),
+    fontStyle: 'italic'
   },
   but: {
     left: 130,
@@ -227,7 +221,7 @@ const styles = StyleSheet.create({
   CreateDiv: {
     flexDirection: 'row',
     justifyContent: 'center',
-    margin: wp('10%'),
+    margin: wp('8%'),
   },
   pass: {
     color: 'white',
@@ -239,8 +233,8 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   logo: {
-    left: wp('20%'),
-    marginTop: wp('15%')
+    left: wp('14%'),
+    marginTop: wp('10%')
   },
   iconStyle: {
     marginTop: wp('8.5%'), borderBottomColor: '#000', borderBottomWidth: 0.5,

@@ -116,16 +116,8 @@ export default class SignupSecond extends React.Component {
           <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
             <View style={styles.logo}>
               <Image
-                source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                style={{
-                  width: wp('25%'),
-                  height: hp('15%'),
-                  borderRadius: wp('30%'),
-                  resizeMode: 'cover',
-                  marginLeft: wp('20%'),
-                  marginTop: wp('5%'),
-                  marginBottom: wp('5%')
-                }} />
+                source={require('../images/mythlogo.png')}
+                style={main.logo} />
             </View>
             <View style={{
               flexDirection: 'row',
@@ -141,7 +133,6 @@ export default class SignupSecond extends React.Component {
                       style={{
                         width: wp('25%'),
                         height: hp('15%'),
-                        borderRadius: wp('30%'),
                         resizeMode: 'cover'
                       }} />
                   </TouchableOpacity>
@@ -152,7 +143,6 @@ export default class SignupSecond extends React.Component {
                         style={{
                           width: wp('25%'),
                           height: hp('15%'),
-                          borderRadius: wp('30%'),
                           resizeMode: 'cover'
                         }} />
                     </TouchableOpacity>
@@ -200,12 +190,12 @@ export default class SignupSecond extends React.Component {
               </View>
             </View>
             <View style={styles.but}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                <TouchableOpacity onPress={this.back}>
+              <View style={main.primaryButtonContanier}>
+                {/* <TouchableOpacity onPress={this.back}>
                   <Text style={main.leftBorderButton}>BACK</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity onPress={this.signUp}>
-                  <Text style={main.rightBorderButton}>SIGN UP</Text>
+                  <Text style={main.primaryButtonText}>Sign Up</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -218,7 +208,7 @@ export default class SignupSecond extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ed5720',
+    // backgroundColor: '#ed5720',
     flex: 1,
   },
   title: {
@@ -241,7 +231,7 @@ const styles = StyleSheet.create({
   },
   TextInputDiv: {
     marginLeft: wp('10%'),
-    marginTop: wp('10%'),
+    marginTop: wp('5%'),
   },
   inputfield: {
     width: wp('88%'),
