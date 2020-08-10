@@ -1,6 +1,7 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import Home from '../authentication/signIn';
+import loading from '../authentication/loading';
+import signIn from '../authentication/signIn';
 import signup from '../authentication/signUp';
 import profile from '../profile/ownProfile';
 import TabNavigator from '../camera/cameraBottomTab';
@@ -18,7 +19,15 @@ import search from '../topTabHomeFeed/search';
 
 const AppNavigator = createStackNavigator({
     Home: {
-        screen: Home,
+        screen: loading,
+        navigationOptions: { header: null },
+    },
+    signIn: {
+        screen: signIn,
+        navigationOptions: { header: null },
+    },
+    signUp: {
+        screen: signup,
         navigationOptions: { header: null },
     },
     account: {

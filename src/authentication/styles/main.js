@@ -14,13 +14,16 @@ const main = StyleSheet.create({
         width: wp('80%'),
         marginLeft: wp('10%'),
         alignItems: 'center',
-        backgroundColor: '#fff',
+      
+           marginTop: wp('3%'),
         borderRadius: wp('2%'),
-        borderWidth: 1,
-        borderColor: '#ed5720'
+        borderWidth: 2,
+        borderColor: 'white',
+
+
     },
     buttonText: {
-        color: '#ed5720',
+        color: 'white',
         width: wp('80%'),
         alignItems: 'center',
         fontSize: hp('2.5%'),
