@@ -17,6 +17,7 @@ import {
     from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
 import main from "./styles/main";
+import RadialGradient from 'react-native-radial-gradient';
 
 export default class forgotPassword extends React.Component {
 
@@ -93,43 +94,51 @@ export default class forgotPassword extends React.Component {
     }
     render() {
         return (
-            <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
-                <View style={styles.TitleDiv}>
-                    <Image
-                        source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                        style={{
-                            width: wp('25%'),
-                            height: hp('15%'),
-                            borderRadius: wp('30%'),
-                            resizeMode: 'cover',
-                            marginLeft: wp('25%'),
-                            marginTop: wp('10%')
-                        }} />
-                </View>
-                <View style={styles.TextInputDiv}>
-                    <Text style={main.labelContainer}>Enter your email ID to reset</Text>
-                    <TextInput
-                        ref={input => { this.fieldRef = input }}
-                        maxLength={50}
-                        style={main.inputContainer}
-                        textColor='white'
-                        baseColor="white"
-                        tintColor="white"
-                        onChangeText={(text) => this.setState({ email: text })}
-                        value={this.state.email}
-                    />
-                    {this.state.fieldNotEmpty == true ? (
-                        <Text style={{ color: 'red' }}>Please enter your registered email ID!</Text>
-                    ) : (
-                            <View></View>
-                        )}
-                </View>
-                <View style={main.buttonContainer}>
-                    <TouchableOpacity onPress={() => this.updatePassword()}>
-                        <Text style={main.buttonText}>Reset</Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
+            <RadialGradient style={{ width: '100%', height: '100%' }}
+                colors={['#FE7948', '#E23E00']}
+                stops={[0.1, 0.95]}
+                center={[180, 270]}
+                radius={400}>
+                {
+                    <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
+                        <View style={styles.TitleDiv}>
+                            <Image
+                                source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+                                style={{
+                                    width: wp('25%'),
+                                    height: hp('15%'),
+                                    borderRadius: wp('30%'),
+                                    resizeMode: 'cover',
+                                    marginLeft: wp('25%'),
+                                    marginTop: wp('10%')
+                                }} />
+                        </View>
+                        <View style={styles.TextInputDiv}>
+                            <Text style={main.labelContainer}>Enter your email ID to reset</Text>
+                            <TextInput
+                                ref={input => { this.fieldRef = input }}
+                                maxLength={50}
+                                style={main.inputContainer}
+                                textColor='white'
+                                baseColor="white"
+                                tintColor="white"
+                                onChangeText={(text) => this.setState({ email: text })}
+                                value={this.state.email}
+                            />
+                            {this.state.fieldNotEmpty == true ? (
+                                <Text style={{ color: 'red' }}>Please enter your registered email ID!</Text>
+                            ) : (
+                                    <View></View>
+                                )}
+                        </View>
+                        <View style={main.buttonContainer}>
+                            <TouchableOpacity onPress={() => this.updatePassword()}>
+                                <Text style={main.buttonText}>Reset</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
+                }
+            </RadialGradient>
         );
     }
 }
@@ -137,7 +146,7 @@ export default class forgotPassword extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#ed5720',
+        // backgroundColor: '#ed5720',
         flex: 1,
     },
     TitleDiv: {

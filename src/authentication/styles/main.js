@@ -64,7 +64,7 @@ const main = StyleSheet.create({
         width: wp('80%'), height: hp('6%'), marginBottom: wp('3%'), color: '#fff', borderColor: 'white', borderWidth: 1.5, borderRadius: wp('2%'),
     },
     passwordContainer: {
-        width: wp('70%'), height: hp('6%'), borderColor: 'white', marginBottom: wp('2%'),
+        width: wp('80%'), height: hp('6%'), borderColor: 'white', marginBottom: wp('2%'),
         borderWidth: 1.5, borderRadius: wp('2%'), color: '#fff'
     },
     labelContainer: {

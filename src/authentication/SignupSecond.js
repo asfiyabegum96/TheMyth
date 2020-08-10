@@ -16,6 +16,7 @@ import {
 } from 'react-native-responsive-screen';
 import ImagePicker from 'react-native-image-picker';
 import main from "./styles/main";
+import RadialGradient from 'react-native-radial-gradient';
 
 export default class SignupSecond extends React.Component {
 
@@ -106,103 +107,111 @@ export default class SignupSecond extends React.Component {
       },
     ];
     return (
-      <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
-        <View style={styles.logo}>
-          <Image
-            source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-            style={{
-              width: wp('25%'),
-              height: hp('15%'),
-              borderRadius: wp('30%'),
-              resizeMode: 'cover',
-              marginLeft: wp('20%'),
-              marginTop: wp('5%'),
-              marginBottom: wp('5%')
-            }} />
-        </View>
-        <View style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: "center",
-        }}>
+      <RadialGradient style={{ width: '100%', height: '100%' }}
+        colors={['#FE7948', '#E23E00']}
+        stops={[0.1, 0.95]}
+        center={[180, 270]}
+        radius={400}>
+        {
+          <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
+            <View style={styles.logo}>
+              <Image
+                source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+                style={{
+                  width: wp('25%'),
+                  height: hp('15%'),
+                  borderRadius: wp('30%'),
+                  resizeMode: 'cover',
+                  marginLeft: wp('20%'),
+                  marginTop: wp('5%'),
+                  marginBottom: wp('5%')
+                }} />
+            </View>
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: "center",
+            }}>
 
-          <View>
-            {this.state.imageSelected == true ? (
-              <TouchableOpacity onPress={this.selectImage}>
-                <Image
-                  source={{ uri: this.state.uri }}
-                  style={{
-                    width: wp('25%'),
-                    height: hp('15%'),
-                    borderRadius: wp('30%'),
-                    resizeMode: 'cover'
-                  }} />
-              </TouchableOpacity>
-            ) : (
-                <TouchableOpacity onPress={this.selectImage}>
-                  <Image
-                    source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" }}
-                    style={{
-                      width: wp('25%'),
-                      height: hp('15%'),
-                      borderRadius: wp('30%'),
-                      resizeMode: 'cover'
-                    }} />
-                </TouchableOpacity>
-              )}
-          </View>
-        </View>
-        <View style={styles.TextInputDiv}>
-          <Text style={main.labelContainer}>Description</Text>
-          <TextInput
-            ref="Description"
-            maxLength={50}
-            style={main.inputContainer}
-            textColor='white'
-            baseColor="white"
-            tintColor="white"
-            onChangeText={text => handleChange('description', text)}
-            defaultValue={values.description}
-          />
-        </View>
-        <View style={{ marginBottom: wp('5%') }}>
-          <Text style={{ color: 'white', left: 60, marginBottom: 8, fontSize: wp('4.5%'), marginTop: wp('1%') }}>Gender :</Text>
-          <View>
-            {options.map(item => {
-              return (
-                <View key={item.key} style={styles.buttonContainer}>
-                  <View>
-                    <TouchableOpacity
-                      style={styles.circle}
-                      onPress={() => {
-                        this.setState({
-                          radioState: item.key,
-                        });
-                        handleChange('gender', item.key)
-                      }}
-                    >
-                      {radioState === item.key && <View style={styles.checkedCircle} />}
+              <View>
+                {this.state.imageSelected == true ? (
+                  <TouchableOpacity onPress={this.selectImage}>
+                    <Image
+                      source={{ uri: this.state.uri }}
+                      style={{
+                        width: wp('25%'),
+                        height: hp('15%'),
+                        borderRadius: wp('30%'),
+                        resizeMode: 'cover'
+                      }} />
+                  </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity onPress={this.selectImage}>
+                      <Image
+                        source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" }}
+                        style={{
+                          width: wp('25%'),
+                          height: hp('15%'),
+                          borderRadius: wp('30%'),
+                          resizeMode: 'cover'
+                        }} />
                     </TouchableOpacity>
-                  </View>
-                  <View>
-                    <Text style={{ color: 'white', marginLeft: 10 }}>{item.text}</Text>
-                  </View>
-                </View>
-              );
-            })}
-          </View>
-        </View>
-        <View style={styles.but}>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-            <TouchableOpacity onPress={this.back}>
-              <Text style={main.leftBorderButton}>BACK</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.signUp}>
-              <Text style={main.rightBorderButton}>SIGN UP</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </ScrollView>
+                  )}
+              </View>
+            </View>
+            <View style={styles.TextInputDiv}>
+              <Text style={main.labelContainer}>Description</Text>
+              <TextInput
+                ref="Description"
+                maxLength={50}
+                style={main.inputContainer}
+                textColor='white'
+                baseColor="white"
+                tintColor="white"
+                onChangeText={text => handleChange('description', text)}
+                defaultValue={values.description}
+              />
+            </View>
+            <View style={{ marginBottom: wp('5%') }}>
+              <Text style={{ color: 'white', left: 60, marginBottom: 8, fontSize: wp('4.5%'), marginTop: wp('1%') }}>Gender :</Text>
+              <View>
+                {options.map(item => {
+                  return (
+                    <View key={item.key} style={styles.buttonContainer}>
+                      <View>
+                        <TouchableOpacity
+                          style={styles.circle}
+                          onPress={() => {
+                            this.setState({
+                              radioState: item.key,
+                            });
+                            handleChange('gender', item.key)
+                          }}
+                        >
+                          {radioState === item.key && <View style={styles.checkedCircle} />}
+                        </TouchableOpacity>
+                      </View>
+                      <View>
+                        <Text style={{ color: 'white', marginLeft: 10 }}>{item.text}</Text>
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
+            </View>
+            <View style={styles.but}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                <TouchableOpacity onPress={this.back}>
+                  <Text style={main.leftBorderButton}>BACK</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.signUp}>
+                  <Text style={main.rightBorderButton}>SIGN UP</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </ScrollView>
+        }
+      </RadialGradient>
     );
   }
 }

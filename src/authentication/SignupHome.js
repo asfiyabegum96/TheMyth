@@ -19,7 +19,7 @@ import {
   from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
 import main from "./styles/main";
-
+import RadialGradient from 'react-native-radial-gradient';
 export default class SignupHome extends React.Component {
   fieldRef = React.createRef();
 
@@ -132,117 +132,121 @@ export default class SignupHome extends React.Component {
   render() {
     const { values, handleChange } = this.props;
 
-    return (
-      <React.Fragment>
-        {this.state.loading == true ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" color='red' />
-          </View>
-        ) :
-          <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
-            <View >
-              <View style={styles.logo}>
-                <Image
-                  source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                  style={{
-                    width: wp('25%'),
-                    height: hp('15%'),
-                    borderRadius: wp('30%'),
-                    resizeMode: 'cover',
-                    marginLeft: wp('20%'),
-                    marginTop: wp('5%')
-                  }} />
-              </View>
-              <View style={styles.TextInputDiv}>
-                <Text style={main.labelContainer}>Full Name *</Text>
-                <TextInput
-                  onSubmitEditing={this.onSubmit}
-                  ref={this.fieldRef}
-                  style={main.inputContainer}
-                  textColor='white'
-                  baseColor="white"
-                  tintColor="white"
-                  onChangeText={text => handleChange('fullName', text)}
-                  defaultValue={values.fullName}
-                />
-                <Text style={main.labelContainer}>Email *</Text>
-                <TextInput
-                  onSubmitEditing={this.onSubmit}
-                  ref="email"
-                  style={main.inputContainer}
-                  textColor='white'
-                  baseColor="white"
-                  tintColor="white"
-                  keyboardType={'email-address'}
-                  onChangeText={text => handleChange('email', text)}
-                  defaultValue={values.email}
-                />
-                {this.state.emailInvalid == true ? (
-                  <Text style={{ color: 'red' }}>Please enter a valid Email ID</Text>
-                ) : (
-                    <View></View>
-                  )}
-                {this.state.isInvalid == true ? (
-                  <Text style={{ color: 'red' }}>Email ID already exists!</Text>
-                ) : (
-                    <View></View>
-                  )}
-                <Text style={main.labelContainer}>Password *</Text>
-                <View style={{ flexDirection: 'row' }}>
+    return (<RadialGradient style={{ width: '100%', height: '100%' }}
+      colors={['#FE7948', '#E23E00']}
+      stops={[0.1, 0.95]}
+      center={[180, 270]}
+      radius={400}>
+      {
+        <React.Fragment>
+          {this.state.loading == true ? (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <ActivityIndicator size="large" color='red' />
+            </View>
+          ) :
+            <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
+              <View >
+                <View style={styles.logo}>
+                  <Image
+                    source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+                    style={{
+                      width: wp('25%'),
+                      height: hp('15%'),
+                      borderRadius: wp('30%'),
+                      resizeMode: 'cover',
+                      marginLeft: wp('20%'),
+                      marginTop: wp('5%')
+                    }} />
+                </View>
+                <View style={styles.TextInputDiv}>
+                  <Text style={main.labelContainer}>Full Name *</Text>
                   <TextInput
                     onSubmitEditing={this.onSubmit}
-                    ref="password"
-                    style={main.passwordContainer}
+                    ref={this.fieldRef}
+                    style={main.inputContainer}
                     textColor='white'
                     baseColor="white"
                     tintColor="white"
-                    secureTextEntry={this.state.hidePassword}
-                    onChangeText={text => handleChange('password', text)}
-                    defaultValue={values.password}
+                    onChangeText={text => handleChange('fullName', text)}
+                    defaultValue={values.fullName}
                   />
-                  <TouchableOpacity onPress={this.setPasswordVisibility}>
-                    {this.state.hidePassword === true ?
-                      <FontAwesome5 style={styles.hideIcon} name={'eye'} />
-                      :
-                      <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
-
-                    }
+                  <Text style={main.labelContainer}>Email *</Text>
+                  <TextInput
+                    onSubmitEditing={this.onSubmit}
+                    ref="email"
+                    style={main.inputContainer}
+                    textColor='white'
+                    baseColor="white"
+                    tintColor="white"
+                    keyboardType={'email-address'}
+                    onChangeText={text => handleChange('email', text)}
+                    defaultValue={values.email}
+                  />
+                  {this.state.emailInvalid == true ? (
+                    <Text style={{ color: 'red' }}>Please enter a valid Email ID</Text>
+                  ) : (
+                      <View></View>
+                    )}
+                  {this.state.isInvalid == true ? (
+                    <Text style={{ color: 'red' }}>Email ID already exists!</Text>
+                  ) : (
+                      <View></View>
+                    )}
+                  <Text style={main.labelContainer}>Password *</Text>
+                  <View style={{ flexDirection: 'row' }}>
+                    <TextInput
+                      onSubmitEditing={this.onSubmit}
+                      ref="password"
+                      style={main.passwordContainer}
+                      textColor='white'
+                      baseColor="white"
+                      tintColor="white"
+                      secureTextEntry={this.state.hidePassword}
+                      onChangeText={text => handleChange('password', text)}
+                      defaultValue={values.password}
+                    />
+                    <TouchableOpacity style={{ zIndex: 999999, }} onPress={this.setPasswordVisibility}>
+                      {this.state.hidePassword === true ?
+                        <FontAwesome5 style={styles.hideIcon} name={'eye'} />
+                        :
+                        <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
+                      }
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={main.labelContainer}>Confirm Password *</Text>
+                  <TextInput
+                    onSubmitEditing={this.onSubmit}
+                    ref="confirmPassword"
+                    style={main.inputContainer}
+                    textColor='#ed5720'
+                    baseColor="black"
+                    tintColor="#ed5720"
+                    secureTextEntry={true}
+                    onChangeText={text => handleChange('confirmPassword', text)}
+                    defaultValue={values.confirmPassword}
+                  />
+                  {this.state.passwordInvalid == true ? (
+                    <Text style={{ color: 'red' }}>Please enter strong password</Text>
+                  ) : (
+                      <View></View>
+                    )}
+                  {this.state.passwordMismatch == true ? (
+                    <Text style={{ color: 'red' }}>Password mismatch!</Text>
+                  ) : (
+                      <View></View>
+                    )}
+                  {this.state.fieldNotEmpty == true ? (
+                    <Text style={{ color: 'red' }}>Please enter all values</Text>
+                  ) : (
+                      <View></View>
+                    )}
+                </View>
+                <View style={main.buttonContainer}>
+                  <TouchableOpacity disabled={this.state.clicked} >
+                    <Text style={main.buttonText} onPress={this.requireField}>Continue</Text>
                   </TouchableOpacity>
                 </View>
-                <Text style={main.labelContainer}>Confirm Password *</Text>
-                <TextInput
-                  onSubmitEditing={this.onSubmit}
-                  ref="confirmPassword"
-                  style={main.inputContainer}
-                  textColor='#ed5720'
-                  baseColor="black"
-                  tintColor="#ed5720"
-                  secureTextEntry={true}
-                  onChangeText={text => handleChange('confirmPassword', text)}
-                  defaultValue={values.confirmPassword}
-                />
-                {this.state.passwordInvalid == true ? (
-                  <Text style={{ color: 'red' }}>Please enter strong password</Text>
-                ) : (
-                    <View></View>
-                  )}
-                {this.state.passwordMismatch == true ? (
-                  <Text style={{ color: 'red' }}>Password mismatch!</Text>
-                ) : (
-                    <View></View>
-                  )}
-                {this.state.fieldNotEmpty == true ? (
-                  <Text style={{ color: 'red' }}>Please enter all values</Text>
-                ) : (
-                    <View></View>
-                  )}
-              </View>
-              <View style={main.buttonContainer}>
-                <TouchableOpacity disabled={this.state.clicked} >
-                  <Text style={main.buttonText} onPress={this.requireField}>Continue</Text>
-                </TouchableOpacity>
-              </View>
-              {/* <View style={styles.socialIconDiv}>
+                {/* <View style={styles.socialIconDiv}>
               <TouchableOpacity>
                 <Text style={{ paddingRight: 40 }}>
                   <FontAwesome5 style={styles.fontFacebook} name={'facebook-square'} />
@@ -257,16 +261,17 @@ export default class SignupHome extends React.Component {
                 </Text>
               </TouchableOpacity>
             </View> */}
-            </View>
-          </ScrollView>}
-      </React.Fragment >
+              </View>
+            </ScrollView>}
+        </React.Fragment >}
+    </RadialGradient>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#ed5720',
+    // backgroundColor: '#ed5720',
     flex: 1,
   },
   title: {

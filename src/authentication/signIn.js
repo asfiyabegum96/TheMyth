@@ -18,7 +18,6 @@ import {
   from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
 import main from "../authentication/styles/main";
-import Icon from 'react-native-vector-icons/Entypo';
 import RadialGradient from 'react-native-radial-gradient';
 
 export default class Home extends React.Component {
@@ -129,7 +128,7 @@ export default class Home extends React.Component {
                 value={this.state.email}
               />
               <Text style={main.labelContainer}>Password *</Text>
-              <View style={{ flexDirection: 'row', }}>
+              <View>
                 <TextInput
                   ref={input => { this.fieldRef = input }}
                   maxLength={50}
@@ -143,12 +142,11 @@ export default class Home extends React.Component {
                   onChangeText={(text) => this.setState({ password: text })}
                   value={this.state.password}
                 />
-                <TouchableOpacity onPress={this.setPasswordVisibility}>
+                <TouchableOpacity style={{ zIndex: 999999, marginTop: wp('-11.5%'), marginLeft: wp('70%') }} onPress={this.setPasswordVisibility}>
                   {this.state.hidePassword === true ?
                     <FontAwesome5 style={styles.hideIcon} name={'eye'} />
                     :
                     <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
-
                   }
                 </TouchableOpacity>
               </View>
@@ -175,7 +173,7 @@ export default class Home extends React.Component {
             </View>
             <View style={main.buttonContainer}>
               <TouchableOpacity onPress={() => this.requireField()}>
-                <Text style={main.buttonText}>Log In</Text>
+                <Text style={main.buttonText}>Sign In</Text>
               </TouchableOpacity>
             </View>
 
@@ -224,7 +222,7 @@ const styles = StyleSheet.create({
   hideIcon: {
     color: '#fff',
     padding: wp('2%'),
-    fontSize: 18,
+    fontSize: 18
   },
   CreateDiv: {
     flexDirection: 'row',
