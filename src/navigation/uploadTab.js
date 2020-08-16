@@ -10,7 +10,8 @@ import {
     ScrollView,
     Button,
     TouchableOpacity,
-    Alert
+    Alert,
+    TextInput
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
@@ -25,6 +26,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'react-native-firebase';
 import PushNotification from 'react-native-push-notification';
+import main from "../authentication/styles/main";
 
 class photosUpload extends React.Component {
     constructor(props) {
@@ -316,77 +318,60 @@ class photosUpload extends React.Component {
 
     render() {
         return (
-            <ScrollView keyboardShouldPersistTaps={true} style={{ flex: 1, padding: wp('3%') }}>
+            <ScrollView keyboardShouldPersistTaps={true} style={{ flex: 1, padding: wp('3%'),backgroundColor: '#fff6f2' }}>
                 <View style={styles.logo}>
                     <Image
-                        source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
+                        source={require('../images/icecream.jpg')}
                         style={{
-                            width: wp('25%'),
-                            height: hp('15%'),
-                            borderRadius: wp('30%'),
+                            width: wp('65%'),
+                            height: hp('45%'),
+                            borderRadius: wp('5%'),
                             resizeMode: 'cover',
-                            marginLeft: wp('20%'),
-                            marginTop: wp('5%')
+                            marginLeft: wp('0%'),
+                            marginTop: wp('5%'),
+                              marginBottom: wp('5%')
                         }} />
                 </View>
-                <View
-                    style={{
-                        borderBottomColor: '#FF7200',
-                        borderBottomWidth: 1,
-                        marginTop: wp('3%')
-                    }} />
-                <View style={{ alignItems: 'center' }}>
-                    <View style={{ paddingTop: wp('15%'), }}>
-                        {
-                            this.state.uri ?
-                                <Image
-                                    source={{ uri: this.state.uri }}
-                                    style={{
-                                        width: wp('40%'),
-                                        height: hp('20%'),
-                                        resizeMode: 'cover',
-                                    }} /> :
-                                <TouchableOpacity onPress={this.selectImage}>
-                                    <Image
-                                        source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" }}
-                                        style={{
-                                            width: wp('25%'),
-                                            height: hp('15%'),
-                                            resizeMode: 'cover'
-                                        }} />
-                                </TouchableOpacity>
-                        }
-                    </View>
+                 <View style={styles.edit}>
+                    <Image
+                        source={require('../images/person.png')}
+                        style={{
+                            width: wp('15%'),
+                            height: wp('15%'),
+                           
+                            resizeMode: 'cover',
+                          marginLeft: wp('-10%'),
+                            marginTop: wp('-15%'),
+                              marginBottom: wp('5%')
+                        }} />
                 </View>
-                <View style={{ paddingVertical: wp('1%'), alignItems: 'center' }}>
-                    <TextField
-                        editable={true}
-                        maxLength={150}
-                        onChangeText={(text) => this.setState({ caption: text })}
-                        value={this.state.caption}
-                        label='Enter Your Caption...'
-                        containerStyle={{
-                            width: wp('90%'),
-                            height: wp('17%')
-                        }}
-                        textColor='#FF7200'
-                        baseColor="#121212"
-                        tintColor="#FF7200"
-                    />
-                    <TextField
-                        editable={true}
-                        maxLength={50}
-                        onChangeText={(text) => this.setState({ location: text })}
-                        value={this.state.location}
-                        label='Location'
-                        containerStyle={{
-                            width: wp('90%'),
-                            height: wp('17%')
-                        }}
-                        textColor='#FF7200'
-                        baseColor="#121212"
-                        tintColor="#FF7200"
-                    />
+       
+                <View style={{ paddingVertical: wp('1%'), backgroundColor: '#fff6f2' }}>
+                   
+                    <Text style={styles.labelContainer}>Caption</Text>
+              <TextInput
+                ref={input => { this.fieldRef = input }}
+                maxLength={150}
+                style={styles.inputContainer}
+                textColor='white'
+                baseColor="white"
+                tintColor="white"
+                onChangeText={(text) => this.setState({ caption: text })}
+                value={this.state.caption}
+              />
+
+
+                       <Text style={styles.labelContainer}>Location</Text>
+              <TextInput
+                ref={input => { this.fieldRef = input }}
+                maxLength={150}
+                style={styles.inputContainer}
+                textColor='white'
+                baseColor="white"
+                tintColor="white"
+                onChangeText={(text) => this.setState({ location: text })}
+                value={this.state.location}
+              />
                 </View>
                 <View>
                     {this.state.uploading == true ? (
@@ -415,10 +400,10 @@ class photosUpload extends React.Component {
                 <View style={styles.uploadImageStyle}>
                     <TouchableOpacity style={styles.uploadButton} onPress={() => this.uploadImage()}>
                         <View>
-                            <MaterialCommunityIcons style={{ color: '#fff', }} name='upload' size={20} />
+                            
                         </View>
                         <View>
-                            <Text style={styles.buttonText}>UPLOAD</Text>
+                            <Text style={styles.buttonText}>Post</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -443,6 +428,7 @@ const styles = StyleSheet.create({
         borderWidth: wp('0.5%'),
         borderColor: '#FF7200',
         padding: wp('1%'),
+
         borderRadius: wp('1%'),
 
     },
@@ -461,16 +447,30 @@ const styles = StyleSheet.create({
     logo: {
         left: 55,
     },
+      edit: {
+          left: 280,
+
+    },
+    inputContainer: {
+        width: wp('94%'), height: hp('6%'), marginBottom: wp('3%'), backgroundColor: 'white', borderColor: 'white', borderWidth: 1.5, borderRadius: wp('2%'),
+    },
+       labelContainer: {
+        textAlign: 'left', color: 'black', paddingBottom: wp('2%')
+    },
     uploadImageStyle: {
-        marginTop: wp('35%'),
+        marginTop: wp('10%'),
         paddingTop: wp('1%'),
         paddingBottom: wp('1%'),
         backgroundColor: '#FF7200',
-        borderRadius: 17,
+        borderRadius: 10,
         borderWidth: wp('0.5%'),
         borderColor: '#FF7200',
+         width: wp('50%'),
+         marginLeft:75
+
+
     },
-    buttonText: { color: 'white', fontWeight: 'bold' }
+    buttonText: { color: 'white', fontWeight: 'bold', }
 });
 
 export default photosUpload;  
