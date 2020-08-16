@@ -172,7 +172,7 @@ export default class Home extends React.Component {
 
             <TouchableOpacity onPress={() => this.props.navigation.navigate('forgotPassword')} style={styles.ForgotPassDiv}>
               <Text style={styles.ForgotPass}
-              >Trouble logging in?</Text>
+              >Trouble signing in?</Text>
             </TouchableOpacity>
             {this.state.loading == true ? (
               <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

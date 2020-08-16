@@ -17,6 +17,7 @@ import {
 import ImagePicker from 'react-native-image-picker';
 import main from "./styles/main";
 import RadialGradient from 'react-native-radial-gradient';
+import { Picker } from '@react-native-community/picker';
 
 export default class SignupSecond extends React.Component {
 
@@ -26,7 +27,7 @@ export default class SignupSecond extends React.Component {
       uri: '',
       imagePath: '',
       imageSelected: false,
-      radioState: ''
+      radioState: 'others',
     }
   }
 
@@ -114,15 +115,16 @@ export default class SignupSecond extends React.Component {
         radius={400}>
         {
           <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
-            <View style={styles.logo}>
+            {/* <View style={styles.logo}>
               <Image
                 source={require('../images/mythlogo.png')}
                 style={main.logo} />
-            </View>
+            </View> */}
             <View style={{
               flexDirection: 'row',
               justifyContent: 'space-around',
               alignItems: "center",
+              marginTop: wp('20%')
             }}>
 
               <View>
@@ -131,9 +133,10 @@ export default class SignupSecond extends React.Component {
                     <Image
                       source={{ uri: this.state.uri }}
                       style={{
-                        width: wp('25%'),
-                        height: hp('15%'),
-                        resizeMode: 'cover'
+                        width: wp('35%'),
+                        height: hp('25%'),
+                        resizeMode: 'cover',
+                        borderRadius: wp('2%'), borderWidth: 1.5, borderColor: 'white'
                       }} />
                   </TouchableOpacity>
                 ) : (
@@ -141,9 +144,10 @@ export default class SignupSecond extends React.Component {
                       <Image
                         source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" }}
                         style={{
-                          width: wp('25%'),
-                          height: hp('15%'),
-                          resizeMode: 'cover'
+                          width: wp('35%'),
+                          height: hp('25%'),
+                          resizeMode: 'cover',
+                          borderRadius: wp('2%'), borderWidth: 1.5, borderColor: 'white'
                         }} />
                     </TouchableOpacity>
                   )}
@@ -162,32 +166,22 @@ export default class SignupSecond extends React.Component {
                 defaultValue={values.description}
               />
             </View>
-            <View style={{ marginBottom: wp('5%') }}>
-              <Text style={{ color: 'white', left: 60, marginBottom: 8, fontSize: wp('4.5%'), marginTop: wp('1%') }}>Gender :</Text>
-              <View>
-                {options.map(item => {
-                  return (
-                    <View key={item.key} style={styles.buttonContainer}>
-                      <View>
-                        <TouchableOpacity
-                          style={styles.circle}
-                          onPress={() => {
-                            this.setState({
-                              radioState: item.key,
-                            });
-                            handleChange('gender', item.key)
-                          }}
-                        >
-                          {radioState === item.key && <View style={styles.checkedCircle} />}
-                        </TouchableOpacity>
-                      </View>
-                      <View>
-                        <Text style={{ color: 'white', marginLeft: 10 }}>{item.text}</Text>
-                      </View>
-                    </View>
-                  );
-                })}
+            <View style={{ marginBottom: wp('15%'), }}>
+              <Text style={{ color: 'white', left: 35, marginBottom: 8, fontSize: wp('4.5%'), marginTop: wp('1%') }}>Gender :</Text>
+              <View style={{ marginLeft: wp('10%'), backgroundColor: 'white',opacity: 0.7, borderRadius: wp('2%'), borderWidth: 1.5, borderColor: 'white', width: wp('80%') }}>
+                <Picker
+                  selectedValue={this.state.radioState}
+                  mode={'dropdown'}
+                  style={{ height: wp('10%'), width: wp('80%') }}
+                  onValueChange={(itemValue, itemIndex) =>
+                    this.setState({ radioState: itemValue })
+                  }>
+                  <Picker.Item color="#ed5720" label="Others" value="others" />
+                  <Picker.Item label="Male" color="#ed5720" value="male" />
+                  <Picker.Item label="Female" value="female" color="#ed5720" />
+                </Picker>
               </View>
+
             </View>
             <View style={styles.but}>
               <View style={main.primaryButtonContanier}>
@@ -231,7 +225,7 @@ const styles = StyleSheet.create({
   },
   TextInputDiv: {
     marginLeft: wp('10%'),
-    marginTop: wp('5%'),
+    marginTop: wp('15%'),
   },
   inputfield: {
     width: wp('88%'),

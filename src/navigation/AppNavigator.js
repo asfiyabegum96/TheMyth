@@ -91,7 +91,10 @@ const AppNavigator = createStackNavigator({
     },
     sideNavigator: {
         screen: sideNavigator,
-        navigationOptions: { header: null },
+        navigationOptions: {
+            headerTitle: 'Settings',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white' },
+        },
     },
 });
 

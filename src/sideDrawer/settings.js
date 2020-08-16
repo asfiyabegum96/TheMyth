@@ -11,6 +11,10 @@ import {
   from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
 import { StackActions } from 'react-navigation';
+import RadialGradient from 'react-native-radial-gradient';
+
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import main from "../authentication/styles/main";
 
 class Settings extends Component {
   constructor(props) {
@@ -96,39 +100,78 @@ class Settings extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.navSectionStyle}><Text style={styles.header}>Settings</Text></View>
-          <View>
-            <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
-              Edit Profile
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('updatePassword')}>
-              Update Password
-            </Text>
-            <Text style={styles.navItemStyle} onPress={() => this.confirmDeactivate()}>
-              De-activate Account
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('account')}>
-              Account Settings
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.navItemStyle} onPress={() => this.logout()}>
-              Logout
-            </Text>
-          </View>
-        </ScrollView>
-        <View style={styles.footerContainer}>
-          <TouchableOpacity onPress={() => this.onBack()}>
-            <Text style={styles.butText}>BACK</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <RadialGradient style={{ width: '100%', height: '100%' }}
+        colors={['#FE7948', '#E23E00']}
+        stops={[0.1, 0.95]}
+        center={[180, 270]}
+        radius={400}>
+        {
+          <View style={styles.container}>
+            <View style={{ flexDirection: 'row' }}>
+              {/* <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+                  Edit Profile
+                </Text> */}
+              <FontAwesome5 style={styles.fabIcon} name='user-plus' size={14} />
+              <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+                Invite Friends
+                </Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              {/* <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+                  Edit Profile
+                </Text> */}
+              <FontAwesome5 style={styles.fabIcon} name='user-circle' size={18} />
+              <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+                Account
+                </Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              {/* <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+                  Edit Profile
+                </Text> */}
+              <FontAwesome5 style={styles.fabIcon} name='id-card' size={16} />
+              <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+                Wallet
+                </Text>
+            </View>
+           
+            <View style={{ flexDirection: 'row' }}>
+              {/* <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+                  Edit Profile
+                </Text> */}
+              <FontAwesome5 style={styles.fabIcon} name='info-circle' size={16} />
+              <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+                About
+                </Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              {/* <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+                  Edit Profile
+                </Text> */}
+              <FontAwesome5 style={styles.fabIcon} name='power-off' size={16} />
+              <Text style={styles.navItemStyle} onPress={() => this.logout()}>
+                Logout
+                </Text>
+            </View>
+            {/* <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('updatePassword')}>
+                  Update Password
+                </Text>
+                <Text style={styles.navItemStyle} onPress={() => this.confirmDeactivate()}>
+                  De-activate Account
+                </Text> */}
+
+            {/* <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('account')}>
+                  Account Settings
+            </Text> */}
+            {/* <View style={styles.footerContainer}>
+              <View style={main.primaryButtonContanier}>
+                <TouchableOpacity onPress={() => this.onBack()}>
+                  <Text style={main.primaryButtonText}>Back</Text>
+                </TouchableOpacity>
+              </View>
+            </View> */}
+          </View>}
+      </RadialGradient>
     );
   }
 }
@@ -139,45 +182,27 @@ Settings.propTypes = {
 
 const styles = {
   container: {
-    paddingTop: 20,
     flex: 1,
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    opacity: 0.5,
-    width: 400,
-    height: '100%',
-    backgroundColor: '#fff'
   },
   navItemStyle: {
-    padding: wp('8%'),
-    paddingLeft: wp('10%'),
-    borderBottomColor: '#FF7200',
-    borderBottomWidth: 1,
-    fontSize: hp('2.2%')
+    padding: wp('6%'),
+    paddingLeft: wp('2%'),
+    color: 'white'
   },
   navSectionStyle: {
     padding: wp('10%'),
   },
   footerContainer: {
-    padding: wp('20%'),
+    marginTop: wp('40%')
   },
   header: {
     fontSize: hp('4%')
   },
-  butText: {
-    color: '#000',
-    fontSize: hp('2%'),
-    marginTop: 10,
-    borderColor: '#A9A9A9',
-    backgroundColor: '#FF7200',
-    paddingVertical: 10,
-    paddingHorizontal: 100,
-    fontWeight: 'bold',
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: '#FF7200'
-  }
+  fabIcon: {
+    color: '#fff',
+    padding: wp('6%'),
+    paddingLeft: wp('7%'),
+  },
 };
 
 export default Settings;
