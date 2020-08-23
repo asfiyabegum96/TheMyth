@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   TextInputDiv: {
     marginLeft: wp('10%'),
-    // marginTop: wp('10%'),
+    marginTop: wp('-10%'),
   },
   ForgotPassDiv: {
     left: wp('35%'),

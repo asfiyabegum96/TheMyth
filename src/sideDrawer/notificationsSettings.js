@@ -18,7 +18,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import RadialGradient from 'react-native-radial-gradient';
 
-export default class privacySettings extends React.Component {
+export default class notificationSettings extends React.Component {
 
     constructor(props) {
         super(props)
@@ -87,8 +87,9 @@ export default class privacySettings extends React.Component {
                 radius={400}>
                 {
                     <View style={styles.container}>
+                        <Text style={styles.name}>Push Notifications</Text>
                         <View style={styles.contentHeader}>
-                            <Text style={styles.name}>Request for whisper</Text>
+                            <Text style={styles.subname}>Pause all notifications</Text>
                             <View style={styles.time}>
                                 <Switch
                                     trackColor={{ true: '#FF7200', false: 'grey' }}
@@ -97,7 +98,6 @@ export default class privacySettings extends React.Component {
                                     value={this.state.switchValue} />
                             </View>
                         </View>
-                        <Text style={styles.subname}>Enables or disables people Whispering to you.</Text>
                     </View>
                 }</RadialGradient>
         );
@@ -128,13 +128,15 @@ const styles = StyleSheet.create({
     time: {
         fontSize: 11,
         color: "#808080",
-        marginRight: wp('10%')
+        marginRight: wp('10%'),
+        marginTop: wp('5%'),
     },
     name: {
         fontSize: 16,
         color: '#fff'
     },
     subname: {
+        marginTop: wp('5%'),
         fontSize: 11,
         color: '#ccc',
         marginLeft: wp('3%')

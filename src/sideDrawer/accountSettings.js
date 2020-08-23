@@ -110,7 +110,7 @@ class accountSettings extends Component {
 					<View style={styles.container}>
 						<View style={{ flexDirection: 'row' }}>
 							<FontAwesome5 style={styles.fabIcon} name='bell' size={16} />
-							<Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+							<Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('notificationsSettings')}>
 								Notifications
                 			</Text>
 						</View>

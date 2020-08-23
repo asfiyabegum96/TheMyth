@@ -16,6 +16,7 @@ import editProfile from '../sideDrawer/editProfile'
 import updatePassword from '../sideDrawer/updatePassword';
 import privacySettings from '../sideDrawer/privacySettings';
 import accountSettings from '../sideDrawer/accountSettings'
+import notificationsSettings from '../sideDrawer/notificationsSettings'
 import search from '../topTabHomeFeed/search';
 
 const AppNavigator = createStackNavigator({
@@ -42,6 +43,13 @@ const AppNavigator = createStackNavigator({
         screen: accountSettings,
         navigationOptions: {
             headerTitle: 'Account',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+        }
+    },
+    notificationsSettings: {
+        screen: notificationsSettings,
+        navigationOptions: {
+            headerTitle: 'Notifications',
             headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
         }
     },
