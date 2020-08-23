@@ -89,14 +89,18 @@ const main = StyleSheet.create({
         borderWidth: 1.5, borderRadius: wp('2%'), color: '#fff'
     },
     labelContainer: {
-        textAlign: 'left', color: 'white', paddingBottom: wp('2%')
+        textAlign: 'left', color: 'white', paddingBottom: wp('2%'), marginTop: wp('4%')
     },
     logo: {
         width: wp('50%'),
         height: hp('40%'),
         resizeMode: 'cover',
         marginLeft: wp('10%'),
-    }
+    },
+    passwordIconContainer: {
+        width: wp('50%'), height: hp('6%'), borderColor: 'white', marginBottom: wp('2%'),
+        borderWidth: 1.5, borderRadius: wp('2%'), color: '#fff'
+    },
 });
 
 export default main;

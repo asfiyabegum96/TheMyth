@@ -121,7 +121,7 @@ class Settings extends Component {
                   Edit Profile
                 </Text> */}
               <FontAwesome5 style={styles.fabIcon} name='user-circle' size={18} />
-              <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+              <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('accountSettings')}>
                 Account
                 </Text>
             </View>

@@ -6,7 +6,8 @@ import {
     ScrollView,
     TouchableOpacity,
     Image,
-    ActivityIndicator
+    ActivityIndicator,
+    TextInput
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import {
@@ -20,6 +21,8 @@ import firebase from 'react-native-firebase';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { StackActions, NavigationActions } from 'react-navigation';
 import main from "../authentication/styles/main";
+
+import RadialGradient from 'react-native-radial-gradient';
 export default class updatePassword extends React.Component {
 
     constructor(props) {
@@ -129,103 +132,128 @@ export default class updatePassword extends React.Component {
 
     render() {
         return (
-            <React.Fragment>
-                {this.state.loading == true ? (
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                        <ActivityIndicator size="large" color='red' />
-                    </View>
-                ) :
-                    <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
-                        <View style={styles.TitleDiv}>
-                            <Image
-                                source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                                style={{
-                                    width: wp('25%'),
-                                    height: hp('15%'),
-                                    borderRadius: wp('30%'),
-                                    resizeMode: 'cover',
-                                    marginTop: wp('20%')
-                                }} />
-                        </View>
-                        <View style={styles.TextInputDiv}>
-                            <View style={{ flexDirection: 'row', }}>
-                                <TextField
-                                    label='Old Password *'
-                                    ref="password"
-                                    containerStyle={{ width: wp('75%'), height: hp('11%') }}
-                                    textColor='#FF7200'
-                                    baseColor="black"
-                                    tintColor="#FF7200"
-                                    secureTextEntry={this.state.hideOldPassword}
-                                    onChangeText={text => this.handleChange('oldPassword', text)}
-                                />
-                                <TouchableOpacity onPress={this.setOldPasswordVisibility}>
-                                    {this.state.hideOldPassword === true ?
-                                        <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
-                                        :
-                                        <FontAwesome5 style={styles.hideIcon} name={'eye'} />
-
-                                    }
-                                </TouchableOpacity>
+            <RadialGradient style={{ width: '100%', height: '100%' }}
+                colors={['#FE7948', '#E23E00']}
+                stops={[0.1, 0.95]}
+                center={[180, 270]}
+                radius={400}>
+                {
+                    <React.Fragment>
+                        {this.state.loading == true ? (
+                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                <ActivityIndicator size="large" color='red' />
                             </View>
-                            <View style={{ flexDirection: 'row', }}>
-                                <TextField
-                                    label='New Password *'
-                                    ref="password"
-                                    containerStyle={{ width: wp('75%'), height: hp('11%') }}
-                                    textColor='#FF7200'
-                                    baseColor="black"
-                                    tintColor="#FF7200"
-                                    secureTextEntry={this.state.hidePassword}
-                                    onChangeText={text => this.handleChange('newPassword', text)}
-                                />
-                                <TouchableOpacity onPress={this.setPasswordVisibility}>
-                                    {this.state.hidePassword === true ?
-                                        <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
-                                        :
-                                        <FontAwesome5 style={styles.hideIcon} name={'eye'} />
+                        ) :
+                            <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
+                                <View style={styles.logo}>
+                                    <Image
+                                        source={require('../images/mythlogo.png')}
+                                        style={main.logo} />
+                                </View>
+                                <View style={styles.TextInputDiv}>
+                                    <Text style={main.labelContainer}>Old Password *</Text>
+                                    <TextInput
+                                        ref="password"
+                                        maxLength={50}
+                                        minLength={8}
+                                        onSubmitEditing={this.onSubmit}
+                                        style={main.passwordContainer}
+                                        textColor='white'
+                                        baseColor="white"
+                                        tintColor="white"
+                                        secureTextEntry={this.state.hideOldPassword}
+                                        onChangeText={text => this.handleChange('oldPassword', text)}
+                                    />
+                                    <TouchableOpacity style={{ zIndex: 999999, marginTop: wp('-11.5%'), marginLeft: wp('70%') }} onPress={this.setOldPasswordVisibility}>
+                                        {this.state.hideOldPassword === true ?
+                                            <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
+                                            :
+                                            <FontAwesome5 style={styles.hideIcon} name={'eye'} />
 
-                                    }
-                                </TouchableOpacity>
-                            </View>
-                            <TextField
-                                label='Re-enter New Password *'
-                                ref="confirmPassword"
-                                containerStyle={{ width: wp('80%'), height: hp('11%') }}
-                                textColor='#FF7200'
-                                baseColor="black"
-                                tintColor="#FF7200"
-                                secureTextEntry={true}
-                                onChangeText={text => this.handleChange('confirmPassword', text)}
-                            />
-                            {this.state.passwordInvalid == true ? (
-                                <Text style={{ color: 'red' }}>Please enter strong password.</Text>
-                            ) : (
-                                    <View></View>
-                                )}
-                            {this.state.passwordMismatch == true ? (
-                                <Text style={{ color: 'red' }}>Password mismatch!</Text>
-                            ) : (
-                                    <View></View>
-                                )}
-                            {this.state.fieldNotEmpty == true ? (
-                                <Text style={{ color: 'red' }}>Please enter all values.</Text>
-                            ) : (
-                                    <View></View>
-                                )}
-                            {this.state.isInvalid == true ? (
-                                <Text style={{ color: 'red' }}>Incorrect Old Password!</Text>
-                            ) : (
-                                    <View></View>
-                                )}
-                        </View>
-                        <View style={main.buttonContainer}>
-                            <TouchableOpacity onPress={() => this.requireField()}>
-                                <Text style={main.buttonText}>Update</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </ScrollView>}
-            </React.Fragment >
+                                        }
+                                    </TouchableOpacity>
+                                    <Text style={main.labelContainer}>New Password *</Text>
+                                    <TextInput
+                                        ref="password"
+                                        maxLength={50}
+                                        minLength={8}
+                                        onSubmitEditing={this.onSubmit}
+                                        style={main.passwordContainer}
+                                        textColor='white'
+                                        baseColor="white"
+                                        tintColor="white"
+                                        secureTextEntry={this.state.hidePassword}
+                                        onChangeText={text => this.handleChange('newPassword', text)}
+                                    />
+                                    {/* <TextField
+                                            label='New Password *'
+                                            ref="password"
+                                            containerStyle={{ width: wp('75%'), height: hp('11%') }}
+                                            textColor='#FF7200'
+                                            baseColor="black"
+                                            tintColor="#FF7200"
+                                            secureTextEntry={this.state.hidePassword}
+                                            onChangeText={text => this.handleChange('newPassword', text)}
+                                        /> */}
+                                    <TouchableOpacity style={{ zIndex: 999999, marginTop: wp('-11.5%'), marginLeft: wp('70%') }} onPress={this.setPasswordVisibility}>
+                                        {this.state.hidePassword === true ?
+                                            <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
+                                            :
+                                            <FontAwesome5 style={styles.hideIcon} name={'eye'} />
+
+                                        }
+                                    </TouchableOpacity>
+                                    <Text style={main.labelContainer}>Re-enter New Password *</Text>
+                                    {/* <View style={{ flexDirection: 'row' }}> */}
+                                    <TextInput
+                                        onSubmitEditing={this.onSubmit}
+                                        ref="confirmPassword"
+                                        style={main.passwordContainer}
+                                        textColor='white'
+                                        baseColor="white"
+                                        tintColor="white"
+                                        secureTextEntry={true}
+                                        onChangeText={text => this.handleChange('confirmPassword', text)}
+                                    />
+                                    {/* <TextField
+                                            label='Re-enter New Password *'
+                                            ref="confirmPassword"
+                                            containerStyle={{ width: wp('80%'), height: hp('11%') }}
+                                            textColor='#FF7200'
+                                            baseColor="black"
+                                            tintColor="#FF7200"
+                                            secureTextEntry={true}
+                                            onChangeText={text => this.handleChange('confirmPassword', text)}
+                                        /> */}
+                                    {this.state.passwordInvalid == true ? (
+                                        <Text style={{ color: 'red' }}>Please enter strong password.</Text>
+                                    ) : (
+                                            <View></View>
+                                        )}
+                                    {this.state.passwordMismatch == true ? (
+                                        <Text style={{ color: 'red' }}>Password mismatch!</Text>
+                                    ) : (
+                                            <View></View>
+                                        )}
+                                    {this.state.fieldNotEmpty == true ? (
+                                        <Text style={{ color: 'red' }}>Please enter all values.</Text>
+                                    ) : (
+                                            <View></View>
+                                        )}
+                                    {this.state.isInvalid == true ? (
+                                        <Text style={{ color: 'red' }}>Incorrect Old Password!</Text>
+                                    ) : (
+                                            <View></View>
+                                        )}
+                                </View>
+                                <View style={main.primaryButtonContanier}>
+                                    <TouchableOpacity onPress={() => this.requireField()}>
+                                        <Text style={main.primaryButtonText}>Update</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </ScrollView>}
+                    </React.Fragment >
+                }</RadialGradient>
         );
     }
 }
@@ -233,8 +261,8 @@ export default class updatePassword extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
         flex: 1,
+        marginTop: wp('-10%')
     },
     TitleDiv: {
         alignItems: 'center',
@@ -252,9 +280,10 @@ const styles = StyleSheet.create({
         marginTop: 5,
     },
     TextInputDiv: {
-        alignItems: 'center',
-        marginTop: wp('10%'),
-        marginBottom: wp('35%')
+        // alignItems: 'center',
+        marginLeft: wp('10%'),
+        marginTop: wp('-16%'),
+        marginBottom: wp('20%')
     },
     ForgotPassDiv: {
         left: 210,
@@ -323,10 +352,11 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
     },
     hideIcon: {
-        fontSize: 18,
-        color: '#000',
-        marginTop: wp('11.7%'),
-        paddingBottom: wp('2%'),
-        borderBottomColor: '#000', borderBottomWidth: 0.5,
+        color: '#fff',
+        padding: wp('2%'),
+        fontSize: 18
+    },
+    logo: {
+        left: 55,
     },
 });

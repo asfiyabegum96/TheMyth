@@ -14,7 +14,8 @@ import Comments from '../topTabHomeFeed/comments';
 import sideNavigator from './sideDrawerNavigator'
 import editProfile from '../sideDrawer/editProfile'
 import updatePassword from '../sideDrawer/updatePassword';
-import account from '../sideDrawer/accountSettings';
+import privacySettings from '../sideDrawer/privacySettings';
+import accountSettings from '../sideDrawer/accountSettings'
 import search from '../topTabHomeFeed/search';
 
 const AppNavigator = createStackNavigator({
@@ -30,9 +31,19 @@ const AppNavigator = createStackNavigator({
         screen: signup,
         navigationOptions: { header: null },
     },
-    account: {
-        screen: account,
-        navigationOptions: { headerTitle: 'Account Settings' }
+    privacySettings: {
+        screen: privacySettings,
+        navigationOptions: {
+            headerTitle: 'Privacy',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+        }
+    },
+    accountSettings: {
+        screen: accountSettings,
+        navigationOptions: {
+            headerTitle: 'Account',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+        }
     },
     editProfile: {
         screen: editProfile,
@@ -44,7 +55,10 @@ const AppNavigator = createStackNavigator({
     },
     updatePassword: {
         screen: updatePassword,
-        navigationOptions: { headerTitle: 'Update Password' }
+        navigationOptions: {
+            headerTitle: 'Update Password',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+        }
     },
     signup: {
         screen: signup,
@@ -75,7 +89,7 @@ const AppNavigator = createStackNavigator({
     },
     bottomTab: {
         screen: TabNavigator,
-        navigationOptions: { headerTitle: 'Add a photo' },
+        navigationOptions: { headerTitle: 'Add a photo', headerTitleStyle: { fontSize: 17 } },
     },
     chat: {
         screen: chatLanding,
@@ -93,7 +107,7 @@ const AppNavigator = createStackNavigator({
         screen: sideNavigator,
         navigationOptions: {
             headerTitle: 'Settings',
-            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white' },
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
         },
     },
 });
