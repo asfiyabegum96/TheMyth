@@ -1,4 +1,5 @@
 <resources>
-    <color name="white">#FFF</color>
+    <color name="white">#EE6E3D</color>
     <color name="primary_dark">#FFF</color>
+    <color name="myth">#EE6E3D</color>
 </resources>
