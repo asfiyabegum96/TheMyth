@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  Image
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -23,6 +24,8 @@ import MasonryList from "react-native-masonry-list";
 import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react-native"
 import firebase from 'react-native-firebase';
 import { SearchBar } from 'react-native-elements';
+import main from "../authentication/styles/main";
+
 
 
 export default class profile extends React.Component {
@@ -225,7 +228,7 @@ export default class profile extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
+      <View style={{ flex: 1, backgroundColor: '#fff6f2' }}>
         {this.props.navigation.state.params.isSameProfile === true ? <View></View> : (
           <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', { selectedItem: this.state.user, userDetails: this.state.user, email: this.props.navigation.state.params.email })}
             style={styles.fabDiv}>
@@ -233,69 +236,63 @@ export default class profile extends React.Component {
               <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />
             </View>
           </TouchableOpacity>)}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
-            <Icon name={'home'} size={30} color="#fff" />
-          </TouchableOpacity>
-          <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#FF7200', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
-            placeholderTextColor="#fff"
-            inputStyle={{ color: '#fff' }}
-            onFocus={() => this.updateSearch()}
-          />
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('sideNavigator', { email: this.props.navigation.state.params.email })}>
-            <MaterialCommunityIcons name="settings" size={35} color="#fff" />
-          </TouchableOpacity>
-        </View>
+   
         <ScrollView>
-          <View style={{ backgroundColor: '#FF7200', paddingBottom: wp('3%') }}>
-            <View style={{ flexDirection: 'row', marginLeft: wp('10%'), alignItems: 'center' }}>
-              <UserAvatar size="70" name="Avishay Bar"
+          <View style={{ backgroundColor: '#fff6f2', paddingBottom: wp('3%') }}>
+            <View style={{ flexDirection: 'row', marginLeft: wp('37%'), alignItems: 'center',marginTop: wp('10%') }}>
+                    <Image
+                       source={require('../images/dp.jpg')}
+                        style={{
+                          width: wp('30%'),
+                          height: hp('15%'),
+                          resizeMode: 'cover',
+                          borderRadius: wp('5%'), borderWidth: 1.5, borderColor: 'white'
+                        }} 
                 src={this.state.user.profilePicture} />
               <Text style={styles.profileName}>{this.state.user.fullName}</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginLeft: wp('32%'), backgroundColor: '#FF7200', paddingBottom: wp('3%') }}>
+            <View style={{ flexDirection: 'row', marginLeft: wp('46%'),marginTop: wp('10%') }}>
               <Text style={{
                 fontSize: hp('2%'),
                 marginLeft: 4,
-                color: '#fff',
-                marginTop: wp('-10%'),
+                color: 'black',
               }} >{this.state.user.description}</Text>
             </View>
           </View>
-
-          <View style={styles.countDiv}>
-            <View style={styles.but}>
-              <Text style={styles.followTextStyle}>Followers</Text>
-              <Text style={styles.butText}>{this.state.followersCount}</Text>
-            </View>
-            <View style={styles.butFollow}>
-              <Text style={styles.followTextStyle}>Following</Text>
-              <Text style={styles.butText}>{this.state.followingCount}</Text>
-            </View>
-          </View>
-          <View style={styles.countDivs}>
-            {this.props.navigation.state.params.isSameProfile === true ?
-              <View style={styles.circleFirst}>
-                <View style={styles.follow}>
-                  <Text style={{
-                    color: '#FF7200',
-                    fontSize: wp('5%'),
-                    paddingTop: wp('1.8%')
-                  }}>{this.state.images.length}</Text>
-                </View>
-              </View> :
-              <TouchableOpacity style={{ paddingTop: wp('8%'), width: wp('10%') }} onPress={() => { this.followPressed() }}>
-                <View style={styles.circle}>
-                  <View style={styles.follow}>
-                    {this.state.followText === '+' ?
-                      <FontAwesome5 style={{ color: '#ff7200', paddingTop: wp('2.8%') }} name='plus' size={15} /> :
-                      <FontAwesome5 style={{ color: '#ff7200', paddingTop: wp('2.8%') }} name='check' size={15} />}
-                  </View>
-                </View>
+          <View style={{flexDirection: 'row'}}>
+           <View style={styles.following}>
+              <TouchableOpacity onPress={() => this.requireField()}>
+                <Text style={styles.followingtext}>Following</Text>
               </TouchableOpacity>
+            </View>
+           <View style={styles.following}>
+              <TouchableOpacity onPress={() => this.requireField()}>
+                <Text style={styles.followingtext1}>Whisper</Text>
+              </TouchableOpacity>
+            </View>
+            </View>
+            <View style={{flex: 1, flexDirection: 'row', marginBottom: '-20%', justifyContent: 'center', alignItems: 'center'}}>
+      
+              <Text style={styles.followBox1}>245</Text>
+              <Text style={styles.followBox2}>376</Text>
+              <Text style={styles.followBox3}>120</Text>
+        
+            </View>
 
-            }
-          </View>
+            <View style={{flexDirection: 'row', marginBottom: '-20%'}}>
+      
+              <Text style={styles.followBox4}>Followers</Text>
+              <Text style={styles.followBox5}>Following</Text> 
+              <Text style={styles.followBox6}>Post</Text>
+        
+            </View>
+     <View style={{flexDirection: 'row', marginBottom: '-30%'}}>
+      
+              <Text style={styles.posts}>Posts</Text>
+              <Text style={styles.diary}>Diary</Text> 
+             
+        
+            </View>
           <View style={{ padding: 10, marginTop: wp('32%') }}>
             {this.state.loading == true ? (
               <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
@@ -303,7 +300,7 @@ export default class profile extends React.Component {
               </View>
             ) : (
                 <MasonryList
-                  backgroundColor={'#fff'}
+                  backgroundColor={'#E3BC9A'}
                   onRefresh={this.fetchImages}
                   columns={3}
                   images={this.state.images}
@@ -358,12 +355,117 @@ const styles = StyleSheet.create({
     height: hp('4%')
   },
   profileName: {
-    fontSize: hp('3%'),
+    fontSize: hp('2.5%'),
     fontWeight: 'bold',
-    color: '#fff',
-    marginLeft: wp('5%'),
-    marginTop: wp('-10%')
+    color: '#FF7200',
+    marginLeft: wp('-23%'),
+    marginTop: wp('20%'),
+    marginBottom: wp('-20%'),
+
+},
+
+followBox1:{
+
+      fontSize: hp('2%'),
+    fontWeight: 'bold',
+    color: '#FF7200',
+    marginLeft: wp('3%'),
+    justifyContent: 'space-between',
+    marginBottom: wp('-10%'),
   },
+  followBox2:{
+
+      fontSize: hp('2%'),
+    fontWeight: 'bold',
+    color: '#FF7200',
+    marginLeft: wp('21%'),
+    justifyContent: 'space-between',
+    marginBottom: wp('-10%'),
+  },
+  followBox3:{
+
+      fontSize: hp('2%'),
+    fontWeight: 'bold',
+    color: '#FF7200',
+    marginLeft: wp('20%'),
+    justifyContent: 'space-between',
+    marginBottom: wp('-10%'),
+  },
+    followBox4:{
+
+      fontSize: hp('2%'),
+    fontWeight: 'bold',
+    color: '#FF7200',
+    marginLeft: wp('15%'),
+    justifyContent: 'space-between',
+    marginTop: wp('35%'),
+  },
+  followBox5:{
+
+      fontSize: hp('2%'),
+    fontWeight: 'bold',
+    color: '#FF7200',
+    marginLeft: wp('11%'),
+    justifyContent: 'space-between',
+    marginTop: wp('35%'),
+  },
+    followBox6:{
+
+      fontSize: hp('2%'),
+    fontWeight: 'bold',
+    color: '#FF7200',
+    marginLeft: wp('14%'),
+    justifyContent: 'space-between',
+    marginTop: wp('35%'),
+  },
+      posts:{
+
+      fontSize: hp('2%'),
+    fontWeight: 'bold',
+    color: 'black',
+    marginLeft: wp('15%'),
+    justifyContent: 'space-between',
+    marginTop: wp('30%'),
+  },
+      diary:{
+
+      fontSize: hp('2%'),
+    fontWeight: 'bold',
+    color: 'black',
+    marginLeft: wp('50%'),
+    justifyContent: 'space-between',
+    marginTop: wp('30%'),
+  },
+    following: {
+        width: wp('40%'),
+        backgroundColor: '#FF7200',
+        marginLeft: wp('7%'),
+        alignItems: 'center',
+        marginTop: wp('1%'),
+        borderRadius: wp('2%'),
+        borderWidth: 2,
+        borderColor: '#FF7200',
+    },
+       followingtext: {
+        color: 'white',
+        width: wp('80%'),
+        alignItems: 'center',
+        fontSize: hp('2%'),
+        marginLeft: wp('48%'),
+        paddingVertical: 8,
+        paddingHorizontal: 25,
+        fontWeight: 'bold',
+    },
+       followingtext1: {
+        color: 'white',
+        width: wp('80%'),
+        alignItems: 'center',
+        fontSize: hp('2%'),
+        marginLeft: wp('50%'),
+        paddingVertical: 8,
+        paddingHorizontal: 25,
+        fontWeight: 'bold',
+    },
   follow: {
     alignItems: 'center',
     backgroundColor: '#fff',

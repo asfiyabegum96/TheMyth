@@ -9,8 +9,7 @@ import {
     TextInput,
     ActivityIndicator
 } from 'react-native';
-import {
-    widthPercentageToDP as wp,
+import {     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 }
     from 'react-native-responsive-screen';
@@ -194,14 +193,7 @@ export default class Comments extends Component {
     render() {
         return (
             <View style={styles.mainContainer}>
-                <View style={styles.viewcomment}>
-                    <Image style={styles.myimage} source={{ uri: this.state.userDetails.profilePicture }} />
-                    <TextInput value={this.state.commentText}
-                        onChangeText={(commentText) => { this.setState({ commentText }) }} placeholder="Your comments..." placeholderTextColor='#FF7200' multiline={true} style={styles.inputStyle} />
-                    <TouchableOpacity onPress={this.insertComment} style={styles.butText}>
-                        <Text style={styles.buttonText}>Comment</Text>
-                    </TouchableOpacity>
-                </View>
+               
                 {this.state.loading == true ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <ActivityIndicator size="large" color='red' />
@@ -231,16 +223,25 @@ export default class Comments extends Component {
                                         <View style={styles.content}>
                                             <View style={styles.contentHeader}>
                                                 <Text style={styles.name}>{Notification.name}</Text>
-                                                <Text style={styles.time}>
+                                               <Text style={styles.commentSection} rkType='primary3 mediumLine'>{Notification.comment}</Text>
+                                            </View>
+                                           
+                                              <Text style={styles.time}>
                                                     {Notification.postedTime}
                                                 </Text>
-                                            </View>
-                                            <Text style={styles.commentSection} rkType='primary3 mediumLine'>{Notification.comment}</Text>
                                         </View>
                                     </View>
                                 );
                             }} />
                     )}
+                     <View style={styles.viewcomment}>
+                    <Image style={styles.myimage} source={{ uri: this.state.userDetails.profilePicture }} />
+                    <TextInput value={this.state.commentText}
+                        onChangeText={(commentText) => { this.setState({ commentText }) }} placeholder="Comment as Ashwin..." placeholderTextColor='#808080' multiline={true} style={styles.inputStyle} />
+                    <TouchableOpacity onPress={this.insertComment} style={styles.butText}>
+                        <Text style={styles.buttonText}>Comment</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -248,8 +249,9 @@ export default class Comments extends Component {
 
 const styles = StyleSheet.create({
     root: {
-        backgroundColor: '#fff',
+        backgroundColor: 'white',
         paddingTop: wp('1%'),
+        maxHeight: hp('80%'),
     },
     container: {
         // paddingLeft: 19,
@@ -270,13 +272,13 @@ const styles = StyleSheet.create({
     separator: {
         height: wp('0.1%'),
         marginLeft: wp('20%'),
-        backgroundColor: '#FF7200',
+        backgroundColor: 'white',
         width: wp('71%'),
     },
     image: {
         width: 45,
         height: 45,
-        borderRadius: 20,
+        borderRadius: 10,
         marginLeft: 20
     },
     time: {
@@ -285,39 +287,47 @@ const styles = StyleSheet.create({
         marginRight: wp('5%')
     },
     name: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: "bold",
-        color: '#FF7200'
+        color: 'black',
+          width: 70
     },
     commentSection: {
-        color: "#FF7200",
+        color: "black",
+           marginRight: wp('50%'),
+             marginTop: wp('0%'),
+             fontSize: 14
     },
     viewcomment: {
-        backgroundColor: '#fff',
-        flexDirection: 'row'
+        backgroundColor: '#fff6f2',
+        borderRadius: 10,
+        flexDirection: 'row',
+     left: '2%',
+     marginRight: wp('8%'),
+      marginBottom: wp('10%'),
+        paddingBottom: wp('2%')
     },
     butText: {
         color: '#22222C',
         marginTop: wp('5%'),
-        borderBottomColor: '#FF7200', // Add this to specify bottom border color
-        borderBottomWidth: wp('0.1%')
+       
     },
     inputStyle: {
         marginLeft: wp('4%'),
         width: wp('55%'),
-        color: '#FF7200',
-        borderBottomColor: '#FF7200', // Add this to specify bottom border color
-        borderBottomWidth: wp('0.1%')
+        color: 'black',
+      
     },
     buttonText: {
-        color: '#FF7200'
+        color: '#FF7200',
+         marginLeft: wp('-6%')
     },
     myimage: {
         width: 45,
         height: 45,
-        borderRadius: 20,
-        marginLeft: wp('5%'),
-        marginTop: wp('3%'),
+        borderRadius: 10,
+        marginLeft: wp('4%'),
+        marginTop: wp('2%'),
     },
     mainContainer: {
         height: 762
