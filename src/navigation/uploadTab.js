@@ -79,6 +79,7 @@ class photosUpload extends React.Component {
     }
     // pick image from imagepicker
     selectImage = () => {
+        console.log('inside');
         const options = {
             title: 'Food Upload',
             storageOptions: {
@@ -318,60 +319,72 @@ class photosUpload extends React.Component {
 
     render() {
         return (
-            <ScrollView keyboardShouldPersistTaps={true} style={{ flex: 1, padding: wp('3%'),backgroundColor: '#fff6f2' }}>
+            <ScrollView keyboardShouldPersistTaps={true} style={{ flex: 1, padding: wp('3%'), backgroundColor: '#fff6f2' }}>
                 <View style={styles.logo}>
-                    <Image
-                        source={require('../images/icecream.jpg')}
-                        style={{
-                            width: wp('65%'),
-                            height: hp('45%'),
-                            borderRadius: wp('5%'),
-                            resizeMode: 'cover',
-                            marginLeft: wp('0%'),
-                            marginTop: wp('5%'),
-                              marginBottom: wp('5%')
-                        }} />
+                    {
+                        this.state.uri ?
+                            <Image
+                                source={{ uri: this.state.uri }}
+                                style={{
+                                    width: wp('65%'),
+                                    height: hp('45%'),
+                                    borderRadius: wp('5%'),
+                                    resizeMode: 'cover',
+                                    marginLeft: wp('0%'),
+                                    marginTop: wp('5%'),
+                                    marginBottom: wp('5%')
+                                }} /> :
+                            <Image
+                                source={require('../images/icecream.jpg')}
+                                style={{
+                                    width: wp('65%'),
+                                    height: hp('45%'),
+                                    borderRadius: wp('5%'),
+                                    resizeMode: 'cover',
+                                    marginLeft: wp('0%'),
+                                    marginTop: wp('5%'),
+                                    marginBottom: wp('5%')
+                                }} />}
                 </View>
-                 <View style={styles.edit}>
-                    <Image
-                        source={require('../images/person.png')}
-                        style={{
-                            width: wp('15%'),
-                            height: wp('15%'),
-                           
-                            resizeMode: 'cover',
-                          marginLeft: wp('-10%'),
-                            marginTop: wp('-15%'),
-                              marginBottom: wp('5%')
-                        }} />
+                <View style={styles.edit}>
+                    <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={this.selectImage}>
+                        <Image
+                            source={require('../images/person.png')}
+                            style={{
+                                width: wp('15%'),
+                                height: wp('15%'),
+
+                                resizeMode: 'cover',
+                            }} />
+                    </TouchableOpacity>
                 </View>
-       
+
                 <View style={{ paddingVertical: wp('1%'), backgroundColor: '#fff6f2' }}>
-                   
+
                     <Text style={styles.labelContainer}>Caption</Text>
-              <TextInput
-                ref={input => { this.fieldRef = input }}
-                maxLength={150}
-                style={styles.inputContainer}
-                textColor='white'
-                baseColor="white"
-                tintColor="white"
-                onChangeText={(text) => this.setState({ caption: text })}
-                value={this.state.caption}
-              />
+                    <TextInput
+                        ref={input => { this.fieldRef = input }}
+                        maxLength={150}
+                        style={styles.inputContainer}
+                        textColor='white'
+                        baseColor="white"
+                        tintColor="white"
+                        onChangeText={(text) => this.setState({ caption: text })}
+                        value={this.state.caption}
+                    />
 
 
-                       <Text style={styles.labelContainer}>Location</Text>
-              <TextInput
-                ref={input => { this.fieldRef = input }}
-                maxLength={150}
-                style={styles.inputContainer}
-                textColor='white'
-                baseColor="white"
-                tintColor="white"
-                onChangeText={(text) => this.setState({ location: text })}
-                value={this.state.location}
-              />
+                    <Text style={styles.labelContainer}>Location</Text>
+                    <TextInput
+                        ref={input => { this.fieldRef = input }}
+                        maxLength={150}
+                        style={styles.inputContainer}
+                        textColor='white'
+                        baseColor="white"
+                        tintColor="white"
+                        onChangeText={(text) => this.setState({ location: text })}
+                        value={this.state.location}
+                    />
                 </View>
                 <View>
                     {this.state.uploading == true ? (
@@ -400,7 +413,7 @@ class photosUpload extends React.Component {
                 <View style={styles.uploadImageStyle}>
                     <TouchableOpacity style={styles.uploadButton} onPress={() => this.uploadImage()}>
                         <View>
-                            
+
                         </View>
                         <View>
                             <Text style={styles.buttonText}>Post</Text>
@@ -447,14 +460,14 @@ const styles = StyleSheet.create({
     logo: {
         left: 55,
     },
-      edit: {
-          left: 280,
+    edit: {
+        left: 280,
 
     },
     inputContainer: {
         width: wp('94%'), height: hp('6%'), marginBottom: wp('3%'), backgroundColor: 'white', borderColor: 'white', borderWidth: 1.5, borderRadius: wp('2%'),
     },
-       labelContainer: {
+    labelContainer: {
         textAlign: 'left', color: 'black', paddingBottom: wp('2%')
     },
     uploadImageStyle: {
@@ -465,8 +478,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: wp('0.5%'),
         borderColor: '#FF7200',
-         width: wp('50%'),
-         marginLeft:75
+        width: wp('50%'),
+        marginLeft: 75
 
 
     },

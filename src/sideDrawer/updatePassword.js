@@ -283,7 +283,7 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         marginLeft: wp('10%'),
         marginTop: wp('-16%'),
-        marginBottom: wp('20%')
+        marginBottom: wp('25%')
     },
     ForgotPassDiv: {
         left: 210,

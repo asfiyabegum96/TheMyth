@@ -192,13 +192,13 @@ const styles = {
 	},
 	deactivateStyle: {
 		padding: wp('6%'),
-		marginLeft: wp('35%'),
+		marginLeft: wp('30%'),
 		color: 'white',
 		fontWeight: 'bold'
 	},
 	separator: {
 		borderTopColor: '#fff', borderTopWidth: 0.5,
-		marginTop: wp('60%'),
+		marginTop: wp('90%'),
 		marginLeft: wp('10&'),
 		marginRight: wp('10&')
 	}
