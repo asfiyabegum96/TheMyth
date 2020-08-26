@@ -101,7 +101,7 @@ export default class Home extends React.Component {
             </View>
             <View style={main.buttonContainer}>
               <TouchableOpacity onPress={() => this.signUp()}>
-                <Text style={main.buttonText}>Sign up</Text>
+                <Text style={main.buttonText}>Sign Up</Text>
               </TouchableOpacity>
             </View>
 

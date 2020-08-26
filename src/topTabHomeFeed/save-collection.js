@@ -9,6 +9,7 @@ import {
 }
     from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
+import main from '../authentication/styles/main'
 export default class SaveCollection extends Component {
     constructor(props) {
         super(props)
@@ -115,19 +116,22 @@ export default class SaveCollection extends Component {
 
     render() {
         return (
-            <ScrollView style={{ backgroundColor: '#fff' }}>
+            <ScrollView style={{ backgroundColor: '#fff6f2' }}>
                 <View style={{ padding: 10, minHeight: hp('50%') }}>
                     {this.state.loading == true ? (
                         <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
                             <ActivityIndicator size="large" color='red' />
                         </View>
                     ) : (
-                            <View style={{ flex: 1}}>
+                            <View style={{ flex: 1 }}>
                                 {this.state.images.length > 0 ?
                                     <MasonryList
                                         rerender={true}
                                         masonryFlatListColProps={{ refreshing: this.state.feedRefresh, onRefresh: () => this.fetchUserDetails() }}
-                                        backgroundColor={'#fff'}
+                                        backgroundColor={'#fff6f2'}
+                                        listContainerStyle={{ marginLeft: wp('3%') }}
+                                        imageContainerStyle={main.imagesContainer}
+                                        spacing={2}
                                         columns={3}
                                         images={this.state.images}
                                         keyExtractor={(item, index) => index.toString()}

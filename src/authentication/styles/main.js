@@ -101,6 +101,7 @@ const main = StyleSheet.create({
         width: wp('50%'), height: hp('6%'), borderColor: 'white', marginBottom: wp('2%'),
         borderWidth: 1.5, borderRadius: wp('2%'), color: '#fff'
     },
+    imagesContainer: { borderRadius: 10, borderWidth: 1.5, borderColor: 'white', height: hp('15%'), width: wp('27%') }
 });
 
 export default main;

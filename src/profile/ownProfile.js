@@ -25,6 +25,7 @@ import { Collapse, CollapseHeader, CollapseBody } from "accordion-collapse-react
 import firebase from 'react-native-firebase';
 import { SearchBar } from 'react-native-elements';
 import main from "../authentication/styles/main";
+import PostTab from './postTab';
 
 
 
@@ -36,7 +37,7 @@ export default class profile extends React.Component {
       images: [],
       loading: true,
       navProps: props.navigation.state.params,
-      followText: '+',
+      followText: 'Follow',
       followersCount: 0,
       followingCount: 0
     }
@@ -62,7 +63,7 @@ export default class profile extends React.Component {
     } else {
       email = params.searchedEmail
       if (params.isFollowed === true) {
-        this.setState({ followText: '-' })
+        this.setState({ followText: 'Following' })
       }
     }
     photosRef.where('email', '==', email).get().then(function (querySnapshot) {
@@ -213,13 +214,13 @@ export default class profile extends React.Component {
 
   updateFollowers(userData, searchedUserData) {
     let db = firebase.firestore();
-    if (this.state.followText === '+') {
-      this.setState({ followText: '-' });
+    if (this.state.followText === 'Follow') {
+      this.setState({ followText: 'Following' });
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => console.log('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
 
     } else {
-      this.setState({ followText: '+' })
+      this.setState({ followText: 'Follow' })
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => console.log('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).update({ email: userData.email.trim() + '_removed' })
 
@@ -263,62 +264,48 @@ export default class profile extends React.Component {
                 src={this.state.user.profilePicture} />
               <Text style={styles.profileName}>{this.state.user.fullName}</Text>
             </View>
-            <View style={{ flexDirection: 'row', marginLeft: wp('46%'), marginTop: wp('10%') }}>
+            <View style={{ flexDirection: 'row', marginLeft: wp('40%'), marginTop: wp('10%') }}>
               <Text style={{
                 fontSize: hp('2%'),
-                marginLeft: 4,
                 color: 'black',
               }} >{this.state.user.description}</Text>
             </View>
           </View>
-          <View style={{ flexDirection: 'row' }}>
-            <View style={styles.following}>
-              <TouchableOpacity onPress={() => this.requireField()}>
-                <Text style={styles.followingtext}>Following</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.following}>
-              <TouchableOpacity onPress={() => this.requireField()}>
-                <Text style={styles.followingtext1}>Whisper</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-20%', justifyContent: 'center', alignItems: 'center' }}>
+          {this.props.navigation.state.params.isSameProfile === false ?
+            <View style={{ flexDirection: 'row' }}>
+              <View style={styles.following}>
+                <TouchableOpacity onPress={() => this.followPressed()}>
+                  <Text style={styles.followingtext}>{this.state.followText}</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.following}>
+                <TouchableOpacity >
+                  <Text style={styles.followingtext1}>Whisper</Text>
+                </TouchableOpacity>
+              </View>
+            </View> : <View></View>}
+          <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-15%', justifyContent: 'center', alignItems: 'center' }}>
 
-            <Text style={styles.followBox1}>245</Text>
-            <Text style={styles.followBox2}>376</Text>
-            <Text style={styles.followBox3}>120</Text>
+            <Text style={styles.followBox1}>{this.state.followersCount}</Text>
+            <Text style={styles.followBox2}>{this.state.followingCount}</Text>
+            <Text style={styles.followBox3}>{this.state.images.length}</Text>
 
           </View>
 
           <View style={{ flexDirection: 'row', marginBottom: '-20%' }}>
-
             <Text style={styles.followBox4}>Followers</Text>
             <Text style={styles.followBox5}>Following</Text>
             <Text style={styles.followBox6}>Post</Text>
-
           </View>
-          <View style={{ flexDirection: 'row', marginBottom: '-30%' }}>
 
-            <Text style={styles.posts}>Posts</Text>
-            <Text style={styles.diary}>Diary</Text>
-
-
-          </View>
-          <View style={{ padding: 10, marginTop: wp('32%') }}>
+          <View style={{ padding: 10, marginTop: wp('32%'), }}>
             {this.state.loading == true ? (
               <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color='red' />
               </View>
             ) : (
-                <MasonryList
-                  backgroundColor={'#E3BC9A'}
-                  onRefresh={this.fetchImages}
-                  columns={3}
-                  images={this.state.images}
-                  onLongPressImage={(item, index) => this.confirmDelete(item, index)}
-                  onPressImage={(item) => this.props.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.navigation.state.params.email.trim(), viewSpecificPhotos: true })}
-                />)}
+                <PostTab screenProps={{ navigation: this.props.navigation, email: this.props.navigation.state.params.email.trim() }}></PostTab>
+              )}
           </View>
         </ScrollView>
       </View>

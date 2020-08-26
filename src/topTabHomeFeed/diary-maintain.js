@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import {
     ActivityIndicator, View, ScrollView, Alert,
-    TouchableOpacity,
     FlatList,
     StyleSheet,
-    UserAvatar,
     Text,
     Image
 } from 'react-native';
@@ -17,6 +15,7 @@ import {
 }
     from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
+import main from '../authentication/styles/main'
 export default class DiaryMaintain extends Component {
     constructor(props) {
         super(props)
@@ -35,7 +34,7 @@ export default class DiaryMaintain extends Component {
     componentDidMount() {
         loc(this);
         this.props.navigation.setParams({
-            onFocus: () => {this.fetchUserDetails()}
+            onFocus: () => { this.fetchUserDetails() }
         })
         this.fetchUserDetails();
     }
@@ -140,7 +139,7 @@ export default class DiaryMaintain extends Component {
 
     render() {
         return (
-            <ScrollView style={{ backgroundColor: '#fff' }}>
+            <ScrollView style={{ backgroundColor: '#fff6f2' }}>
                 <View style={{ padding: 10, minHeight: hp('50%') }}>
                     {this.state.loading == true ? (
                         <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
@@ -179,7 +178,10 @@ export default class DiaryMaintain extends Component {
                         />) : (
                             <MasonryList
                                 masonryFlatListColProps={{ refreshing: this.state.feedRefresh, onRefresh: () => this.fetchImages() }}
-                                backgroundColor={'#fff'}
+                                backgroundColor={'#fff6f2'}
+                                listContainerStyle={{ marginLeft: wp('3%') }}
+                                imageContainerStyle={main.imagesContainer}
+                                spacing={2}
                                 columns={3}
                                 images={this.state.images}
                                 keyExtractor={(item, index) => index.toString()}
