@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import Entypo from 'react-native-vector-icons/Entypo';
 import UserAvatar from 'react-native-user-avatar';
 import {
   widthPercentageToDP as wp,
@@ -417,13 +418,25 @@ export default class mainFeed extends React.Component {
                   <View style={styles.feedBorder}>
                     <View style={styles.listHeader}>
                       <TouchableOpacity onPress={() => this.viewOtherUserProfiles({ item })} style={{ paddingHorizontal: 10, }}>
-                        <UserAvatar size="50" name={item.author}
-                          src={item.userAvatar}
-                        />
+                       <Image
+                source={require('../images/dp.jpg')}
+                style={{
+                  width: wp('15%'),
+                  height: hp('8%'),
+                  resizeMode: 'cover',
+                  borderRadius: wp('3%'), borderWidth: 1,marginLeft: wp('2%'),marginTop: wp('-5%'),
+                }}/>
                       </TouchableOpacity>
+
                       <TouchableOpacity>
                         <Text style={styles.listProfileName}>{item.author}</Text>
-                        <Text style={styles.listProfileSubName}>{item.authorDescription}</Text>
+                         <View style={styles.locationDiv}>
+                      <Text style={styles.locationText}>{item.location}</Text>
+                          <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('3%') }}>
+                        <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
+                      </TouchableOpacity>
+                    </View>
+                      
                       </TouchableOpacity>
                     </View>
                     <View style={styles.listViewImg}>
@@ -433,12 +446,9 @@ export default class mainFeed extends React.Component {
                         loadingIndicatorSource={require('../images/loading.gif')}
                       />
                     </View>
-                    <View style={styles.foodNameDiv}>
-                      <Text style={styles.foodNameText}>{item.caption}</Text>
-                    </View>
-                    <View style={styles.locationDiv}>
-                      <Text style={styles.locationText}>{item.location}</Text>
-                    </View>
+                 
+                       
+
                     <View style={{
                       flexDirection: 'row',
                       paddingHorizontal: wp('2%'),
@@ -446,33 +456,43 @@ export default class mainFeed extends React.Component {
                       marginLeft: wp('1.3%')
                     }}>
                       <TouchableWithoutFeedback onPress={() => this.onLikePost({ item, index })} >
-                        <Animated.View style={heartButtonStyle}>
-                          <Heart filled={item.isLiked} />
-                        </Animated.View>
+                    <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('1%') }}>
+                        <FontAwesome5 style={styles.comment} name="cookie-bite" size={22} color="#808080" />
+                      </TouchableOpacity>
                       </TouchableWithoutFeedback>
                       <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('1%') }}>
-                        <Fontisto style={styles.comment} name="comment" size={22} color="#22222C" />
+                        <Fontisto style={styles.comment} name="commenting" size={22} color="#808080" />
                       </TouchableOpacity>
                       {item.isSaved === true ?
                         <TouchableOpacity onPress={() => { this.deleteCollection({ item, index }) }} style={{ paddingLeft: wp('1%') }}>
-                          <Fontisto name="bookmark-alt" size={22} color="#FF7200" />
+                          <FontAwesome5 name="bookmark" size={22} color="#808080" />
                         </TouchableOpacity> :
-                        <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, false)} style={{ paddingLeft: wp('1%') }}>
-                          <Fontisto name="bookmark" size={22} />
+                        <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, false)} style={{ paddingLeft: wp('3%') }}>
+                          <FontAwesome5 name="bookmark" size={22} color="#808080" />
                         </TouchableOpacity>
                       }
-                      <TouchableOpacity onPress={() => this.sendImage({ item, index })} style={{ paddingLeft: wp('1%') }}>
-                        <FontAwesome5 style={styles.fabIcon} name="telegram-plane" size={22} />
+                      <TouchableOpacity onPress={() => this.sendImage({ item, index })} style={{ flexDirection: 'row', }}>
+                        <FontAwesome5 style={styles.fabIcon} name="cookie-bite" size={22} />
+                        <FontAwesome5 style={styles.fabIcon} name="telegram-plane" size={22} color="#808080" />
+
                       </TouchableOpacity>
                       <View>
                       </View>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginLeft: wp('2%') }}>
+                    <View style={{ flexDirection: 'row',marginLeft: wp('5%') }}>
+                    
                       <Text style={styles.likeText}>{item.likes} likes</Text>
-                      <Text style={{ marginRight: wp('4%') }}>{item.postedTime}</Text>
+                      
                     </View>
                   </View>
+
+                    <View style={styles.foodNameDiv}>
+                    <Text style={styles.listProfileName1}>{item.author}</Text>
+                      <Text style={styles.foodNameText}>{item.caption}</Text>
+                    </View>
+                  <Text style={{ marginLeft: wp('5%'),marginBottom: wp('5%'),fontSize: hp('1.5%'),color:'#808080' }}>{item.postedTime}</Text>
                 </View>
+
               )}
             />
           )}
@@ -482,19 +502,25 @@ export default class mainFeed extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  feedBorder: {
-    borderBottomWidth: wp('0.1%'),
-    borderBottomColor: '#121212'
-  },
+
   listHeader: {
     flexDirection: 'row',
-    marginTop: hp('1%')
+    marginTop: hp('3%')
   },
   listProfileName: {
-    fontSize: hp('3%'),
+    fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#22222C',
-    marginRight: wp('5%')
+    marginRight: wp('5%'),
+      marginTop: wp('-3%'),
+         marginBottom: wp('-2%'),
+  },
+    listProfileName1: {
+    fontSize: hp('2%'),
+    fontWeight: 'bold',
+    color: '#22222C',
+    marginLeft: wp('3%'),
+      marginTop: wp('-5%')
   },
   listProfileSubName: {
     color: '#22222C',
@@ -504,40 +530,50 @@ const styles = StyleSheet.create({
     paddingVertical: wp('2%'),
   },
   listViewInlineImg: {
-    width: wp('91%'),
-    height: wp('60%'),
-    marginLeft: wp('3.5%'),
+    width: wp('90%'),
+    height: wp('110%'),
+    marginLeft: wp('4%'),
     borderWidth: 1,
     borderRadius: wp('3%'),
   },
   foodNameDiv: {
-    left: 16,
+    left: 1,
+padding:7,
     flexDirection: 'row',
-    alignItems: 'baseline',
-  },
+    },
   foodNameText: {
-    fontSize: hp('2.5%'),
+    fontSize: hp('2%'),
+     left: 5,
+      marginTop: wp('-5%'),
+
   },
   locationDiv: {
-    left: 16,
+    left: 1,
     flexDirection: 'row',
     alignItems: 'baseline'
   },
   locationText: {
-    fontSize: hp('2.5%'),
-    fontWeight: 'bold'
+    fontSize: hp('1.5%'),
+  color: '#FF7200',
+
   },
   comment: {
     paddingHorizontal: wp('2%')
   },
+  more:{
+     marginLeft: wp('13%'),
+},
   likeText: {
-    paddingHorizontal: wp('2%'),
+     marginRight: wp('45%'),
     paddingBottom: wp('4%'),
+      marginTop: wp('-1%'),
   },
   fabIcon: {
     color: '#FF7200',
     fontSize: hp('2.5%'),
-    marginLeft: wp('60%'),
+    marginLeft: wp('40%'),
     fontSize: 26,
+        marginRight: wp('-35%'),
+ 
   },
 });
