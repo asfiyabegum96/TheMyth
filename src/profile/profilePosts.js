@@ -48,14 +48,12 @@ export default class ProfilePosts extends React.Component {
         let params = context.props.screenProps;
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
-        console.log('outside', params.email)
         photosRef.where('email', '==', params.email).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
                 if (docNotEmpty) data = (doc.id, " => ", doc.data());
                 context.setState({ user: doc.data() })
-                console.log('fetc')
                 context.fetchImages();
             })
         })
@@ -74,7 +72,6 @@ export default class ProfilePosts extends React.Component {
                     let data;
                     const docNotEmpty = (doc.id, " => ", doc.data() != null);
                     if (docNotEmpty) data = (doc.id, " => ", doc.data());
-                    console.log('inside', doc.data())
                     image.push({
                         URL: doc.data().url,
                         dimensions: { width: 900, height: 1050 },

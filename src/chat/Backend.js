@@ -71,7 +71,9 @@ class Backend {
                 user: message[i].user,
                 createdAt: new Date(),
             });
-            this.handlePrivateAccount(selectedItem, userEmail)
+            if (userEmail) {
+                this.handlePrivateAccount(selectedItem, userEmail)
+            }
             this.sendNotification(token, message[i].text, message[i].user.name);
         }
     }

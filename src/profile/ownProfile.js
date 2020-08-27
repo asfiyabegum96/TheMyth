@@ -264,6 +264,17 @@ export default class profile extends React.Component {
                 src={this.state.user.profilePicture} />
               <Text style={styles.profileName}>{this.state.user.fullName}</Text>
             </View>
+            <View style={{ marginLeft: wp('70%') }}>
+              <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
+                <Image
+                  source={require('../images/person.png')}
+                  style={{
+                    width: wp('15%'),
+                    height: wp('15%'),
+
+                    resizeMode: 'cover',
+                  }} />
+              </TouchableOpacity></View>
             <View style={{ flexDirection: 'row', marginLeft: wp('40%'), marginTop: wp('10%') }}>
               <Text style={{
                 fontSize: hp('2%'),

@@ -105,7 +105,10 @@ const AppNavigator = createStackNavigator({
     },
     chatScreen: {
         screen: chatScreen,
-        navigationOptions: {}
+        navigationOptions: {
+            headerTitle: 'Chat',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+        }
     },
     comments: {
         screen: Comments,

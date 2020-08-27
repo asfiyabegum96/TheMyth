@@ -199,8 +199,8 @@ const styles = {
 	separator: {
 		borderTopColor: '#fff', borderTopWidth: 0.5,
 		marginTop: wp('90%'),
-		marginLeft: wp('10&'),
-		marginRight: wp('10&')
+		marginLeft: wp('10%'),
+		marginRight: wp('10%')
 	}
 };
 

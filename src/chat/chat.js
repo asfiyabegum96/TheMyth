@@ -3,25 +3,35 @@ import {
     View,
     TouchableOpacity,
     ActivityIndicator,
-    AsyncStorage
+    AsyncStorage,
+    StyleSheet,
+    Image,
+    Text
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, InputToolbar, Composer, Time, Avatar } from 'react-native-gifted-chat';
 import ImagePicker from 'react-native-image-picker';
 import Backend from './Backend'
 import {
-    heightPercentageToDP as hp,
+    heightPercentageToDP as hp, widthPercentageToDP,
+}
+    from 'react-native-responsive-screen';
+
+import {
+    widthPercentageToDP as wp,
+    listenOrientationChange as loc,
+    removeOrientationListener as rol
 }
     from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
 
 export default class chatScreen extends React.Component {
     static navigationOptions = ({ navigation }) => ({
-        headerTitle: (navigation.state.params || {}).selectedItem.fullName || 'Chat! ',
+        headerTitle: 'Chat',
         headerRight:
             <TouchableOpacity onPress={() => navigation.state.params.handleImageClick()}>
                 <FontAwesome5 style={{
-                    color: '#FF7200',
+                    color: 'white',
                     fontSize: hp('3%'),
                     paddingRight: 8,
                     marginTop: 5,
@@ -171,11 +181,20 @@ export default class chatScreen extends React.Component {
                     right: {
                         color: 'white',
                     },
+                    right: {
+                        color: 'white',
+                    },
                 }}
+
                 wrapperStyle={{
                     right: {
                         backgroundColor: '#FF7200',
+                        marginBottom: 8,
                     },
+                    left: {
+                        backgroundColor: 'white',
+                        marginBottom: 8,
+                    }
                 }}
             />
         );
@@ -230,31 +249,96 @@ export default class chatScreen extends React.Component {
         });
         return earlierMessage;
     }
+    customtInputToolbar = props => {
+        return (
+            <InputToolbar
+                {...props}
+                containerStyle={{
+                    backgroundColor: "white",
+                    borderColor: "white",
+                    borderTopColor: 'white',
+                    borderWidth: 1,
+                    borderRadius: 14,
+                    margin: 10,
+                    paddingLeft: 10
+                }}
+            />
+        );
+    };
+
+    renderAvatar(props) {
+        return (
+            <Avatar
+                {...props}
+                imageStyle={{
+                    left: {
+                        borderRadius: wp('3%'), borderWidth: 1,
+                    },
+                    right: {
+                        borderRadius: wp('3%'), borderWidth: 1,
+                    },
+                }
+                }
+            />
+        );
+    }
+
 
     render() {
         return (
-            <View style={{ flex: 1, }}>
+            <View style={{ flex: 1, backgroundColor: '#fff6f2' }}>
                 {this.state.loading == true ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <ActivityIndicator size="large" color='red' />
                     </View>
-                ) : (
-                        <GiftedChat
-                            messages={this.state.messages}
-                            onSend={(message) => {
-                                Backend.sendMessage(message, this.state.docRef, this.state.uri, this.state.token, this.state.selectedItem, this.state.userEmail)
-                            }}
-                            renderBubble={this.renderBubble}
-                            user={{
-                                _id: Backend.getUid(),
-                                name: this.state.userDetails.fullName,
-                                avatar: this.state.userDetails.profilePicture
-                            }}
-                            extraData={this.state}
-                            loadEarlier={this.state.messages.length >= 9}
-                            onLoadEarlier={this.onLoadEarlier}
-                            isLoadingEarlier={this.state.isLoadingEarlier}
-                        />
+                ) : (<>
+                    <View style={
+                        {
+                            // flex: 1,
+                            backgroundColor: '#fff6f2',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            height: widthPercentageToDP('40%'),
+                            // marginBottom: 150
+                        }}>
+                        <Image
+                            source={{ uri: this.state.selectedItem.profilePicture }}
+                            style={{
+                                width: wp('20%'),
+                                height: hp('10%'),
+                                resizeMode: 'cover',
+                                borderRadius: wp('3%'), borderWidth: 1, marginLeft: wp('2%'),
+                            }} />
+                        <Text style={{ marginTop: wp('5%'), fontWeight: 'bold', fontSize: wp('4%'), marginBottom: wp('5%') }}>{this.state.selectedItem.fullName}</Text>
+                        <View style={{
+                            width: wp('90%'),
+                            borderBottomColor: '#ccc', borderBottomWidth: 0.5,
+                            marginLeft: wp('10%'),
+                            marginRight: wp('10%')
+                        }}></View>
+                    </View>
+                    <GiftedChat
+                        messages={this.state.messages}
+                        renderAvatarOnTop={true}
+                        onSend={(message) => {
+                            Backend.sendMessage(message, this.state.docRef, this.state.uri, this.state.token, this.state.selectedItem, this.state.userEmail)
+                        }}
+                        renderBubble={this.renderBubble}
+                        user={{
+                            _id: Backend.getUid(),
+                            name: this.state.userDetails.fullName,
+                            avatar: this.state.userDetails.profilePicture
+                        }}
+                        placeholder="Whisper here..."
+                        showUserAvatar={true}
+                        extraData={this.state}
+                        loadEarlier={this.state.messages.length >= 9}
+                        onLoadEarlier={this.onLoadEarlier}
+                        isLoadingEarlier={this.state.isLoadingEarlier}
+                        renderInputToolbar={props => this.customtInputToolbar(props)}
+                        renderAvatar={props => this.renderAvatar(props)}
+                    />
+                </>
                     )
                 }
             </View>
