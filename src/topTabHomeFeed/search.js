@@ -25,9 +25,10 @@ export default class search extends React.Component {
         this.state = {
             search: '',
             feedData: [],
-            email: props.navigation.state.params.email
+            email: props.screenProps.email
         }
         this.baseState = this.state;
+        console.log('dfsdf', props)
     }
     componentDidMount() {
         loc(this);

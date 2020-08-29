@@ -24,14 +24,14 @@ class gallery extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props && this.props.navigation && this.props.navigation.state && this.props.navigation.state.params)
-      this.setState({ email: this.props.navigation.state.params.email })
+    if (this.props && this.props.screenProps)
+      this.setState({ email: this.props.screenProps.email })
   }
 
   render() {
     return (
-      <View style={{ flex: 1 }}>  
-        <UploadPage screenProps={{ navigation: this.props.navigation }} />
+      <View style={{ flex: 1 }}>
+        <UploadPage screenProps={{ email: this.props.screenProps.email }} />
       </View>
     );
   }

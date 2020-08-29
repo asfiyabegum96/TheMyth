@@ -9,7 +9,7 @@ import {
     Text
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { GiftedChat, Bubble, InputToolbar, Composer, Time, Avatar } from 'react-native-gifted-chat';
+import { GiftedChat, Bubble, InputToolbar, Composer, Time, Avatar, Message } from 'react-native-gifted-chat';
 import ImagePicker from 'react-native-image-picker';
 import Backend from './Backend'
 import {
@@ -50,6 +50,7 @@ export default class chatScreen extends React.Component {
             selectedItem: props.navigation.state.params.selectedItem,
             userDetails: props.navigation.state.params.userDetails,
         };
+        console.log(this.state.selectedItem)
     }
 
     onSend(messages = []) {
@@ -283,6 +284,30 @@ export default class chatScreen extends React.Component {
         );
     }
 
+    renderChatFooter(props) {
+        return (
+            <>
+                {this.state.userDetails.isPrivateAccount === true ?
+                    <View style={{ borderWidth: 1, borderColor: '#ff2700', margin: wp('5%'), borderRadius: 10 }}>
+                        <View style={styles.whisper}>
+                            <Text style={{ color: '#ccc', fontWeight: 'bold' }}>{this.state.selectedItem.fullName} has something to whisper!</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={styles.accept}>
+                                <TouchableOpacity style={{ marginBottom: wp('25%'), flexDirection: 'row' }}>
+                                    <Text style={styles.acceptText}>Accept</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.deny}>
+                                <TouchableOpacity >
+                                    <Text style={styles.denyText}>Deny</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View> : <></>}
+            </>)
+    }
+
 
     render() {
         return (
@@ -337,6 +362,7 @@ export default class chatScreen extends React.Component {
                         isLoadingEarlier={this.state.isLoadingEarlier}
                         renderInputToolbar={props => this.customtInputToolbar(props)}
                         renderAvatar={props => this.renderAvatar(props)}
+                        renderChatFooter={props => this.renderChatFooter(props)}
                     />
                 </>
                     )
@@ -345,3 +371,53 @@ export default class chatScreen extends React.Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    accept: {
+        width: wp('38%'),
+        height: hp('6%'),
+        backgroundColor: '#FF7200',
+        marginLeft: wp('5%'),
+        alignItems: 'center',
+        marginBottom: wp('8%'),
+        borderRadius: wp('2%'),
+        borderWidth: 2,
+        borderColor: '#FF7200',
+    },
+    deny: {
+        width: wp('38%'),
+        height: hp('6%'),
+        backgroundColor: '#ccc',
+        marginLeft: wp('4%'),
+        alignItems: 'center',
+        marginBottom: wp('8%'),
+        borderRadius: wp('2%'),
+        borderWidth: 2,
+        borderColor: '#ccc',
+    },
+    acceptText: {
+        color: 'white',
+        width: wp('80%'),
+        alignItems: 'center',
+        fontSize: hp('2%'),
+        marginLeft: wp('55%'),
+        paddingVertical: 8,
+        paddingHorizontal: 25,
+        fontWeight: 'bold',
+    },
+    denyText: {
+        color: 'white',
+        width: wp('80%'),
+        alignItems: 'center',
+        fontSize: hp('2%'),
+        marginLeft: wp('58%'),
+        paddingVertical: 8,
+        paddingHorizontal: 25,
+        fontWeight: 'bold',
+    },
+    whisper: {
+        alignItems: 'center',
+        paddingBottom: wp('5%'),
+        paddingTop: wp('5%')
+    }
+})

@@ -43,21 +43,22 @@ class photosUpload extends React.Component {
             fieldNotEmpty: false,
             token: ''
         }
+        console.log('sdfgsd', props)
         this.baseState = this.state;
     }
 
     componentDidMount() {
         const context = this;
-        PushNotification.configure({
-            // (required) Called when a remote or local notification is opened or received
-            onNotification: function (notification) {
-                console.log("NOTIFICATION:", notification);
-                if (notification.userInteraction === true) {
-                    context.props.screenProps.navigation.navigate('homeFixed', { email: context.props.screenProps.navigation.state.params.email })
-                }
+        // PushNotification.configure({
+        //     // (required) Called when a remote or local notification is opened or received
+        //     onNotification: function (notification) {
+        //         console.log("NOTIFICATION:", notification);
+        //         if (notification.userInteraction === true) {
+        //             context.props.screenProps.navigation.navigate('homeFixed', { email: context.props.screenProps.navigation.state.params.email })
+        //         }
 
-            },
-        });
+        //     },
+        // });
         this.fetchUserDetails();
         this.checkUserAuthorization();
     }
@@ -126,7 +127,7 @@ class photosUpload extends React.Component {
         const context = this;
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
-        photosRef.where('email', '==', context.props.screenProps.navigation.state.params.email).get().then(function (querySnapshot) {
+        photosRef.where('email', '==', context.props.screenProps.email).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
