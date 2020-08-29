@@ -176,9 +176,9 @@ export default class chatLanding extends React.Component {
 
     render() {
         return (
-            <View style={{ flex: 1, }}>
+            <View style={{ flex: 1,backgroundColor: '#fff6f2', }}>
                 {this.state.loading == true ? (
-                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff6f2', }}>
                         <ActivityIndicator size="large" color='red' />
                     </View>
                 ) : (
@@ -224,26 +224,25 @@ export default class chatLanding extends React.Component {
 
 const styles = StyleSheet.create({
     root: {
-        backgroundColor: '#fff',
+        backgroundColor: '#fff6f2',
         paddingTop: 10,
         paddingLeft: '5.5%',
     },
-    separator: {
-        height: 1,
-        backgroundColor: '#FF7200',
-        width: wp('90%')
-    },
+ 
     container: {
         paddingLeft: 19,
         paddingRight: 16,
         paddingVertical: 12,
         flexDirection: 'row',
         alignItems: 'flex-start',
+
     },
     name: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: "bold",
         color: '#FF7200',
+          paddingTop: 10,
+          color:'black'
     },
     content: {
         marginLeft: 16,
@@ -252,7 +251,7 @@ const styles = StyleSheet.create({
     image: {
         width: 45,
         height: 45,
-        borderRadius: 20,
+        borderRadius: 10,
         marginLeft: 20
     },
     butText: {
