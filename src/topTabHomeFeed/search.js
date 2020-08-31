@@ -28,7 +28,6 @@ export default class search extends React.Component {
             email: props.screenProps.email
         }
         this.baseState = this.state;
-        console.log('dfsdf', props)
     }
     componentDidMount() {
         loc(this);
@@ -110,7 +109,7 @@ export default class search extends React.Component {
         const isSameProfile = this.state.email.trim() === searchedEmail.trim();
         this.setState(this.baseState);
         this.setState({ feedData: [] })
-        this.props.navigation.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile, isFollowed: isFollowed })
+        this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile, isFollowed: isFollowed })
     }
 
     render() {
@@ -118,9 +117,9 @@ export default class search extends React.Component {
         return (
             <View style={{ flex: 1, }}>
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
+                    {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
                         <Icon name={'home'} size={30} color="#fff" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#FF7200', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
                         autoFocus="true"
                         placeholderTextColor="#fff"
@@ -131,9 +130,9 @@ export default class search extends React.Component {
                         onClear={() => this.setState({ feedData: [] })}
                         value={search}
                     />
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim(), searchedEmail: this.props.navigation.state.params.email.trim(), privateAccount: false, isSameProfile: true })}>
+                    {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim(), searchedEmail: this.props.navigation.state.params.email.trim(), privateAccount: false, isSameProfile: true })}>
                         <FontAwesome5 style={styles.profile} name={'user-alt'} />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                 <FlatList
                     style={styles.root}
@@ -191,7 +190,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     inputSearch: {
-        width: wp('70%'),
+        width: wp('90%'),
         paddingVertical: 2,
         borderBottomWidth: wp('0.1%'),
         borderBottomColor: '#fff',

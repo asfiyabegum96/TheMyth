@@ -43,7 +43,7 @@ class photosUpload extends React.Component {
             fieldNotEmpty: false,
             token: ''
         }
-        console.log('sdfgsd', props)
+        console.log(props.screenProps)
         this.baseState = this.state;
     }
 
@@ -230,7 +230,7 @@ class photosUpload extends React.Component {
             userAvatar: userAvatar,
             docRef: imageId,
             isDeleted: isDeleted,
-            email: this.props.screenProps.navigation.state.params.email
+            email: this.props.screenProps.email
         }
 
         firebase.firestore().collection(url).doc(imageId).set(photoObj).then(function (docRef) {
@@ -238,7 +238,7 @@ class photosUpload extends React.Component {
             context.setState({
                 uploading: false,
             });
-            context.props.screenProps.navigation.navigate('homeFixed', { email: photoObj.email });
+            context.props.screenProps.navigateToOther.navigate('homeFixed', { email: photoObj.email });
             if (!flag) {
                 context.sendNotification(photoObj)
             }

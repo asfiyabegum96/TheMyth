@@ -214,7 +214,7 @@ export default class editProfile extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
+        backgroundColor: '#ff7200',
         flex: 1,
     },
     TitleDiv: {

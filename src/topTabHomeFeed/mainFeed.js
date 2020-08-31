@@ -401,6 +401,13 @@ export default class mainFeed extends React.Component {
             borderBottomColor: '#FF7200',
             borderBottomWidth: 0.5,
           }} />
+        <View style={styles.header}>
+          <Text style={styles.inputSearch}
+          >myth</Text>
+          <TouchableOpacity onPress={() => this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: this.state.email.trim(), privateAccount: false, isSameProfile: true })}>
+            <FontAwesome5 style={styles.profile} name={'user'} />
+          </TouchableOpacity>
+        </View>
         {this.state.loading == true ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" color='#FF7200' />
@@ -418,25 +425,25 @@ export default class mainFeed extends React.Component {
                   <View style={styles.feedBorder}>
                     <View style={styles.listHeader}>
                       <TouchableOpacity onPress={() => this.viewOtherUserProfiles({ item })} style={{ paddingHorizontal: 10, }}>
-                       <Image
-                source={require('../images/dp.jpg')}
-                style={{
-                  width: wp('15%'),
-                  height: hp('8%'),
-                  resizeMode: 'cover',
-                  borderRadius: wp('3%'), borderWidth: 1,marginLeft: wp('2%'),marginTop: wp('-5%'),
-                }}/>
+                        <Image
+                          source={require('../images/dp.jpg')}
+                          style={{
+                            width: wp('15%'),
+                            height: hp('8%'),
+                            resizeMode: 'cover',
+                            borderRadius: wp('3%'), borderWidth: 1, marginLeft: wp('2%'), marginTop: wp('-5%'),
+                          }} />
                       </TouchableOpacity>
 
                       <TouchableOpacity>
                         <Text style={styles.listProfileName}>{item.author}</Text>
-                         <View style={styles.locationDiv}>
-                      <Text style={styles.locationText}>{item.location}</Text>
+                        <View style={styles.locationDiv}>
+                          <Text style={styles.locationText}>{item.location}</Text>
                           <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('3%') }}>
-                        <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
-                      </TouchableOpacity>
-                    </View>
-                      
+                            <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
+                          </TouchableOpacity>
+                        </View>
+
                       </TouchableOpacity>
                     </View>
                     <View style={styles.listViewImg}>
@@ -446,8 +453,8 @@ export default class mainFeed extends React.Component {
                         loadingIndicatorSource={require('../images/loading.gif')}
                       />
                     </View>
-                 
-                       
+
+
 
                     <View style={{
                       flexDirection: 'row',
@@ -456,9 +463,9 @@ export default class mainFeed extends React.Component {
                       marginLeft: wp('1.3%')
                     }}>
                       <TouchableWithoutFeedback onPress={() => this.onLikePost({ item, index })} >
-                    <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('1%') }}>
-                        <FontAwesome5 style={styles.comment} name="cookie-bite" size={22} color="#808080" />
-                      </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('1%') }}>
+                          <FontAwesome5 style={styles.comment} name="cookie-bite" size={22} color="#808080" />
+                        </TouchableOpacity>
                       </TouchableWithoutFeedback>
                       <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('1%') }}>
                         <Fontisto style={styles.comment} name="commenting" size={22} color="#808080" />
@@ -479,18 +486,18 @@ export default class mainFeed extends React.Component {
                       <View>
                       </View>
                     </View>
-                    <View style={{ flexDirection: 'row',marginLeft: wp('5%') }}>
-                    
+                    <View style={{ flexDirection: 'row', marginLeft: wp('5%') }}>
+
                       <Text style={styles.likeText}>{item.likes} likes</Text>
-                      
+
                     </View>
                   </View>
 
-                    <View style={styles.foodNameDiv}>
+                  <View style={styles.foodNameDiv}>
                     <Text style={styles.listProfileName1}>{item.author}</Text>
-                      <Text style={styles.foodNameText}>{item.caption}</Text>
-                    </View>
-                  <Text style={{ marginLeft: wp('5%'),marginBottom: wp('5%'),fontSize: hp('1.5%'),color:'#808080' }}>{item.postedTime}</Text>
+                    <Text style={styles.foodNameText}>{item.caption}</Text>
+                  </View>
+                  <Text style={{ marginLeft: wp('5%'), marginBottom: wp('5%'), fontSize: hp('1.5%'), color: '#808080' }}>{item.postedTime}</Text>
                 </View>
 
               )}
@@ -512,15 +519,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#22222C',
     marginRight: wp('5%'),
-      marginTop: wp('-3%'),
-         marginBottom: wp('-2%'),
+    marginTop: wp('-3%'),
+    marginBottom: wp('-2%'),
   },
-    listProfileName1: {
+  listProfileName1: {
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#22222C',
     marginLeft: wp('3%'),
-      marginTop: wp('-5%')
+    marginTop: wp('-5%')
   },
   listProfileSubName: {
     color: '#22222C',
@@ -538,13 +545,13 @@ const styles = StyleSheet.create({
   },
   foodNameDiv: {
     left: 1,
-padding:7,
+    padding: 7,
     flexDirection: 'row',
-    },
+  },
   foodNameText: {
     fontSize: hp('2%'),
-     left: 5,
-      marginTop: wp('-5%'),
+    left: 5,
+    marginTop: wp('-5%'),
 
   },
   locationDiv: {
@@ -554,26 +561,54 @@ padding:7,
   },
   locationText: {
     fontSize: hp('1.5%'),
-  color: '#FF7200',
+    color: '#FF7200',
 
   },
   comment: {
     paddingHorizontal: wp('2%')
   },
-  more:{
-     marginLeft: wp('13%'),
-},
+  more: {
+    marginLeft: wp('13%'),
+  },
   likeText: {
-     marginRight: wp('45%'),
+    marginRight: wp('45%'),
     paddingBottom: wp('4%'),
-      marginTop: wp('-1%'),
+    marginTop: wp('-1%'),
   },
   fabIcon: {
     color: '#FF7200',
     fontSize: hp('2.5%'),
     marginLeft: wp('40%'),
     fontSize: 26,
-        marginRight: wp('-35%'),
- 
+    marginRight: wp('-35%'),
+
+  },
+  profile: {
+    color: '#fff',
+    fontSize: hp('3%'),
+    // backgroundColor: '#fff',
+    paddingVertical: wp('0.5%'),
+    paddingHorizontal: wp('0.8%'),
+    marginTop: 5,
+    marginRight: wp('1.5%'),
+  },
+  inputSearch: {
+    width: wp('70%'),
+    paddingVertical: 2,
+    borderBottomWidth: wp('0.1%'),
+    borderBottomColor: '#fff',
+    backgroundColor: '#FF7200',
+    fontSize: 20,
+    color: '#fff',
+    height: hp('4%'),
+    fontStyle: 'italic',
+    paddingLeft: wp('40%'),
+    backgroundColor: '#FF7200', height: hp('4%'), borderBottomWidth: 0, borderTopWidth: 0
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#FF7200',
+    padding: 10,
   },
 });

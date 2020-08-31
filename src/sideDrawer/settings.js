@@ -51,18 +51,18 @@ class Settings extends Component {
         index: 0,
         actions: [NavigationActions.navigate({ routeName: route })],
       });
-      this.props.screenProps.navigation.dispatch(resetAction);
+      this.props.screenProps.navigateToOther.dispatch(resetAction);
     } else {
-      this.props.screenProps.navigation.navigate(route, { email: this.props.screenProps.email.trim(), navigation: this.props.screenProps.navigation })
+      this.props.screenProps.navigateToOther.navigate(route, { email: this.props.screenProps.email.trim(), navigation: this.props.screenProps.navigation })
     }
   }
 
   navigation() {
-    this.props.screenProps.navigation.navigate('sideNavigator')
+    this.props.screenProps.navigateToOther.navigate('sideNavigator')
   }
 
   onBack = () => {
-    this.props.screenProps.navigation.navigate('profile', { email: this.props.screenProps.email.trim(), searchedEmail: this.props.screenProps.email.trim(), privateAccount: false, isSameProfile: true, isFollowed: true })
+    this.props.screenProps.navigateToOther.navigate('profile', { email: this.props.screenProps.email.trim(), searchedEmail: this.props.screenProps.email.trim(), privateAccount: false, isSameProfile: true, isFollowed: true })
   }
 
 
@@ -130,7 +130,7 @@ class Settings extends Component {
                   Edit Profile
                 </Text> */}
               <FontAwesome5 style={styles.fabIcon} name='id-card' size={16} />
-              <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+              <Text style={styles.navItemStyle} onPress={() => alert("Coming soon!")}>
                 Wallet
                 </Text>
             </View>

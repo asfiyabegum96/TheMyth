@@ -138,26 +138,13 @@ export default class homeFixed extends React.Component {
         <NavigationEvents
           onDidFocus={() => loc(this)}
         />
-        {/* <View style={styles.header}> */}
-          {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('bottomTab', { email: this.props.navigation.state.params.email.trim() })}>
-            <FontAwesome5 style={styles.camera} name={'camera'} />
-          </TouchableOpacity> */}
-          {/* <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#FF7200', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
-            placeholderTextColor="#fff"
-            inputStyle={{ color: '#fff' }}
-            onFocus={() => this.updateSearch()}
-          /> */}
-          {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim(), searchedEmail: this.props.navigation.state.params.email.trim(), privateAccount: false, isSameProfile: true })}>
-            <FontAwesome5 style={styles.profile} name={'user-alt'} />
-          </TouchableOpacity> */}
-        {/* </View> */}
         <TouchableOpacity onPress={() => this.props.navigation.navigate("chat", { email: this.props.navigation.state.params.email.trim() })}
           style={styles.fabDiv}>
           <View style={styles.fab}>
             {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} /> */}
           </View>
         </TouchableOpacity>
-        <AppIndex screenProps={{ navigation: this.navigateToPage, email: this.props.navigation.state.params.email.trim() }} />
+        <AppIndex screenProps={{ navigation: this.navigateToPage, navigateToOther: this.props.navigation, email: this.props.navigation.state.params.email.trim() }} />
       </View>
     );
   }
@@ -182,16 +169,13 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   profile: {
-    color: '#FF7200',
+    color: '#fff',
     fontSize: hp('3%'),
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     paddingVertical: wp('0.5%'),
     paddingHorizontal: wp('0.8%'),
     marginTop: 5,
     marginRight: wp('1.5%'),
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#fff'
   },
   inputSearch: {
     width: wp('70%'),
@@ -202,6 +186,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#fff',
     height: hp('4%'),
+    fontStyle: 'italic',
+    paddingLeft: wp('40%'),
+    backgroundColor: '#FF7200', height: hp('4%'), borderBottomWidth: 0, borderTopWidth: 0
   },
   fabDiv: {
     position: 'absolute',

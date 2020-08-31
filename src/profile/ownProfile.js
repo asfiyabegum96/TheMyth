@@ -238,49 +238,49 @@ export default class profile extends React.Component {
             </View>
           </TouchableOpacity>)}
         <View style={styles.header}>
+          <Text style={styles.inputSearch}
+          >myth</Text>
           <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
             <Icon name={'home'} size={30} color="#fff" />
           </TouchableOpacity>
-          <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#FF7200', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
+          {/* <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#FF7200', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
             placeholderTextColor="#fff"
             inputStyle={{ color: '#fff' }}
             onFocus={() => this.updateSearch()}
-          />
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('sideNavigator', { email: this.props.navigation.state.params.email })}>
-            <MaterialCommunityIcons name="settings" size={35} color="#fff" />
-          </TouchableOpacity>
+          /> */}
         </View>
         <ScrollView>
           <View style={{ backgroundColor: '#fff6f2', paddingBottom: wp('3%') }}>
             <View style={{ flexDirection: 'row', marginLeft: wp('37%'), alignItems: 'center', marginTop: wp('10%') }}>
               <Image
-                source={require('../images/dp.jpg')}
+                source={{ uri: this.state.user.profilePicture }}
                 style={{
                   width: wp('30%'),
                   height: hp('15%'),
                   resizeMode: 'cover',
                   borderRadius: wp('5%'), borderWidth: 1.5, borderColor: 'white'
                 }}
-                src={this.state.user.profilePicture} />
+              />
               <Text style={styles.profileName}>{this.state.user.fullName}</Text>
             </View>
-            <View style={{ marginLeft: wp('70%') }}>
-              <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
-                <Image
-                  source={require('../images/person.png')}
-                  style={{
-                    width: wp('15%'),
-                    height: wp('15%'),
+            {this.props.navigation.state.params.isSameProfile === true ?
+              <View style={{ marginLeft: wp('70%') }}>
+                <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
+                  <Image
+                    source={require('../images/person.png')}
+                    style={{
+                      width: wp('15%'),
+                      height: wp('15%'),
 
-                    resizeMode: 'cover',
-                  }} />
-              </TouchableOpacity></View>
-            <View style={{ flexDirection: 'row', marginLeft: wp('40%'), marginTop: wp('10%') }}>
-              <Text style={{
-                fontSize: hp('2%'),
-                color: 'black',
-              }} >{this.state.user.description}</Text>
-            </View>
+                      resizeMode: 'cover',
+                    }} />
+                </TouchableOpacity></View> : <></>}
+              <View style={{ flexDirection: 'row', marginLeft: wp('40%'), marginTop: wp('10%') }}>
+                <Text style={{
+                  fontSize: hp('2%'),
+                  color: 'black',
+                }} >{this.state.user.description}</Text>
+              </View>
           </View>
           {this.props.navigation.state.params.isSameProfile === false ?
             <View style={{ flexDirection: 'row' }}>
@@ -315,7 +315,7 @@ export default class profile extends React.Component {
                 <ActivityIndicator size="large" color='red' />
               </View>
             ) : (
-                <PostTab screenProps={{ navigation: this.props.navigation, email: this.props.navigation.state.params.email.trim() }}></PostTab>
+                <PostTab screenProps={{ navigation: this.props.navigation, email: this.state.user.email.trim() }}></PostTab>
               )}
           </View>
         </ScrollView>
@@ -361,8 +361,11 @@ const styles = StyleSheet.create({
     borderBottomColor: '#fff',
     backgroundColor: '#FF7200',
     fontSize: 20,
-    color: '#FF7200',
-    height: hp('4%')
+    color: '#fff',
+    height: hp('4%'),
+    fontStyle: 'italic',
+    paddingLeft: wp('40%'),
+    backgroundColor: '#FF7200', height: hp('4%'), borderBottomWidth: 0, borderTopWidth: 0
   },
   profileName: {
     fontSize: hp('2.5%'),

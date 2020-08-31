@@ -31,19 +31,19 @@ class accountSettings extends Component {
 		this.fetchUserDetails();
 	}
 
-	  fetchUserDetails() {
-	    const context = this;
-	    let db = firebase.firestore();
-	    let photosRef = db.collection('signup');
-	    photosRef.where('email', '==', this.props.navigation.state.params.email.trim()).get().then(function (querySnapshot) {
-	      querySnapshot.forEach(function (doc) {
-	        let data;
-	        const docNotEmpty = (doc.id, " => ", doc.data() != null);
-	        if (docNotEmpty) data = (doc.id, " => ", doc.data());
-	        context.setState({ user: doc.data() })
-	      })
-	    })
-	  }
+	fetchUserDetails() {
+		const context = this;
+		let db = firebase.firestore();
+		let photosRef = db.collection('signup');
+		photosRef.where('email', '==', this.props.navigation.state.params.email.trim()).get().then(function (querySnapshot) {
+			querySnapshot.forEach(function (doc) {
+				let data;
+				const docNotEmpty = (doc.id, " => ", doc.data() != null);
+				if (docNotEmpty) data = (doc.id, " => ", doc.data());
+				context.setState({ user: doc.data() })
+			})
+		})
+	}
 
 	navigateToRoute = (route) => {
 		if (route === 'Home') {
@@ -53,7 +53,6 @@ class accountSettings extends Component {
 			});
 			this.props.navigation.dispatch(resetAction);
 		} else {
-			console.log(this.props.navigation.state)
 			this.props.navigation.navigate(route, { email: this.props.navigation.state.params.email.trim(), navigation: this.props.navigation })
 		}
 	}
@@ -108,12 +107,12 @@ class accountSettings extends Component {
 				radius={400}>
 				{
 					<View style={styles.container}>
-						<View style={{ flexDirection: 'row' }}>
+						{/* <View style={{ flexDirection: 'row' }}>
 							<FontAwesome5 style={styles.fabIcon} name='bell' size={16} />
 							<Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('notificationsSettings')}>
 								Notifications
                 			</Text>
-						</View>
+						</View> */}
 						<View style={{ flexDirection: 'row' }}>
 							<FontAwesome5 style={styles.fabIcon} name='user-shield' size={12} />
 							<Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('privacySettings')}>
@@ -123,7 +122,7 @@ class accountSettings extends Component {
 						<View style={{ flexDirection: 'row' }}>
 							<FontAwesome5 style={styles.fabIcon} name='key' size={16} />
 							<Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('updatePassword')}>
-							Update password
+								Update password
                 </Text>
 						</View>
 						<View style={{ flexDirection: 'row' }}>
