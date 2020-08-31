@@ -24,7 +24,6 @@ class Mainscreen extends React.Component {
     this.state = {
       email: ''
     }
-    console.log('main', props.screenProps)
   }
 
   navigateToComment = (item, isComment, isSavedCollection, viewUserProfile) => {
