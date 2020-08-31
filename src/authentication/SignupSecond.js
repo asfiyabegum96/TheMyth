@@ -14,8 +14,10 @@ import {
   listenOrientationChange as loc,
   removeOrientationListener as rol
 } from 'react-native-responsive-screen';
+
 import ImagePicker from 'react-native-image-picker';
 import main from "./styles/main";
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import RadialGradient from 'react-native-radial-gradient';
 import { Picker } from '@react-native-community/picker';
 
@@ -124,7 +126,7 @@ export default class SignupSecond extends React.Component {
               flexDirection: 'row',
               justifyContent: 'space-around',
               alignItems: "center",
-              marginTop: wp('20%')
+              marginTop: wp('15%')
             }}>
 
               <View>
@@ -153,6 +155,19 @@ export default class SignupSecond extends React.Component {
                   )}
               </View>
             </View>
+                  <View style={styles.edit}>
+                    <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={this.selectImage}>
+                        <Image
+                            source={require('../images/add.png')}
+                            style={{
+                                width: wp('15%'),
+                                height: wp('15%'),
+
+                                resizeMode: 'cover',
+                            }} />
+                    </TouchableOpacity>
+                </View>
+
             <View style={styles.TextInputDiv}>
               <Text style={main.labelContainer}>Description</Text>
               <TextInput
@@ -166,23 +181,22 @@ export default class SignupSecond extends React.Component {
                 defaultValue={values.description}
               />
             </View>
-            <View style={{ marginBottom: wp('15%'), }}>
-              <Text style={{ color: 'white', left: 35, marginBottom: 8, fontSize: wp('4.5%'), marginTop: wp('1%') }}>Gender :</Text>
-              <View style={{ marginLeft: wp('10%'), backgroundColor: 'white',opacity: 0.7, borderRadius: wp('2%'), borderWidth: 1.5, borderColor: 'white', width: wp('80%') }}>
-                <Picker
-                  selectedValue={this.state.radioState}
-                  mode={'dropdown'}
-                  style={{ height: wp('10%'), width: wp('80%') }}
-                  onValueChange={(itemValue, itemIndex) =>
-                    this.setState({ radioState: itemValue })
-                  }>
-                  <Picker.Item color="#ed5720" label="Others" value="others" />
-                  <Picker.Item label="Male" color="#ed5720" value="male" />
-                  <Picker.Item label="Female" value="female" color="#ed5720" />
-                </Picker>
-              </View>
+                <Text style={{marginLeft: wp('32%'), marginTop: wp('5%'), color:'white', fontSize: hp('2%'),marginBottom: wp('5%'),}}>Select your gender</Text>
+                  <View style={{flex: 1, flexDirection: 'row',}}>
+               
+        <View style={styles.box1} />
+          <TouchableOpacity onPress={() => this.sendImage({ item, index })} style={{ flexDirection: 'row',marginTop: wp('8%'),marginLeft: wp('15%') }}>
+                        <FontAwesome5 style={styles.fabIcon} name="mars" size={22} />
+                    </TouchableOpacity>
+                         <Text style={{ color:'white', fontSize: hp('2%'),marginTop: wp('30%'),marginLeft: wp('-32%')}}>Male</Text>
+        <View style={{width: 100, height: 100, backgroundColor: 'white', left:wp('35%'),borderRadius: 10,}} />
 
-            </View>
+       <TouchableOpacity onPress={() => this.sendImage({ item, index })} style={{ flexDirection: 'row', marginTop: wp('8%'),marginLeft: wp('35%') }}>
+                        <FontAwesome5 style={styles.fabIcon1} name="venus" size={22} />
+                    </TouchableOpacity>
+                     <Text style={{ color:'white', fontSize: hp('2%'),marginTop: wp('30%'),marginLeft: wp('-20%')}}>Female</Text>
+      </View>
+    
             <View style={styles.but}>
               <View style={main.primaryButtonContanier}>
                 {/* <TouchableOpacity onPress={this.back}>
@@ -191,7 +205,9 @@ export default class SignupSecond extends React.Component {
                 <TouchableOpacity onPress={this.signUp}>
                   <Text style={main.primaryButtonText}>Sign Up</Text>
                 </TouchableOpacity>
+
               </View>
+              <Text style={{marginLeft: wp('20%'), marginTop: wp('5%'), color:'white', fontSize: hp('2%'),marginBottom: wp('5%'),}}>Already a member? Then<Text style={{fontWeight: "bold"}}> Sign In</Text></Text>
             </View>
           </ScrollView>
         }
@@ -210,6 +226,29 @@ const styles = StyleSheet.create({
     fontSize: hp('4%'),
     fontWeight: 'bold',
   },
+  box1:{
+    width: 100,
+    height: 100, 
+    backgroundColor: 'white',
+   borderRadius: 10,
+       marginLeft:32,
+  },
+  fabIcon: {
+    color: '#6e92f3',
+    fontSize: hp('2.5%'),
+
+    fontSize: 45,
+        marginLeft: wp('-32%'),
+ 
+  },
+    fabIcon1: {
+   color: '#de6fb1',
+    fontSize: hp('2.5%'),
+
+    fontSize: 45,
+        marginLeft: wp('-17%'),
+ 
+  },
   selectImage: {
     color: '#fff',
     fontSize: hp('2%'),
@@ -225,7 +264,7 @@ const styles = StyleSheet.create({
   },
   TextInputDiv: {
     marginLeft: wp('10%'),
-    marginTop: wp('15%'),
+    marginTop: wp('5%'),
   },
   inputfield: {
     width: wp('88%'),
@@ -243,7 +282,11 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     left: 110
   },
+    edit: {
+        left: 190,
+         marginTop: wp('7%')
 
+    },
   circle: {
     height: 20,
     width: 20,
@@ -266,7 +309,7 @@ const styles = StyleSheet.create({
   },
   but: {
     borderRadius: 6,
-    marginTop: wp('1%')
+    marginTop: wp('7%')
   },
   logo: {
     left: 55,

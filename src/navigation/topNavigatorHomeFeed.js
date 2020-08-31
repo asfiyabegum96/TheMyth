@@ -147,8 +147,8 @@ const TopNavigator = createBottomTabNavigator(
       screen: CameraScreen,
       navigationOptions: {
         tabBarIcon: ({ tintColor, focused }) => (
-          <View style={{ marginBottom: wp('6%'), backgroundColor: 'white' }}>
-            <View style={{ borderRadius: 50, borderWidth: 1, borderColor: '#ccc', padding: wp('3%'), height: hp('6%') }}>
+          <View style={{ marginBottom: wp('6%'), }}>
+            <View style={{ borderRadius: 20, borderWidth: 1, borderColor: '#ccc', padding: wp('3%'), height: hp('6%'),backgroundColor: 'white' }}>
               <FontAwesome5 name={'plus-square'}
                 style={styles.addIcon}
                 color={tintColor} />

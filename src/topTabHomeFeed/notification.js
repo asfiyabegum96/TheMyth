@@ -127,17 +127,8 @@ export default class notification extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff2e7', }}>
-        <View
-          style={{
-            borderBottomColor: '#22222C',
-            borderBottomWidth: 1.5,
-          }} />
-        <Text style={{
-          fontSize: hp('3.5'),
-          color: '#FF7200',
-          paddingVertical: 7,
-          left: 25
-        }}>Notification</Text>
+     
+
         <View
           style={{
             borderBottomColor: '#22222C',
@@ -148,6 +139,11 @@ export default class notification extends React.Component {
               <ActivityIndicator size="large" color='red' />
             </View>
           ) : (
+          <>
+          
+                  <Text style={styles.time1}>Today</Text>
+                  <View style={styles.separator1} />
+                  
               <FlatList
                 style={styles.root}
                 refreshing={this.state.feedRefresh}
@@ -157,6 +153,7 @@ export default class notification extends React.Component {
                 ItemSeparatorComponent={() => {
                   return (
                     <View style={styles.separator} />
+                  
                   )
                 }}
                 keyExtractor={(item) => {
@@ -166,11 +163,21 @@ export default class notification extends React.Component {
                   const Notification = item.item;
                   return (
                     <View style={styles.container}>
-                      <Image style={styles.image} source={{ uri: Notification.userAvatar }} />
+             
+                          <Image
+                source={require('../images/dp.jpg')}
+                style={{
+                  width: wp('20%'),
+                  height: hp('10%'),
+                  resizeMode: 'cover',
+                  borderRadius: wp('5%'),
+                }}/>
+
                       <View style={styles.content}>
+
                         <TouchableOpacity onPress={() => this.props.screenProps.navigation(item, false, false, false, true)}>
                           <View style={styles.contentHeader}>
-                            <Text style={styles.name}>{Notification.title}</Text>
+                        
                             <Text style={styles.time}>
                               {Notification.postedTime}
                             </Text>
@@ -181,6 +188,7 @@ export default class notification extends React.Component {
                     </View>
                   );
                 }} />
+                  </>
             )}
         </View>
       </View>
@@ -200,6 +208,7 @@ const styles = StyleSheet.create({
   content: {
     marginLeft: 16,
     flex: 1,
+
   },
   contentHeader: {
     flexDirection: 'row',
@@ -207,12 +216,18 @@ const styles = StyleSheet.create({
     marginBottom: 6
   },
   separator: {
-    height: 1,
-    backgroundColor: '#FF7200'
+   backgroundColor: '#FF7200'
   },
+    separator1: {
+    height:2,
+    backgroundColor: '#ccc',
+    width:300,
+    marginLeft: wp('25%'),
+     marginTop: wp('-5%'),
+},
   root: {
     backgroundColor: '#fff2e7',
-    paddingTop: 10,
+    marginTop: 15,
   },
   container: {
     paddingLeft: 19,
@@ -222,7 +237,9 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   displaySection: {
-    color: "#FF7200",
+    color: "black",
+    flexDirection:'row',
+marginTop: wp('5%'),
   },
   image: {
     width: 45,
@@ -231,8 +248,19 @@ const styles = StyleSheet.create({
     marginLeft: 20
   },
   time: {
-    fontSize: 11,
+    fontSize: 10,
     color: "#808080",
+    marginLeft: wp('45%'),
+      marginTop: wp('-20%'),
+
+  },
+  time1:{
+    fontSize: 20,
+    color:"black",
+      marginTop: wp('10%'),
+       marginLeft: wp('5%'),
+           fontWeight: 'bold',
+           marginBottom: wp('2%'),
   },
   bell: {
     fontSize: hp('3%'),
