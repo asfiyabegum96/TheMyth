@@ -426,7 +426,7 @@ export default class mainFeed extends React.Component {
                     <View style={styles.listHeader}>
                       <TouchableOpacity onPress={() => this.viewOtherUserProfiles({ item })} style={{ paddingHorizontal: 10, }}>
                         <Image
-                          source={require('../images/dp.jpg')}
+                          source={{ uri: item.userAvatar }}
                           style={{
                             width: wp('15%'),
                             height: hp('8%'),
@@ -443,56 +443,47 @@ export default class mainFeed extends React.Component {
                             <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
                           </TouchableOpacity>
                         </View>
-
                       </TouchableOpacity>
                     </View>
                     <View style={styles.listViewImg}>
                       <Image style={styles.listViewInlineImg}
-                        // source={{uri: 'https://source.unsplash.com/random/500'+Math.floor((Math.random() * 800)+ 500)}}
                         source={{ uri: item.url }}
                         loadingIndicatorSource={require('../images/loading.gif')}
                       />
                     </View>
-
-
-
                     <View style={{
                       flexDirection: 'row',
                       paddingHorizontal: wp('2%'),
                       paddingVertical: wp('2%'),
                       marginLeft: wp('1.3%')
                     }}>
-                      <TouchableWithoutFeedback onPress={() => this.onLikePost({ item, index })} >
-                        <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('1%') }}>
-                          <FontAwesome5 style={styles.comment} name="cookie-bite" size={22} color="#808080" />
+                      {item.isLiked === true ?
+                        <TouchableOpacity onPress={() => this.onLikePost({ item, index })} style={{ paddingLeft: wp('1%') }}>
+                          <FontAwesome5 style={styles.comment} name="cookie-bite" size={22} color="#ff7200" />
                         </TouchableOpacity>
-                      </TouchableWithoutFeedback>
+                        :
+                        <TouchableOpacity onPress={() => this.onLikePost({ item, index })} style={{ paddingLeft: wp('1%') }}>
+                          <FontAwesome5 style={styles.comment} name="cookie-bite" size={22} color="#808080" />
+                        </TouchableOpacity>}
                       <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('1%') }}>
                         <Fontisto style={styles.comment} name="commenting" size={22} color="#808080" />
                       </TouchableOpacity>
                       {item.isSaved === true ?
                         <TouchableOpacity onPress={() => { this.deleteCollection({ item, index }) }} style={{ paddingLeft: wp('1%') }}>
-                          <FontAwesome5 name="bookmark" size={22} color="#808080" />
+                          <FontAwesome5 name="bookmark" size={22} color="#ff7200" />
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, false)} style={{ paddingLeft: wp('3%') }}>
                           <FontAwesome5 name="bookmark" size={22} color="#808080" />
                         </TouchableOpacity>
                       }
-                      <TouchableOpacity onPress={() => this.sendImage({ item, index })} style={{ flexDirection: 'row', }}>
-                        <FontAwesome5 style={styles.fabIcon} name="cookie-bite" size={22} />
+                      <TouchableOpacity style={styles.fabIcon} onPress={() => this.sendImage({ item, index })} style={{ flexDirection: 'row', }}>
                         <FontAwesome5 style={styles.fabIcon} name="telegram-plane" size={22} color="#808080" />
-
                       </TouchableOpacity>
-                      <View>
-                      </View>
                     </View>
                     <View style={{ flexDirection: 'row', marginLeft: wp('5%') }}>
-
-                      <Text style={styles.likeText}>{item.likes} likes</Text>
-
+                      <Text style={styles.likeText}>{item.likes} like(s)</Text>
                     </View>
                   </View>
-
                   <View style={styles.foodNameDiv}>
                     <Text style={styles.listProfileName1}>{item.author}</Text>
                     <Text style={styles.foodNameText}>{item.caption}</Text>
@@ -552,7 +543,6 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     left: 5,
     marginTop: wp('-5%'),
-
   },
   locationDiv: {
     left: 1,
@@ -562,13 +552,12 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: hp('1.5%'),
     color: '#FF7200',
-
   },
   comment: {
     paddingHorizontal: wp('2%')
   },
   more: {
-    marginLeft: wp('13%'),
+    marginLeft: wp('60%'),
   },
   likeText: {
     marginRight: wp('45%'),
@@ -578,15 +567,12 @@ const styles = StyleSheet.create({
   fabIcon: {
     color: '#FF7200',
     fontSize: hp('2.5%'),
-    marginLeft: wp('40%'),
+    marginLeft: wp('55%'),
     fontSize: 26,
-    marginRight: wp('-35%'),
-
   },
   profile: {
     color: '#fff',
     fontSize: hp('3%'),
-    // backgroundColor: '#fff',
     paddingVertical: wp('0.5%'),
     paddingHorizontal: wp('0.8%'),
     marginTop: 5,
