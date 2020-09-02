@@ -34,6 +34,7 @@ export default class mainFeed extends React.Component {
       liked: false,
       loading: true,
       alreadyLiked: false,
+      screenPropsPresent: false,
       scale: new Animated.Value(0),
       animations: [
         new Animated.Value(0),
@@ -147,38 +148,110 @@ export default class mainFeed extends React.Component {
       email = this.props.navigation.state.params.email;
       selectedEmail = this.props.navigation.state.params.selectedItem.item.email;
       url = this.props.navigation.state.params.isSavedCollection === true ? 'savedCollections' : 'photos';
+      url = this.props.navigation.state.params.isDiary === true ? 'diary' : 'photos';
       viewSpecificPhotos = this.props.navigation.state.params.viewSpecificPhotos;
     } else {
       email = this.props.screenProps.property.screenProps.email
     }
     this.setState({ email: email })
     let that = this;
+    if (url === 'photos') {
+      let db = firebase.firestore();
+      let photosRef = db.collection(url);
+      photosRef.orderBy('postedTime', 'desc').get().then(function (querySnapshot) {
 
+        querySnapshot.forEach(function (doc) {
+
+          let data;
+          const docNotEmpty = (doc.id, " => ", doc.data() != null);
+          if (docNotEmpty) data = (doc.id, " => ", doc.data());
+          if (viewSpecificPhotos === true) {
+            if (doc.data().isDeleted === false && data.email === selectedEmail) {
+              that.fetchUserFeed(email, data, that)
+            }
+          } else {
+            if (doc.data().isDeleted === false) {
+              that.fetchUserFeed(email, data, that)
+            } else {
+              that.setState({
+                feedRefresh: false,
+                loading: false,
+              });
+            }
+          }
+        });
+      });
+    } else if (url === 'savedCollections') {
+      that.fetchImages();
+    } else {
+      that.fetchDiary()
+    }
+  }
+
+  fetchDiary() {
+    const context = this;
+    context.setState({ feedRefresh: true, images: [], isListView: false })
+    const image = [];
+    const fetchData = [];
     let db = firebase.firestore();
-    let photosRef = db.collection(url);
-    photosRef.orderBy('postedTime', 'desc').get().then(function (querySnapshot) {
-
+    let photosRef = db.collection('diary');
+    photosRef.where('email', '==', context.props.navigation.state.params.email).where('isDeleted', '==', false).get().then(function (querySnapshot) {
+      let data;
       querySnapshot.forEach(function (doc) {
-
-        let data;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) data = (doc.id, " => ", doc.data());
-        if (viewSpecificPhotos === true) {
-          if (doc.data().isDeleted === false && data.email === selectedEmail) {
-            that.fetchUserFeed(email, data, that)
-          }
+        fetchData.push(doc.data());
+        doc.data().postedTime = context.timeConverter(data.postedTime);
+        image.push(
+          doc.data()
+        );
+        context.setState({ photoFeedData: image });
+        context.setState({
+          feedRefresh: false,
+          loading: false,
+        });
+      })
+      context.setState({ images: image, data: fetchData, loading: false, feedRefresh: false, isListView: false })
+    })
+  }
+
+  fetchImages() {
+    const context = this;
+    context.setState({ feedRefresh: true, images: [] })
+    const image = [];
+    let db = firebase.firestore();
+    let photosRef = db.collection('photos');
+    photosRef.where('isDeleted', '==', false).get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        let data;
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) {
+          data = (doc.id, " => ", doc.data());
+          photosRef.doc(data.docRef).collection('savedUsers').get().then(function (savedSnapshot) {
+            savedSnapshot.forEach(function (savedDoc) {
+              let savedData;
+              const docNotEmpty = (savedDoc.id, " => ", savedDoc.data() != null);
+              if (docNotEmpty) {
+                savedData = (savedDoc.id, " => ", savedDoc.data());
+                if (savedData.email === context.state.email) {
+                  doc.data().postedTime = context.timeConverter(data.postedTime);
+                  image.push(doc.data());
+                }
+                context.setState({ photoFeedData: image });
+                context.setState({
+                  feedRefresh: false,
+                  loading: false,
+                });
+              } else {
+                context.setPhoto([])
+              }
+            })
+          })
         } else {
-          if (doc.data().isDeleted === false) {
-            that.fetchUserFeed(email, data, that)
-          } else {
-            that.setState({
-              feedRefresh: false,
-              loading: false,
-            });
-          }
+          context.setPhoto([])
         }
-      });
-    });
+      })
+    })
   }
 
   fetchUserFeed = (email, data, that) => {
@@ -234,6 +307,7 @@ export default class mainFeed extends React.Component {
 
   addToFlatlist = (photoFeedData, data, userData, email) => {
     var that = this;
+    that.setState({ screenPropsPresent: false });
     photoFeedData.push({
       author: userData.fullName,
       authorDescription: userData.description,
@@ -251,6 +325,9 @@ export default class mainFeed extends React.Component {
       isFollowed: userData.isFollowed,
       isPrivateAccount: userData.isPrivateAccount
     });
+    if (that.props && that.props.screenProps && that.props.screenProps.navigateToOther) {
+      that.setState({ screenPropsPresent: true });
+    }
     that.fetchSavedUsers(photoFeedData, email);
 
   }
@@ -302,6 +379,7 @@ export default class mainFeed extends React.Component {
 
   navigateToComment = ({ item, index }, isComment) => {
     if (this.props.screenProps) {
+      this.setState({ screenPropsPresent: true })
       this.props.screenProps.navigation({ item, index, context: this }, isComment);
     } else {
       if (isComment) {
@@ -401,13 +479,16 @@ export default class mainFeed extends React.Component {
             borderBottomColor: '#FF7200',
             borderBottomWidth: 0.5,
           }} />
-        <View style={styles.header}>
-          <Text style={styles.inputSearch}
-          >myth</Text>
-          <TouchableOpacity onPress={() => this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: this.state.email.trim(), privateAccount: false, isSameProfile: true })}>
-            <FontAwesome5 style={styles.profile} name={'user'} />
-          </TouchableOpacity>
-        </View>
+        {this.state.screenPropsPresent === true ?
+          <View style={styles.header}>
+            <Text style={styles.inputSearch}
+            >myth</Text>
+            <TouchableOpacity onPress={() => this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: this.state.email.trim(), privateAccount: false, isSameProfile: true })}>
+              <FontAwesome5 style={styles.profile} name={'user'} />
+            </TouchableOpacity>
+          </View> : <></>
+        }
+
         {this.state.loading == true ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <ActivityIndicator size="large" color='#FF7200' />

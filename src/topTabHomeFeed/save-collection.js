@@ -135,7 +135,7 @@ export default class SaveCollection extends Component {
                                         columns={3}
                                         images={this.state.images}
                                         keyExtractor={(item, index) => index.toString()}
-                                        onPressImage={(item) => this.props.screenProps.navigation(item, false, true)}
+                                        onPressImage={(item) => this.props.screenProps.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.screenProps.navigation.state.params.email.trim(), isSavedCollection: true })}
                                         onLongPressImage={(item, index) => this.confirmDelete(item, index)}
                                     /> : <Text></Text>}
                             </View>

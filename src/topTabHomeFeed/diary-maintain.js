@@ -145,37 +145,7 @@ export default class DiaryMaintain extends Component {
                         <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
                             <ActivityIndicator size="large" color='red' />
                         </View>
-                    ) : (this.state.isListView == true ? (
-                        <FlatList
-                            refreshing={this.state.feedRefresh}
-                            onRefresh={() => this.fetchImages()}
-                            data={this.state.data}
-                            keyExtractor={(item, index) => index.toString()}
-                            style={{ flex: 1 }}
-                            renderItem={({ item, index }) => (
-                                <View key={index} style={{ paddingHorizontal: wp('1%'), marginTop: hp('1%') }}>
-                                    <View style={styles.feedBorder}>
-                                        <View style={styles.listViewImg}>
-                                            <Image style={styles.listViewInlineImg}
-                                                // source={{uri: 'https://source.unsplash.com/random/500'+Math.floor((Math.random() * 800)+ 500)}}
-                                                source={{ uri: item.url }}
-                                                loadingIndicatorSource={require('../images/loading.gif')}
-                                            />
-                                        </View>
-                                        <View style={styles.foodNameDiv}>
-                                            <Text style={styles.foodNameText}>{item.caption}</Text>
-                                        </View>
-                                        <View style={styles.locationDiv}>
-                                            <Text style={styles.locationText}>{item.location}</Text>
-                                        </View>
-                                        <View style={{ marginLeft: wp('67%') }}>
-                                            <Text >{this.timeConverter(item.postedTime)}</Text>
-
-                                        </View>
-                                    </View>
-                                </View>
-                            )}
-                        />) : (
+                    ) : (
                             <MasonryList
                                 masonryFlatListColProps={{ refreshing: this.state.feedRefresh, onRefresh: () => this.fetchImages() }}
                                 backgroundColor={'#fff6f2'}
@@ -185,9 +155,9 @@ export default class DiaryMaintain extends Component {
                                 columns={3}
                                 images={this.state.images}
                                 keyExtractor={(item, index) => index.toString()}
-                                onPressImage={() => { this.setState({ isListView: true }) }}
+                                onPressImage={(item) => this.props.screenProps.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.screenProps.navigation.state.params.email.trim(), isDiary: true })}
                                 onLongPressImage={(item, index) => this.confirmDelete(item, index)}
-                            />)
+                            />
                         )}
                 </View>
             </ScrollView>

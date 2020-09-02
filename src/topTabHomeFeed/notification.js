@@ -127,7 +127,7 @@ export default class notification extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff2e7', }}>
-     
+
 
         <View
           style={{
@@ -139,56 +139,56 @@ export default class notification extends React.Component {
               <ActivityIndicator size="large" color='red' />
             </View>
           ) : (
-          <>
-          
-                  <Text style={styles.time1}>Today</Text>
-                  <View style={styles.separator1} />
-                  
-              <FlatList
-                style={styles.root}
-                refreshing={this.state.feedRefresh}
-                onRefresh={this.fetchNotificationList}
-                data={this.state.feedData}
-                extraData={this.state}
-                ItemSeparatorComponent={() => {
-                  return (
-                    <View style={styles.separator} />
-                  
-                  )
-                }}
-                keyExtractor={(item) => {
-                  return item.id;
-                }}
-                renderItem={(item) => {
-                  const Notification = item.item;
-                  return (
-                    <View style={styles.container}>
-             
-                          <Image
-                source={require('../images/dp.jpg')}
-                style={{
-                  width: wp('20%'),
-                  height: hp('10%'),
-                  resizeMode: 'cover',
-                  borderRadius: wp('5%'),
-                }}/>
+              <>
 
-                      <View style={styles.content}>
+                <Text style={styles.time1}>Today</Text>
+                <View style={styles.separator1} />
 
-                        <TouchableOpacity onPress={() => this.props.screenProps.navigation(item, false, false, false, true)}>
-                          <View style={styles.contentHeader}>
-                        
-                            <Text style={styles.time}>
-                              {Notification.postedTime}
-                            </Text>
-                          </View>
-                        </TouchableOpacity>
-                        <Text style={styles.displaySection} rkType='primary3 mediumLine'>{Notification.body}</Text>
+                <FlatList
+                  style={styles.root}
+                  refreshing={this.state.feedRefresh}
+                  onRefresh={this.fetchNotificationList}
+                  data={this.state.feedData}
+                  extraData={this.state}
+                  ItemSeparatorComponent={() => {
+                    return (
+                      <View style={styles.separator} />
+
+                    )
+                  }}
+                  keyExtractor={(item) => {
+                    return item.id;
+                  }}
+                  renderItem={(item) => {
+                    const Notification = item.item;
+                    return (
+                      <View style={styles.container}>
+
+                        <Image
+                          source={{ uri: Notification.userAvatar }}
+                          style={{
+                            width: wp('20%'),
+                            height: hp('10%'),
+                            resizeMode: 'cover',
+                            borderRadius: wp('5%'),
+                          }} />
+
+                        <View style={styles.content}>
+
+                          <TouchableOpacity onPress={() => this.props.screenProps.navigation(item, false, false, false, true)}>
+                            <View style={styles.contentHeader}>
+
+                              <Text style={styles.time}>
+                                {Notification.postedTime}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                          <Text style={styles.displaySection} rkType='primary3 mediumLine'>{Notification.body}</Text>
+                        </View>
                       </View>
-                    </View>
-                  );
-                }} />
-                  </>
+                    );
+                  }} />
+              </>
             )}
         </View>
       </View>
@@ -216,15 +216,15 @@ const styles = StyleSheet.create({
     marginBottom: 6
   },
   separator: {
-   backgroundColor: '#FF7200'
+    backgroundColor: '#FF7200'
   },
-    separator1: {
-    height:2,
+  separator1: {
+    height: 2,
     backgroundColor: '#ccc',
-    width:300,
+    width: 300,
     marginLeft: wp('25%'),
-     marginTop: wp('-5%'),
-},
+    marginTop: wp('-5%'),
+  },
   root: {
     backgroundColor: '#fff2e7',
     marginTop: 15,
@@ -238,8 +238,8 @@ const styles = StyleSheet.create({
   },
   displaySection: {
     color: "black",
-    flexDirection:'row',
-marginTop: wp('5%'),
+    flexDirection: 'row',
+    marginTop: wp('5%'),
   },
   image: {
     width: 45,
@@ -251,16 +251,16 @@ marginTop: wp('5%'),
     fontSize: 10,
     color: "#808080",
     marginLeft: wp('45%'),
-      marginTop: wp('-20%'),
+    marginTop: wp('-20%'),
 
   },
-  time1:{
+  time1: {
     fontSize: 20,
-    color:"black",
-      marginTop: wp('10%'),
-       marginLeft: wp('5%'),
-           fontWeight: 'bold',
-           marginBottom: wp('2%'),
+    color: "black",
+    marginTop: wp('10%'),
+    marginLeft: wp('5%'),
+    fontWeight: 'bold',
+    marginBottom: wp('2%'),
   },
   bell: {
     fontSize: hp('3%'),
