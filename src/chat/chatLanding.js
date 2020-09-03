@@ -146,6 +146,7 @@ export default class chatLanding extends React.Component {
     }
 
     navigateToChat(selectedItem) {
+        console.log('inside', this.props.navigation.state.params.selectedItem)
         const uri = this.props.navigation.state.params.selectedItem && this.props.navigation.state.params.selectedItem.item.url ? this.props.navigation.state.params.selectedItem.item.url : '';
         const item = selectedItem.item ? selectedItem.item : selectedItem;
         this.setState(this.baseState);
@@ -176,7 +177,7 @@ export default class chatLanding extends React.Component {
 
     render() {
         return (
-            <View style={{ flex: 1,backgroundColor: '#fff6f2', }}>
+            <View style={{ flex: 1, backgroundColor: '#fff6f2', }}>
                 {this.state.loading == true ? (
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff6f2', }}>
                         <ActivityIndicator size="large" color='red' />
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingLeft: '5.5%',
     },
- 
+
     container: {
         paddingLeft: 19,
         paddingRight: 16,
@@ -241,8 +242,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: "bold",
         color: '#FF7200',
-          paddingTop: 10,
-          color:'black'
+        paddingTop: 10,
+        color: 'black'
     },
     content: {
         marginLeft: 16,

@@ -476,7 +476,7 @@ export default class mainFeed extends React.Component {
       <View style={{ flex: 1, }}>
         <View
           style={{
-            borderBottomColor: '#FF7200',
+            borderBottomColor: '#EE6E3D',
             borderBottomWidth: 0.5,
           }} />
         {this.state.screenPropsPresent === true ?
@@ -491,7 +491,7 @@ export default class mainFeed extends React.Component {
 
         {this.state.loading == true ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" color='#FF7200' />
+            <ActivityIndicator size="large" color='#EE6E3D' />
           </View>
         ) : (
             <FlatList
@@ -540,7 +540,7 @@ export default class mainFeed extends React.Component {
                     }}>
                       {item.isLiked === true ?
                         <TouchableOpacity onPress={() => this.onLikePost({ item, index })} style={{ paddingLeft: wp('1%') }}>
-                          <FontAwesome5 style={styles.comment} name="cookie-bite" size={22} color="#ff7200" />
+                          <FontAwesome5 style={styles.comment} name="cookie-bite" size={22} color="#EE6E3D" />
                         </TouchableOpacity>
                         :
                         <TouchableOpacity onPress={() => this.onLikePost({ item, index })} style={{ paddingLeft: wp('1%') }}>
@@ -551,7 +551,7 @@ export default class mainFeed extends React.Component {
                       </TouchableOpacity>
                       {item.isSaved === true ?
                         <TouchableOpacity onPress={() => { this.deleteCollection({ item, index }) }} style={{ paddingLeft: wp('1%') }}>
-                          <FontAwesome5 name="bookmark" size={22} color="#ff7200" />
+                          <FontAwesome5 name="bookmark" size={22} color="#EE6E3D" />
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, false)} style={{ paddingLeft: wp('3%') }}>
                           <FontAwesome5 name="bookmark" size={22} color="#808080" />
@@ -564,7 +564,7 @@ export default class mainFeed extends React.Component {
                     <View style={{ flexDirection: 'row', marginLeft: wp('5%') }}>
                       <Text style={styles.likeText}>{item.likes} like(s)</Text>
                     </View>
-                  </View>
+                  </View>  
                   <View style={styles.foodNameDiv}>
                     <Text style={styles.listProfileName1}>{item.author}</Text>
                     <Text style={styles.foodNameText}>{item.caption}</Text>
@@ -632,7 +632,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: hp('1.5%'),
-    color: '#FF7200',
+    color: '#EE6E3D',
   },
   comment: {
     paddingHorizontal: wp('2%')
@@ -646,7 +646,7 @@ const styles = StyleSheet.create({
     marginTop: wp('-1%'),
   },
   fabIcon: {
-    color: '#FF7200',
+    color: '#EE6E3D',
     fontSize: hp('2.5%'),
     marginLeft: wp('55%'),
     fontSize: 26,
@@ -664,18 +664,18 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderBottomWidth: wp('0.1%'),
     borderBottomColor: '#fff',
-    backgroundColor: '#FF7200',
+    backgroundColor: '#EE6E3D',
     fontSize: 20,
     color: '#fff',
     height: hp('4%'),
     fontStyle: 'italic',
     paddingLeft: wp('40%'),
-    backgroundColor: '#FF7200', height: hp('4%'), borderBottomWidth: 0, borderTopWidth: 0
+    backgroundColor: '#EE6E3D', height: hp('4%'), borderBottomWidth: 0, borderTopWidth: 0
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#FF7200',
+    backgroundColor: '#EE6E3D',
     padding: 10,
   },
 });

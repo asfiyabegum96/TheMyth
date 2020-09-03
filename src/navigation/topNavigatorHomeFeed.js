@@ -99,7 +99,7 @@ const TopNavigator = createBottomTabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: '#FF7200',
+      activeTintColor: '#EE6E3D',
       inactiveTintColor: '#aaa',
       showIcon: true,
       showLabel: false,

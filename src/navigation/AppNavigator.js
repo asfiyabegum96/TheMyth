@@ -112,7 +112,7 @@ const AppNavigator = createStackNavigator({
     },
     comments: {
         screen: Comments,
-        navigationOptions: { headerTitle: 'Comments' }
+        navigationOptions: { header: null },
     },
     sideNavigator: {
         screen: sideNavigator,

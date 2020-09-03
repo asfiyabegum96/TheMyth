@@ -141,7 +141,7 @@ export default class homeFixed extends React.Component {
         <TouchableOpacity onPress={() => this.props.navigation.navigate("chat", { email: this.props.navigation.state.params.email.trim() })}
           style={styles.fabDiv}>
           <View style={styles.fab}>
-            {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} /> */}
+            <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />
           </View>
         </TouchableOpacity>
         <AppIndex screenProps={{ navigation: this.navigateToPage, navigateToOther: this.props.navigation, email: this.props.navigation.state.params.email.trim() }} />
@@ -156,49 +156,23 @@ const styles = StyleSheet.create({
     flex: 1.0,
     backgroundColor: '#fff'
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#FF7200',
-    padding: 10,
-  },
-  camera: {
-    color: '#fff',
-    fontSize: hp('3.5%'),
-    paddingLeft: 8,
-    marginTop: 5,
-  },
   profile: {
     color: '#fff',
     fontSize: hp('3%'),
-    // backgroundColor: '#fff',
     paddingVertical: wp('0.5%'),
     paddingHorizontal: wp('0.8%'),
     marginTop: 5,
     marginRight: wp('1.5%'),
   },
-  inputSearch: {
-    width: wp('70%'),
-    paddingVertical: 2,
-    borderBottomWidth: wp('0.1%'),
-    borderBottomColor: '#fff',
-    backgroundColor: '#FF7200',
-    fontSize: 20,
-    color: '#fff',
-    height: hp('4%'),
-    fontStyle: 'italic',
-    paddingLeft: wp('40%'),
-    backgroundColor: '#FF7200', height: hp('4%'), borderBottomWidth: 0, borderTopWidth: 0
-  },
   fabDiv: {
     position: 'absolute',
     zIndex: 1,
-    bottom: 0,
+    bottom: wp('10%'),
     right: 0,
     margin: 15,
   },
   fab: {
-    backgroundColor: '#FF7200',
+    backgroundColor: '#EE6E3D',
     alignItems: 'center',
     width: wp('15%'),
     borderRadius: wp('10%'),

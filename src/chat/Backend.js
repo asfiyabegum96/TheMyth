@@ -2,7 +2,7 @@ import firebase from 'react-native-firebase';
 
 class Backend {
     uid = '';
-    messagesRef = null;
+    messagesRef = [];
     allMessagesArray = [];
     constructor() {
         if (!firebase.apps.length) {

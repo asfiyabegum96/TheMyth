@@ -243,7 +243,7 @@ export default class profile extends React.Component {
           <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
             <Icon name={'home'} size={30} color="#fff" />
           </TouchableOpacity>
-          {/* <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#FF7200', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
+          {/* <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#EE6E3D', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
             placeholderTextColor="#fff"
             inputStyle={{ color: '#fff' }}
             onFocus={() => this.updateSearch()}
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
     margin: 15,
   },
   fab: {
-    backgroundColor: '#FF7200',
+    backgroundColor: '#EE6E3D',
     alignItems: 'center',
     width: wp('15%'),
     borderRadius: wp('10%'),
@@ -346,11 +346,11 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#FF7200',
+    backgroundColor: '#EE6E3D',
     padding: 10,
   },
   backArrow: {
-    color: '#FF7200',
+    color: '#EE6E3D',
     fontSize: hp('3%'),
     marginTop: 5,
   },
@@ -359,18 +359,18 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderBottomWidth: wp('0.1%'),
     borderBottomColor: '#fff',
-    backgroundColor: '#FF7200',
+    backgroundColor: '#EE6E3D',
     fontSize: 20,
     color: '#fff',
     height: hp('4%'),
     fontStyle: 'italic',
     paddingLeft: wp('40%'),
-    backgroundColor: '#FF7200', height: hp('4%'), borderBottomWidth: 0, borderTopWidth: 0
+    backgroundColor: '#EE6E3D', height: hp('4%'), borderBottomWidth: 0, borderTopWidth: 0
   },
   profileName: {
     fontSize: hp('2.5%'),
     fontWeight: 'bold',
-    color: '#FF7200',
+    color: '#EE6E3D',
     marginLeft: wp('-23%'),
     marginTop: wp('20%'),
     marginBottom: wp('-20%'),
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
 
     fontSize: hp('2%'),
     fontWeight: 'bold',
-    color: '#FF7200',
+    color: '#EE6E3D',
     marginLeft: wp('3%'),
     justifyContent: 'space-between',
     marginBottom: wp('-10%'),
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
 
     fontSize: hp('2%'),
     fontWeight: 'bold',
-    color: '#FF7200',
+    color: '#EE6E3D',
     marginLeft: wp('21%'),
     justifyContent: 'space-between',
     marginBottom: wp('-10%'),
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
 
     fontSize: hp('2%'),
     fontWeight: 'bold',
-    color: '#FF7200',
+    color: '#EE6E3D',
     marginLeft: wp('20%'),
     justifyContent: 'space-between',
     marginBottom: wp('-10%'),
@@ -408,7 +408,7 @@ const styles = StyleSheet.create({
 
     fontSize: hp('2%'),
     fontWeight: 'bold',
-    color: '#FF7200',
+    color: '#EE6E3D',
     marginLeft: wp('15%'),
     justifyContent: 'space-between',
     marginTop: wp('35%'),
@@ -417,7 +417,7 @@ const styles = StyleSheet.create({
 
     fontSize: hp('2%'),
     fontWeight: 'bold',
-    color: '#FF7200',
+    color: '#EE6E3D',
     marginLeft: wp('11%'),
     justifyContent: 'space-between',
     marginTop: wp('35%'),
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
 
     fontSize: hp('2%'),
     fontWeight: 'bold',
-    color: '#FF7200',
+    color: '#EE6E3D',
     marginLeft: wp('14%'),
     justifyContent: 'space-between',
     marginTop: wp('35%'),
@@ -451,13 +451,13 @@ const styles = StyleSheet.create({
   },
   following: {
     width: wp('40%'),
-    backgroundColor: '#FF7200',
+    backgroundColor: '#EE6E3D',
     marginLeft: wp('7%'),
     alignItems: 'center',
     marginTop: wp('1%'),
     borderRadius: wp('2%'),
     borderWidth: 2,
-    borderColor: '#FF7200',
+    borderColor: '#EE6E3D',
   },
   followingtext: {
     color: 'white',
@@ -491,7 +491,7 @@ const styles = StyleSheet.create({
     top: wp('20%'),
     zIndex: 1,
     flexDirection: 'row',
-    backgroundColor: '#FF7200',
+    backgroundColor: '#EE6E3D',
   },
   countDivs: {
     position: 'absolute',
@@ -502,7 +502,7 @@ const styles = StyleSheet.create({
   },
   followTextStyle: {
     marginTop: wp('6%'),
-    color: '#FF7200',
+    color: '#EE6E3D',
   },
   but: {
     width: wp('30%'),
@@ -526,7 +526,7 @@ const styles = StyleSheet.create({
     marginBottom: wp('2%')
   },
   butText: {
-    color: '#FF7200',
+    color: '#EE6E3D',
     width: wp('50%'),
     alignItems: 'center',
     fontSize: hp('3%'),
@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
     alignItems: 'center',
     borderWidth: wp('1.5%'),
-    borderColor: '#FF7200',
+    borderColor: '#EE6E3D',
     bottom: wp('5%'),
   },
   circleFirst: {
@@ -555,6 +555,6 @@ const styles = StyleSheet.create({
     zIndex: 1,
     alignItems: 'center',
     borderWidth: wp('1.5%'),
-    borderColor: '#FF7200'
+    borderColor: '#EE6E3D'
   }
 });

@@ -390,10 +390,10 @@ class photosUpload extends React.Component {
                 <View>
                     {this.state.uploading == true ? (
                         <View style={{ marginTop: wp('2%'), }}>
-                            <Text style={{ color: '#FF7200' }}>{this.state.progress}%</Text>
+                            <Text style={{ color: '#EE6E3D' }}>{this.state.progress}%</Text>
                             <View>
                                 {this.state.progress != 100 ? (
-                                    <ActivityIndicator size='small' color='#FF7200' />
+                                    <ActivityIndicator size='small' color='#EE6E3D' />
                                 ) : (
                                         <View>
                                             <Text>Processing</Text>
@@ -431,7 +431,7 @@ const styles = StyleSheet.create({
         alignItems: 'baseline',
         justifyContent: 'center',
         borderWidth: wp('0.5%'),
-        borderColor: '#FF7200',
+        borderColor: '#EE6E3D',
         padding: wp('1%'),
         borderRadius: wp('1%'),
     },
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
         alignItems: 'baseline',
         justifyContent: 'center',
         borderWidth: wp('0.5%'),
-        borderColor: '#FF7200',
+        borderColor: '#EE6E3D',
         padding: wp('1%'),
 
         borderRadius: wp('1%'),
@@ -475,10 +475,10 @@ const styles = StyleSheet.create({
         marginTop: wp('10%'),
         paddingTop: wp('1%'),
         paddingBottom: wp('1%'),
-        backgroundColor: '#FF7200',
+        backgroundColor: '#EE6E3D',
         borderRadius: 10,
         borderWidth: wp('0.5%'),
-        borderColor: '#FF7200',
+        borderColor: '#EE6E3D',
         width: wp('50%'),
         marginLeft: 75
 

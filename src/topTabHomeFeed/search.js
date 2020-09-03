@@ -120,7 +120,7 @@ export default class search extends React.Component {
                     {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
                         <Icon name={'home'} size={30} color="#fff" />
                     </TouchableOpacity> */}
-                    <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#FF7200', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
+                    <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#EE6E3D', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
                         autoFocus="true"
                         placeholderTextColor="#fff"
                         inputStyle={{ color: '#fff' }}
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: '#FF7200',
+        backgroundColor: '#EE6E3D',
         width: wp('90%')
     },
     container: {
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 16,
         fontWeight: "bold",
-        color: '#FF7200',
+        color: '#EE6E3D',
     },
     content: {
         marginLeft: 16,
@@ -194,15 +194,15 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         borderBottomWidth: wp('0.1%'),
         borderBottomColor: '#fff',
-        backgroundColor: '#FF7200',
+        backgroundColor: '#EE6E3D',
         fontSize: 20,
-        color: '#FF7200',
+        color: '#EE6E3D',
         height: hp('4%')
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: '#FF7200',
+        backgroundColor: '#EE6E3D',
         padding: 10,
     },
     image: {
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
         marginLeft: 20
     },
     profile: {
-        color: '#FF7200',
+        color: '#EE6E3D',
         fontSize: hp('3%'),
         backgroundColor: '#fff',
         paddingVertical: wp('0.5%'),
