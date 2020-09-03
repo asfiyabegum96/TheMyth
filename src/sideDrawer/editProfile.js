@@ -6,7 +6,8 @@ import {
     TouchableOpacity,
     ActivityIndicator,
     ScrollView,
-    Image
+    Image,
+    TextInput
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import {
@@ -134,17 +135,7 @@ export default class editProfile extends React.Component {
                 ) :
                     <View >
                         <View style={styles.logo}>
-                            <Image
-                                source={{ uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTvAIbW8Ka6_KCCozwRCw2_lhWYqQUGyti9ZkVCQWqfeKElydG8" }}
-                                style={{
-                                    width: wp('25%'),
-                                    height: hp('15%'),
-                                    borderRadius: wp('30%'),
-                                    resizeMode: 'cover',
-                                    marginLeft: wp('20%'),
-                                    marginTop: wp('5%'),
-                                    marginBottom: wp('10%')
-                                }} />
+      
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -157,49 +148,64 @@ export default class editProfile extends React.Component {
                                         <Image
                                             source={{ uri: this.state.uri }}
                                             style={{
-                                                width: wp('25%'),
-                                                height: hp('15%'),
-                                                borderRadius: wp('30%'),
-                                                resizeMode: 'cover'
+                                                 width: wp('30%'),
+                  height: hp('15%'),
+                  resizeMode: 'cover',
+                  borderRadius: wp('5%'),
+                  marginTop:wp('30%'),
                                             }} />
                                     </TouchableOpacity>
                                 ) : (
                                         <TouchableOpacity onPress={this.selectImage}>
-                                            <Image
-                                                source={{ uri: this.state.user.profilePicture }}
-                                                style={{
-                                                    width: wp('25%'),
-                                                    height: hp('15%'),
-                                                    borderRadius: wp('30%'),
-                                                    resizeMode: 'cover'
-                                                }} />
+                                                              <Image
+                source={{ uri: this.state.user.profilePicture }}
+                style={{
+                  width: wp('30%'),
+                  height: hp('15%'),
+                  resizeMode: 'cover',
+                  borderRadius: wp('5%'),
+                  marginTop:wp('30%'),
+                }}
+              />
+                    <Image
+                    source={require('../images/person.png')}
+                    style={{
+                      width: wp('15%'),
+                      height: wp('15%'),
+ marginLeft: wp('19%'),
+ marginTop: wp('-8%'),
+                      resizeMode: 'cover',
+                    }} />
                                         </TouchableOpacity>
+
                                     )}
                             </View>
                         </View>
                         <View style={styles.TextInputDiv}>
-                            <TextField
-                                label='Full Name'
-                                ref={this.fieldRef}
-                                containerStyle={{ width: wp('80%'), height: hp('11%') }}
-                                textColor='#FF7200'
-                                baseColor="black"
-                                tintColor="#FF7200"
-                                onChangeText={text => this.handleChange('fullName', text)}
-                                defaultValue={this.state.user.fullName}
-                            />
-                            <TextField
-                                maxLength={50}
-                                label='Description'
-                                ref="description"
-                                containerStyle={{ width: wp('80%'), height: hp('11%') }}
-                                textColor='#FF7200'
-                                baseColor="black"
-                                autoCapitalize="false"
-                                tintColor="#FF7200"
-                                onChangeText={text => this.handleChange('description', text)}
-                                defaultValue={this.state.user.description}
-                            />
+                             <Text style={styles.labelContainer}>Name</Text>
+                    <TextInput
+                        ref={input => { this.fieldRef = input }}
+                        maxLength={150}
+                        style={styles.inputContainer}
+                        textColor='white'
+                        baseColor="white"
+                        tintColor="white"
+                        onChangeText={(text) => this.setState({ caption: text })}
+                        value={this.state.caption}
+                    />
+
+
+                    <Text style={styles.labelContainer}>Description</Text>
+                    <TextInput
+                        ref={input => { this.fieldRef = input }}
+                        maxLength={150}
+                        style={styles.inputContainer}
+                        textColor='white'
+                        baseColor="white"
+                        tintColor="white"
+                        onChangeText={(text) => this.setState({ location: text })}
+                        value={this.state.location}
+                    />
                         </View>
                         <View style={main.buttonContainer}>
                             <TouchableOpacity onPress={() => this.updateProfileDetails()}>
@@ -227,7 +233,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     TextInputDiv: {
-        alignItems: 'center',
+       
         marginTop: wp('10%'),
         marginBottom: wp('30%')
     },
@@ -249,6 +255,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 6,
         marginTop: wp('3%')
+    },
+       labelContainer: {
+        marginLeft: wp('5%'), color: 'white', paddingBottom: wp('2%')
+    },
+      inputContainer: {
+        width: wp('90%'), height: hp('6%'), marginLeft: wp('5%'),marginBottom: wp('3%'), backgroundColor: 'white', borderColor: 'white', borderWidth: 1.5, borderRadius: wp('2%'),
     },
     butText: {
         color: '#fff2e7',
