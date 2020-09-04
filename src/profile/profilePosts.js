@@ -3,7 +3,8 @@ import {
     Text,
     View,
     ActivityIndicator,
-    Image
+    Image,
+    Alert
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
@@ -93,7 +94,9 @@ export default class ProfilePosts extends React.Component {
     }
 
     confirmDelete(item, index) {
-        if (this.props.navigation.state && this.context.props.screenProps && this.context.props.screenProps.isSameProfile === true) {
+        if (this.props && this.props.screenProps && this.props.screenProps.navigation &&
+            this.props.screenProps.navigation.state && this.props.screenProps.navigation.state.params
+            && this.props.screenProps.navigation.state.params.isSameProfile === true) {
             Alert.alert(
                 //title
                 'Confirmation',

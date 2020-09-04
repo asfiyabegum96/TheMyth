@@ -135,7 +135,7 @@ export default class editProfile extends React.Component {
                 ) :
                     <View >
                         <View style={styles.logo}>
-      
+
                         </View>
                         <View style={{
                             flexDirection: 'row',
@@ -148,68 +148,68 @@ export default class editProfile extends React.Component {
                                         <Image
                                             source={{ uri: this.state.uri }}
                                             style={{
-                                                 width: wp('30%'),
-                  height: hp('15%'),
-                  resizeMode: 'cover',
-                  borderRadius: wp('5%'),
-                  marginTop:wp('30%'),
+                                                width: wp('30%'),
+                                                height: hp('15%'),
+                                                resizeMode: 'cover',
+                                                borderRadius: wp('5%'),
+                                                marginTop: wp('30%'),
                                             }} />
                                     </TouchableOpacity>
                                 ) : (
                                         <TouchableOpacity onPress={this.selectImage}>
-                                                              <Image
-                source={{ uri: this.state.user.profilePicture }}
-                style={{
-                  width: wp('30%'),
-                  height: hp('15%'),
-                  resizeMode: 'cover',
-                  borderRadius: wp('5%'),
-                  marginTop:wp('30%'),
-                }}
-              />
-                    <Image
-                    source={require('../images/person.png')}
-                    style={{
-                      width: wp('15%'),
-                      height: wp('15%'),
- marginLeft: wp('19%'),
- marginTop: wp('-8%'),
-                      resizeMode: 'cover',
-                    }} />
+                                            <Image
+                                                source={{ uri: this.state.user.profilePicture }}
+                                                style={{
+                                                    width: wp('30%'),
+                                                    height: hp('15%'),
+                                                    resizeMode: 'cover',
+                                                    borderRadius: wp('5%'),
+                                                    marginTop: wp('30%'),
+                                                }}
+                                            />
+                                            <Image
+                                                source={require('../images/person.png')}
+                                                style={{
+                                                    width: wp('15%'),
+                                                    height: wp('15%'),
+                                                    marginLeft: wp('19%'),
+                                                    marginTop: wp('-8%'),
+                                                    resizeMode: 'cover',
+                                                }} />
                                         </TouchableOpacity>
 
                                     )}
                             </View>
                         </View>
                         <View style={styles.TextInputDiv}>
-                             <Text style={styles.labelContainer}>Name</Text>
-                    <TextInput
-                        ref={input => { this.fieldRef = input }}
-                        maxLength={150}
-                        style={styles.inputContainer}
-                        textColor='white'
-                        baseColor="white"
-                        tintColor="white"
-                        onChangeText={(text) => this.setState({ caption: text })}
-                        value={this.state.caption}
-                    />
+                            <Text style={styles.labelContainer}>Name</Text>
+                            <TextInput
+                                ref={input => { this.fieldRef = input }}
+                                maxLength={150}
+                                style={styles.inputContainer}
+                                textColor='white'
+                                baseColor="white"
+                                tintColor="white"
+                                onChangeText={text => this.handleChange('fullName', text)}
+                                defaultValue={this.state.user.fullName}
+                            />
 
 
-                    <Text style={styles.labelContainer}>Description</Text>
-                    <TextInput
-                        ref={input => { this.fieldRef = input }}
-                        maxLength={150}
-                        style={styles.inputContainer}
-                        textColor='white'
-                        baseColor="white"
-                        tintColor="white"
-                        onChangeText={(text) => this.setState({ location: text })}
-                        value={this.state.location}
-                    />
+                            <Text style={styles.labelContainer}>Description</Text>
+                            <TextInput
+                                ref={input => { this.fieldRef = input }}
+                                maxLength={150}
+                                style={styles.inputContainer}
+                                textColor='white'
+                                baseColor="white"
+                                tintColor="white"
+                                onChangeText={text => this.handleChange('description', text)}
+                                defaultValue={this.state.user.description}
+                            />
                         </View>
-                        <View style={main.buttonContainer}>
+                        <View style={main.primaryButtonContanier}>
                             <TouchableOpacity onPress={() => this.updateProfileDetails()}>
-                                <Text style={main.buttonText}>Update</Text>
+                                <Text style={main.primaryButtonText}>Update</Text>
                             </TouchableOpacity>
                         </View>
                     </View>}
@@ -220,7 +220,7 @@ export default class editProfile extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#ff7200',
+        backgroundColor: '#EE6E3D',
         flex: 1,
     },
     TitleDiv: {
@@ -228,12 +228,12 @@ const styles = StyleSheet.create({
         marginTop: wp('5%')
     },
     title: {
-        color: '#FF7200',
+        color: '#EE6E3D',
         fontSize: hp('4%'),
         fontWeight: 'bold',
     },
     TextInputDiv: {
-       
+
         marginTop: wp('10%'),
         marginBottom: wp('30%')
     },
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#22222C',
         marginBottom: 10,
-        borderColor: '#FF7200',
+        borderColor: '#EE6E3D',
         backgroundColor: '#A19FA3',
     },
     checkboxDiv: {
@@ -256,24 +256,24 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         marginTop: wp('3%')
     },
-       labelContainer: {
+    labelContainer: {
         marginLeft: wp('5%'), color: 'white', paddingBottom: wp('2%')
     },
-      inputContainer: {
-        width: wp('90%'), height: hp('6%'), marginLeft: wp('5%'),marginBottom: wp('3%'), backgroundColor: 'white', borderColor: 'white', borderWidth: 1.5, borderRadius: wp('2%'),
+    inputContainer: {
+        width: wp('90%'),color: 'white', height: hp('6%'), marginLeft: wp('5%'), marginBottom: wp('3%'), backgroundColor: '#EE6E3D', borderColor: 'white', borderWidth: 1.5, borderRadius: wp('2%'),
     },
     butText: {
         color: '#fff2e7',
         fontSize: hp('3%'),
         marginTop: 10,
         borderColor: '#A9A9A9',
-        backgroundColor: '#FF7200',
+        backgroundColor: '#EE6E3D',
         paddingVertical: 8,
         paddingHorizontal: 20,
         fontWeight: 'bold',
         borderRadius: 6,
         borderWidth: 1,
-        borderColor: '#FF7200'
+        borderColor: '#EE6E3D'
     },
     socialIconDiv: {
         flexDirection: 'row',
@@ -308,12 +308,12 @@ const styles = StyleSheet.create({
         fontSize: hp('2%'),
         marginTop: 10,
         borderColor: '#A9A9A9',
-        backgroundColor: '#FF7200',
+        backgroundColor: '#EE6E3D',
         paddingVertical: 8,
         paddingHorizontal: 20,
         borderRadius: 6,
         borderWidth: 1,
-        borderColor: '#FF7200',
+        borderColor: '#EE6E3D',
         fontWeight: 'bold',
     },
 });

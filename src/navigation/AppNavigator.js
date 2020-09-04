@@ -36,26 +36,29 @@ const AppNavigator = createStackNavigator({
         screen: privacySettings,
         navigationOptions: {
             headerTitle: 'Privacy',
-            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17 },
         }
     },
     accountSettings: {
         screen: accountSettings,
         navigationOptions: {
             headerTitle: 'Account',
-            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17 },
         }
     },
     notificationsSettings: {
         screen: notificationsSettings,
         navigationOptions: {
             headerTitle: 'Notifications',
-            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17 },
         }
     },
     editProfile: {
         screen: editProfile,
-        navigationOptions: { headerTitle: 'Edit Profile' }
+        navigationOptions: {
+            headerTitle: 'Edit Profile',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+        }
     },
     search: {
         screen: search,
@@ -65,7 +68,7 @@ const AppNavigator = createStackNavigator({
         screen: updatePassword,
         navigationOptions: {
             headerTitle: 'Update Password',
-            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17 },
         }
     },
     signup: {
@@ -73,7 +76,7 @@ const AppNavigator = createStackNavigator({
         navigationOptions: {
             header: null
             // headerTitle: 'Create Account',
-            // headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white' },
+            // headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white' },
         }
     },
     forgotPassword: {
@@ -81,7 +84,7 @@ const AppNavigator = createStackNavigator({
         navigationOptions: {
             header: null
             // headerTitle: 'Forgot Password',
-            // headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white' }
+            // headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white' }
         }
     },
     profile: {
@@ -107,7 +110,7 @@ const AppNavigator = createStackNavigator({
         screen: chatScreen,
         navigationOptions: {
             headerTitle: 'Chat',
-            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17 },
         }
     },
     comments: {
@@ -118,7 +121,7 @@ const AppNavigator = createStackNavigator({
         screen: sideNavigator,
         navigationOptions: {
             headerTitle: 'Settings',
-            headerTintColor: "#fff", headerStyle: { backgroundColor: '#ed5720' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17 },
         },
     },
 });

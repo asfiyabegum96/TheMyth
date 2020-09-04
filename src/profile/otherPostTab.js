@@ -7,8 +7,6 @@ import {
     from 'react-native-responsive-screen';
 import ProfilePosts from './profilePosts';
 import { createAppContainer } from 'react-navigation';
-import DiaryMaintain from '../topTabHomeFeed/diary-maintain';
-import SaveCollection from '../topTabHomeFeed/save-collection';
 const NavigatorTab = createMaterialTopTabNavigator({
     Home: {
         screen: ProfilePosts,
@@ -22,30 +20,6 @@ const NavigatorTab = createMaterialTopTabNavigator({
             },
         }
     },
-    Second: {
-        screen: DiaryMaintain,
-        navigationOptions: {
-            title: 'Diary',
-            tabBarOnPress: ({ navigation, defaultHandler }) => {
-                defaultHandler()
-                if (navigation.state && navigation.state.params) {
-                    navigation.state.params.onFocus()
-                }
-            },
-        }
-    },
-    Third: {
-        screen: SaveCollection,
-        navigationOptions: {
-          title: 'Saved',
-          tabBarOnPress: ({ navigation, defaultHandler }) => {
-            defaultHandler()
-            if (navigation.state && navigation.state.params) {
-              navigation.state.params.onFocus()
-            }
-          },
-        }
-      }
 },
     {
         tabBarOptions: {
@@ -71,9 +45,9 @@ const NavigatorTab = createMaterialTopTabNavigator({
     },
 );
 
-const PostTab = createAppContainer(NavigatorTab);
+const OtherPostTab = createAppContainer(NavigatorTab);
 
-export default PostTab;
+export default OtherPostTab;
 
 
 

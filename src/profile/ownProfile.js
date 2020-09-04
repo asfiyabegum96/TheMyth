@@ -26,6 +26,7 @@ import firebase from 'react-native-firebase';
 import { SearchBar } from 'react-native-elements';
 import main from "../authentication/styles/main";
 import PostTab from './postTab';
+import OtherPostTab from './otherPostTab';
 
 
 
@@ -275,12 +276,12 @@ export default class profile extends React.Component {
                       resizeMode: 'cover',
                     }} />
                 </TouchableOpacity></View> : <></>}
-              <View style={{ flexDirection: 'row', marginLeft: wp('40%'), marginTop: wp('10%') }}>
-                <Text style={{
-                  fontSize: hp('2%'),
-                  color: 'black',
-                }} >{this.state.user.description}</Text>
-              </View>
+            <View style={{ flexDirection: 'row', marginLeft: wp('40%'), marginTop: wp('10%') }}>
+              <Text style={{
+                fontSize: hp('2%'),
+                color: 'black',
+              }} >{this.state.user.description}</Text>
+            </View>
           </View>
           {this.props.navigation.state.params.isSameProfile === false ?
             <View style={{ flexDirection: 'row' }}>
@@ -315,7 +316,9 @@ export default class profile extends React.Component {
                 <ActivityIndicator size="large" color='red' />
               </View>
             ) : (
-                <PostTab screenProps={{ navigation: this.props.navigation, email: this.state.user.email.trim() }}></PostTab>
+                this.props.navigation.state.params.isSameProfile === true ?
+                  <PostTab screenProps={{ navigation: this.props.navigation, email: this.state.user.email.trim() }}></PostTab> :
+                  <OtherPostTab screenProps={{ navigation: this.props.navigation, email: this.state.user.email.trim() }}>/</OtherPostTab>
               )}
           </View>
         </ScrollView>
