@@ -22,7 +22,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "ChatOt";
+    return "Myth";
   }
   @Override
   protected ReactActivityDelegate createReactActivityDelegate() {
