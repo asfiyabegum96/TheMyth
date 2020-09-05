@@ -87,6 +87,21 @@ export default class mainFeed extends React.Component {
       this.state.photoFeedData[index].isLiked = true;
       db.collection("photos").doc(selectedPhoto.docRef).collection('likedUsers').doc(this.state.email).set({ email: this.state.email.trim() })
       this.setState({ alreadyLiked: true, liked: true })
+      // let dateTime = Date.now();
+      // let timestamp = Math.floor(dateTime / 1000);
+      // const photoObj = this.props.screenProps.userDetails;
+      // console.log(photoObj)
+      // const notificationObj = {
+      //   docRef: selectedPhoto.docRef,
+      //   title: 'Photo upload',
+      //   body: `${photoObj.author} added a photo!`,
+      //   userAvatar: photoObj.userAvatar,
+      //   postedTime: timestamp,
+      //   email: photoObj.email
+      // }
+      // firebase.firestore().collection('notifications').doc(selectedPhoto.docRef).set(notificationObj).then(function (docRef) {
+
+      // });
     }
   }
 
@@ -461,16 +476,16 @@ export default class mainFeed extends React.Component {
 
 
   render() {
-    //Heart like spring animation 
-    const bouncyHeart = this.state.scale.interpolate({
-      inputRange: [0, 1, 2],
-      outputRange: [1, .8, 1]
-    })
-    const heartButtonStyle = {
-      transform: [
-        { scale: bouncyHeart }
-      ]
-    }
+    // //Heart like spring animation 
+    // const bouncyHeart = this.state.scale.interpolate({
+    //   inputRange: [0, 1, 2],
+    //   outputRange: [1, .8, 1]
+    // })
+    // const heartButtonStyle = {
+    //   transform: [
+    //     { scale: bouncyHeart }
+    //   ]
+    // }
 
     return (
       <View style={{ flex: 1, }}>
@@ -520,9 +535,9 @@ export default class mainFeed extends React.Component {
                         <Text style={styles.listProfileName}>{item.author}</Text>
                         <View style={styles.locationDiv}>
                           <Text style={styles.locationText}>{item.location}</Text>
-                          <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('3%') }}>
+                          {/* <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('3%') }}>
                             <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
-                          </TouchableOpacity>
+                          </TouchableOpacity> */}
                         </View>
                       </TouchableOpacity>
                     </View>
@@ -564,7 +579,7 @@ export default class mainFeed extends React.Component {
                     <View style={{ flexDirection: 'row', marginLeft: wp('5%') }}>
                       <Text style={styles.likeText}>{item.likes} like(s)</Text>
                     </View>
-                  </View>  
+                  </View>
                   <View style={styles.foodNameDiv}>
                     <Text style={styles.listProfileName1}>{item.author}</Text>
                     <Text style={styles.foodNameText}>{item.caption}</Text>

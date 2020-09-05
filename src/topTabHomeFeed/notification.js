@@ -38,10 +38,28 @@ export default class notification extends React.Component {
 
   componentDidMount() {
     loc(this);
-    this.fetchNotificationList();
+    this.fetchFollowers();
   }
 
-  fetchNotificationList = () => {
+  fetchFollowers = () => {
+    let emailArray = [];
+    let context = this;
+    let db = firebase.firestore();
+    let photosRef = db.collection('signup');
+    photosRef.doc(context.props.screenProps.userDetails.docRef).collection('following').get().then(function (followerSnapshot) {
+      followerSnapshot.forEach(function (followerDoc) {
+        const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
+        if (docNotEmpty) {
+          isFollower = true;
+          emailArray.push(followerDoc.data().email);
+        }
+      });
+      context.fetchNotificationList(emailArray);
+      context.setState({ emailArray: emailArray });
+    });
+  }
+
+  fetchNotificationList = (emailArray) => {
     this.setState({
       feedData: [],
       feedRefresh: true
@@ -49,15 +67,22 @@ export default class notification extends React.Component {
     let that = this;
     let db = firebase.firestore();
     let notificationRef = db.collection('notifications');
-    notificationRef.get().then(function (querySnapshot) {
+    notificationRef.orderBy('postedTime', 'desc').get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         let data;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) {
           data = (doc.id, " => ", doc.data());
+          if (emailArray.includes(data.email)) {
+            let feedData = that.state.feedData;
+            that.addToFlatlist(feedData, data);
+          }
+        } else {
+          that.setState({
+            feedRefresh: false,
+            loading: false,
+          });
         }
-        let feedData = that.state.feedData;
-        that.addToFlatlist(feedData, data);
       });
     });
     that.setState({
@@ -65,7 +90,6 @@ export default class notification extends React.Component {
       loading: false,
     });
   }
-
 
   addToFlatlist = (feedData, data) => {
     var that = this;
@@ -126,9 +150,7 @@ export default class notification extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff2e7', }}>
-
-
+      <View style={{ flex: 1, backgroundColor: '#fff6f2', }}>
         <View
           style={{
             borderBottomColor: '#22222C',
@@ -140,14 +162,13 @@ export default class notification extends React.Component {
             </View>
           ) : (
               <>
-
-                <Text style={styles.time1}>Today</Text>
+                <Text style={styles.time1}>Recents</Text>
                 <View style={styles.separator1} />
 
                 <FlatList
                   style={styles.root}
                   refreshing={this.state.feedRefresh}
-                  onRefresh={this.fetchNotificationList}
+                  onRefresh={this.fetchFollowers}
                   data={this.state.feedData}
                   extraData={this.state}
                   ItemSeparatorComponent={() => {
@@ -226,7 +247,7 @@ const styles = StyleSheet.create({
     marginTop: wp('-5%'),
   },
   root: {
-    backgroundColor: '#fff2e7',
+    backgroundColor: '#fff6f2',
     marginTop: 15,
   },
   container: {

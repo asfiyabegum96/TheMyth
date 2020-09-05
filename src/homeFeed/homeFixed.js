@@ -59,7 +59,7 @@ export default class homeFixed extends React.Component {
     const context = this;
     let db = firebase.firestore();
     let photosRef = db.collection('signup');
-    photosRef.where('email', '==', context.props.navigation.state.params.email).get().then(function (querySnapshot) {
+    photosRef.where('email', '==', context.props.navigation.state.params.email.trim()).get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         let data;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -144,7 +144,7 @@ export default class homeFixed extends React.Component {
             <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />
           </View>
         </TouchableOpacity>
-        <AppIndex screenProps={{ navigation: this.navigateToPage, navigateToOther: this.props.navigation, email: this.props.navigation.state.params.email.trim() }} />
+        <AppIndex screenProps={{ navigation: this.navigateToPage, navigateToOther: this.props.navigation, email: this.props.navigation.state.params.email.trim(), userDetails: this.state.user }} />
       </View>
     );
   }
