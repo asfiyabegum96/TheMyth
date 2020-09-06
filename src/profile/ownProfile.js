@@ -39,10 +39,12 @@ export default class profile extends React.Component {
       loading: true,
       navProps: props.navigation.state.params,
       followText: 'Follow',
+      whisperText: 'Whisper',
       followersCount: 0,
       followingCount: 0
     }
     this.baseState = this.state;
+    console.log(props.navigation.state.params)
   }
 
   componentDidMount() {
@@ -64,7 +66,7 @@ export default class profile extends React.Component {
     } else {
       email = params.searchedEmail
       if (params.isFollowed === true) {
-        this.setState({ followText: 'Following' })
+        this.setState({ followText: 'Following' });
       }
     }
     photosRef.where('email', '==', email).get().then(function (querySnapshot) {
@@ -217,27 +219,43 @@ export default class profile extends React.Component {
     let db = firebase.firestore();
     if (this.state.followText === 'Follow') {
       this.setState({ followText: 'Following' });
+      this.setState({ whisperText: 'Request Pending' });
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => console.log('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
-
     } else {
-      this.setState({ followText: 'Follow' })
+      this.setState({ followText: 'Follow' });
+      this.setState({ whisperText: 'Whisper' });
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => console.log('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).update({ email: userData.email.trim() + '_removed' })
+    }
+  }
 
+  handleWhisper() {
+    const searchedUserData = this.props.navigation.state.params;
+    if (searchedUserData.isPrivateAccount === true) {
+      const saveObj = {
+        email: userData.email.trim(),
+        fullName: userData.fullName,
+        profilePicture: userData.profilePicture,
+        docRef: searchedUserData.docRef
+      }
+      db.collection("signup").doc(userData.docRef).collection('pendingFollowers').doc(userData.email.trim()).set(saveObj);
+      this.props.navigation.navigate('chatScreen', { selectedItem: this.state.user, userDetails: this.state.user, email: this.props.navigation.state.params.email })
+    } else {
+      this.props.navigation.navigate('chatScreen', { selectedItem: this.state.user, userDetails: this.state.user, email: this.props.navigation.state.params.email })
     }
   }
 
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff6f2' }}>
-        {this.props.navigation.state.params.isSameProfile === true ? <View></View> : (
+        {/* {this.props.navigation.state.params.isSameProfile === true ? <View></View> : (
           <TouchableOpacity onPress={() => this.props.navigation.navigate('chatScreen', { selectedItem: this.state.user, userDetails: this.state.user, email: this.props.navigation.state.params.email })}
             style={styles.fabDiv}>
             <View style={styles.fab}>
               <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />
             </View>
-          </TouchableOpacity>)}
+          </TouchableOpacity>)} */}
         <View style={styles.header}>
           <Text style={styles.inputSearch}
           >myth</Text>
@@ -291,8 +309,8 @@ export default class profile extends React.Component {
                 </TouchableOpacity>
               </View>
               <View style={styles.following}>
-                <TouchableOpacity >
-                  <Text style={styles.followingtext1}>Whisper</Text>
+                <TouchableOpacity onPress={() => this.handleWhisper()}>
+                  <Text style={styles.followingtext1}>{this.state.whisperText}</Text>
                 </TouchableOpacity>
               </View>
             </View> : <View></View>}

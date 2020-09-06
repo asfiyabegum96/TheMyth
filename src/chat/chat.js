@@ -284,27 +284,53 @@ export default class chatScreen extends React.Component {
         );
     }
 
+    acceptRequest = () => {
+        let db = firebase.firestore();
+        const item = this.state.userDetails;
+        const selectedItem = this.state.selectedItem;
+        const context = this;
+        context.state.selectedItem.isFollowing = true;
+        context.setState({ selectedItem: context.state.selectedItem });
+        db.collection("signup").doc(item.docRef).collection('following').doc(selectedItem.email.trim()).set({ email: selectedItem.email.trim() })
+        db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(selectedItem.email.trim()).update({ email: selectedItem.email.trim() + '_accepted' }).then(() => {
+            //   context.getFollowers();
+        })
+    }
+
+    cancelRequest = () => {
+        const item = this.state.userDetails;
+        let db = firebase.firestore();
+        db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(item.email.trim()).update({ email: item.email.trim() + '_cancelled' }).then(() => {
+            //   context.getFollowers();
+        })
+    }
+
     renderChatFooter(props) {
         return (
             <>
-                {this.state.userDetails.isPrivateAccount === true ?
+                {this.state.selectedItem.isFollowing !== true && this.state.messages.length > 0 ?
                     <View style={{ borderWidth: 1, borderColor: '#ff2700', margin: wp('5%'), borderRadius: 10 }}>
                         <View style={styles.whisper}>
                             <Text style={{ color: '#ccc', fontWeight: 'bold' }}>{this.state.selectedItem.fullName} has something to whisper!</Text>
                         </View>
                         <View style={{ flexDirection: 'row' }}>
                             <View style={styles.accept}>
-                                <TouchableOpacity style={{ marginBottom: wp('25%'), flexDirection: 'row' }}>
+                                <TouchableOpacity style={{ marginBottom: wp('25%'), flexDirection: 'row' }} onPress={this.acceptRequest}>
                                     <Text style={styles.acceptText}>Accept</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.deny}>
-                                <TouchableOpacity >
+                                <TouchableOpacity onPress={this.cancelRequest}>
                                     <Text style={styles.denyText}>Deny</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
-                    </View> : <></>}
+                    </View> :
+                    <View style={{ borderWidth: 1, borderColor: '#ff2700', margin: wp('5%'), borderRadius: 10 }}>
+                        <View style={styles.whisper}>
+                            <Text style={{ color: '#ccc', fontWeight: 'bold' }}>{this.state.selectedItem.fullName} has private account!</Text>
+                        </View>
+                    </View>}
             </>)
     }
 

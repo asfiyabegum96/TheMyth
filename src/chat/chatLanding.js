@@ -69,7 +69,7 @@ export default class chatLanding extends React.Component {
             followerSnapshot.forEach(function (followerDoc) {
                 const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                 if (docNotEmpty) {
-                    isFollower = true;
+                    followerDoc.data().isFollower = true;
                     emailArray.push(followerDoc.data().email);
                     searchArray.push(followerDoc.data())
                 }
@@ -87,6 +87,14 @@ export default class chatLanding extends React.Component {
                 if (docNotEmpty) {
                     if (!emailArray.includes(followerDoc.data().email)) {
                         searchArray.push(followerDoc.data());
+                    } else {
+                        if(searchArray.length) {
+                            searchArray.forEach(element => {
+                                if(element.email === followerDoc.data().email) {
+                                    element.isFollowing = true;
+                                }
+                            });
+                        }
                     }
                 }
             })
@@ -126,6 +134,8 @@ export default class chatLanding extends React.Component {
                         const docNotEmpty = (doc.id, " => ", doc.data() != null);
                         if (docNotEmpty) {
                             data = (doc.id, " => ", doc.data());
+                            doc.data().isFollowing = element.isFollowing;
+                            doc.data().isFollower = element.isFollower;
                             resultArray.push(doc.data())
                         }
                     });
@@ -146,7 +156,6 @@ export default class chatLanding extends React.Component {
     }
 
     navigateToChat(selectedItem) {
-        console.log('inside', this.props.navigation.state.params.selectedItem)
         const uri = this.props.navigation.state.params.selectedItem && this.props.navigation.state.params.selectedItem.item.url ? this.props.navigation.state.params.selectedItem.item.url : '';
         const item = selectedItem.item ? selectedItem.item : selectedItem;
         this.setState(this.baseState);
