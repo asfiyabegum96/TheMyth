@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   FlatList,
   Animated,
-  TouchableWithoutFeedback,
-  ActivityIndicator
+  Clipboard,
+  ActivityIndicator,
+  Alert
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -483,6 +484,12 @@ export default class mainFeed extends React.Component {
     // })
   }
 
+  copyUrl(selectedItem) {
+    console.log(selectedItem)
+    Clipboard.setString(selectedItem.url);
+    alert("Photo url copied!")
+  }
+
 
   render() {
     // //Heart like spring animation 
@@ -544,9 +551,9 @@ export default class mainFeed extends React.Component {
                         <Text style={styles.listProfileName}>{item.author}</Text>
                         <View style={styles.locationDiv}>
                           <Text style={styles.locationText}>{item.location}</Text>
-                          {/* <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, true)} style={{ paddingLeft: wp('3%') }}>
+                          <TouchableOpacity onPress={() => this.copyUrl(item)} style={{ paddingLeft: wp('3%') }}>
                             <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
-                          </TouchableOpacity> */}
+                          </TouchableOpacity>
                         </View>
                       </TouchableOpacity>
                     </View>
