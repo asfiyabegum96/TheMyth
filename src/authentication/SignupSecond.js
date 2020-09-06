@@ -152,8 +152,8 @@ export default class SignupSecond extends React.Component {
                     <Image
                       source={{ uri: this.state.uri }}
                       style={{
-                        width: wp('35%'),
-                        height: hp('25%'),
+                        width: wp('30%'),
+                        height: hp('15%'),
                         resizeMode: 'cover',
                         borderRadius: wp('2%'), borderWidth: 1.5, borderColor: 'white'
                       }} />
@@ -163,8 +163,8 @@ export default class SignupSecond extends React.Component {
                       <Image
                         source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" }}
                         style={{
-                          width: wp('35%'),
-                          height: hp('25%'),
+                          width: wp('30%'),
+                          height: hp('15%'),
                           resizeMode: 'cover',
                           borderRadius: wp('2%'), borderWidth: 1.5, borderColor: 'white'
                         }} />

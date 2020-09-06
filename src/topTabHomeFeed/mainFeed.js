@@ -485,7 +485,6 @@ export default class mainFeed extends React.Component {
   }
 
   copyUrl(selectedItem) {
-    console.log(selectedItem)
     Clipboard.setString(selectedItem.url);
     alert("Photo url copied!")
   }
