@@ -73,6 +73,11 @@ export default class Home extends React.Component {
 
   componentDidMount() {
     loc(this);
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.props.navigation.navigate('homeFixed', { email: user.email.trim() })
+      }
+    })
   }
 
   componentWillUnMount() {

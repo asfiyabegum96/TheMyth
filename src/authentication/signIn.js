@@ -144,13 +144,13 @@ export default class Home extends React.Component {
                 </TouchableOpacity>
               </View>
               {this.state.fieldNotEmpty == true ? (
-                <Text style={{ color: 'red' }}>Please enter email and password</Text>
+                <Text style={{ color: 'black', marginTop: wp('2%') }}>Please enter email and password</Text>
               ) : (
                   <View></View>
                 )}
 
               {this.state.isInvalid == true ? (
-                <Text style={{ color: 'red' }}>Incorrect email ID or password</Text>
+                <Text style={{ color: 'black', marginTop: wp('2%') }}>Incorrect email ID or password</Text>
               ) : (
                   <View></View>
                 )}

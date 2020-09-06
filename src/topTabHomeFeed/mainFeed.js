@@ -188,6 +188,9 @@ export default class mainFeed extends React.Component {
             if (doc.data().isDeleted === false) {
               that.fetchUserFeed(email, data, that)
             } else {
+              if (that.props && that.props.screenProps && that.props.screenProps.navigateToOther) {
+                that.setState({ screenPropsPresent: true });
+              }
               that.setState({
                 feedRefresh: false,
                 loading: false,
@@ -258,11 +261,17 @@ export default class mainFeed extends React.Component {
                   loading: false,
                 });
               } else {
+                if (context.props && context.props.screenProps && context.props.screenProps.navigateToOther) {
+                  context.setState({ screenPropsPresent: true });
+                }
                 context.setPhoto([])
               }
             })
           })
         } else {
+          if (context.props && context.props.screenProps && context.props.screenProps.navigateToOther) {
+            context.setState({ screenPropsPresent: true });
+          }
           context.setPhoto([])
         }
       })

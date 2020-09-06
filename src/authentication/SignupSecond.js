@@ -30,6 +30,7 @@ export default class SignupSecond extends React.Component {
       imagePath: '',
       imageSelected: false,
       radioState: 'others',
+      signUpClicked: false,
     }
   }
 
@@ -100,7 +101,12 @@ export default class SignupSecond extends React.Component {
   }
 
   signUp = () => {
+    this.setState({ signUpClicked: true })
     this.props.insertUser();
+  }
+
+  navigateToSignIn = () => {
+    this.props.navigateToSignIn();
   }
 
 
@@ -228,12 +234,16 @@ export default class SignupSecond extends React.Component {
                 {/* <TouchableOpacity onPress={this.back}>
                   <Text style={main.leftBorderButton}>BACK</Text>
                 </TouchableOpacity> */}
-                <TouchableOpacity onPress={this.signUp}>
-                  <Text style={main.primaryButtonText}>Sign Up</Text>
-                </TouchableOpacity>
+                {this.state.signUpClicked === false ?
+                  <TouchableOpacity onPress={this.signUp}>
+                    <Text style={main.primaryButtonText}>Sign Up</Text>
+                  </TouchableOpacity> : <></>
+                }
+
 
               </View>
-              <Text style={{ marginLeft: wp('20%'), marginTop: wp('5%'), color: 'white', fontSize: hp('2%'), marginBottom: wp('5%'), }}>Already a member? Then<Text style={{ fontWeight: "bold" }}> Sign In</Text></Text>
+              <TouchableOpacity style={{ marginLeft: wp('20%'), marginTop: wp('5%'), marginBottom: wp('5%'), }} onPress={this.navigateToSignIn}>
+                <Text style={{ color: 'white', fontSize: hp('2%') }}>Already a member? Then<Text style={{ fontWeight: "bold" }}> Sign In</Text></Text></TouchableOpacity>
             </View>
           </ScrollView>
         }

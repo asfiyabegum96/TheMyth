@@ -32,7 +32,8 @@ export default class SignupHome extends React.Component {
       isInvalid: false,
       loading: true,
       passwordMismatch: false,
-      hidePassword: true
+      hidePassword: true,
+      clicked: false
     }
     this.ref = firebase.firestore().collection('signup')
   }
@@ -50,7 +51,6 @@ export default class SignupHome extends React.Component {
   // check Textfields are not empty
 
   requireField = (e) => {
-    this.setState({ clicked: true })
     const values = this.props.values;
     if (values.email !== '' && values.password !== '' && values.fullName !== '' && values.confirmPassword !== '') {
       this.setState({
@@ -105,7 +105,7 @@ export default class SignupHome extends React.Component {
     let query = signupRef.where('email', '==', userEmail.trim()).where('isDeleted', '==', false).get()
       .then(snapshot => {
         if (snapshot.empty) {
-          this.setState({ clicked: false })
+          this.setState({ clicked: true })
           this.props.nextStep();
           return;
         }
@@ -176,12 +176,12 @@ export default class SignupHome extends React.Component {
                     defaultValue={values.email}
                   />
                   {this.state.emailInvalid == true ? (
-                    <Text style={{ color: 'red' }}>Please enter a valid Email ID</Text>
+                    <Text style={{ color: 'black' }}>Please enter a valid Email ID</Text>
                   ) : (
                       <View></View>
                     )}
                   {this.state.isInvalid == true ? (
-                    <Text style={{ color: 'red' }}>Email ID already exists!</Text>
+                    <Text style={{ color: 'black' }}>Email ID already exists!</Text>
                   ) : (
                       <View></View>
                     )}
@@ -219,25 +219,27 @@ export default class SignupHome extends React.Component {
                     defaultValue={values.confirmPassword}
                   />
                   {this.state.passwordInvalid == true ? (
-                    <Text style={{ color: 'red' }}>Please enter strong password</Text>
+                    <Text style={{ color: 'black' }}>Please enter strong password</Text>
                   ) : (
                       <View></View>
                     )}
                   {this.state.passwordMismatch == true ? (
-                    <Text style={{ color: 'red' }}>Password mismatch!</Text>
+                    <Text style={{ color: 'black' }}>Password mismatch!</Text>
                   ) : (
                       <View></View>
                     )}
                   {this.state.fieldNotEmpty == true ? (
-                    <Text style={{ color: 'red' }}>Please enter all values</Text>
+                    <Text style={{ color: 'black' }}>Please enter all values</Text>
                   ) : (
                       <View></View>
                     )}
                 </View>
                 <View style={main.primaryButtonContanier}>
-                  <TouchableOpacity disabled={this.state.clicked} >
-                    <Text style={main.primaryButtonText} onPress={this.requireField}>Continue</Text>
-                  </TouchableOpacity>
+                  {this.state.clicked === false ?
+                    <TouchableOpacity disabled={this.state.clicked} >
+                      <Text style={main.primaryButtonText} onPress={this.requireField}>Next</Text>
+                    </TouchableOpacity> : <></>
+                  }
                 </View>
                 {/* <View style={styles.socialIconDiv}>
               <TouchableOpacity>

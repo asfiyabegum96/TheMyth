@@ -56,6 +56,11 @@ export default class signup extends React.Component {
     });
   };
 
+  navigateToSignIn = () => {
+    let context = this;
+    context.props.navigation.navigate('signIn')
+  }
+
   insertUser = () => {
     let context = this;
     context.setState({ loadingSecond: true })
@@ -121,6 +126,7 @@ export default class signup extends React.Component {
                   handleChange={this.handleChange}
                   values={values}
                   insertUser={this.insertUser.bind(this)}
+                  navigateToSignIn={this.navigateToSignIn.bind(this)}
                 />)}
           </React.Fragment>
         );
