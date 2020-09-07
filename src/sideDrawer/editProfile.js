@@ -59,7 +59,7 @@ export default class editProfile extends React.Component {
             description: this.state.descriptionChanged === true ? this.state.description : this.state.user.description
         }
         db.collection('signup').doc(this.state.user.docRef).update(saveParams).then(() => {
-            alert('success');
+            // alert('success');
             this.navigateToRoute();
         })
     }
