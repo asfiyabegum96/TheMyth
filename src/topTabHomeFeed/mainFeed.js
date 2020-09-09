@@ -668,7 +668,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp('2%')
   },
   more: {
-    marginLeft: wp('60%'),
+    marginLeft: wp('50%'),
   },
   likeText: {
     marginRight: wp('45%'),
@@ -678,7 +678,7 @@ const styles = StyleSheet.create({
   fabIcon: {
     color: '#EE6E3D',
     fontSize: hp('2.5%'),
-    marginLeft: wp('55%'),
+    marginLeft: wp('50%'),
     fontSize: 26,
   },
   profile: {

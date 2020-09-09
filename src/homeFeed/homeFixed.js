@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
   },
   fabIcon: {
     color: '#fff',
-    padding: wp('3%'),
+    padding: wp('2%'),
     marginRight: wp('1%')
   },
 });

@@ -277,7 +277,7 @@ export default class profile extends React.Component {
                   width: wp('30%'),
                   height: hp('15%'),
                   resizeMode: 'cover',
-                  borderRadius: wp('5%'), borderWidth: 1.5, borderColor: 'white'
+                  borderRadius: wp('5%'), borderWidth: 1.5
                 }}
               />
               <Text style={styles.profileName}>{this.state.user.fullName}</Text>
@@ -285,16 +285,9 @@ export default class profile extends React.Component {
             {this.props.navigation.state.params.isSameProfile === true ?
               <View style={{ marginLeft: wp('70%') }}>
                 <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
-                  <Image
-                    source={require('../images/person.png')}
-                    style={{
-                      width: wp('15%'),
-                      height: wp('15%'),
-
-                      resizeMode: 'cover',
-                    }} />
+              
                 </TouchableOpacity></View> : <></>}
-            <View style={{ flexDirection: 'row', marginLeft: wp('40%'), marginTop: wp('10%') }}>
+            <View style={{ flexDirection: 'row', marginLeft: wp('20%'), marginTop: wp('10%') }}>
               <Text style={{
                 fontSize: hp('2%'),
                 color: 'black',
@@ -314,6 +307,11 @@ export default class profile extends React.Component {
                 </TouchableOpacity>
               </View>
             </View> : <View></View>}
+              <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={() => this.this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
+                <Text style={styles.buttonText}>Edit Profile</Text>
+              </TouchableOpacity>
+            </View>
           <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-15%', justifyContent: 'center', alignItems: 'center' }}>
 
             <Text style={styles.followBox1}>{this.state.followersCount}</Text>
@@ -325,10 +323,10 @@ export default class profile extends React.Component {
           <View style={{ flexDirection: 'row', marginBottom: '-20%' }}>
             <Text style={styles.followBox4}>Followers</Text>
             <Text style={styles.followBox5}>Following</Text>
-            <Text style={styles.followBox6}>Post</Text>
+            <Text style={styles.followBox6}>Posts</Text>
           </View>
 
-          <View style={{ padding: 10, marginTop: wp('32%'), }}>
+          <View style={{ padding: 10, marginTop: wp('20%'), }}>
             {this.state.loading == true ? (
               <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color='red' />
@@ -346,6 +344,26 @@ export default class profile extends React.Component {
 }
 
 const styles = StyleSheet.create({
+      buttonContainer: {
+        width: wp('80%'),
+        marginLeft: wp('10%'),
+        alignItems: 'center',
+        marginTop: wp('3%'),
+          marginBottom: wp('-5%'),
+        borderRadius: wp('3%'),
+        borderWidth: 1,
+        borderColor: '#EE6E3D',
+    },
+        buttonText: {
+        color: '#EE6E3D',
+        width: wp('80%'),
+        alignItems: 'center',
+        fontSize: hp('2%'),
+        marginLeft: wp('55%'),
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+        fontWeight: 'bold',
+    },
   fabDiv: {
     position: 'absolute',
     zIndex: 1,
@@ -403,7 +421,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('3%'),
+    marginLeft: wp('5%'),
     justifyContent: 'space-between',
     marginBottom: wp('-10%'),
   },
@@ -412,7 +430,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('21%'),
+    marginLeft: wp('30%'),
     justifyContent: 'space-between',
     marginBottom: wp('-10%'),
   },
@@ -421,16 +439,17 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('20%'),
+    marginLeft: wp('30%'),
     justifyContent: 'space-between',
-    marginBottom: wp('-10%'),
+    marginBottom: wp('-8%'),
+    marginTop: wp('2%'),
   },
   followBox4: {
 
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('15%'),
+    marginLeft: wp('12%'),
     justifyContent: 'space-between',
     marginTop: wp('35%'),
   },
@@ -439,7 +458,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('11%'),
+    marginLeft: wp('15%'),
     justifyContent: 'space-between',
     marginTop: wp('35%'),
   },
@@ -448,7 +467,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('14%'),
+    marginLeft: wp('17%'),
     justifyContent: 'space-between',
     marginTop: wp('35%'),
   },
