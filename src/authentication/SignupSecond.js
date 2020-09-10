@@ -102,7 +102,7 @@ export default class SignupSecond extends React.Component {
 
   signUp = () => {
     this.setState({ signUpClicked: true })
-    this.props.insertUser();
+    this.props.insertUser(this.state.imagePath);
   }
 
   navigateToSignIn = () => {

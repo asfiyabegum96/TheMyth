@@ -138,6 +138,7 @@ export default class search extends React.Component {
                     style={styles.root}
                     data={this.state.feedData}
                     extraData={this.state}
+                    keyExtractor={(item, index) => index.toString()}
                     ItemSeparatorComponent={
                         () => { return <View style={styles.separator} /> }
                     }
@@ -209,7 +210,8 @@ const styles = StyleSheet.create({
         width: 45,
         height: 45,
         borderRadius: 20,
-        marginLeft: 20
+        marginLeft: 20,
+        resizeMode: 'cover',
     },
     profile: {
         color: '#EE6E3D',

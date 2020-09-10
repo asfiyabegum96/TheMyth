@@ -285,7 +285,7 @@ export default class profile extends React.Component {
             {this.props.navigation.state.params.isSameProfile === true ?
               <View style={{ marginLeft: wp('70%') }}>
                 <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
-              
+
                 </TouchableOpacity></View> : <></>}
             <View style={{ flexDirection: 'row', marginLeft: wp('20%'), marginTop: wp('10%') }}>
               <Text style={{
@@ -307,11 +307,11 @@ export default class profile extends React.Component {
                 </TouchableOpacity>
               </View>
             </View> : <View></View>}
-              <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={() => this.this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
-                <Text style={styles.buttonText}>Edit Profile</Text>
-              </TouchableOpacity>
-            </View>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={() => this.this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
+              <Text style={styles.buttonText}>Edit Profile</Text>
+            </TouchableOpacity>
+          </View>
           <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-15%', justifyContent: 'center', alignItems: 'center' }}>
 
             <Text style={styles.followBox1}>{this.state.followersCount}</Text>
@@ -344,26 +344,26 @@ export default class profile extends React.Component {
 }
 
 const styles = StyleSheet.create({
-      buttonContainer: {
-        width: wp('80%'),
-        marginLeft: wp('10%'),
-        alignItems: 'center',
-        marginTop: wp('3%'),
-          marginBottom: wp('-5%'),
-        borderRadius: wp('3%'),
-        borderWidth: 1,
-        borderColor: '#EE6E3D',
-    },
-        buttonText: {
-        color: '#EE6E3D',
-        width: wp('80%'),
-        alignItems: 'center',
-        fontSize: hp('2%'),
-        marginLeft: wp('55%'),
-        paddingVertical: 8,
-        paddingHorizontal: 15,
-        fontWeight: 'bold',
-    },
+  buttonContainer: {
+    width: wp('80%'),
+    marginLeft: wp('10%'),
+    alignItems: 'center',
+    marginTop: wp('3%'),
+    marginBottom: wp('-5%'),
+    borderRadius: wp('3%'),
+    borderWidth: 1,
+    borderColor: '#EE6E3D',
+  },
+  buttonText: {
+    color: '#EE6E3D',
+    width: wp('80%'),
+    alignItems: 'center',
+    fontSize: hp('2%'),
+    marginLeft: wp('55%'),
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    fontWeight: 'bold',
+  },
   fabDiv: {
     position: 'absolute',
     zIndex: 1,
