@@ -270,29 +270,27 @@ export default class profile extends React.Component {
         </View>
         <ScrollView>
           <View style={{ backgroundColor: '#fff6f2', paddingBottom: wp('3%') }}>
-            <View style={{ flexDirection: 'row', marginLeft: wp('37%'), alignItems: 'center', marginTop: wp('10%') }}>
+            <View style={{ flexDirection: 'row', marginLeft: wp('40%'), alignItems: 'center', marginTop: wp('-10%') }}>
               <Image
                 source={{ uri: this.state.user.profilePicture }}
                 style={{
-                  width: wp('30%'),
-                  height: hp('15%'),
+                  width: wp('20%'),
+                  height: hp('10%'),
                   resizeMode: 'cover',
                   borderRadius: wp('5%'), borderWidth: 1.5
                 }}
               />
               <Text style={styles.profileName}>{this.state.user.fullName}</Text>
+              <Text style={styles.description}>{this.state.user.description}</Text>
             </View>
             {this.props.navigation.state.params.isSameProfile === true ?
               <View style={{ marginLeft: wp('70%') }}>
                 <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
               
                 </TouchableOpacity></View> : <></>}
-            <View style={{ flexDirection: 'row', marginLeft: wp('20%'), marginTop: wp('10%') }}>
-              <Text style={{
-                fontSize: hp('2%'),
-                color: 'black',
-              }} >{this.state.user.description}</Text>
-            </View>
+          
+         
+         
           </View>
           {this.props.navigation.state.params.isSameProfile === false ?
             <View style={{ flexDirection: 'row' }}>
@@ -312,7 +310,7 @@ export default class profile extends React.Component {
                 <Text style={styles.buttonText}>Edit Profile</Text>
               </TouchableOpacity>
             </View>
-          <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-15%', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-18%', justifyContent: 'center', alignItems: 'center' }}>
 
             <Text style={styles.followBox1}>{this.state.followersCount}</Text>
             <Text style={styles.followBox2}>{this.state.followingCount}</Text>
@@ -360,8 +358,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         fontSize: hp('2%'),
         marginLeft: wp('55%'),
-        paddingVertical: 8,
-        paddingHorizontal: 15,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
         fontWeight: 'bold',
     },
   fabDiv: {
@@ -410,12 +408,19 @@ const styles = StyleSheet.create({
     fontSize: hp('2.5%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('-23%'),
-    marginTop: wp('20%'),
+    marginLeft: wp('-18%'),
+    alignItems: 'center',
+    marginTop: wp('10%'),
     marginBottom: wp('-20%'),
-
   },
+  description: {
+    fontSize: hp('2%'),
 
+    color: 'black',
+    marginLeft: wp('-37%'),
+    marginTop: wp('45%'),
+  
+  },
   followBox1: {
 
     fontSize: hp('2%'),
@@ -490,21 +495,21 @@ const styles = StyleSheet.create({
     marginTop: wp('30%'),
   },
   following: {
-    width: wp('40%'),
+    width: wp('35%'),
     backgroundColor: '#EE6E3D',
-    marginLeft: wp('7%'),
+    marginLeft: wp('10%'),
     alignItems: 'center',
     marginTop: wp('1%'),
     borderRadius: wp('2%'),
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#EE6E3D',
   },
   followingtext: {
     color: 'white',
     width: wp('80%'),
-    alignItems: 'center',
+   alignItems: 'center',
     fontSize: hp('2%'),
-    marginLeft: wp('48%'),
+    marginLeft: wp('50%'),
     paddingVertical: 8,
     paddingHorizontal: 25,
     fontWeight: 'bold',
