@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
   YellowBox,
+  BackHandler
 } from 'react-native';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -48,9 +49,11 @@ export default class homeFixed extends React.Component {
       fieldNotEmpty: false
     }
     this.baseState = this.state;
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     this.fetchUserDetails();
     loc(this);
   }
@@ -73,8 +76,14 @@ export default class homeFixed extends React.Component {
     console.log('inside')
   }
 
-  componentWillUnMount() {
+  componentDidUnMount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     rol();
+  }
+
+  handleBackButtonClick() {
+    BackHandler.exitApp();
+    return true;
   }
 
   navigateToPage = (item, isComment, isSavedCollection, viewOthers, notification) => {

@@ -7,7 +7,8 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
-  Image
+  Image,
+  BackHandler
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -44,10 +45,11 @@ export default class profile extends React.Component {
       followingCount: 0
     }
     this.baseState = this.state;
-    console.log(props.navigation.state.params)
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     loc(this);
     this._unsubscribe = this.props.navigation.addListener('willFocus', () => {
       this.setState(this.baseState)
@@ -139,9 +141,16 @@ export default class profile extends React.Component {
     })
   }
 
-  componentWillUnMount() {
+  componentDidUnMount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     rol();
     this._unsubscribe();
+  }
+
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    return true;
   }
 
   confirmDelete(item, index) {
@@ -288,9 +297,9 @@ export default class profile extends React.Component {
                 <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
 
                 </TouchableOpacity></View> : <></>}
-          
-         
-         
+
+
+
           </View>
           {this.props.navigation.state.params.isSameProfile === false ?
             <View style={{ flexDirection: 'row' }}>
@@ -305,21 +314,12 @@ export default class profile extends React.Component {
                 </TouchableOpacity>
               </View>
             </View> : <View></View>}
-<<<<<<< HEAD
-              <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={() => this.this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
-                <Text style={styles.buttonText}>Edit Profile</Text>
-              </TouchableOpacity>
-            </View>
-          <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-18%', justifyContent: 'center', alignItems: 'center' }}>
-=======
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => this.this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
               <Text style={styles.buttonText}>Edit Profile</Text>
             </TouchableOpacity>
           </View>
           <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-15%', justifyContent: 'center', alignItems: 'center' }}>
->>>>>>> b3bdd893ca0afc616879320950d1d45956f619cf
 
             <Text style={styles.followBox1}>{this.state.followersCount}</Text>
             <Text style={styles.followBox2}>{this.state.followingCount}</Text>
@@ -351,28 +351,6 @@ export default class profile extends React.Component {
 }
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
-      buttonContainer: {
-        width: wp('80%'),
-        marginLeft: wp('10%'),
-        alignItems: 'center',
-        marginTop: wp('3%'),
-          marginBottom: wp('-5%'),
-        borderRadius: wp('3%'),
-        borderWidth: 1,
-        borderColor: '#EE6E3D',
-    },
-        buttonText: {
-        color: '#EE6E3D',
-        width: wp('80%'),
-        alignItems: 'center',
-        fontSize: hp('2%'),
-        marginLeft: wp('55%'),
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-        fontWeight: 'bold',
-    },
-=======
   buttonContainer: {
     width: wp('80%'),
     marginLeft: wp('10%'),
@@ -393,7 +371,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     fontWeight: 'bold',
   },
->>>>>>> b3bdd893ca0afc616879320950d1d45956f619cf
   fabDiv: {
     position: 'absolute',
     zIndex: 1,
@@ -451,7 +428,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginLeft: wp('-37%'),
     marginTop: wp('45%'),
-  
+
   },
   followBox1: {
 
@@ -539,7 +516,7 @@ const styles = StyleSheet.create({
   followingtext: {
     color: 'white',
     width: wp('80%'),
-   alignItems: 'center',
+    alignItems: 'center',
     fontSize: hp('2%'),
     marginLeft: wp('50%'),
     paddingVertical: 8,

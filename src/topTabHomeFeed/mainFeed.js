@@ -9,7 +9,8 @@ import {
   Animated,
   Clipboard,
   ActivityIndicator,
-  Alert
+  Alert,
+  BackHandler
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -47,6 +48,12 @@ export default class mainFeed extends React.Component {
       ],
       email: ''
     }
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+  }
+
+  handleBackButtonClick() {
+    BackHandler.exitApp();
+    return true;
   }
 
   // Photo feed function
@@ -107,11 +114,13 @@ export default class mainFeed extends React.Component {
   }
 
   componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     loc(this);
     this.loadFeed();
   }
 
   componentWillUnMount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     rol();
   }
 
@@ -408,7 +417,7 @@ export default class mainFeed extends React.Component {
       this.props.screenProps.navigation({ item, index, context: this }, isComment);
     } else {
       if (isComment) {
-        this.props.navigation.navigate('comments', { selectedItem: { item: item }, email: this.props.navigation.state.params.email.trim() })
+        this.props.screenProps.navigation({ item, index, context: this }, isComment);
       } else {
         this.addToSaveCollection({ item, index })
       }
@@ -580,14 +589,14 @@ export default class mainFeed extends React.Component {
                         <Fontisto style={styles.comment} name="commenting" size={22} color="#808080" />
                       </TouchableOpacity>
                       {item.isSaved === true ?
-                        <TouchableOpacity onPress={() => { this.deleteCollection({ item, index }) }} style={{ paddingLeft: wp('1%') }}>
-                          <FontAwesome5 name="bookmark" size={22} color="#EE6E3D" />
+                        <TouchableOpacity onPress={() => { this.deleteCollection({ item, index }) }} style={{ paddingLeft: wp('3%') }}>
+                          <Fontisto name="bookmark-alt" size={22} color="#EE6E3D" />
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={() => this.navigateToComment({ item, index }, false)} style={{ paddingLeft: wp('3%') }}>
-                          <FontAwesome5 name="bookmark" size={22} color="#808080" />
+                          <Fontisto name="bookmark" size={22} color="#808080" />
                         </TouchableOpacity>
                       }
-                      <TouchableOpacity style={styles.fabIcon} onPress={() => this.sendImage({ item, index })} style={{ flexDirection: 'row', }}>
+                      <TouchableOpacity style={styles.fabIcon1} onPress={() => this.sendImage({ item, index })}>
                         <FontAwesome5 style={styles.fabIcon} name="telegram-plane" size={22} color="#808080" />
                       </TouchableOpacity>
                     </View>
@@ -678,8 +687,17 @@ const styles = StyleSheet.create({
   fabIcon: {
     color: '#EE6E3D',
     fontSize: hp('2.5%'),
+    marginLeft: wp('5%'),
+    fontSize: 26,
+    width: wp('10%')
+  },
+  fabIcon1: {
+    flexDirection: 'row',
+    color: '#EE6E3D',
+    fontSize: hp('2.5%'),
     marginLeft: wp('50%'),
     fontSize: 26,
+    width: wp('10%')
   },
   profile: {
     color: '#fff',

@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
-  FlatList
+  FlatList,
+  BackHandler
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -34,9 +35,15 @@ export default class notification extends React.Component {
       feedRefresh: false,
     }
     this.baseState = this.state;
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidMount() {
+    this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
+      // Perform the reset action here
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    });
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     loc(this);
     this.fetchFollowers();
   }
@@ -144,8 +151,15 @@ export default class notification extends React.Component {
   }
 
   componentWillUnMount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     rol();
     this.setState(this.baseState)
+  }
+
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    return true;
   }
 
   render() {

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
-import { ScrollView, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, Alert, BackHandler } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -25,10 +25,27 @@ class Settings extends Component {
       imageSelected: false,
       radioState: ''
     }
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
+
   componentDidMount() {
+    this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
+      // Perform the reset action here
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    });
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     loc(this);
     this.fetchUserDetails();
+  }
+
+  componentWillUnMount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+  }
+
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    return true;
   }
 
   fetchUserDetails() {
@@ -134,7 +151,7 @@ class Settings extends Component {
                 Wallet
                 </Text>
             </View>
-           
+
             <View style={{ flexDirection: 'row' }}>
               {/* <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
                   Edit Profile

@@ -7,7 +7,8 @@ import {
     Image,
     FlatList,
     TextInput,
-    ActivityIndicator
+    ActivityIndicator,
+    BackHandler
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
@@ -31,16 +32,25 @@ export default class Comments extends Component {
             feedRefresh: false,
             userDetails: ''
         }
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this)
         this.baseState = this.state;
     }
 
     componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         this.fetchUserDetails();
         this.fetchComments();
     }
 
     componentWillUnMount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         this.setState(this.baseState)
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        return true;
     }
 
     fetchUserDetails = () => {

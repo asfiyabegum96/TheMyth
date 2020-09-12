@@ -5,6 +5,7 @@ import {
     StyleSheet,
     Switch,
     Image,
+    BackHandler,
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
@@ -26,9 +27,11 @@ export default class privacySettings extends React.Component {
             switchValue: false,
             email: props.navigation.state.params.email
         }
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         loc(this);
         this.fetchCurrentUserDetails();
     }
@@ -50,8 +53,16 @@ export default class privacySettings extends React.Component {
     }
 
     componentWillUnMount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         rol();
     }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        return true;
+    }
+
 
     handleChange() {
         if (this.state.switchValue === true) {

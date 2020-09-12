@@ -7,7 +7,8 @@ import {
     TouchableOpacity,
     Image,
     ActivityIndicator,
-    TextInput
+    TextInput,
+    BackHandler
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import {
@@ -39,6 +40,7 @@ export default class updatePassword extends React.Component {
             confirmPassword: '',
             loading: false
         }
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     navigateToRoute = (route) => {
@@ -123,11 +125,19 @@ export default class updatePassword extends React.Component {
     };
 
     componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         loc(this);
     }
 
     componentWillUnMount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         rol();
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        return true;
     }
 
     render() {

@@ -11,7 +11,8 @@ import {
     Button,
     TouchableOpacity,
     Alert,
-    TextInput
+    TextInput,
+    BackHandler
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
@@ -45,11 +46,16 @@ class photosUpload extends React.Component {
             token: '',
             uri: ''
         }
-        console.log(props.screenProps)
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.baseState = this.state;
     }
 
     componentDidMount() {
+        this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
+            // Perform the reset action here
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        });
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         const context = this;
         // PushNotification.configure({
         //     // (required) Called when a remote or local notification is opened or received
@@ -66,8 +72,16 @@ class photosUpload extends React.Component {
     }
 
     componentWillUnMount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         this.setState(this.baseState)
     }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        return true;
+    }
+
 
     // Generate random Id for images
     s4 = () => {

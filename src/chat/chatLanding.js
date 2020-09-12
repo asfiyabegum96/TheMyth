@@ -7,7 +7,8 @@ import {
     TouchableOpacity,
     ScrollView,
     ActivityIndicator,
-    FlatList
+    FlatList,
+    BackHandler
 } from 'react-native';
 import {
     widthPercentageToDP as wp,
@@ -34,15 +35,25 @@ export default class chatLanding extends React.Component {
         this.props.navigation.addListener('willFocus', () => {
             this.fetchUserDetails();
         })
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
     componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         loc(this);
         this.fetchUserDetails()
     }
 
     componentWillUnMount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         rol();
     }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        return true;
+    }
+
 
     fetchUserDetails() {
         const context = this;
@@ -88,9 +99,9 @@ export default class chatLanding extends React.Component {
                     if (!emailArray.includes(followerDoc.data().email)) {
                         searchArray.push(followerDoc.data());
                     } else {
-                        if(searchArray.length) {
+                        if (searchArray.length) {
                             searchArray.forEach(element => {
-                                if(element.email === followerDoc.data().email) {
+                                if (element.email === followerDoc.data().email) {
                                     element.isFollowing = true;
                                 }
                             });

@@ -5,7 +5,8 @@ import {
     Image,
     View,
     TouchableOpacity,
-    FlatList
+    FlatList,
+    BackHandler
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import {
@@ -28,13 +29,22 @@ export default class search extends React.Component {
             email: props.screenProps.email
         }
         this.baseState = this.state;
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
     componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         loc(this);
     }
 
     componentWillUnMount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         rol();
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        return true;
     }
 
     updateSearch(text) {

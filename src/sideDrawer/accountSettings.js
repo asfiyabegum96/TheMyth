@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
-import { ScrollView, Text, View, TouchableOpacity, Alert } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, Alert, BackHandler } from 'react-native';
 import {
 	widthPercentageToDP as wp,
 	heightPercentageToDP as hp,
@@ -25,10 +25,22 @@ class accountSettings extends Component {
 			imageSelected: false,
 			radioState: ''
 		}
+		this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
 	}
 	componentDidMount() {
+		BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 		loc(this);
 		this.fetchUserDetails();
+	}
+
+	componentWillUnMount() {
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+	}
+
+	handleBackButtonClick() {
+		this.props.navigation.goBack(null);
+		BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+		return true;
 	}
 
 	fetchUserDetails() {
