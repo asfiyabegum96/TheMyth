@@ -34,9 +34,22 @@ export default class editProfile extends React.Component {
             loading: true,
             passwordMismatch: false,
             hidePassword: true,
-            user: ''
+            user: '',
+            imageId: this.uniqueId(),
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    }
+
+    uniqueId = () => {
+        return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' +
+            this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4();
+    }
+
+    // Generate random Id for images
+    s4 = () => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
     }
 
     fetchUserDetails() {
@@ -53,10 +66,51 @@ export default class editProfile extends React.Component {
         })
     }
 
+    getUrl() {
+        const imagePath = this.state.imagePath;
+        var firstTime = true;
+        var uploadTask = firebase.storage().ref('images/userId/' + this.state.imageId).putFile(imagePath);
+        uploadTask.on(
+            firebase.storage.TaskEvent.STATE_CHANGED,
+            (snapshot) => {
+                let progress = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0);
+                console.log('Upload is ' + progress + '% complete')
+                this.setState({
+                    progress: progress
+                });
+                if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+                    // complete
+                    this.setState({
+                        progress: 100
+                    });
+
+                    firebase.storage().ref('images/userId/' + this.state.imageId).getDownloadURL()
+                        .then((url) => {
+                            if (firstTime) {
+                                firstTime = false;
+                                this.processUpload(url);
+                            }
+                        });
+                }
+            },
+            (error) => {
+                unsubscribe();
+            },
+        );
+    }
+
     updateProfileDetails() {
+        if (this.state.imageSelected === true) {
+            this.getUrl();
+        } else {
+            this.processUpload(null)
+        }
+    }
+
+    processUpload(url) {
         let db = firebase.firestore();
         const saveParams = {
-            profilePicture: this.state.imageSelected === true ? this.state.uri : this.state.user.profilePicture,
+            profilePicture: this.state.imageSelected === true ? url : this.state.user.profilePicture,
             fullName: this.state.nameChanged === true ? this.state.fullName : this.state.user.fullName,
             description: this.state.descriptionChanged === true ? this.state.description : this.state.user.description
         }
