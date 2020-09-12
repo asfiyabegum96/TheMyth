@@ -100,7 +100,7 @@ export default class updatePassword extends React.Component {
                 firebase.auth().currentUser.updatePassword(this.state.newPassword).then(() => {
                     alert('Updated Password successfully!')
                     this.setState({ loading: false });
-                    this.navigateToRoute('sideNavigator')
+                    this.props.navigation.goBack(null);
                 })
             })
             .catch(error => {
@@ -174,14 +174,14 @@ export default class updatePassword extends React.Component {
                                         secureTextEntry={this.state.hideOldPassword}
                                         onChangeText={text => this.handleChange('oldPassword', text)}
                                     />
-                                    <TouchableOpacity style={{ zIndex: 999999, marginTop: wp('-11.5%'), marginLeft: wp('70%') }} onPress={this.setOldPasswordVisibility}>
+                                    {/* <TouchableOpacity style={{ zIndex: 999999, marginTop: wp('-11.5%'), marginLeft: wp('70%') }} onPress={this.setOldPasswordVisibility}>
                                         {this.state.hideOldPassword === true ?
                                             <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
                                             :
                                             <FontAwesome5 style={styles.hideIcon} name={'eye'} />
 
                                         }
-                                    </TouchableOpacity>
+                                    </TouchableOpacity> */}
                                     <Text style={main.labelContainer}>New Password *</Text>
                                     <TextInput
                                         ref="password"
@@ -205,14 +205,14 @@ export default class updatePassword extends React.Component {
                                             secureTextEntry={this.state.hidePassword}
                                             onChangeText={text => this.handleChange('newPassword', text)}
                                         /> */}
-                                    <TouchableOpacity style={{ zIndex: 999999, marginTop: wp('-11.5%'), marginLeft: wp('70%') }} onPress={this.setPasswordVisibility}>
+                                    {/* <TouchableOpacity style={{ zIndex: 999999, marginTop: wp('-11.5%'), marginLeft: wp('70%') }} onPress={this.setPasswordVisibility}>
                                         {this.state.hidePassword === true ?
                                             <FontAwesome5 style={styles.hideIcon} name={'eye-slash'} />
                                             :
                                             <FontAwesome5 style={styles.hideIcon} name={'eye'} />
 
                                         }
-                                    </TouchableOpacity>
+                                    </TouchableOpacity> */}
                                     <Text style={main.labelContainer}>Re-enter New Password *</Text>
                                     {/* <View style={{ flexDirection: 'row' }}> */}
                                     <TextInput

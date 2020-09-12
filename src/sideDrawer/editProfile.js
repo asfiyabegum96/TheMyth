@@ -7,7 +7,8 @@ import {
     ActivityIndicator,
     ScrollView,
     Image,
-    TextInput
+    TextInput,
+    BackHandler
 } from 'react-native';
 import { TextField } from 'react-native-material-textfield';
 import {
@@ -35,6 +36,7 @@ export default class editProfile extends React.Component {
             hidePassword: true,
             user: ''
         }
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
 
     fetchUserDetails() {
@@ -59,16 +61,16 @@ export default class editProfile extends React.Component {
             description: this.state.descriptionChanged === true ? this.state.description : this.state.user.description
         }
         db.collection('signup').doc(this.state.user.docRef).update(saveParams).then(() => {
-            // alert('success');
-            this.navigateToRoute();
+            this.props.navigation.goBack(null);
         })
     }
 
-    navigateToRoute = () => {
-        this.props.navigation.state.params.navigation.navigate('sideNavigator');
-    }
-
     componentDidMount() {
+        this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
+            // Perform the reset action here
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        });
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         this.setState({
             loading: false,
         });
@@ -77,7 +79,14 @@ export default class editProfile extends React.Component {
     }
 
     componentWillUnMount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         rol();
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        return true;
     }
 
     // pick image from imagepicker
@@ -260,7 +269,7 @@ const styles = StyleSheet.create({
         marginLeft: wp('5%'), color: 'white', paddingBottom: wp('2%')
     },
     inputContainer: {
-        width: wp('90%'),color: 'white', height: hp('6%'), marginLeft: wp('5%'), marginBottom: wp('3%'), backgroundColor: '#EE6E3D', borderColor: 'white', borderWidth: 1.5, borderRadius: wp('2%'),
+        width: wp('90%'), color: 'white', height: hp('6%'), marginLeft: wp('5%'), marginBottom: wp('3%'), backgroundColor: '#EE6E3D', borderColor: 'white', borderWidth: 1.5, borderRadius: wp('2%'),
     },
     butText: {
         color: '#fff2e7',
