@@ -3,7 +3,8 @@ import SignupHome from './SignupHome';
 import SignupSecond from './SignupSecond';
 import {
   ActivityIndicator,
-  View
+  View,
+  AsyncStorage
 } from 'react-native';
 import firebase from 'react-native-firebase';
 
@@ -24,13 +25,38 @@ export default class signup extends React.Component {
       confirmPassword: '',
       errorMessage: 'this is an error',
       imageId: this.uniqueId(),
-      profilePicture: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+      profilePicture: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+      token: null
     }
     this.ref = firebase.firestore().collection('signup')
   }
 
   componentDidMount() {
-    this.setState({ loading: false })
+    this.setState({ loading: false });
+    this.checkUserAuthorization();
+  }
+
+  async checkUserAuthorization() {
+    firebase.messaging().hasPermission()
+      .then((enabled) => {
+        if (enabled) {
+          console.log('user has permission');
+        } else {
+          console.log('user does not have permission');
+          this.getPermission()
+        }
+      });
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    this.setState({ token: fcmToken })
+    console.log('token from async storage', fcmToken);
+    if (!fcmToken) {
+      fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        console.log('token from firebase', fcmToken);
+        this.setState({ token: fcmToken })
+        await AsyncStorage.setItem("fcmToken", fcmToken, this.state.token); // store in db during installing and access that token
+      }
+    }
   }
 
   uniqueId = () => {
@@ -126,7 +152,8 @@ export default class signup extends React.Component {
         description: values.description,
         profilePicture: url,
         docRef: cred.user.uid,
-        isDeleted: false
+        isDeleted: false,
+        token: context.state.token
       }).then(function () {
         context.props.navigation.navigate('homeFixed', { email: values.email })
         context.loadingChange();

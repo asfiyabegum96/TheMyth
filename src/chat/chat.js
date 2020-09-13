@@ -6,7 +6,8 @@ import {
     AsyncStorage,
     StyleSheet,
     Image,
-    Text
+    Text,
+    BackHandler
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { GiftedChat, Bubble, InputToolbar, Composer, Time, Avatar, Message } from 'react-native-gifted-chat';
@@ -50,6 +51,7 @@ export default class chatScreen extends React.Component {
             selectedItem: props.navigation.state.params.selectedItem,
             userDetails: props.navigation.state.params.userDetails,
         };
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         console.log(this.state.selectedItem)
     }
 
@@ -110,6 +112,7 @@ export default class chatScreen extends React.Component {
         this.firstTime = true;
         this.allMessages = [];
         this.messageIds = [];
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         this.props.navigation.setParams({ handleImageClick: this.selectImage });
         this.setState({ messages: [] });
         this.checkUserAuthorization();
@@ -168,9 +171,16 @@ export default class chatScreen extends React.Component {
     }
 
     componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         this.messageIds = [];
         this.setState({ uri: '' })
         Backend.closeChat()
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        return true;
     }
 
     renderBubble = (props) => {
@@ -372,7 +382,7 @@ export default class chatScreen extends React.Component {
                         messages={this.state.messages}
                         renderAvatarOnTop={true}
                         onSend={(message) => {
-                            Backend.sendMessage(message, this.state.docRef, this.state.uri, this.state.token, this.state.selectedItem, this.state.userEmail)
+                            Backend.sendMessage(message, this.state.docRef, this.state.uri, this.state.selectedItem.token, this.state.selectedItem, this.state.userEmail)
                         }}
                         renderBubble={this.renderBubble}
                         user={{
@@ -383,7 +393,7 @@ export default class chatScreen extends React.Component {
                         placeholder="Whisper here..."
                         showUserAvatar={true}
                         extraData={this.state}
-                        loadEarlier={this.state.messages.length >= 9}
+                        loadEarlier={this.state.messages.length >= 4}
                         onLoadEarlier={this.onLoadEarlier}
                         isLoadingEarlier={this.state.isLoadingEarlier}
                         renderInputToolbar={props => this.customtInputToolbar(props)}

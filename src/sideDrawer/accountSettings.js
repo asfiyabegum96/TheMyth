@@ -139,7 +139,7 @@ class accountSettings extends Component {
 						</View>
 						<View style={{ flexDirection: 'row' }}>
 							<FontAwesome5 style={styles.fabIcon} name='gavel' size={16} />
-							<Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+							<Text style={styles.navItemStyle}>
 								Terms & conditions
                 </Text>
 						</View>
