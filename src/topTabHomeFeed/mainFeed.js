@@ -94,23 +94,65 @@ export default class mainFeed extends React.Component {
       this.state.photoFeedData[index].likes = selectedPhoto.likes + 1;
       this.state.photoFeedData[index].isLiked = true;
       db.collection("photos").doc(selectedPhoto.docRef).collection('likedUsers').doc(this.state.email).set({ email: this.state.email.trim() })
-      this.setState({ alreadyLiked: true, liked: true })
-      // let dateTime = Date.now();
-      // let timestamp = Math.floor(dateTime / 1000);
-      // const photoObj = this.props.screenProps.userDetails;
-      // console.log(photoObj)
-      // const notificationObj = {
-      //   docRef: selectedPhoto.docRef,
-      //   title: 'Photo upload',
-      //   body: `${photoObj.author} added a photo!`,
-      //   userAvatar: photoObj.userAvatar,
-      //   postedTime: timestamp,
-      //   email: photoObj.email
-      // }
-      // firebase.firestore().collection('notifications').doc(selectedPhoto.docRef).set(notificationObj).then(function (docRef) {
-
-      // });
+      this.setState({ alreadyLiked: true, liked: true });
+      this.getTokens(selectedPhoto);
     }
+  }
+
+  getTokens(selectedPhoto) {
+    const context = this;
+    let db = firebase.firestore();
+    let photosRef = db.collection('signup');
+    photosRef.where('email', '==', selectedPhoto.email).get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        let data;
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) data = (doc.id, " => ", doc.data());
+        context.sendNotifications(selectedPhoto, doc.data().token);
+      })
+    });
+  }
+
+  async sendNotifications(selectedPhoto, token) {
+    console.log(selectedPhoto)
+    const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
+    const message = {
+      registration_ids: [token],
+      notification: {
+        title: "Myth",
+        body: `One of your friend likes your photo!`,
+        "vibrate": 1,
+        "sound": 1,
+        "show_in_foreground": true,
+        "priority": "high",
+        "content_available": true,
+      }
+    }
+
+    let headers = new Headers({
+      "Content-Type": "application/json",
+      "Authorization": "key=" + FIREBASE_API_KEY
+    });
+
+    let response = await fetch("https://fcm.googleapis.com/fcm/send", { method: "POST", headers, body: JSON.stringify(message) })
+    response = await response.json();
+    if (response.success) {
+      let dateTime = Date.now();
+      let timestamp = Math.floor(dateTime / 1000);
+      const photoObj = this.props.screenProps.userDetails;
+      const notificationObj = {
+        docRef: selectedPhoto.docRef,
+        title: 'Liked your post',
+        body: `${photoObj.author} likes your photo!`,
+        userAvatar: photoObj.userAvatar,
+        postedTime: timestamp,
+        email: photoObj.email
+      }
+      firebase.firestore().collection('notifications').doc(selectedPhoto.docRef).set(notificationObj).then(function (docRef) {
+
+      });
+    }
+    console.log(response);
   }
 
   componentDidMount() {

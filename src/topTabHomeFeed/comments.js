@@ -202,8 +202,65 @@ export default class Comments extends Component {
             firebase.firestore().collection('comments').doc(docRef).set(commentObject).then(function (docRef) {
                 context.setState({ commentText: null });
                 context.fetchComments();
+                context.getTokens(selectedItem);
             });
         }
+    }
+
+    getTokens(selectedPhoto) {
+        const context = this;
+        let db = firebase.firestore();
+        let photosRef = db.collection('signup');
+        photosRef.where('email', '==', selectedPhoto.email).get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                let data;
+                const docNotEmpty = (doc.id, " => ", doc.data() != null);
+                if (docNotEmpty) data = (doc.id, " => ", doc.data());
+                context.sendNotifications(selectedPhoto, doc.data().token);
+            })
+        });
+    }
+
+    async sendNotifications(selectedPhoto, token) {
+        console.log(selectedPhoto)
+        const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
+        const message = {
+            registration_ids: [token],
+            notification: {
+                title: "Myth",
+                body: `One of your friend commented on your photo!`,
+                "vibrate": 1,
+                "sound": 1,
+                "show_in_foreground": true,
+                "priority": "high",
+                "content_available": true,
+            }
+        }
+
+        let headers = new Headers({
+            "Content-Type": "application/json",
+            "Authorization": "key=" + FIREBASE_API_KEY
+        });
+
+        let response = await fetch("https://fcm.googleapis.com/fcm/send", { method: "POST", headers, body: JSON.stringify(message) })
+        response = await response.json();
+        if (response.success) {
+            let dateTime = Date.now();
+            let timestamp = Math.floor(dateTime / 1000);
+            const photoObj = this.state.userDetails;
+            const notificationObj = {
+                docRef: selectedPhoto.docRef,
+                title: 'Commented your post',
+                body: `${photoObj.fullName} commented your photo!`,
+                userAvatar: photoObj.profilePicture,
+                postedTime: timestamp,
+                email: photoObj.email
+            }
+            firebase.firestore().collection('notifications').doc(selectedPhoto.docRef).set(notificationObj).then(function (docRef) {
+
+            });
+        }
+        console.log(response);
     }
 
     render() {

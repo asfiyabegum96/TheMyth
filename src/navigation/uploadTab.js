@@ -138,7 +138,6 @@ class photosUpload extends React.Component {
 
     getFollowers = () => {
         const context = this;
-        this.setState({ feedData: [], feedRefresh: false, })
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
         photosRef.doc(context.state.user.docRef).collection('followers').get().then(function (followerSnapshot) {
@@ -284,19 +283,6 @@ class photosUpload extends React.Component {
     }
 
     async sendNotification(photoObj) {
-        let dateTime = Date.now();
-        let timestamp = Math.floor(dateTime / 1000);
-        const notificationObj = {
-            docRef: this.state.imageId,
-            title: 'Photo upload',
-            body: `${photoObj.author} added a photo!`,
-            userAvatar: photoObj.userAvatar,
-            postedTime: timestamp,
-            email: photoObj.email
-        }
-        firebase.firestore().collection('notifications').doc(this.state.imageId).set(notificationObj).then(function (docRef) {
-        });
-        console.log('sd', this.tokenArray)
         const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
         const message = {
             registration_ids: this.tokenArray,
