@@ -2,8 +2,6 @@ import React from 'react';
 import {
     Text,
     View,
-    AppRegistry,
-    AsyncStorage,
     ActivityIndicator,
     StyleSheet,
     Image,
@@ -21,9 +19,6 @@ import {
     removeOrientationListener as rol
 }
     from 'react-native-responsive-screen';
-import { TextField } from 'react-native-material-textfield';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ImagePicker from 'react-native-image-picker';
 import firebase from 'react-native-firebase';
 import PushNotification from 'react-native-push-notification';
@@ -44,31 +39,19 @@ class photosUpload extends React.Component {
             user: '',
             fieldNotEmpty: false,
             token: '',
-            uri: ''
+            uri: '',
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.baseState = this.state;
     }
-
+    tokenArray = [];
     componentDidMount() {
         this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
             // Perform the reset action here
             BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         });
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        const context = this;
-        // PushNotification.configure({
-        //     // (required) Called when a remote or local notification is opened or received
-        //     onNotification: function (notification) {
-        //         console.log("NOTIFICATION:", notification);
-        //         if (notification.userInteraction === true) {
-        //             context.props.screenProps.navigation.navigate('homeFixed', { email: context.props.screenProps.navigation.state.params.email })
-        //         }
-
-        //     },
-        // });
         this.fetchUserDetails();
-        this.checkUserAuthorization();
     }
 
     componentWillUnMount() {
@@ -96,7 +79,6 @@ class photosUpload extends React.Component {
     }
     // pick image from imagepicker
     selectImage = () => {
-        console.log('inside');
         const options = {
             title: 'Food Upload',
             storageOptions: {
@@ -148,9 +130,39 @@ class photosUpload extends React.Component {
                 let data;
                 const docNotEmpty = (doc.id, " => ", doc.data() != null);
                 if (docNotEmpty) data = (doc.id, " => ", doc.data());
-                context.setState({ user: doc.data() })
+                context.setState({ user: doc.data() });
+                context.getFollowers();
             })
-        })
+        });
+    }
+
+    getFollowers = () => {
+        const context = this;
+        this.setState({ feedData: [], feedRefresh: false, })
+        let db = firebase.firestore();
+        let photosRef = db.collection('signup');
+        photosRef.doc(context.state.user.docRef).collection('followers').get().then(function (followerSnapshot) {
+            followerSnapshot.forEach(function (followerDoc) {
+                const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
+                if (docNotEmpty) {
+                    context.getTokens(followerDoc.data().email);
+                }
+            });
+        });
+    }
+
+    getTokens(followerEmail) {
+        const context = this;
+        let db = firebase.firestore();
+        let photosRef = db.collection('signup');
+        photosRef.where('email', '==', followerEmail).get().then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+                let data;
+                const docNotEmpty = (doc.id, " => ", doc.data() != null);
+                if (docNotEmpty) data = (doc.id, " => ", doc.data());
+                context.tokenArray.push(doc.data().token);
+            })
+        });
     }
 
     // upload image to fireabase storage
@@ -284,75 +296,43 @@ class photosUpload extends React.Component {
         }
         firebase.firestore().collection('notifications').doc(this.state.imageId).set(notificationObj).then(function (docRef) {
         });
-        // const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
-        // const message = {
-        //     registration_ids: [this.state.token],
-        //     notification: {
-        //         title: "Myth",
-        //         body: "One of your friends had a food cravings!",
-        //         "vibrate": 1,
-        //         "sound": 1,
-        //         "show_in_foreground": true,
-        //         "priority": "high",
-        //         "content_available": true,
-        //     }
-        // }
-
-        // let headers = new Headers({
-        //     "Content-Type": "application/json",
-        //     "Authorization": "key=" + FIREBASE_API_KEY
-        // });
-
-        // let response = await fetch("https://fcm.googleapis.com/fcm/send", { method: "POST", headers, body: JSON.stringify(message) })
-        // response = await response.json();
-        // if (response.success) {
-        //     let dateTime = Date.now();
-        //     let timestamp = Math.floor(dateTime / 1000);
-        //     const notificationObj = {
-        //         docRef: this.state.imageId,
-        //         title: 'Photo upload',
-        //         body: `${photoObj.author} added a photo!`,
-        //         userAvatar: photoObj.userAvatar,
-        //         postedTime: timestamp,
-        //         email: photoObj.email
-        //     }
-        //     firebase.firestore().collection('notifications').doc(this.state.imageId).set(notificationObj).then(function (docRef) {
-        //     });
-        // }
-        // console.log(response);
-    }
-
-    async checkUserAuthorization() {
-        firebase.messaging().hasPermission()
-            .then((enabled) => {
-                if (enabled) {
-                    console.log('user has permission');
-                } else {
-                    console.log('user does not have permission');
-                    this.getPermission()
-                }
-            });
-        let fcmToken = await AsyncStorage.getItem('fcmToken');
-        this.setState({ token: fcmToken })
-        console.log('token from async storage', fcmToken);
-        if (!fcmToken) {
-            fcmToken = await firebase.messaging().getToken();
-            if (fcmToken) {
-                console.log('token from firebase', fcmToken);
-                this.setState({ token: fcmToken })
-                await AsyncStorage.setItem("fcmToken", fcmToken, this.state.token);
+        console.log('sd', this.tokenArray)
+        const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
+        const message = {
+            registration_ids: this.tokenArray,
+            notification: {
+                title: "Myth",
+                body: "One of your friends had a food cravings!",
+                "vibrate": 1,
+                "sound": 1,
+                "show_in_foreground": true,
+                "priority": "high",
+                "content_available": true,
             }
         }
-    }
 
-    async getPermission() {
-        firebase.messaging().requestPermission()
-            .then(() => {
-                console.log('user has authorized')
-            })
-            .catch(() => {
-                console.log('rejected permission')
-            })
+        let headers = new Headers({
+            "Content-Type": "application/json",
+            "Authorization": "key=" + FIREBASE_API_KEY
+        });
+
+        let response = await fetch("https://fcm.googleapis.com/fcm/send", { method: "POST", headers, body: JSON.stringify(message) })
+        response = await response.json();
+        if (response.success) {
+            let dateTime = Date.now();
+            let timestamp = Math.floor(dateTime / 1000);
+            const notificationObj = {
+                docRef: this.state.imageId,
+                title: 'Photo upload',
+                body: `${photoObj.author} added a photo!`,
+                userAvatar: photoObj.userAvatar,
+                postedTime: timestamp,
+                email: photoObj.email
+            }
+            firebase.firestore().collection('notifications').doc(this.state.imageId).set(notificationObj).then(function (docRef) {
+            });
+        }
+        console.log(response);
     }
 
     render() {
