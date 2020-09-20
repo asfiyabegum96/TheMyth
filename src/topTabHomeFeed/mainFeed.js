@@ -216,7 +216,9 @@ export default class mainFeed extends React.Component {
       email = this.props.navigation.state.params.email;
       selectedEmail = this.props.navigation.state.params.selectedItem.item.email;
       url = this.props.navigation.state.params.isSavedCollection === true ? 'savedCollections' : 'photos';
-      url = this.props.navigation.state.params.isDiary === true ? 'diary' : 'photos';
+      if (url !== 'savedCollections') {
+        url = this.props.navigation.state.params.isDiary === true ? 'diary' : 'photos';
+      }
       viewSpecificPhotos = this.props.navigation.state.params.viewSpecificPhotos;
     } else {
       email = this.props.screenProps.property.screenProps.email
@@ -360,19 +362,23 @@ export default class mainFeed extends React.Component {
                 if (docNotEmpty) {
                   let otherUserData;
                   otherUserData = (otherDoc.id, " => ", otherDoc.data());
-                  userRef.doc(otherUserData.docRef).collection('followers').get().then(function (followerSnapshot) {
-                    followerSnapshot.forEach(function (followerDoc) {
-                      const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
-                      if (docNotEmpty) {
-                        otherUserData.isFollowed = false;
-                        if (email === followerDoc.data().email) {
-                          otherUserData.isFollowed = true;
-                          that.addToFlatlist(photoFeedData, data, otherUserData, email);
+                  if (that.props && that.props.navigation &&
+                    that.props.navigation.state && that.props.navigation.state.params && that.props.navigation.state.params.viewOtherPhotos === true) {
+                    that.addToFlatlist(photoFeedData, data, otherUserData, email);
+                  } else {
+                    userRef.doc(otherUserData.docRef).collection('followers').get().then(function (followerSnapshot) {
+                      followerSnapshot.forEach(function (followerDoc) {
+                        const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
+                        if (docNotEmpty) {
+                          otherUserData.isFollowed = false;
+                          if (email.trim() === followerDoc.data().email.trim()) {
+                            otherUserData.isFollowed = true;
+                            that.addToFlatlist(photoFeedData, data, otherUserData, email);
+                          }
                         }
-                      }
-                    })
-                  });
-
+                      })
+                    });
+                  }
                 }
               })
             })
@@ -715,6 +721,7 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: hp('1.5%'),
     color: '#EE6E3D',
+    width: wp('53%')
   },
   comment: {
     paddingHorizontal: wp('2%')

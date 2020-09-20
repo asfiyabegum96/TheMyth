@@ -172,7 +172,7 @@ export default class notification extends React.Component {
           }}>
           {this.state.loading == true ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <ActivityIndicator size="large" color='red' />
+              {/* <ActivityIndicator  style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} size="large" color='red' /> */}
             </View>
           ) : (
               <>
@@ -275,6 +275,7 @@ const styles = StyleSheet.create({
     color: "black",
     flexDirection: 'row',
     marginTop: wp('5%'),
+    width: wp('43%'),
   },
   image: {
     width: 45,

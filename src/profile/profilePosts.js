@@ -142,7 +142,7 @@ export default class ProfilePosts extends React.Component {
                             columns={3}
                             images={this.state.images}
                             onLongPressImage={(item, index) => this.confirmDelete(item, index)}
-                            onPressImage={(item) => this.props.screenProps.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.screenProps.navigation.state.params.email.trim(), viewSpecificPhotos: true })}
+                            onPressImage={(item) => this.props.screenProps.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.screenProps.navigation.state.params.email.trim(), viewSpecificPhotos: true, viewOtherPhotos: true })}
                         />
                     )}
             </View>

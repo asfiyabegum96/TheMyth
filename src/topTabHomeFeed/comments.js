@@ -431,13 +431,12 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         marginLeft: wp('4%'),
-        width: wp('55%'),
+        width: wp('50%'),
         color: 'black',
-
     },
     buttonText: {
         color: '#EE6E3D',
-        marginLeft: wp('-6%')
+        marginLeft: wp('2%')
     },
     myimage: {
         width: 45,
