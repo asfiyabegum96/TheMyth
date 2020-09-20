@@ -279,16 +279,18 @@ export default class profile extends React.Component {
         </View>
         <ScrollView>
           <View style={{ backgroundColor: '#fff6f2', paddingBottom: wp('3%') }}>
-            <View style={{ flexDirection: 'row', marginLeft: wp('40%'), alignItems: 'center', marginTop: wp('-10%') }}>
+            <View style={{ alignItems: 'center', marginTop: wp('2%') }}>
               <Image
                 source={{ uri: this.state.user.profilePicture }}
                 style={{
                   width: wp('20%'),
                   height: hp('10%'),
                   resizeMode: 'cover',
-                  borderRadius: wp('5%'), borderWidth: 1.5
+                  borderRadius: wp('5%'), borderWidth: 1.5,
                 }}
               />
+            </View>
+            <View style={{ alignItems: 'center', marginTop: wp('5%') }}>
               <Text style={styles.profileName}>{this.state.user.fullName}</Text>
               <Text style={styles.description}>{this.state.user.description}</Text>
             </View>
@@ -297,9 +299,6 @@ export default class profile extends React.Component {
                 <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
 
                 </TouchableOpacity></View> : <></>}
-
-
-
           </View>
           {this.props.navigation.state.params.isSameProfile === false ?
             <View style={{ flexDirection: 'row' }}>
@@ -313,13 +312,13 @@ export default class profile extends React.Component {
                   <Text style={styles.followingtext1}>{this.state.whisperText}</Text>
                 </TouchableOpacity>
               </View>
-            </View> : <View></View>}
+            </View> : 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => this.this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
               <Text style={styles.buttonText}>Edit Profile</Text>
             </TouchableOpacity>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-15%', justifyContent: 'center', alignItems: 'center' }}>
+          </View>}
+          <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-18%', justifyContent: 'center', alignItems: 'center' }}>
 
             <Text style={styles.followBox1}>{this.state.followersCount}</Text>
             <Text style={styles.followBox2}>{this.state.followingCount}</Text>
@@ -327,13 +326,13 @@ export default class profile extends React.Component {
 
           </View>
 
-          <View style={{ flexDirection: 'row', marginBottom: '-20%' }}>
+          <View style={{ flexDirection: 'row', height: wp('10%'), marginBottom: '-20%' }}>
             <Text style={styles.followBox4}>Followers</Text>
             <Text style={styles.followBox5}>Following</Text>
             <Text style={styles.followBox6}>Posts</Text>
           </View>
 
-          <View style={{ padding: 10, marginTop: wp('20%'), }}>
+          <View style={{ padding: 10, marginTop: wp('50%'), }}>
             {this.state.loading == true ? (
               <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
                 <ActivityIndicator size="large" color='red' />
@@ -417,17 +416,14 @@ const styles = StyleSheet.create({
     fontSize: hp('2.5%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('-18%'),
-    alignItems: 'center',
-    marginTop: wp('10%'),
-    marginBottom: wp('-20%'),
+    textAlign: 'center',
+    width: wp('80%'),
   },
   description: {
     fontSize: hp('2%'),
-
+    width: wp('80%'),
     color: 'black',
-    marginLeft: wp('-37%'),
-    marginTop: wp('45%'),
+    textAlign: 'center',
 
   },
   followBox1: {
@@ -453,7 +449,7 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('30%'),
+    marginLeft: wp('28%'),
     justifyContent: 'space-between',
     marginBottom: wp('-8%'),
     marginTop: wp('2%'),
@@ -463,27 +459,29 @@ const styles = StyleSheet.create({
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('12%'),
+    marginLeft: wp('10%'),
     justifyContent: 'space-between',
     marginTop: wp('35%'),
+    height: wp('10%'),
   },
   followBox5: {
 
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
-    marginLeft: wp('15%'),
+    marginLeft: wp('14%'),
     justifyContent: 'space-between',
     marginTop: wp('35%'),
+    height: wp('10%'),
   },
   followBox6: {
-
     fontSize: hp('2%'),
     fontWeight: 'bold',
     color: '#EE6E3D',
     marginLeft: wp('17%'),
     justifyContent: 'space-between',
     marginTop: wp('35%'),
+    height: wp('10%'),
   },
   posts: {
 

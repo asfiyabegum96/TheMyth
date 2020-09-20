@@ -261,7 +261,6 @@ export default class Comments extends Component {
 
             });
         }
-        console.log(response);
     }
 
     render() {
@@ -420,9 +419,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff6f2',
         borderRadius: 10,
         flexDirection: 'row',
-        left: '2%',
+        left: '4%',
         marginRight: wp('8%'),
-        paddingBottom: wp('2%')
+        paddingBottom: wp('2%'),
+        position: 'absolute',
+        zIndex: 1,
+        bottom: 0,
+        right: 0,
     },
     butText: {
         color: '#22222C',
@@ -431,7 +434,7 @@ const styles = StyleSheet.create({
     },
     inputStyle: {
         marginLeft: wp('4%'),
-        width: wp('50%'),
+        width: wp('45%'),
         color: 'black',
     },
     buttonText: {

@@ -150,7 +150,7 @@ export default class homeFixed extends React.Component {
         <TouchableOpacity onPress={() => this.props.navigation.navigate("chat", { email: this.props.navigation.state.params.email.trim() })}
           style={styles.fabDiv}>
           <View style={styles.fab}>
-            <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />
+            <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} />
           </View>
         </TouchableOpacity>
         <AppIndex screenProps={{ navigation: this.navigateToPage, navigateToOther: this.props.navigation, email: this.props.navigation.state.params.email.trim(), userDetails: this.state.user }} />
@@ -183,9 +183,12 @@ const styles = StyleSheet.create({
   fab: {
     backgroundColor: '#EE6E3D',
     alignItems: 'center',
-    width: wp('15%'),
-    borderRadius: wp('10%'),
-    justifyContent: 'center'
+    // width: wp('15%'),
+    // borderRadius: wp('10%'),
+    justifyContent: 'center',
+    width: 50,
+    height: 50,
+    borderRadius: 50/2,
   },
   fabIcon: {
     color: '#fff',
