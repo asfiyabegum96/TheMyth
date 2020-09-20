@@ -84,7 +84,6 @@ export default class chatScreen extends React.Component {
             }
             else if (response.customButton) {
                 console.log('User tapped custom button: ', response.customButton);
-
             }
             else {
                 this.setState({
@@ -115,7 +114,6 @@ export default class chatScreen extends React.Component {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         this.props.navigation.setParams({ handleImageClick: this.selectImage });
         this.setState({ messages: [] });
-        this.checkUserAuthorization();
         Backend.loadMessages((message) => {
             if ((message.userid === this.state.docRef && message.user._id === Backend.getUid()) ||
                 (message.userid === Backend.getUid() && message.user._id === this.state.docRef)) {
@@ -137,39 +135,6 @@ export default class chatScreen extends React.Component {
         });
     }
 
-    async checkUserAuthorization() {
-        firebase.messaging().hasPermission()
-            .then((enabled) => {
-                if (enabled) {
-                    console.log('user has permission');
-                } else {
-                    console.log('user does not have permission');
-                    this.getPermission()
-                }
-            });
-        let fcmToken = await AsyncStorage.getItem('fcmToken');
-        this.setState({ token: fcmToken })
-        console.log('token from async storage', fcmToken);
-        if (!fcmToken) {
-            fcmToken = await firebase.messaging().getToken();
-            if (fcmToken) {
-                console.log('token from firebase', fcmToken);
-                this.setState({ token: fcmToken })
-                await AsyncStorage.setItem("fcmToken", fcmToken, this.state.token); // store in db during installing and access that token
-            }
-        }
-    }
-
-    async getPermission() {
-        firebase.messaging().requestPermission()
-            .then(() => {
-                console.log('user has authorized')
-            })
-            .catch(() => {
-                console.log('rejected permission')
-            })
-    }
-
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
         this.messageIds = [];
@@ -184,7 +149,6 @@ export default class chatScreen extends React.Component {
     }
 
     renderBubble = (props) => {
-
         return (
             <Bubble
                 {...props}
@@ -295,10 +259,10 @@ export default class chatScreen extends React.Component {
     }
 
     acceptRequest = () => {
-        let db = firebase.firestore();
-        const item = this.state.userDetails;
-        const selectedItem = this.state.selectedItem;
         const context = this;
+        let db = firebase.firestore();
+        const item = context.state.userDetails;
+        const selectedItem = context.state.selectedItem;
         context.state.selectedItem.isFollowing = true;
         context.setState({ selectedItem: context.state.selectedItem });
         db.collection("signup").doc(item.docRef).collection('following').doc(selectedItem.email.trim()).set({ email: selectedItem.email.trim() })
@@ -336,11 +300,7 @@ export default class chatScreen extends React.Component {
                             </View>
                         </View>
                     </View> :
-                    <View style={{ borderWidth: 1, borderColor: '#ff2700', margin: wp('5%'), borderRadius: 10 }}>
-                        <View style={styles.whisper}>
-                            <Text style={{ color: '#ccc', fontWeight: 'bold' }}>{this.state.selectedItem.fullName} has private account!</Text>
-                        </View>
-                    </View>}
+                    <></>}
             </>)
     }
 
@@ -372,7 +332,7 @@ export default class chatScreen extends React.Component {
                             }} />
                         <Text style={{ marginTop: wp('5%'), fontWeight: 'bold', fontSize: wp('4%'), marginBottom: wp('5%') }}>{this.state.selectedItem.fullName}</Text>
                         <View style={{
-                            width: wp('90%'),
+                            width: wp('90%'), 
                             borderBottomColor: '#ccc', borderBottomWidth: 0.5,
                             marginLeft: wp('10%'),
                             marginRight: wp('10%')
@@ -382,6 +342,9 @@ export default class chatScreen extends React.Component {
                         messages={this.state.messages}
                         renderAvatarOnTop={true}
                         onSend={(message) => {
+                            if (this.state.selectedItem.isFollowing !== true) {
+                                this.acceptRequest()
+                            }
                             Backend.sendMessage(message, this.state.docRef, this.state.uri, this.state.selectedItem.token, this.state.selectedItem, this.state.userEmail)
                         }}
                         renderBubble={this.renderBubble}

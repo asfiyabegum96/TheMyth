@@ -108,13 +108,14 @@ export default class mainFeed extends React.Component {
         let data;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) data = (doc.id, " => ", doc.data());
-        context.sendNotifications(selectedPhoto, doc.data().token);
+        if (context.props && context.props.screenProps && context.props.screenProps.userDetails && context.props.screenProps.userDetails.token !== doc.data().token) {
+          context.sendNotifications(selectedPhoto, doc.data().token);
+        }
       })
     });
   }
 
   async sendNotifications(selectedPhoto, token) {
-    console.log(selectedPhoto)
     const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
     const message = {
       registration_ids: [token],
