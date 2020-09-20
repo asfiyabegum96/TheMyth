@@ -412,7 +412,6 @@ export default class mainFeed extends React.Component {
       that.setState({ screenPropsPresent: true });
     }
     that.fetchSavedUsers(photoFeedData, email);
-
   }
 
   fetchSavedUsers = (item, email) => {
