@@ -153,7 +153,6 @@ export default class mainFeed extends React.Component {
 
       });
     }
-    console.log(response);
   }
 
   componentDidMount() {
@@ -465,7 +464,7 @@ export default class mainFeed extends React.Component {
       this.props.screenProps.navigation({ item, index, context: this }, isComment);
     } else {
       if (isComment) {
-        this.props.screenProps.navigation({ item, index, context: this }, isComment);
+        this.props.navigation.navigate('comments', { selectedItem: { item: item }, email: this.props.navigation.state.params.email.trim() })
       } else {
         this.addToSaveCollection({ item, index })
       }
@@ -485,6 +484,7 @@ export default class mainFeed extends React.Component {
 
   //uploading feed data in cloud firestore
   addToSaveCollection = (selectedItem, index) => {
+    let db = firebase.firestore();
     const context = this;
     //Set variable for feed
     let author = selectedItem.item.author;
