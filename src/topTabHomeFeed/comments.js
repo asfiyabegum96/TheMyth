@@ -276,7 +276,7 @@ export default class Comments extends Component {
                     <View style={styles.header}>
                         <Text style={styles.inputSearch}
                         >myth</Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
+                        <TouchableOpacity style={{ marginTop: wp('5%'), marginRight: wp('2%') }} onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
                             <Icon name={'home'} size={30} color="#fff" />
                         </TouchableOpacity>
                     </View>
@@ -534,17 +534,17 @@ const styles = StyleSheet.create({
         borderBottomWidth: wp('0.1%'),
         borderBottomColor: '#fff',
         backgroundColor: '#EE6E3D',
-        fontSize: 20,
+        fontSize: 36,
         color: '#fff',
-        height: hp('4%'),
-        fontStyle: 'italic',
-        paddingLeft: wp('40%'),
-        backgroundColor: '#EE6E3D', height: hp('4%'), borderBottomWidth: 0, borderTopWidth: 0
+        height: hp('8%'),
+        paddingLeft: wp('45%'),
+        backgroundColor: '#EE6E3D', borderBottomWidth: 0, borderTopWidth: 0,
+        fontFamily: 'SEAFOOL',
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: '#EE6E3D',
-        padding: 10,
+        marginTop: wp('-2%')
     },
 });  

@@ -268,7 +268,7 @@ export default class profile extends React.Component {
         <View style={styles.header}>
           <Text style={styles.inputSearch}
           >myth</Text>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
+          <TouchableOpacity style={{ marginTop: wp('5%'), marginRight: wp('2%') }} onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
             <Icon name={'home'} size={30} color="#fff" />
           </TouchableOpacity>
           {/* <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#EE6E3D', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
@@ -312,12 +312,12 @@ export default class profile extends React.Component {
                   <Text style={styles.followingtext1}>{this.state.whisperText}</Text>
                 </TouchableOpacity>
               </View>
-            </View> : 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
-              <Text style={styles.buttonText}>Edit Profile</Text>
-            </TouchableOpacity>
-          </View>}
+            </View> :
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
+                <Text style={styles.buttonText}>Edit Profile</Text>
+              </TouchableOpacity>
+            </View>}
           <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-18%', justifyContent: 'center', alignItems: 'center' }}>
 
             <Text style={styles.followBox1}>{this.state.followersCount}</Text>
@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#EE6E3D',
-    padding: 10,
+    marginTop: wp('-2%')
   },
   backArrow: {
     color: '#EE6E3D',
@@ -405,12 +405,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: wp('0.1%'),
     borderBottomColor: '#fff',
     backgroundColor: '#EE6E3D',
-    fontSize: 20,
+    fontSize: 36,
     color: '#fff',
-    height: hp('4%'),
-    fontStyle: 'italic',
-    paddingLeft: wp('40%'),
-    backgroundColor: '#EE6E3D', height: hp('4%'), borderBottomWidth: 0, borderTopWidth: 0
+    height: hp('8%'),
+    paddingLeft: wp('45%'),
+    backgroundColor: '#EE6E3D', borderBottomWidth: 0, borderTopWidth: 0,
+    fontFamily: 'SEAFOOL',
   },
   profileName: {
     fontSize: hp('2.5%'),
