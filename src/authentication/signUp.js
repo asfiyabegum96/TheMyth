@@ -102,34 +102,38 @@ export default class signup extends React.Component {
 
   getUrl(imagePath) {
     var firstTime = true;
-    var uploadTask = firebase.storage().ref('images/userId/' + this.state.imageId).putFile(imagePath);
-    uploadTask.on(
-      firebase.storage.TaskEvent.STATE_CHANGED,
-      (snapshot) => {
-        let progress = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0);
-        console.log('Upload is ' + progress + '% complete')
-        this.setState({
-          progress: progress
-        });
-        if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-          // complete
+    if (imagePath) {
+      var uploadTask = firebase.storage().ref('images/userId/' + this.state.imageId).putFile(imagePath);
+      uploadTask.on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        (snapshot) => {
+          let progress = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0);
+          console.log('Upload is ' + progress + '% complete')
           this.setState({
-            progress: 100
+            progress: progress
           });
-
-          firebase.storage().ref('images/userId/' + this.state.imageId).getDownloadURL()
-            .then((url) => {
-              if (firstTime) {
-                firstTime = false;
-                this.processUpload(url);
-              }
+          if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+            // complete
+            this.setState({
+              progress: 100
             });
-        }
-      },
-      (error) => {
-        unsubscribe();
-      },
-    );
+
+            firebase.storage().ref('images/userId/' + this.state.imageId).getDownloadURL()
+              .then((url) => {
+                if (firstTime) {
+                  firstTime = false;
+                  this.processUpload(url);
+                }
+              });
+          }
+        },
+        (error) => {
+          unsubscribe();
+        },
+      );
+    } else {
+      this.processUpload("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
+    }
   }
 
   insertUser = (imagePath) => {
@@ -145,7 +149,7 @@ export default class signup extends React.Component {
     const values = { fullName, email, password, description, gender, profilePicture }
     firebase.auth().createUserWithEmailAndPassword(email, password).then(function (cred) {
       return db.collection("signup").doc(cred.user.uid).set({
-        email: values.email,
+        email: values.email.toLowerCase(),
         fullName: values.fullName,
         password: values.password,
         gender: values.gender,

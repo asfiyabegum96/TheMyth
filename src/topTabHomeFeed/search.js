@@ -64,6 +64,7 @@ export default class search extends React.Component {
                 if (docNotEmpty) {
                     data = (doc.id, " => ", doc.data());
                     if (data.isDeleted === false) {
+                        console.log(data)
                         searchArray.push(data);
                     }
                 }
@@ -219,9 +220,8 @@ const styles = StyleSheet.create({
     image: {
         width: 45,
         height: 45,
-        borderRadius: 20,
-        marginLeft: 20,
-        resizeMode: 'cover',
+        borderRadius: 10,
+        marginLeft: 20
     },
     profile: {
         color: '#EE6E3D',
