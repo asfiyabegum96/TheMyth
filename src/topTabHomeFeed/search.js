@@ -8,7 +8,6 @@ import {
     FlatList,
     BackHandler
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Entypo';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -18,7 +17,6 @@ import {
     from 'react-native-responsive-screen';
 import { SearchBar } from 'react-native-elements';
 import firebase from 'react-native-firebase';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 export default class search extends React.Component {
 
     constructor(props) {
@@ -53,7 +51,6 @@ export default class search extends React.Component {
 
     fetchSearchList() {
         const searchArray = [];
-        console.log('submitted', this.state.search);
         const context = this;
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
@@ -64,7 +61,6 @@ export default class search extends React.Component {
                 if (docNotEmpty) {
                     data = (doc.id, " => ", doc.data());
                     if (data.isDeleted === false) {
-                        console.log(data)
                         searchArray.push(data);
                     }
                 }
@@ -96,7 +92,7 @@ export default class search extends React.Component {
                 });
 
                 if (isFollower === false) {
-                    context.setState({ feedData: searchArray })
+                    context.fetchPendingFollowers(photosRef, searchElement, searchArray);
                 }
             });
 
@@ -104,6 +100,23 @@ export default class search extends React.Component {
             this.setState({ feedData: [] })
         }
 
+    }
+
+    fetchPendingFollowers(photosRef, searchElement, searchArray) {
+        const context = this;
+        photosRef.doc(searchElement.docRef).collection('pendingFollowers').get().then(function (pendingSnapshot) {
+            pendingSnapshot.forEach(function (pendingDoc) {
+                const docNotEmpty = (pendingDoc.id, " => ", pendingDoc.data() != null);
+                if (docNotEmpty) {
+                    if (context.state.email.trim() === pendingDoc.data().email.trim()) {
+                        searchElement.isPending = true
+                    } else {
+                        searchElement.isPending = false
+                    }
+                }
+            })
+            context.setState({ feedData: searchArray })
+        });
     }
 
     navigateToOtherUser(selectedItem) {
@@ -117,10 +130,14 @@ export default class search extends React.Component {
             ? selectedItem.item.isFollowed
             : selectedItem.isFollowed
             ;
+        const isPending = selectedItem.item
+            ? selectedItem.item.isPending
+            : selectedItem.isPending
+            ;
         const isSameProfile = this.state.email.trim() === searchedEmail.trim();
         this.setState(this.baseState);
         this.setState({ feedData: [] })
-        this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile, isFollowed: isFollowed })
+        this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: searchedEmail.trim(), privateAccount: isPrivateAccount, isSameProfile: isSameProfile, isFollowed: isFollowed, isPending: isPending })
     }
 
     render() {

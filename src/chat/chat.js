@@ -52,7 +52,6 @@ export default class chatScreen extends React.Component {
             userDetails: props.navigation.state.params.userDetails,
         };
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-        console.log(this.state.selectedItem)
     }
 
     onSend(messages = []) {
@@ -282,7 +281,7 @@ export default class chatScreen extends React.Component {
     renderChatFooter(props) {
         return (
             <>
-                {this.state.selectedItem.isFollowing !== true && this.state.messages.length > 0 ?
+                {this.state.selectedItem.isFollowing !== true && this.state.messages.length && this.state.userDetails.isPrivateAccount === true > 0 ?
                     <View style={{ borderWidth: 1, borderColor: '#ff2700', margin: wp('5%'), borderRadius: 10 }}>
                         <View style={styles.whisper}>
                             <Text style={{ color: '#ccc', fontWeight: 'bold' }}>{this.state.selectedItem.fullName} has something to whisper!</Text>
@@ -332,7 +331,7 @@ export default class chatScreen extends React.Component {
                             }} />
                         <Text style={{ marginTop: wp('5%'), fontWeight: 'bold', fontSize: wp('4%'), marginBottom: wp('5%') }}>{this.state.selectedItem.fullName}</Text>
                         <View style={{
-                            width: wp('90%'), 
+                            width: wp('90%'),
                             borderBottomColor: '#ccc', borderBottomWidth: 0.5,
                             marginLeft: wp('10%'),
                             marginRight: wp('10%')

@@ -129,7 +129,7 @@ class Settings extends Component {
                   Edit Profile
                 </Text> */}
               <FontAwesome5 style={styles.fabIcon} name='user-plus' size={14} />
-              <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+              <Text style={styles.navItemStyle}>
                 Invite Friends
                 </Text>
             </View>
@@ -157,7 +157,7 @@ class Settings extends Component {
                   Edit Profile
                 </Text> */}
               <FontAwesome5 style={styles.fabIcon} name='info-circle' size={16} />
-              <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
+              <Text style={styles.navItemStyle}>
                 About
                 </Text>
             </View>

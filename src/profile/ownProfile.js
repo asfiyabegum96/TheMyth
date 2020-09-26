@@ -70,6 +70,9 @@ export default class profile extends React.Component {
       if (params.isFollowed === true) {
         this.setState({ followText: 'Following' });
       }
+      if (params.isPending === true) {
+        this.setState({ whisperText: 'Pending' })
+      }
     }
     photosRef.where('email', '==', email).get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
@@ -228,10 +231,29 @@ export default class profile extends React.Component {
     let db = firebase.firestore();
     if (this.state.followText === 'Follow') {
       this.setState({ followText: 'Following' });
-      this.setState({ whisperText: 'Request Pending' });
+      if (searchedUserData.isPrivateAccount === true) {
+        this.setState({ whisperText: 'Pending' });
+        const saveObj = {
+          email: userData.email.trim(),
+          fullName: userData.fullName,
+          profilePicture: userData.profilePicture,
+          docRef: searchedUserData.docRef
+        }
+        db.collection("signup").doc(searchedUserData.docRef).collection('pendingFollowers').doc(userData.email.trim()).set(saveObj);
+      }
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).set({ email: searchedUserData.email.trim() }).then((dat) => console.log('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).set({ email: userData.email.trim() })
     } else {
+      if (this.state.whisperText === 'Pending') {
+        const saveObj = {
+          email: userData.email.trim() + '_removed',
+          fullName: userData.fullName,
+          profilePicture: userData.profilePicture,
+          docRef: searchedUserData.docRef
+        }
+        this.setState({ followText: 'Follow' });
+        db.collection("signup").doc(searchedUserData.docRef).collection('pendingFollowers').doc(userData.email.trim()).update(saveObj)
+      }
       this.setState({ followText: 'Follow' });
       this.setState({ whisperText: 'Whisper' });
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => console.log('done'))
