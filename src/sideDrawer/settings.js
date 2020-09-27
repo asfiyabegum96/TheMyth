@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { NavigationActions } from 'react-navigation';
-import { ScrollView, Text, View, TouchableOpacity, Alert, BackHandler } from 'react-native';
+import { ScrollView, Text, View, TouchableOpacity, Alert, BackHandler, AsyncStorage } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -35,7 +35,31 @@ class Settings extends Component {
     });
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
     loc(this);
+    this.checkUserAuthorization();
     this.fetchUserDetails();
+  }
+
+  async checkUserAuthorization() {
+    firebase.messaging().hasPermission()
+      .then((enabled) => {
+        if (enabled) {
+          console.log('user has permission');
+        } else {
+          console.log('user does not have permission');
+          this.getPermission()
+        }
+      });
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    this.setState({ token: fcmToken })
+    console.log('token from async storage', fcmToken);
+    if (!fcmToken) {
+      fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        console.log('token from firebase', fcmToken);
+        this.setState({ token: fcmToken })
+        await AsyncStorage.setItem("fcmToken", fcmToken, this.state.token); // store in db during installing and access that token
+      }
+    }
   }
 
   componentWillUnMount() {
@@ -84,8 +108,31 @@ class Settings extends Component {
 
 
   logout = () => {
+    const context = this;
+    context.removeToken();
     firebase.auth().signOut().then(() => {
       this.navigateToRoute('Home')
+    })
+  }
+
+  removeToken() {
+    const context = this;
+    let db = firebase.firestore();
+    let userRef = db.collection('signup');
+    userRef.where('email', '==', context.props.screenProps.email.trim()).get().then(function (userQuerySnapshot) {
+      userQuerySnapshot.forEach(function (doc) {
+        let userData;
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) {
+          userData = (doc.id, " => ", doc.data());
+          if (userData.token && userData.token.length) {
+            if (userData.token.includes(context.state.token)) {
+              const token = userData.token.filter((data) => data !== context.state.token)
+              db.collection("signup").doc(context.state.user.docRef).update({ token: token })
+            }
+          }
+        }
+      })
     })
   }
 

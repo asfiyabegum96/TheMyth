@@ -116,9 +116,10 @@ export default class mainFeed extends React.Component {
   }
 
   async sendNotifications(selectedPhoto, token) {
+    token = token && token.length ? token : [token]
     const FIREBASE_API_KEY = 'AAAAG7aHdPM:APA91bF4Yc6qbYxvK90mhU1XheWJbYFnCjVQ13RRUGoUT6oDcI5xiqgUZXsNzxuB0CFuflonomJbDoNtFm1hFyPSLWyAi1LGMAVJpUV_HOjN_xvYRzwrN4U7vw5TZU9x2PMRvcZoaBQ_';
     const message = {
-      registration_ids: [token],
+      registration_ids: token,
       notification: {
         title: "Myth",
         body: `One of your friend likes your photo!`,

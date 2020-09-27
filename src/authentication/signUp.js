@@ -157,7 +157,7 @@ export default class signup extends React.Component {
         profilePicture: url,
         docRef: cred.user.uid,
         isDeleted: false,
-        token: context.state.token
+        token: [context.state.token]
       }).then(function () {
         context.props.navigation.navigate('homeFixed', { email: values.email })
         context.loadingChange();

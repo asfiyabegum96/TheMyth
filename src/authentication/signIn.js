@@ -45,8 +45,9 @@ export default class Home extends React.Component {
     let userEmail = context.state.email.trim();
     let verifyPassword = context.state.password;
     firebase.auth().signInWithEmailAndPassword(userEmail, verifyPassword).then(function () {
-      context.setState({ isInvalid: false })
-      context.props.navigation.navigate('homeFixed', { email: context.state.email, })
+      context.setState({ isInvalid: false });
+      context.setToken();
+      context.props.navigation.navigate('homeFixed', { email: context.state.email, });
     }).catch((error) => {
       if (error)
         this.setState({ isInvalid: true })
@@ -87,32 +88,55 @@ export default class Home extends React.Component {
   };
 
   componentDidMount() {
-    // this.checkUserAuthorization();
+    this.checkUserAuthorization();
     loc(this);
   }
 
-  // async checkUserAuthorization() {
-  //   firebase.messaging().hasPermission()
-  //     .then((enabled) => {
-  //       if (enabled) {
-  //         console.log('user has permission');
-  //       } else {
-  //         console.log('user does not have permission');
-  //         this.getPermission()
-  //       }
-  //     });
-  //   let fcmToken = await AsyncStorage.getItem('fcmToken');
-  //   this.setState({ token: fcmToken })
-  //   console.log('token from async storage', fcmToken);
-  //   if (!fcmToken) {
-  //     fcmToken = await firebase.messaging().getToken();
-  //     if (fcmToken) {
-  //       console.log('token from firebase', fcmToken);
-  //       this.setState({ token: fcmToken })
-  //       await AsyncStorage.setItem("fcmToken", fcmToken, this.state.token); // store in db during installing and access that token
-  //     }
-  //   }
-  // }
+  async checkUserAuthorization() {
+    firebase.messaging().hasPermission()
+      .then((enabled) => {
+        if (enabled) {
+          console.log('user has permission');
+        } else {
+          console.log('user does not have permission');
+          this.getPermission()
+        }
+      });
+    let fcmToken = await AsyncStorage.getItem('fcmToken');
+    this.setState({ token: fcmToken })
+    console.log('token from async storage', fcmToken);
+    if (!fcmToken) {
+      fcmToken = await firebase.messaging().getToken();
+      if (fcmToken) {
+        console.log('token from firebase', fcmToken);
+        this.setState({ token: fcmToken })
+        await AsyncStorage.setItem("fcmToken", fcmToken, this.state.token); // store in db during installing and access that token
+      }
+    }
+  }
+
+  setToken() {
+    const context = this;
+    let db = firebase.firestore();
+    let userRef = db.collection('signup');
+    userRef.where('email', '==', context.state.email.trim()).get().then(function (userQuerySnapshot) {
+      userQuerySnapshot.forEach(function (doc) {
+        let userData;
+        const docNotEmpty = (doc.id, " => ", doc.data() != null);
+        if (docNotEmpty) {
+          userData = (doc.id, " => ", doc.data());
+          if (userData.token && userData.token.length >= 0) {
+            if (!userData.token.includes(context.state.token)) {
+              const token = userData.token;
+              token.push(context.state.token)
+              db.collection("signup").doc(userData.docRef).update({ token: token })
+            }
+          }
+        }
+      })
+    })
+
+  }
 
   componentWillUnMount() {
     rol();
