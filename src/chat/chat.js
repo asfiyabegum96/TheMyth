@@ -52,6 +52,7 @@ export default class chatScreen extends React.Component {
             userDetails: props.navigation.state.params.userDetails,
         };
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+        console.log(this.state.selectedItem)
     }
 
     onSend(messages = []) {
@@ -268,16 +269,24 @@ export default class chatScreen extends React.Component {
         db.collection("signup").doc(selectedItem.docRef).collection('followers').doc(item.email.trim()).set({ email: item.email.trim() })
         db.collection("signup").doc(item.docRef).collection('following').doc(selectedItem.email.trim()).set({ email: selectedItem.email.trim() });
         if (item.isPrivateAccount === true) {
-            db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(selectedItem.email.trim()).update({ email: selectedItem.email.trim() + '_accepted' })
+            const docRef = db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(item.email.trim())
+            docRef.get().then(function (doc) {
+                if (doc.exists) {
+                    db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(selectedItem.email.trim()).update({ email: selectedItem.email.trim() + '_accepted' })
+                }
+            })
         }
     }
 
     cancelRequest = () => {
         const item = this.state.userDetails;
         let db = firebase.firestore();
-        db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(item.email.trim()).update({ email: item.email.trim() + '_cancelled' }).then(() => {
-            //   context.getFollowers();
-        })
+        const docRef = db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(item.email.trim())
+        docRef.get().then(function (doc) {
+            if (doc.exists) {
+                db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(item.email.trim()).update({ email: item.email.trim() + '_cancelled' })
+            }
+        })   //   context.getFollowers();
     }
 
     renderChatFooter(props) {

@@ -80,22 +80,18 @@ export default class search extends React.Component {
                     followerSnapshot.forEach(function (followerDoc) {
                         const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                         if (docNotEmpty) {
-                            if (context.state.email === followerDoc.data().email) {
+                            if (context.state.email.trim() === followerDoc.data().email.trim()) {
                                 isFollower = true;
                                 searchElement.isFollowed = true
-                            } else {
-                                searchElement.isFollowed = false
                             }
                         }
                     })
-                    context.setState({ feedData: searchArray })
                 });
-
                 if (isFollower === false) {
                     context.fetchPendingFollowers(photosRef, searchElement, searchArray);
                 }
             });
-
+            context.setState({ feedData: searchArray })
         } else {
             this.setState({ feedData: [] })
         }
@@ -115,7 +111,7 @@ export default class search extends React.Component {
                     }
                 }
             })
-            context.setState({ feedData: searchArray })
+            context.setState({ feedData: searchArray });
         });
     }
 
