@@ -193,10 +193,10 @@ export default class profile extends React.Component {
 
   followPressed = () => {
     this.setState({ navProps: this.props.navigation.state.params });
-    this.fetchCurrentUserDetails();
+    this.fetchCurrentUserDetails(true);
   }
 
-  fetchCurrentUserDetails() {
+  fetchCurrentUserDetails(followPressed) {
     const context = this;
     let db = firebase.firestore();
     let userData;
@@ -205,13 +205,13 @@ export default class profile extends React.Component {
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) {
           userData = (doc.id, " => ", doc.data());
-          context.fetchSeachedUser(userData);
+          context.fetchSeachedUser(userData, followPressed);
         }
       });
     });
   }
 
-  fetchSeachedUser(userData) {
+  fetchSeachedUser(userData, followPressed) {
     const context = this;
     let db = firebase.firestore();
     let searchedUserData;
@@ -220,11 +220,34 @@ export default class profile extends React.Component {
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) {
           searchedUserData = (doc.id, " => ", doc.data());
-          context.updateFollowers(userData, searchedUserData)
+          if (followPressed) {
+            context.updateFollowers(userData, searchedUserData)
+          } else {
+            context.fetchFollowing(userData, searchedUserData)
+          }
         }
       });
     });
 
+  }
+
+  fetchFollowing(userData, searchedUserData) {
+    const context = this;
+    let db = firebase.firestore();
+    let photosRef = db.collection('signup');
+    photosRef.doc(userData.docRef).collection('following').get().then(function (followerSnapshot) {
+      followerSnapshot.forEach(function (followerDoc) {
+        const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
+        if (docNotEmpty) {
+          if (searchedUserData) {
+            if (searchedUserData.email.trim() === followerDoc.data().email.trim()) {
+              searchedUserData.isFollowing = true;
+            }
+          }
+        }
+      })
+      context.updateWhisper(userData, searchedUserData)
+    });
   }
 
   updateFollowers(userData, searchedUserData) {
@@ -261,8 +284,8 @@ export default class profile extends React.Component {
     }
   }
 
-  handleWhisper() {
-    const searchedUserData = this.props.navigation.state.params;
+  updateWhisper(userData, searchedUserData) {
+    let db = firebase.firestore();
     if (searchedUserData.isPrivateAccount === true) {
       const saveObj = {
         email: userData.email.trim(),
@@ -271,10 +294,15 @@ export default class profile extends React.Component {
         docRef: searchedUserData.docRef
       }
       db.collection("signup").doc(userData.docRef).collection('pendingFollowers').doc(userData.email.trim()).set(saveObj);
-      this.props.navigation.navigate('chatScreen', { selectedItem: this.state.user, userDetails: this.state.user, email: this.props.navigation.state.params.email })
+      this.props.navigation.navigate('chatScreen', { selectedItem: searchedUserData, userDetails: userData, email: this.props.navigation.state.params.email })
     } else {
-      this.props.navigation.navigate('chatScreen', { selectedItem: this.state.user, userDetails: this.state.user, email: this.props.navigation.state.params.email })
+      this.props.navigation.navigate('chatScreen', { selectedItem: searchedUserData, userDetails: userData, email: this.props.navigation.state.params.email })
     }
+  }
+
+  handleWhisper() {
+    this.setState({ navProps: this.props.navigation.state.params });
+    this.fetchCurrentUserDetails(false);
   }
 
   render() {

@@ -96,15 +96,17 @@ export default class chatLanding extends React.Component {
             followerSnapshot.forEach(function (followerDoc) {
                 const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                 if (docNotEmpty) {
+                    followerDoc.data().isFollowing = true;
                     if (!emailArray.includes(followerDoc.data().email)) {
                         searchArray.push(followerDoc.data());
                     } else {
                         if (searchArray.length) {
                             searchArray.forEach(element => {
-                                if (element.email === followerDoc.data().email) {
+                                if (element.email.trim() === followerDoc.data().email.trim()) {
                                     element.isFollowing = true;
                                 }
                             });
+                            context.setState({ searchArray: searchArray });
                         }
                     }
                 }

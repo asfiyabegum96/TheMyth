@@ -607,9 +607,9 @@ export default class mainFeed extends React.Component {
                         <Text style={styles.listProfileName}>{item.author}</Text>
                         <View style={styles.locationDiv}>
                           <Text style={styles.locationText}>{item.location}</Text>
-                          <TouchableOpacity onPress={() => this.copyUrl(item)} style={{ paddingLeft: wp('1%') }}>
+                          {/* <TouchableOpacity onPress={() => this.copyUrl(item)} style={{ paddingLeft: wp('1%') }}>
                             <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
-                          </TouchableOpacity>
+                          </TouchableOpacity> */}
                         </View>
                       </TouchableOpacity>
                     </View>

@@ -264,10 +264,12 @@ export default class chatScreen extends React.Component {
         const selectedItem = context.state.selectedItem;
         context.state.selectedItem.isFollowing = true;
         context.setState({ selectedItem: context.state.selectedItem });
-        db.collection("signup").doc(item.docRef).collection('following').doc(selectedItem.email.trim()).set({ email: selectedItem.email.trim() })
-        db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(selectedItem.email.trim()).update({ email: selectedItem.email.trim() + '_accepted' }).then(() => {
-            //   context.getFollowers();
-        })
+
+        db.collection("signup").doc(selectedItem.docRef).collection('followers').doc(item.email.trim()).set({ email: item.email.trim() })
+        db.collection("signup").doc(item.docRef).collection('following').doc(selectedItem.email.trim()).set({ email: selectedItem.email.trim() });
+        if (item.isPrivateAccount === true) {
+            db.collection("signup").doc(item.docRef).collection('pendingFollowers').doc(selectedItem.email.trim()).update({ email: selectedItem.email.trim() + '_accepted' })
+        }
     }
 
     cancelRequest = () => {
