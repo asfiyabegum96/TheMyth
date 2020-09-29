@@ -123,7 +123,10 @@ const AppNavigator = createStackNavigator({
     },
     settings: {
         screen: Settings,
-        navigationOptions: { header: null },
+        navigationOptions: {
+            headerTitle: 'Settings',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+        },
     },
     sideNavigator: {
         screen: sideNavigator,

@@ -236,22 +236,22 @@ export default class updatePassword extends React.Component {
                                             onChangeText={text => this.handleChange('confirmPassword', text)}
                                         /> */}
                                     {this.state.passwordInvalid == true ? (
-                                        <Text style={{ color: 'red' }}>Please enter strong password.</Text>
+                                        <Text style={{ color: 'black' }}>Please enter strong password.</Text>
                                     ) : (
                                             <View></View>
                                         )}
                                     {this.state.passwordMismatch == true ? (
-                                        <Text style={{ color: 'red' }}>Password mismatch!</Text>
+                                        <Text style={{ color: 'black' }}>Password mismatch!</Text>
                                     ) : (
                                             <View></View>
                                         )}
                                     {this.state.fieldNotEmpty == true ? (
-                                        <Text style={{ color: 'red' }}>Please enter all values.</Text>
+                                        <Text style={{ color: 'black' }}>Please enter all values.</Text>
                                     ) : (
                                             <View></View>
                                         )}
                                     {this.state.isInvalid == true ? (
-                                        <Text style={{ color: 'red' }}>Incorrect Old Password!</Text>
+                                        <Text style={{ color: 'black' }}>Incorrect Old Password!</Text>
                                     ) : (
                                             <View></View>
                                         )}

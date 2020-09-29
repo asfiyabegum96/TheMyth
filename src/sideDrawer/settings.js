@@ -76,7 +76,7 @@ class Settings extends Component {
     const context = this;
     let db = firebase.firestore();
     let photosRef = db.collection('signup');
-    photosRef.where('email', '==', this.props.screenProps.email.trim()).get().then(function (querySnapshot) {
+    photosRef.where('email', '==', this.props.navigation.state.params.email.trim()).get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         let data;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -92,20 +92,15 @@ class Settings extends Component {
         index: 0,
         actions: [NavigationActions.navigate({ routeName: route })],
       });
-      this.props.screenProps.navigateToOther.dispatch(resetAction);
+      this.props.navigation.dispatch(resetAction);
     } else {
-      this.props.screenProps.navigateToOther.navigate(route, { email: this.props.screenProps.email.trim(), navigation: this.props.screenProps.navigation })
+      this.props.navigation.navigate(route, { email: this.props.navigation.state.params.email.trim(), navigation: this.props.navigation })
     }
   }
 
   navigation() {
-    this.props.screenProps.navigateToOther.navigate('sideNavigator')
+    this.props.navigation.navigate('sideNavigator')
   }
-
-  onBack = () => {
-    this.props.screenProps.navigateToOther.navigate('profile', { email: this.props.screenProps.email.trim(), searchedEmail: this.props.screenProps.email.trim(), privateAccount: false, isSameProfile: true, isFollowed: true })
-  }
-
 
   logout = () => {
     const context = this;
@@ -119,7 +114,7 @@ class Settings extends Component {
     const context = this;
     let db = firebase.firestore();
     let userRef = db.collection('signup');
-    userRef.where('email', '==', context.props.screenProps.email.trim()).get().then(function (userQuerySnapshot) {
+    userRef.where('email', '==', context.props.navigation.state.params.email.trim()).get().then(function (userQuerySnapshot) {
       userQuerySnapshot.forEach(function (doc) {
         let userData;
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
@@ -171,13 +166,6 @@ class Settings extends Component {
         radius={400}>
         {
           <View style={styles.container}>
-            <View style={styles.header}>
-              <Text style={styles.inputText}
-              >Settings</Text>
-              {/* <TouchableOpacity onPress={() => this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: this.state.email.trim(), privateAccount: false, isSameProfile: true })}>
-                        <FontAwesome5 style={styles.profile} name={'user'} />
-                    </TouchableOpacity> */}
-            </View>
             <View style={{ flexDirection: 'row' }}>
               {/* <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
                   Edit Profile

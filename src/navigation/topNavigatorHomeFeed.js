@@ -17,6 +17,7 @@ import Search from '../topTabHomeFeed/search.js';
 import Gallery from '../camera/cameraBottomTab.js';
 import Settings from '../sideDrawer/settings.js';
 import PhotosUpload from './uploadTab.js';
+import DiaryMaintain from '../topTabHomeFeed/diary-maintain.js';
 
 class Mainscreen extends React.Component {
   constructor(props) {
@@ -87,7 +88,7 @@ const TopNavigator = createBottomTabNavigator(
     },
     Fourth: notification,
     Fifth: {
-      screen: Settings,
+      screen: DiaryMaintain,
       navigationOptions: {
         tabBarIcon: ({ tintColor, focused }) => (
           <FontAwesome5 name={'cog'}

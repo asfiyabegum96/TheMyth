@@ -745,7 +745,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     color: '#EE6E3D',
     fontSize: hp('2.5%'),
-    marginLeft: wp('50%'),
+    marginLeft: wp('45%'),
     fontSize: 26,
     width: wp('10%')
   },

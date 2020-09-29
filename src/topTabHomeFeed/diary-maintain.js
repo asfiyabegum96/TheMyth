@@ -139,28 +139,37 @@ export default class DiaryMaintain extends Component {
 
     render() {
         return (
-            <ScrollView style={{ backgroundColor: '#fff6f2' }}>
-                <View style={{ padding: 10, minHeight: hp('50%') }}>
-                    {this.state.loading == true ? (
-                        <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
-                            <ActivityIndicator size="large" color='red' />
-                        </View>
-                    ) : (
-                            <MasonryList
-                                masonryFlatListColProps={{ refreshing: this.state.feedRefresh, onRefresh: () => this.fetchImages() }}
-                                backgroundColor={'#fff6f2'}
-                                listContainerStyle={{ marginLeft: wp('3%') }}
-                                imageContainerStyle={main.imagesContainer}
-                                spacing={2}
-                                columns={3}
-                                images={this.state.images}
-                                keyExtractor={(item, index) => index.toString()}
-                                onPressImage={(item) => this.props.screenProps.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.screenProps.navigation.state.params.email.trim(), isDiary: true })}
-                                onLongPressImage={(item, index) => this.confirmDelete(item, index)}
-                            />
-                        )}
+            <>
+                <View style={main.header}>
+                    <Text style={main.inputText}
+                    >Diary</Text>
+                    {/* <TouchableOpacity onPress={() => this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: this.state.email.trim(), privateAccount: false, isSameProfile: true })}>
+                      <FontAwesome5 style={styles.profile} name={'user'} />
+                  </TouchableOpacity> */}
                 </View>
-            </ScrollView>
+                <ScrollView style={{ backgroundColor: '#fff6f2' }}>
+                    <View style={{ padding: 10, minHeight: hp('50%') }}>
+                        {this.state.loading == true ? (
+                            <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
+                                <ActivityIndicator size="large" color='red' />
+                            </View>
+                        ) : (
+                                <MasonryList
+                                    masonryFlatListColProps={{ refreshing: this.state.feedRefresh, onRefresh: () => this.fetchImages() }}
+                                    backgroundColor={'#fff6f2'}
+                                    listContainerStyle={{ marginLeft: wp('3%') }}
+                                    imageContainerStyle={main.imagesContainer}
+                                    spacing={2}
+                                    columns={3}
+                                    images={this.state.images}
+                                    keyExtractor={(item, index) => index.toString()}
+                                    onPressImage={(item) => this.props.screenProps.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.screenProps.navigation.state.params.email.trim(), isDiary: true })}
+                                    onLongPressImage={(item, index) => this.confirmDelete(item, index)}
+                                />
+                            )}
+                    </View>
+                </ScrollView>
+            </>
         )
     }
 }
