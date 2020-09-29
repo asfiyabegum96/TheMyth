@@ -561,7 +561,7 @@ export default class mainFeed extends React.Component {
     // }
 
     return (
-      <View style={{ flex: 1, }}>
+      <View style={{ flex: 1, backgroundColor: '#fff6f2', }}>
         <View
           style={{
             borderBottomColor: '#EE6E3D',
@@ -590,7 +590,7 @@ export default class mainFeed extends React.Component {
               style={{ flex: 1 }}
               renderItem={({ item, index }) => (
 
-                <View key={index} style={{ paddingHorizontal: wp('1%'), marginTop: hp('1%') }}>
+                <View key={index} style={{ paddingHorizontal: wp('1%'), margin: hp('1%'), borderRadius: wp('2%'), borderWidth: 1, backgroundColor: 'white', borderColor: 'white' }}>
                   <View style={styles.feedBorder}>
                     <View style={styles.listHeader}>
                       <TouchableOpacity onPress={() => this.viewOtherUserProfiles({ item })} style={{ paddingHorizontal: 10, }}>
@@ -697,8 +697,8 @@ const styles = StyleSheet.create({
     paddingVertical: wp('2%'),
   },
   listViewInlineImg: {
-    width: wp('90%'),
-    height: wp('110%'),
+    width: wp('85%'),
+    height: wp('100%'),
     marginLeft: wp('4%'),
     borderWidth: 1,
     borderRadius: wp('3%'),

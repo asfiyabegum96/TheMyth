@@ -155,6 +155,9 @@ export default class Home extends React.Component {
                 source={require('../images/mythlogo.png')}
                 style={main.logo} />
             </View>
+            <View style={{ backgroundColor: 'yellow' }}>
+              <Text style={{ textAlign: 'center', marginTop: wp('-15%'), color: 'white', fontWeight: 'bold' }}>Food.  Photo. Memories</Text>
+            </View>
             <View style={styles.TextInputDiv}>
               {/* <View style={{ flexDirection: 'row', }}> */}
               <Text style={main.labelContainer}>Email *</Text>
@@ -241,7 +244,7 @@ const styles = StyleSheet.create({
   },
   TextInputDiv: {
     marginLeft: wp('10%'),
-    marginTop: wp('-10%'),
+    marginTop: wp('-5%'),
   },
   ForgotPassDiv: {
     left: wp('35%'),
@@ -282,7 +285,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     left: wp('14%'),
-    marginTop: wp('10%')
+    marginTop: wp('5%')
   },
   iconStyle: {
     marginTop: wp('8.5%'), borderBottomColor: '#000', borderBottomWidth: 0.5,
