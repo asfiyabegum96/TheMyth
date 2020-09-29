@@ -144,14 +144,15 @@ export default class search extends React.Component {
                     {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
                         <Icon name={'home'} size={30} color="#fff" />
                     </TouchableOpacity> */}
-                    <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#EE6E3D', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
+                    <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#EE6E3D', height: hp('5%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
                         autoFocus="true"
                         placeholderTextColor="#fff"
-                        inputStyle={{ color: '#fff' }}
+                        inputStyle={{ color: '#fff', fontSize: 15 }}
                         clearIcon={{ color: 'white' }}
                         onChangeText={(text) => this.updateSearch(text)}
                         onSubmitEditing={() => this.fetchSearchList()}
                         onClear={() => this.setState({ feedData: [] })}
+                        placeholder='Search'
                         value={search}
                     />
                     {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('profile', { email: this.props.navigation.state.params.email.trim(), searchedEmail: this.props.navigation.state.params.email.trim(), privateAccount: false, isSameProfile: true })}>
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: '#EE6E3D',
-        padding: 10,
+        padding: 8,
     },
     image: {
         width: 45,

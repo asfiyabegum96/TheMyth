@@ -18,6 +18,7 @@ import privacySettings from '../sideDrawer/privacySettings';
 import accountSettings from '../sideDrawer/accountSettings'
 import notificationsSettings from '../sideDrawer/notificationsSettings'
 import search from '../topTabHomeFeed/search';
+import Settings from "../sideDrawer/settings";
 
 const AppNavigator = createStackNavigator({
     Home: {
@@ -104,17 +105,24 @@ const AppNavigator = createStackNavigator({
     },
     chat: {
         screen: chatLanding,
-        navigationOptions: { headerTitle: 'Chat' }
+        navigationOptions: {
+            headerTitle: 'Whispers',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17, fontWeight: 'bold' },
+        }
     },
     chatScreen: {
         screen: chatScreen,
         navigationOptions: {
-            headerTitle: 'Chat',
-            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17 },
+            headerTitle: 'Whispers',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' }, headerTitleStyle: { color: 'white', fontSize: 17, fontWeight: 'bold' },
         }
     },
     comments: {
         screen: Comments,
+        navigationOptions: { header: null },
+    },
+    settings: {
+        screen: Settings,
         navigationOptions: { header: null },
     },
     sideNavigator: {

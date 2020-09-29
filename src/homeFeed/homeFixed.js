@@ -188,12 +188,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 50,
     height: 50,
-    borderRadius: 50/2,
+    borderRadius: 50 / 2,
+    marginBottom: wp('5%'),
+    marginRight: wp('1.5%')
   },
   fabIcon: {
     color: '#fff',
     padding: wp('2%'),
-    marginRight: wp('1%')
+    marginRight: wp('1%'),
   },
 });
 

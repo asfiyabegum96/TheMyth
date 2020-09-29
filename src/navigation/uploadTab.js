@@ -323,108 +323,117 @@ class photosUpload extends React.Component {
 
     render() {
         return (
-            <ScrollView keyboardShouldPersistTaps={true} style={{ flex: 1, padding: wp('3%'), backgroundColor: '#fff6f2' }}>
-                <View style={styles.logo}>
-                    {
-                        this.state.uri ?
+            <>
+                <View style={main.header}>
+                    <Text style={main.inputText}
+                    >Add a photo</Text>
+                    {/* <TouchableOpacity onPress={() => this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: this.state.email.trim(), privateAccount: false, isSameProfile: true })}>
+                        <FontAwesome5 style={styles.profile} name={'user'} />
+                    </TouchableOpacity> */}
+                </View>
+                <ScrollView keyboardShouldPersistTaps={true} style={{ flex: 1, padding: wp('3%'), backgroundColor: '#fff6f2' }}>
+                    <View style={styles.logo}>
+                        {
+                            this.state.uri ?
+                                <Image
+                                    source={{ uri: this.state.uri }}
+                                    style={{
+                                        width: wp('65%'),
+                                        height: hp('45%'),
+                                        borderRadius: wp('5%'),
+                                        resizeMode: 'cover',
+                                        marginLeft: wp('0%'),
+                                        marginTop: wp('5%'),
+                                        marginBottom: wp('5%')
+                                    }} /> :
+                                <Image
+                                    source={require('../images/icecream.jpg')}
+                                    style={{
+                                        width: wp('65%'),
+                                        height: hp('45%'),
+                                        borderRadius: wp('5%'),
+                                        resizeMode: 'cover',
+                                        marginLeft: wp('0%'),
+                                        marginTop: wp('5%'),
+                                        marginBottom: wp('5%')
+                                    }} />}
+                    </View>
+                    <View style={styles.edit}>
+                        <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={this.selectImage}>
                             <Image
-                                source={{ uri: this.state.uri }}
+                                source={require('../images/person.png')}
                                 style={{
-                                    width: wp('65%'),
-                                    height: hp('45%'),
-                                    borderRadius: wp('5%'),
+                                    width: wp('15%'),
+                                    height: wp('15%'),
+
                                     resizeMode: 'cover',
-                                    marginLeft: wp('0%'),
-                                    marginTop: wp('5%'),
-                                    marginBottom: wp('5%')
-                                }} /> :
-                            <Image
-                                source={require('../images/icecream.jpg')}
-                                style={{
-                                    width: wp('65%'),
-                                    height: hp('45%'),
-                                    borderRadius: wp('5%'),
-                                    resizeMode: 'cover',
-                                    marginLeft: wp('0%'),
-                                    marginTop: wp('5%'),
-                                    marginBottom: wp('5%')
-                                }} />}
-                </View>
-                <View style={styles.edit}>
-                    <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={this.selectImage}>
-                        <Image
-                            source={require('../images/person.png')}
-                            style={{
-                                width: wp('15%'),
-                                height: wp('15%'),
+                                }} />
+                        </TouchableOpacity>
+                    </View>
 
-                                resizeMode: 'cover',
-                            }} />
-                    </TouchableOpacity>
-                </View>
+                    <View style={{ paddingVertical: wp('1%'), backgroundColor: '#fff6f2' }}>
 
-                <View style={{ paddingVertical: wp('1%'), backgroundColor: '#fff6f2' }}>
-
-                    <Text style={styles.labelContainer}>Caption</Text>
-                    <TextInput
-                        ref={input => { this.fieldRef = input }}
-                        maxLength={150}
-                        style={styles.inputContainer}
-                        textColor='white'
-                        baseColor="white"
-                        tintColor="white"
-                        onChangeText={(text) => this.setState({ caption: text })}
-                        value={this.state.caption}
-                    />
+                        <Text style={styles.labelContainer}>Caption</Text>
+                        <TextInput
+                            ref={input => { this.fieldRef = input }}
+                            maxLength={150}
+                            style={styles.inputContainer}
+                            textColor='white'
+                            baseColor="white"
+                            tintColor="white"
+                            onChangeText={(text) => this.setState({ caption: text })}
+                            value={this.state.caption}
+                        />
 
 
-                    <Text style={styles.labelContainer}>Location</Text>
-                    <TextInput
-                        ref={input => { this.fieldRef = input }}
-                        maxLength={150}
-                        style={styles.inputContainer}
-                        textColor='white'
-                        baseColor="white"
-                        tintColor="white"
-                        onChangeText={(text) => this.setState({ location: text })}
-                        value={this.state.location}
-                    />
-                </View>
-                <View>
-                    {this.state.uploading == true ? (
-                        <View style={{ marginTop: wp('2%'), }}>
-                            <Text style={{ color: '#EE6E3D' }}>{this.state.progress}%</Text>
-                            <View>
-                                {this.state.progress != 100 ? (
-                                    <ActivityIndicator size='small' color='#EE6E3D' />
-                                ) : (
-                                        <View>
-                                            <Text>Processing</Text>
-                                        </View>
-                                    )}
+                        <Text style={styles.labelContainer}>Location</Text>
+                        <TextInput
+                            ref={input => { this.fieldRef = input }}
+                            maxLength={150}
+                            style={styles.inputContainer}
+                            textColor='white'
+                            baseColor="white"
+                            tintColor="white"
+                            onChangeText={(text) => this.setState({ location: text })}
+                            value={this.state.location}
+                        />
+                    </View>
+                    <View>
+                        {this.state.uploading == true ? (
+                            <View style={{ marginTop: wp('2%'), }}>
+                                <Text style={{ color: '#EE6E3D' }}>{this.state.progress}%</Text>
+                                <View>
+                                    {this.state.progress != 100 ? (
+                                        <ActivityIndicator size='small' color='#EE6E3D' />
+                                    ) : (
+                                            <View>
+                                                <Text>Processing</Text>
+                                            </View>
+                                        )}
+                                </View>
+
                             </View>
-
-                        </View>
+                        ) : (
+                                <View></View>
+                            )}
+                    </View>
+                    {this.state.fieldNotEmpty === true ? (
+                        <Text style={{ color: 'red' }}>Please select an image to upload</Text>
                     ) : (
                             <View></View>
                         )}
-                </View>
-                {this.state.fieldNotEmpty === true ? (
-                    <Text style={{ color: 'red' }}>Please select an image to upload</Text>
-                ) : (
-                        <View></View>
-                    )}
-                <View style={styles.uploadImageStyle}>
-                    <TouchableOpacity style={styles.uploadButton} onPress={() => this.uploadImage()}>
-                        <View>
+                    <View style={styles.uploadImageStyle}>
+                        <TouchableOpacity style={styles.uploadButton} onPress={() => this.uploadImage()}>
+                            <View>
 
-                        </View>
-                        <View>
-                            <Text style={styles.buttonText}>Post</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView >
+                            </View>
+                            <View>
+                                <Text style={styles.buttonText}>Post</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView >
+            </>
         );
     }
 }
@@ -475,7 +484,7 @@ const styles = StyleSheet.create({
         textAlign: 'left', color: 'black', paddingBottom: wp('2%')
     },
     uploadImageStyle: {
-        marginTop: wp('10%'),
+        marginTop: wp('1%'),
         paddingTop: wp('1%'),
         paddingBottom: wp('1%'),
         backgroundColor: '#EE6E3D',

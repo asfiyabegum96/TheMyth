@@ -754,8 +754,8 @@ const styles = StyleSheet.create({
     fontSize: hp('3%'),
     paddingVertical: wp('0.5%'),
     paddingHorizontal: wp('0.8%'),
-    marginTop: wp('5%'),
-    marginRight: wp('2%'),
+    marginTop: wp('6%'),
+    marginRight: wp('5%'),
   },
   inputSearch: {
     width: wp('70%'),
@@ -763,10 +763,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: wp('0.1%'),
     borderBottomColor: '#fff',
     backgroundColor: '#EE6E3D',
-    fontSize: 36,
+    fontSize: 30,
     color: '#fff',
-    height: hp('8%'),
+    height: hp('7%'),
     paddingLeft: wp('45%'),
+    marginTop: wp('2%'),
     backgroundColor: '#EE6E3D', borderBottomWidth: 0, borderTopWidth: 0,
     fontFamily: 'SEAFOOL',
   },
@@ -774,6 +775,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: '#EE6E3D',
-    marginTop: wp('-2%')
+    marginTop: wp('-3%')
   },
 });

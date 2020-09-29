@@ -55,6 +55,7 @@ export default class profile extends React.Component {
       this.setState(this.baseState)
       this.fetchUserDetails();
     });
+    this.fetchUserDetails();
   }
 
   fetchUserDetails() {
@@ -315,85 +316,93 @@ export default class profile extends React.Component {
               <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={35} />
             </View>
           </TouchableOpacity>)} */}
-        <View style={styles.header}>
-          <Text style={styles.inputSearch}
-          >myth</Text>
-          <TouchableOpacity style={{ marginTop: wp('5%'), marginRight: wp('2%') }} onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
-            <Icon name={'home'} size={30} color="#fff" />
-          </TouchableOpacity>
-          {/* <SearchBar searchIcon={{ color: 'white' }} containerStyle={{ backgroundColor: '#EE6E3D', height: hp('6%'), borderBottomWidth: 0, borderTopWidth: 0 }} inputContainerStyle={styles.inputSearch}
-            placeholderTextColor="#fff"
-            inputStyle={{ color: '#fff' }}
-            onFocus={() => this.updateSearch()}
-          /> */}
-        </View>
-        <ScrollView>
-          <View style={{ backgroundColor: '#fff6f2', paddingBottom: wp('3%') }}>
-            <View style={{ alignItems: 'center', marginTop: wp('2%') }}>
-              <Image
-                source={{ uri: this.state.user.profilePicture }}
-                style={{
-                  width: wp('20%'),
-                  height: hp('10%'),
-                  resizeMode: 'cover',
-                  borderRadius: wp('5%'), borderWidth: 1.5,
-                }}
-              />
-            </View>
-            <View style={{ alignItems: 'center', marginTop: wp('5%') }}>
-              <Text style={styles.profileName}>{this.state.user.fullName}</Text>
-              <Text style={styles.description}>{this.state.user.description}</Text>
-            </View>
-            {this.props.navigation.state.params.isSameProfile === true ?
-              <View style={{ marginLeft: wp('70%') }}>
-                <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
-
-                </TouchableOpacity></View> : <></>}
+        {this.props.navigation.state && this.props.navigation.state.params && this.props.navigation.state.params.isSameProfile === true ?
+          <View style={styles.header}>
+            <Text style={styles.inputText}
+            >Your Profile</Text>
+            <TouchableOpacity style={{ marginTop: wp('5%'), marginRight: wp('5%') }} onPress={() => this.props.navigation.navigate('settings', { email: this.props.navigation.state.params.email })} >
+              <Icon name={'cog'} size={30} color="#fff" />
+            </TouchableOpacity>
+          </View> : <View style={styles.header}>
+            <Text style={styles.inputText}
+            >{this.state.user.fullName}</Text>
+            <TouchableOpacity style={{ marginTop: wp('5%'), marginRight: wp('5%') }} onPress={() => this.props.navigation.navigate('settings', { email: this.props.navigation.state.params.email })} >
+              <Icon name={'cog'} size={30} color="#fff" />
+            </TouchableOpacity>
           </View>
-          {this.props.navigation.state.params.isSameProfile === false ?
-            <View style={{ flexDirection: 'row' }}>
-              <View style={styles.following}>
-                <TouchableOpacity onPress={() => this.followPressed()}>
-                  <Text style={styles.followingtext}>{this.state.followText}</Text>
-                </TouchableOpacity>
+        }
+        {this.state.loading == true ? (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color='red' />
+          </View>
+        ) : (
+            <ScrollView>
+              <View style={{ backgroundColor: '#fff6f2', paddingBottom: wp('3%') }}>
+                <View style={{ alignItems: 'center', marginTop: wp('2%') }}>
+                  <Image
+                    source={{ uri: this.state.user.profilePicture }}
+                    style={{
+                      width: wp('20%'),
+                      height: hp('10%'),
+                      resizeMode: 'cover',
+                      borderRadius: wp('5%'), borderWidth: 1.5,
+                    }}
+                  />
+                </View>
+                <View style={{ alignItems: 'center', marginTop: wp('5%') }}>
+                  <Text style={styles.profileName}>{this.state.user.fullName}</Text>
+                  <Text style={styles.description}>{this.state.user.description}</Text>
+                </View>
+                {this.props.navigation.state.params.isSameProfile === true ?
+                  <View style={{ marginLeft: wp('70%') }}>
+                    <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
+
+                    </TouchableOpacity></View> : <></>}
               </View>
-              <View style={styles.following}>
-                <TouchableOpacity onPress={() => this.handleWhisper()}>
-                  <Text style={styles.followingtext1}>{this.state.whisperText}</Text>
-                </TouchableOpacity>
+              {this.props.navigation.state.params.isSameProfile === false ?
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={styles.following}>
+                    <TouchableOpacity onPress={() => this.followPressed()}>
+                      <Text style={styles.followingtext}>{this.state.followText}</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.following}>
+                    <TouchableOpacity onPress={() => this.handleWhisper()}>
+                      <Text style={styles.followingtext1}>{this.state.whisperText}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View> :
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
+                    <Text style={styles.buttonText}>Edit Profile</Text>
+                  </TouchableOpacity>
+                </View>}
+              <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-18%', justifyContent: 'center', alignItems: 'center' }}>
+
+                <Text style={styles.followBox1}>{this.state.followersCount}</Text>
+                <Text style={styles.followBox2}>{this.state.followingCount}</Text>
+                <Text style={styles.followBox3}>{this.state.images.length}</Text>
+
               </View>
-            </View> :
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile', { email: this.props.navigation.state.params.email })}>
-                <Text style={styles.buttonText}>Edit Profile</Text>
-              </TouchableOpacity>
-            </View>}
-          <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-18%', justifyContent: 'center', alignItems: 'center' }}>
 
-            <Text style={styles.followBox1}>{this.state.followersCount}</Text>
-            <Text style={styles.followBox2}>{this.state.followingCount}</Text>
-            <Text style={styles.followBox3}>{this.state.images.length}</Text>
-
-          </View>
-
-          <View style={{ flexDirection: 'row', height: wp('10%'), marginBottom: '-20%' }}>
-            <Text style={styles.followBox4}>Followers</Text>
-            <Text style={styles.followBox5}>Following</Text>
-            <Text style={styles.followBox6}>Posts</Text>
-          </View>
-
-          <View style={{ padding: 10, marginTop: wp('50%'), }}>
-            {this.state.loading == true ? (
-              <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
-                <ActivityIndicator size="large" color='red' />
+              <View style={{ flexDirection: 'row', height: wp('10%'), marginBottom: '-20%' }}>
+                <Text style={styles.followBox4}>Followers</Text>
+                <Text style={styles.followBox5}>Following</Text>
+                <Text style={styles.followBox6}>Posts</Text>
               </View>
-            ) : (
-                this.props.navigation.state.params.isSameProfile === true ?
-                  <PostTab screenProps={{ navigation: this.props.navigation, email: this.state.user.email.trim() }}></PostTab> :
-                  <OtherPostTab screenProps={{ navigation: this.props.navigation, email: this.state.user.email.trim() }}>/</OtherPostTab>
-              )}
-          </View>
-        </ScrollView>
+
+              <View style={{ padding: 10, marginTop: wp('50%'), }}>
+                {this.state.loading == true ? (
+                  <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator size="large" color='red' />
+                  </View>
+                ) : (
+                    this.props.navigation.state.params.isSameProfile === true ?
+                      <PostTab screenProps={{ navigation: this.props.navigation, email: this.state.user.email.trim() }}></PostTab> :
+                      <OtherPostTab screenProps={{ navigation: this.props.navigation, email: this.state.user.email.trim() }}>/</OtherPostTab>
+                  )}
+              </View>
+            </ScrollView>)}
       </View>
     );
   }
@@ -449,18 +458,19 @@ const styles = StyleSheet.create({
     fontSize: hp('3%'),
     marginTop: 5,
   },
-  inputSearch: {
+  inputText: {
     width: wp('70%'),
     paddingVertical: 2,
     borderBottomWidth: wp('0.1%'),
     borderBottomColor: '#fff',
-    backgroundColor: '#EE6E3D',
-    fontSize: 36,
+    fontSize: 17,
     color: '#fff',
-    height: hp('8%'),
-    paddingLeft: wp('45%'),
+    height: hp('7%'),
+    paddingLeft: wp('5%'),
+    paddingTop: wp('3.5%'),
+    fontWeight: 'bold',
+    marginTop: wp('2%'),
     backgroundColor: '#EE6E3D', borderBottomWidth: 0, borderTopWidth: 0,
-    fontFamily: 'SEAFOOL',
   },
   profileName: {
     fontSize: hp('2.5%'),

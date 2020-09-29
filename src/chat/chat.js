@@ -34,7 +34,7 @@ export default class chatScreen extends React.Component {
                 <FontAwesome5 style={{
                     color: 'white',
                     fontSize: hp('3%'),
-                    paddingRight: 8,
+                    paddingRight: wp('5%'),
                     marginTop: 5,
                 }} name={'camera'} />
             </TouchableOpacity>,

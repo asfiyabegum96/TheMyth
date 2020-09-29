@@ -101,7 +101,40 @@ const main = StyleSheet.create({
         width: wp('50%'), height: hp('6%'), borderColor: 'white', marginBottom: wp('2%'),
         borderWidth: 1.5, borderRadius: wp('2%'), color: '#fff'
     },
-    imagesContainer: { borderRadius: 10, borderWidth: 1.5, borderColor: 'white', height: hp('15%'), width: wp('27%') }
+    imagesContainer: { borderRadius: 10, borderWidth: 1.5, borderColor: 'white', height: hp('15%'), width: wp('27%') },
+    inputSearch: {
+        width: wp('70%'),
+        paddingVertical: 2,
+        borderBottomWidth: wp('0.1%'),
+        borderBottomColor: '#fff',
+        fontSize: 30,
+        color: '#fff',
+        height: hp('7%'),
+        paddingLeft: wp('45%'),
+        marginTop: wp('2%'),
+        backgroundColor: '#EE6E3D', borderBottomWidth: 0, borderTopWidth: 0,
+        fontFamily: 'SEAFOOL',
+    },
+    inputText: {
+        width: wp('70%'),
+        paddingVertical: 2,
+        borderBottomWidth: wp('0.1%'),
+        borderBottomColor: '#fff',
+        fontSize: 17,
+        color: '#fff',
+        height: hp('7%'),
+        paddingLeft: wp('5%'),
+        paddingTop: wp('3.5%'),
+        fontWeight: 'bold',
+        marginTop: wp('2%'),
+        backgroundColor: '#EE6E3D', borderBottomWidth: 0, borderTopWidth: 0,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: '#EE6E3D',
+        marginTop: wp('-3%')
+    },
 });
 
 export default main;

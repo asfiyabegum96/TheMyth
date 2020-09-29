@@ -171,6 +171,13 @@ class Settings extends Component {
         radius={400}>
         {
           <View style={styles.container}>
+            <View style={styles.header}>
+              <Text style={styles.inputText}
+              >Settings</Text>
+              {/* <TouchableOpacity onPress={() => this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: this.state.email.trim(), privateAccount: false, isSameProfile: true })}>
+                        <FontAwesome5 style={styles.profile} name={'user'} />
+                    </TouchableOpacity> */}
+            </View>
             <View style={{ flexDirection: 'row' }}>
               {/* <Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('editProfile')}>
                   Edit Profile
@@ -266,6 +273,26 @@ const styles = {
     color: '#fff',
     padding: wp('6%'),
     paddingLeft: wp('7%'),
+  },
+  inputText: {
+    width: wp('70%'),
+    paddingVertical: 2,
+    borderBottomWidth: wp('0.1%'),
+    borderBottomColor: '#fff',
+    fontSize: 17,
+    color: '#fff',
+    height: hp('7%'),
+    paddingLeft: wp('5%'),
+    paddingTop: wp('3.5%'),
+    fontWeight: 'bold',
+    marginTop: wp('2%'),
+    borderBottomWidth: 0, borderTopWidth: 0,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+
+    marginTop: wp('-3%')
   },
 };
 

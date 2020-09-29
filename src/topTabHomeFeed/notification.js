@@ -23,7 +23,7 @@ import {
 }
   from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
-
+import main from '../authentication/styles/main'
 const Jaguar = '#22222C';
 
 export default class notification extends React.Component {
@@ -165,11 +165,14 @@ export default class notification extends React.Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#fff6f2', }}>
-        <View
-          style={{
-            borderBottomColor: '#22222C',
-            borderBottomWidth: wp('0.2'),
-          }}>
+        <View style={main.header}>
+          <Text style={main.inputText}
+          >Your Myths</Text>
+          {/* <TouchableOpacity onPress={() => this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: this.state.email.trim(), privateAccount: false, isSameProfile: true })}>
+                        <FontAwesome5 style={styles.profile} name={'user'} />
+                    </TouchableOpacity> */}
+        </View>
+        <View>
           {this.state.loading == true ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               {/* <ActivityIndicator  style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} size="large" color='red' /> */}
@@ -185,12 +188,6 @@ export default class notification extends React.Component {
                   onRefresh={this.fetchFollowers}
                   data={this.state.feedData}
                   extraData={this.state}
-                  ItemSeparatorComponent={() => {
-                    return (
-                      <View style={styles.separator} />
-
-                    )
-                  }}
                   keyExtractor={(item) => {
                     return item.id;
                   }}
@@ -288,18 +285,23 @@ const styles = StyleSheet.create({
     color: "#808080",
     marginLeft: wp('45%'),
     marginTop: wp('-20%'),
-
   },
   time1: {
     fontSize: 20,
     color: "black",
-    marginTop: wp('10%'),
+    marginTop: wp('5%'),
     marginLeft: wp('5%'),
     fontWeight: 'bold',
     marginBottom: wp('2%'),
   },
   bell: {
     fontSize: hp('3%'),
-  }
+  },
+  image: {
+    width: 45,
+    height: 45,
+    borderRadius: 10,
+    marginLeft: 20
+  },
 });
 
