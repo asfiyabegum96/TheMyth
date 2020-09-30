@@ -22,7 +22,7 @@ import firebase from 'react-native-firebase';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { StackActions, NavigationActions } from 'react-navigation';
 import main from "../authentication/styles/main";
-
+import Toaster from 'react-native-toaster'
 import RadialGradient from 'react-native-radial-gradient';
 export default class updatePassword extends React.Component {
 
@@ -38,7 +38,8 @@ export default class updatePassword extends React.Component {
             oldPassword: '',
             newPassword: '',
             confirmPassword: '',
-            loading: false
+            loading: false,
+            showAlert: false,
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     }
@@ -95,12 +96,22 @@ export default class updatePassword extends React.Component {
             firebase.auth().currentUser.email, this.state.oldPassword);
         firebase.auth().currentUser.reauthenticateWithCredential(emailCred)
             .then(() => {
-                this.setState({ loading: true })
                 // User successfully reauthenticated.
                 firebase.auth().currentUser.updatePassword(this.state.newPassword).then(() => {
-                    alert('Updated Password successfully!')
-                    this.setState({ loading: false });
-                    this.props.navigation.goBack(null);
+                    // alert('Updated Password successfully!')
+                    this.setState({
+                        loading: false, message: {
+                            text: (
+                                <View styles={styles.toasterContainer}>
+                                    <Text style={styles.text}>Updated Password successfully!</Text>
+                                </View>
+                            ),
+                            duration: 1000
+                        }, showAlert: true
+                    });
+                    setTimeout(() => {
+                        this.props.navigation.goBack(null);
+                    }, 2000);
                 })
             })
             .catch(error => {
@@ -149,6 +160,7 @@ export default class updatePassword extends React.Component {
                 radius={400}>
                 {
                     <React.Fragment>
+                        <Toaster message={this.state.message} />
                         {this.state.loading == true ? (
                             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                                 <ActivityIndicator size="large" color='red' />
@@ -261,6 +273,8 @@ export default class updatePassword extends React.Component {
                                         <Text style={main.primaryButtonText}>Update</Text>
                                     </TouchableOpacity>
                                 </View>
+                                {this.state.showAlert === true ?
+                                    <Toaster message={this.state.message} /> : <></>}
                             </ScrollView>}
                     </React.Fragment >
                 }</RadialGradient>
@@ -273,6 +287,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: wp('-10%')
+    },
+    toasterContainer: {
+        backgroundColor: '#fff',
+        paddingTop: 15,
+        paddingRight: 15,
+        paddingBottom: 15,
+        paddingLeft: 15,
+    },
+    text: {
+        backgroundColor: '#fff',
+        color: '#000',
+        height: hp('4%'),
+        fontWeight: 'bold',
+        textAlign: 'center',
+        fontSize: wp('4%')
     },
     TitleDiv: {
         alignItems: 'center',
