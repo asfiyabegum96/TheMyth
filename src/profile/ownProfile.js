@@ -349,7 +349,7 @@ export default class profile extends React.Component {
                     }}
                   />
                 </View>
-                <View style={{ alignItems: 'center', marginTop: wp('5%') }}>
+                <View style={{ alignItems: 'center', marginTop: wp('2%') }}>
                   <Text style={styles.profileName}>{this.state.user.fullName}</Text>
                   <Text style={styles.description}>{this.state.user.description}</Text>
                 </View>
@@ -360,7 +360,7 @@ export default class profile extends React.Component {
                     </TouchableOpacity></View> : <></>}
               </View>
               {this.props.navigation.state.params.isSameProfile === false ?
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', marginBottom: wp('-8%'), }}>
                   <View style={styles.following}>
                     <TouchableOpacity onPress={() => this.followPressed()}>
                       <Text style={styles.followingtext}>{this.state.followText}</Text>
@@ -377,7 +377,7 @@ export default class profile extends React.Component {
                     <Text style={styles.buttonText}>Edit Profile</Text>
                   </TouchableOpacity>
                 </View>}
-              <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-18%', justifyContent: 'center', alignItems: 'center' }}>
+              {/* <View style={{ flex: 1, flexDirection: 'row', marginBottom: '-18%', justifyContent: 'center', alignItems: 'center' }}>
 
                 <Text style={styles.followBox1}>{this.state.followersCount}</Text>
                 <Text style={styles.followBox2}>{this.state.followingCount}</Text>
@@ -389,9 +389,21 @@ export default class profile extends React.Component {
                 <Text style={styles.followBox4}>Followers</Text>
                 <Text style={styles.followBox5}>Following</Text>
                 <Text style={styles.followBox6}>Posts</Text>
+              </View> */}
+              <View style={{ alignItems: 'center', marginTop: wp('11%'), marginLeft: wp('5%'), width: wp('30%'), }}>
+                <Text style={styles.count}>{this.state.followersCount}</Text>
+                <Text style={styles.followText}>Followers</Text>
               </View>
 
-              <View style={{ padding: 10, marginTop: wp('50%'), }}>
+              <View style={{ marginTop: wp('-9%'), alignItems: 'center', marginLeft: wp('35%'), width: wp('30%'), }}>
+                <Text style={styles.count}>{this.state.followingCount}</Text>
+                <Text style={styles.followText}>Following</Text>
+              </View>
+              <View style={{ alignItems: 'center', marginTop: wp('-9%'), width: wp('30%'), marginLeft: wp('67%'), }}>
+                <Text style={styles.count}>{this.state.images.length}</Text>
+                <Text style={styles.followText}>Posts</Text>
+              </View>
+              <View style={{ padding: 10, marginTop: wp('3%'), }}>
                 {this.state.loading == true ? (
                   <View style={{ flex: 1, marginBottom: '40%', justifyContent: 'center', alignItems: 'center' }}>
                     <ActivityIndicator size="large" color='red' />
@@ -414,7 +426,7 @@ const styles = StyleSheet.create({
     marginLeft: wp('10%'),
     alignItems: 'center',
     marginTop: wp('3%'),
-    marginBottom: wp('-5%'),
+    marginBottom: wp('-8%'),
     borderRadius: wp('3%'),
     borderWidth: 1,
     borderColor: '#EE6E3D',
@@ -485,6 +497,19 @@ const styles = StyleSheet.create({
     color: 'black',
     textAlign: 'center',
 
+  },
+  count: {
+    fontSize: hp('1.5%'),
+    fontWeight: 'bold',
+    color: '#EE6E3D',
+    textAlign: 'center',
+  },
+  followText: {
+    fontSize: hp('1.5%'),
+    fontWeight: 'bold',
+    color: '#EE6E3D',
+    textAlign: 'center',
+    justifyContent: 'space-between',
   },
   followBox1: {
 

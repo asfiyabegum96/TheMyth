@@ -425,7 +425,7 @@ const styles = StyleSheet.create({
         paddingBottom: wp('2%'),
         position: 'absolute',
         zIndex: 1,
-        bottom: 0,
+        bottom: wp('1%'),
         right: 0,
     },
     butText: {
