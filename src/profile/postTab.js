@@ -23,9 +23,9 @@ const NavigatorTab = createMaterialTopTabNavigator({
         }
     },
     Second: {
-        screen: DiaryMaintain,
+        screen: SaveCollection,
         navigationOptions: {
-            title: 'Diary',
+            title: 'Saved',
             tabBarOnPress: ({ navigation, defaultHandler }) => {
                 defaultHandler()
                 if (navigation.state && navigation.state.params) {
@@ -33,19 +33,7 @@ const NavigatorTab = createMaterialTopTabNavigator({
                 }
             },
         }
-    },
-    Third: {
-        screen: SaveCollection,
-        navigationOptions: {
-          title: 'Saved',
-          tabBarOnPress: ({ navigation, defaultHandler }) => {
-            defaultHandler()
-            if (navigation.state && navigation.state.params) {
-              navigation.state.params.onFocus()
-            }
-          },
-        }
-      }
+    }
 },
     {
         tabBarOptions: {
