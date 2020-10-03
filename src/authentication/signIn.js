@@ -110,7 +110,7 @@ export default class Home extends React.Component {
       if (fcmToken) {
         console.log('token from firebase', fcmToken);
         this.setState({ token: fcmToken })
-        await AsyncStorage.setItem("fcmToken", fcmToken, this.state.token); // store in db during installing and access that token
+        await AsyncStorage.setItem("fcmToken", fcmToken); // store in db during installing and access that token
       }
     }
   }
