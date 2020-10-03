@@ -49,6 +49,7 @@ export default class notification extends React.Component {
   }
 
   fetchFollowers = () => {
+    let isFollower = false;
     let emailArray = [];
     let context = this;
     let db = firebase.firestore();
@@ -180,8 +181,6 @@ export default class notification extends React.Component {
           ) : (
               <>
                 <Text style={styles.time1}>Recents</Text>
-                <View style={styles.separator1} />
-
                 <FlatList
                   style={styles.root}
                   refreshing={this.state.feedRefresh}
@@ -230,13 +229,29 @@ export default class notification extends React.Component {
 
 notification.navigationOptions = {
   tabBarIcon: ({ tintColor, focused }) => (
-    <FontAwesome5 name={'bell'}
-      style={styles.bell}
-      color={tintColor} />
+    <View style={styles.fab}>
+      <Image
+        source={require('../images/notifications.png')}
+        style={styles.fabIcon} tintColor={tintColor} width={25} height={30} />
+      {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+  fab: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    // width: wp('15%'),
+    // borderRadius: wp('10%'),
+    justifyContent: 'center',
+    width: 30,
+    height: 40,
+  },
+  fabIcon: {
+    color: '#fff',
+    // padding: wp('2%'),
+  },
   content: {
     marginLeft: 16,
     flex: 1,

@@ -15,6 +15,7 @@ import RadialGradient from 'react-native-radial-gradient';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import main from "../authentication/styles/main";
+import Toaster from 'react-native-toaster';
 
 class accountSettings extends Component {
 	constructor(props) {
@@ -103,10 +104,22 @@ class accountSettings extends Component {
 		let db = firebase.firestore();
 		firebase.auth().currentUser.delete().then(() => {
 			db.collection("signup").doc(this.state.user.docRef).update({
-				isDeleted: true
+				isDeleted: true,
+				email: `${this.state.user.email}_deleted`
 			})
-			alert('Thanks for using Myth!');
-			this.navigateToRoute('Home');
+			this.setState({
+				message: {
+					text: (
+						<View styles={styles.toasterContainer}>
+							<Text style={styles.text}>Thanks for using Myth!</Text>
+						</View>
+					),
+					duration: 1000
+				}, showAlert: true
+			});
+			setTimeout(() => {
+				this.navigateToRoute('Home');
+			}, 1000);
 		})
 	}
 
@@ -119,6 +132,7 @@ class accountSettings extends Component {
 				radius={400}>
 				{
 					<View style={styles.container}>
+						<Toaster message={this.state.message} />
 						{/* <View style={{ flexDirection: 'row' }}>
 							<FontAwesome5 style={styles.fabIcon} name='bell' size={16} />
 							<Text style={styles.navItemStyle} onPress={() => this.navigateToRoute('notificationsSettings')}>
@@ -212,7 +226,22 @@ const styles = {
 		marginTop: wp('90%'),
 		marginLeft: wp('10%'),
 		marginRight: wp('10%')
-	}
+	},
+	toasterContainer: {
+		backgroundColor: '#fff',
+		paddingTop: 15,
+		paddingRight: 15,
+		paddingBottom: 15,
+		paddingLeft: 15,
+	},
+	text: {
+		backgroundColor: '#fff',
+		color: '#000',
+		height: hp('4%'),
+		fontWeight: 'bold',
+		textAlign: 'center',
+		fontSize: wp('4%')
+	},
 };
 
 export default accountSettings;

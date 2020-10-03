@@ -2,6 +2,7 @@ import React from 'react';
 import {
   StyleSheet,
   View,
+  Image,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {
@@ -45,9 +46,33 @@ const styles = StyleSheet.create({
     fontSize: hp('3%'),
   },
   addIcon: {
-    fontSize: hp('3%'),
-    marginTop: wp('-0.5%'),
-  }
+    marginTop: wp('-2%'),
+    marginRight: wp('1.2%')
+  },
+  addFab: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    // width: wp('15%'),
+    // borderRadius: wp('10%'),
+    justifyContent: 'center',
+    width: 30,
+    height: 30,
+    marginBottom: wp('6%')
+  },
+  fab: {
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    // width: wp('15%'),
+    // borderRadius: wp('10%'),
+    justifyContent: 'center',
+    width: 30,
+    height: 30,
+    marginBottom: wp('1%')
+  },
+  fabIcon: {
+    color: '#fff',
+    // padding: wp('2%'),
+  },
 })
 const TopNavigator = createBottomTabNavigator(
   {
@@ -55,9 +80,12 @@ const TopNavigator = createBottomTabNavigator(
       screen: Mainscreen,
       navigationOptions: {
         tabBarIcon: ({ tintColor, focused }) => (
-          <FontAwesome5 name={'home'}
-            style={styles.icon}
-            color={tintColor} />
+          <View style={styles.fab}>
+            <Image
+              source={require('../images/homeactive.png')}
+              style={styles.fabIcon} tintColor={tintColor} inactiveTintColor='#aaa' width={25} height={25} />
+            {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
+          </View>
         )
       }
     },
@@ -65,9 +93,12 @@ const TopNavigator = createBottomTabNavigator(
       screen: Search,
       navigationOptions: {
         tabBarIcon: ({ tintColor, focused }) => (
-          <FontAwesome5 name={'search'}
-            style={styles.icon}
-            color={tintColor} />
+          <View style={styles.fab}>
+            <Image
+              source={require('../images/explore.png')}
+              style={styles.fabIcon} tintColor={tintColor} width={25} height={25} />
+            {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
+          </View>
 
         )
       }
@@ -77,10 +108,18 @@ const TopNavigator = createBottomTabNavigator(
       navigationOptions: {
         tabBarIcon: ({ tintColor, focused }) => (
           <View style={{ marginBottom: wp('6%'), }}>
-            <View style={{ borderRadius: 20, borderWidth: 1, borderColor: '#ccc', padding: wp('3%'), height: hp('6%'),backgroundColor: 'white' }}>
-              <FontAwesome5 name={'plus-square'}
-                style={styles.addIcon}
-                color={tintColor} />
+            <View style={{
+              width: 50,
+              height: 50,
+              elevation: 3,
+              borderRadius: 50 / 2, borderWidth: 1, borderColor: '#fff', padding: wp('3%'), height: hp('6%'), backgroundColor: 'white'
+            }}>
+              <View style={styles.addFab}>
+                <Image
+                  source={require('../images/newpost.png')}
+                  style={styles.addIcon} tintColor={tintColor} width={25} height={25} />
+                {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
+              </View>
             </View>
           </View>
         )
@@ -91,9 +130,12 @@ const TopNavigator = createBottomTabNavigator(
       screen: DiaryMaintain,
       navigationOptions: {
         tabBarIcon: ({ tintColor, focused }) => (
-          <FontAwesome5 name={'cog'}
-            style={styles.icon}
-            color={tintColor} />
+          <View style={styles.fab}>
+            <Image
+              source={require('../images/Diary.png')}
+              style={styles.fabIcon} tintColor={tintColor} width={25} height={25} />
+            {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
+          </View>
         )
       }
     },

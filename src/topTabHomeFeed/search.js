@@ -80,7 +80,7 @@ export default class search extends React.Component {
                     followerSnapshot.forEach(function (followerDoc) {
                         const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                         if (docNotEmpty) {
-                            if (context.state.email.trim() === followerDoc.data().email.trim()) {
+                            if (context.state.email.trim() === followerDoc.data().email.trim() && followerDoc.data().isDeleted === false) {
                                 isFollower = true;
                                 searchElement.isFollowed = true
                             }
@@ -104,7 +104,7 @@ export default class search extends React.Component {
             pendingSnapshot.forEach(function (pendingDoc) {
                 const docNotEmpty = (pendingDoc.id, " => ", pendingDoc.data() != null);
                 if (docNotEmpty) {
-                    if (context.state.email.trim() === pendingDoc.data().email.trim()) {
+                    if (context.state.email.trim() === pendingDoc.data().email.trim() && pendingDoc.data().isDeleted === false) {
                         searchElement.isPending = true
                     } else {
                         searchElement.isPending = false

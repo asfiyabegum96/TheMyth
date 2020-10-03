@@ -646,7 +646,10 @@ export default class mainFeed extends React.Component {
                         </TouchableOpacity>
                       }
                       <TouchableOpacity style={styles.fabIcon1} onPress={() => this.sendImage({ item, index })}>
-                        <FontAwesome5 style={styles.fabIcon} name="telegram-plane" size={22} color="#808080" />
+                        <Image
+                          source={require('../images/message.png')}
+                          style={styles.fabIcon} />
+                        {/* <FontAwesome5 style={styles.fabIcon} name="telegram-plane" size={22} color="#808080" /> */}
                       </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: 'row', marginLeft: wp('5%') }}>
@@ -736,18 +739,14 @@ const styles = StyleSheet.create({
   },
   fabIcon: {
     color: '#EE6E3D',
-    fontSize: hp('2.5%'),
     marginLeft: wp('5%'),
-    fontSize: 26,
-    width: wp('10%')
+    width: 23,
+    height: 23
   },
   fabIcon1: {
     flexDirection: 'row',
     color: '#EE6E3D',
-    fontSize: hp('2.5%'),
     marginLeft: wp('45%'),
-    fontSize: 26,
-    width: wp('10%')
   },
   profile: {
     color: '#fff',
