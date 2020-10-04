@@ -316,6 +316,14 @@ export default class Comments extends Component {
                             </View>
                             <Text style={{ marginLeft: wp('5%'), marginBottom: wp('5%'), fontSize: hp('1.5%'), color: '#808080' }}>{item.postedTime}</Text>
                         </View>
+                        <View style={styles.viewcomment}>
+                            <Image style={styles.myimage} source={{ uri: this.state.userDetails.profilePicture }} />
+                            <TextInput value={this.state.commentText}
+                                onChangeText={(commentText) => { this.setState({ commentText }) }} placeholder={this.state.placeHolder} placeholderTextColor='#808080' multiline={true} style={styles.inputStyle} />
+                            <TouchableOpacity onPress={this.insertComment} style={styles.butText}>
+                                <Text style={styles.buttonText}>Comment</Text>
+                            </TouchableOpacity>
+                        </View>
                         <FlatList
                             style={styles.root}
                             refreshing={this.state.feedRefresh}
@@ -351,15 +359,6 @@ export default class Comments extends Component {
                                 );
                             }} /></ScrollView></>
                     )}
-
-                <View style={styles.viewcomment}>
-                    <Image style={styles.myimage} source={{ uri: this.state.userDetails.profilePicture }} />
-                    <TextInput value={this.state.commentText}
-                        onChangeText={(commentText) => { this.setState({ commentText }) }} placeholder={this.state.placeHolder} placeholderTextColor='#808080' multiline={true} style={styles.inputStyle} />
-                    <TouchableOpacity onPress={this.insertComment} style={styles.butText}>
-                        <Text style={styles.buttonText}>Comment</Text>
-                    </TouchableOpacity>
-                </View>
             </View>
         );
     }
@@ -420,13 +419,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff6f2',
         borderRadius: 10,
         flexDirection: 'row',
-        left: '4%',
+        left: wp('4%'),
         marginRight: wp('8%'),
         paddingBottom: wp('2%'),
-        position: 'absolute',
-        zIndex: 1,
-        bottom: wp('1%'),
-        right: 0,
+        // position: 'absolute',
+        // zIndex: 1,
+        // bottom: wp('1%'),
+        // right: 0,
     },
     butText: {
         color: '#22222C',

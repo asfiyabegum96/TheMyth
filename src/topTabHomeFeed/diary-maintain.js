@@ -143,9 +143,6 @@ export default class DiaryMaintain extends Component {
                 <View style={main.header}>
                     <Text style={main.inputText}
                     >Diary</Text>
-                    {/* <TouchableOpacity onPress={() => this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: this.state.email.trim(), privateAccount: false, isSameProfile: true })}>
-                      <FontAwesome5 style={styles.profile} name={'user'} />
-                  </TouchableOpacity> */}
                 </View>
                 <ScrollView style={{ backgroundColor: '#fff6f2' }}>
                     <View style={{ padding: 10, minHeight: hp('50%') }}>
@@ -163,7 +160,7 @@ export default class DiaryMaintain extends Component {
                                     columns={3}
                                     images={this.state.images}
                                     keyExtractor={(item, index) => index.toString()}
-                                    onPressImage={(item) => this.props.screenProps.navigation.navigate('mainFeed', { selectedItem: item, email: this.props.screenProps.navigation.state.params.email.trim(), isDiary: true })}
+                                    onPressImage={(item) => this.props.screenProps.navigateToOther.navigate('mainFeed', { selectedItem: item, email: this.props.screenProps.email.trim(), isDiary: true })}
                                     onLongPressImage={(item, index) => this.confirmDelete(item, index)}
                                 />
                             )}
