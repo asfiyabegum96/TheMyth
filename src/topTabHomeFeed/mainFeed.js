@@ -230,29 +230,40 @@ export default class mainFeed extends React.Component {
       let photosRef = db.collection(url);
       photosRef.orderBy('postedTime', 'desc').get().then(function (querySnapshot) {
 
-        querySnapshot.forEach(function (doc) {
+        if (querySnapshot._docs && querySnapshot._docs.length) {
+          querySnapshot.forEach(function (doc) {
 
-          let data;
-          const docNotEmpty = (doc.id, " => ", doc.data() != null);
-          if (docNotEmpty) data = (doc.id, " => ", doc.data());
-          if (viewSpecificPhotos === true) {
-            if (doc.data().isDeleted === false && data.email === selectedEmail) {
-              that.fetchUserFeed(email, data, that)
-            }
-          } else {
-            if (doc.data().isDeleted === false) {
-              that.fetchUserFeed(email, data, that)
-            } else {
-              if (that.props && that.props.screenProps && that.props.screenProps.navigateToOther) {
-                that.setState({ screenPropsPresent: true });
+            let data;
+            const docNotEmpty = (doc.id, " => ", doc.data() != null);
+            if (docNotEmpty) data = (doc.id, " => ", doc.data());
+            if (viewSpecificPhotos === true) {
+              if (doc.data().isDeleted === false && data.email === selectedEmail) {
+                that.fetchUserFeed(email, data, that)
               }
-              that.setState({
-                feedRefresh: false,
-                loading: false,
-              });
+            } else {
+              if (doc.data().isDeleted === false) {
+                that.fetchUserFeed(email, data, that)
+              } else {
+                if (that.props && that.props.screenProps && that.props.screenProps.navigateToOther) {
+                  that.setState({ screenPropsPresent: true });
+                }
+                that.setState({
+                  feedRefresh: false,
+                  loading: false,
+                });
+              }
             }
+          });
+        } else {
+          if (that.props && that.props.screenProps && that.props.screenProps.navigateToOther) {
+            that.setState({ screenPropsPresent: true });
           }
-        });
+          that.setState({
+            feedRefresh: false,
+            loading: false,
+          });
+          that.setPhoto([])
+        }
       });
     } else if (url === 'savedCollections') {
       that.fetchImages();
@@ -683,7 +694,6 @@ const styles = StyleSheet.create({
     color: '#22222C',
     marginRight: wp('5%'),
     marginTop: wp('-3%'),
-    marginBottom: wp('-2%'),
   },
   listProfileName1: {
     fontSize: hp('2%'),
@@ -740,7 +750,7 @@ const styles = StyleSheet.create({
   fabIcon: {
     color: '#EE6E3D',
     marginLeft: wp('5%'),
-    width: 23,
+    width: 25,
     height: 23
   },
   fabIcon1: {

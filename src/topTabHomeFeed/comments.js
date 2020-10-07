@@ -413,7 +413,8 @@ const styles = StyleSheet.create({
         color: "black",
         marginRight: wp('50%'),
         marginTop: wp('0%'),
-        fontSize: 14
+        fontSize: 14,
+        width: wp('55%'),
     },
     viewcomment: {
         backgroundColor: '#fff6f2',
@@ -422,10 +423,6 @@ const styles = StyleSheet.create({
         left: wp('4%'),
         marginRight: wp('8%'),
         paddingBottom: wp('2%'),
-        // position: 'absolute',
-        // zIndex: 1,
-        // bottom: wp('1%'),
-        // right: 0,
     },
     butText: {
         color: '#22222C',

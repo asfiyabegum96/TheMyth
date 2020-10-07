@@ -98,6 +98,10 @@ const AppNavigator = createStackNavigator({
     },
     mainFeed: {
         screen: mainFeed,
+        navigationOptions: {
+            headerTitle: '',
+            headerTintColor: "#fff", headerStyle: { backgroundColor: '#EE6E3D' },
+        }
     },
     bottomTab: {
         screen: TabNavigator,

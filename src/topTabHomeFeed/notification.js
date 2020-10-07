@@ -205,10 +205,8 @@ export default class notification extends React.Component {
                           }} />
 
                         <View style={styles.content}>
-
                           <TouchableOpacity onPress={() => this.props.screenProps.navigation(item, false, false, false, true)}>
                             <View style={styles.contentHeader}>
-
                               <Text style={styles.time}>
                                 {Notification.postedTime}
                               </Text>
