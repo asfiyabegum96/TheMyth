@@ -40,6 +40,7 @@ class photosUpload extends React.Component {
             fieldNotEmpty: false,
             token: '',
             uri: '',
+            followers: []
         }
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.baseState = this.state;
@@ -138,14 +139,18 @@ class photosUpload extends React.Component {
 
     getFollowers = () => {
         const context = this;
+        const followers = []
         let db = firebase.firestore();
         let photosRef = db.collection('signup');
         photosRef.doc(context.state.user.docRef).collection('followers').get().then(function (followerSnapshot) {
             followerSnapshot.forEach(function (followerDoc) {
                 const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                 if (docNotEmpty) {
+                    followers.push(followerDoc.data().email)
                     context.getTokens(followerDoc.data().email);
                 }
+                context.setState({ followers: followers });
+
             });
         });
     }
@@ -265,11 +270,11 @@ class photosUpload extends React.Component {
             context.setState({
                 uploading: false,
             });
-            context.setState(context.baseState);
             context.navigateToHome();
-            if (!flag) {
+            if (!flag && context.tokenArray.length) {
                 context.sendNotification(photoObj)
             }
+            context.setState(context.baseState);
         });
 
     }
@@ -304,20 +309,19 @@ class photosUpload extends React.Component {
 
         let response = await fetch("https://fcm.googleapis.com/fcm/send", { method: "POST", headers, body: JSON.stringify(message) })
         response = await response.json();
-        if (response.success) {
-            let dateTime = Date.now();
-            let timestamp = Math.floor(dateTime / 1000);
-            const notificationObj = {
-                docRef: this.state.imageId,
-                title: 'Photo upload',
-                body: `${photoObj.author} added a photo!`,
-                userAvatar: photoObj.userAvatar,
-                postedTime: timestamp,
-                email: photoObj.email
-            }
-            firebase.firestore().collection('notifications').doc(this.state.imageId).set(notificationObj).then(function (docRef) {
-            });
+        let dateTime = Date.now();
+        let timestamp = Math.floor(dateTime / 1000);
+        const notificationObj = {
+            docRef: this.state.imageId,
+            title: 'Photo upload',
+            body: `${photoObj.author} added a photo!`,
+            userAvatar: photoObj.userAvatar,
+            postedTime: timestamp,
+            email: photoObj.email,
+            followersEmail: this.state.followers
         }
+        firebase.firestore().collection('notifications').doc(this.state.imageId).set(notificationObj).then(function (docRef) {
+        });
         console.log(response);
     }
 

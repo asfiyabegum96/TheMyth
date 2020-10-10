@@ -54,7 +54,7 @@ export default class notification extends React.Component {
     let context = this;
     let db = firebase.firestore();
     let photosRef = db.collection('signup');
-    photosRef.doc(context.props.screenProps.userDetails.docRef).collection('following').get().then(function (followerSnapshot) {
+    photosRef.doc(context.props.screenProps.userDetails.docRef).collection('followers').get().then(function (followerSnapshot) {
       followerSnapshot.forEach(function (followerDoc) {
         const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
         if (docNotEmpty) {
@@ -81,10 +81,18 @@ export default class notification extends React.Component {
         const docNotEmpty = (doc.id, " => ", doc.data() != null);
         if (docNotEmpty) {
           data = (doc.id, " => ", doc.data());
-          if (emailArray.includes(data.email)) {
-            let feedData = that.state.feedData;
-            that.addToFlatlist(feedData, data);
+          if (data.title === 'Photo upload') {
+            if (data.followersEmail.includes(that.props.screenProps.userDetails.email.trim())) {
+              let feedData = that.state.feedData;
+              that.addToFlatlist(feedData, data);
+            }
+          } else {
+            if (emailArray.includes(data.email)) {
+              let feedData = that.state.feedData;
+              that.addToFlatlist(feedData, data);
+            }
           }
+
         } else {
           that.setState({
             feedRefresh: false,
@@ -198,8 +206,8 @@ export default class notification extends React.Component {
                         <Image
                           source={{ uri: Notification.userAvatar }}
                           style={{
-                            width: wp('20%'),
-                            height: hp('10%'),
+                            width: wp('15%'),
+                            height: hp('8%'),
                             resizeMode: 'cover',
                             borderRadius: wp('5%'),
                           }} />
@@ -211,8 +219,8 @@ export default class notification extends React.Component {
                                 {Notification.postedTime}
                               </Text>
                             </View>
+                            <Text style={styles.displaySection} rkType='primary3 mediumLine'>{Notification.body}</Text>
                           </TouchableOpacity>
-                          <Text style={styles.displaySection} rkType='primary3 mediumLine'>{Notification.body}</Text>
                         </View>
                       </View>
                     );
@@ -253,7 +261,6 @@ const styles = StyleSheet.create({
   content: {
     marginLeft: 16,
     flex: 1,
-
   },
   contentHeader: {
     flexDirection: 'row',
@@ -284,7 +291,7 @@ const styles = StyleSheet.create({
   displaySection: {
     color: "black",
     flexDirection: 'row',
-    marginTop: wp('5%'),
+    marginTop: wp('-6%'),
     width: wp('43%'),
   },
   image: {
@@ -297,7 +304,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#808080",
     marginLeft: wp('45%'),
-    marginTop: wp('-20%'),
+    marginTop: wp('6%'),
   },
   time1: {
     fontSize: 20,
