@@ -151,7 +151,7 @@ export default class homeFixed extends React.Component {
           style={styles.fabDiv}>
           <View style={styles.fab}>
             <Image
-              source={require('../images/message.png')}
+              source={require('../images/message-new.png')}
               style={styles.fabIcon} />
             {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
           </View>
@@ -196,6 +196,8 @@ const styles = StyleSheet.create({
   fabIcon: {
     color: '#fff',
     padding: wp('2%'),
+    width: wp('7%'),
+    height: hp('5%')
   },
 });
 

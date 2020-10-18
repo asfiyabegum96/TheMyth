@@ -254,7 +254,8 @@ export default class profile extends React.Component {
   updateFollowers(userData, searchedUserData) {
     let db = firebase.firestore();
     if (this.state.followText === 'Follow') {
-      this.setState({ followText: 'Following' });
+      const followerCount = this.state.followersCount + 1;
+      this.setState({ followText: 'Following', followersCount: followerCount });
       if (searchedUserData.isPrivateAccount === true) {
         this.setState({ whisperText: 'Pending' });
         const saveObj = {
@@ -278,7 +279,8 @@ export default class profile extends React.Component {
         this.setState({ followText: 'Follow' });
         db.collection("signup").doc(searchedUserData.docRef).collection('pendingFollowers').doc(userData.email.trim()).update(saveObj)
       }
-      this.setState({ followText: 'Follow' });
+      const followerCount = this.state.followersCount - 1;
+      this.setState({ followText: 'Follow', followersCount: followerCount });
       this.setState({ whisperText: 'Whisper' });
       db.collection("signup").doc(userData.docRef).collection('following').doc(searchedUserData.email.trim()).update({ email: searchedUserData.email.trim() + '_removed' }).then((dat) => console.log('done'))
       db.collection("signup").doc(searchedUserData.docRef).collection('followers').doc(userData.email.trim()).update({ email: userData.email.trim() + '_removed' })
@@ -318,6 +320,9 @@ export default class profile extends React.Component {
           </TouchableOpacity>)} */}
         {this.props.navigation.state && this.props.navigation.state.params && this.props.navigation.state.params.isSameProfile === true ?
           <View style={styles.header}>
+            <TouchableOpacity style={{ marginLeft: wp('2%'), marginTop: wp('5%'), marginRight: wp('2%') }} onPress={() => this.props.navigation.navigate('homeFixed', { email: this.props.navigation.state.params.email })} >
+              <FontAwesome5 name={'arrow-left'} size={25} color="#fff" />
+            </TouchableOpacity>
             <Text style={styles.inputText}
             >Your Profile</Text>
             <TouchableOpacity style={{ marginTop: wp('5%'), marginRight: wp('5%') }} onPress={() => this.props.navigation.navigate('settings', { email: this.props.navigation.state.params.email })} >

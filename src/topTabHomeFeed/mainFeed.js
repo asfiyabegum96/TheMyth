@@ -392,6 +392,7 @@ export default class mainFeed extends React.Component {
                               if (that.props && that.props.screenProps && that.props.screenProps.navigateToOther) {
                                 that.setState({ screenPropsPresent: true });
                               }
+                              console.log('in')
                               that.setState({
                                 feedRefresh: false,
                                 loading: false,
@@ -404,11 +405,13 @@ export default class mainFeed extends React.Component {
                         if (that.props && that.props.screenProps && that.props.screenProps.navigateToOther) {
                           that.setState({ screenPropsPresent: true });
                         }
-                        that.setState({
-                          feedRefresh: false,
-                          loading: false,
-                        });
-                        that.setPhoto([])
+                        if (that.state.loading !== false) {
+                          that.setState({
+                            feedRefresh: false,
+                            loading: false,
+                          });
+                          that.setPhoto([])
+                        }
                       }
                     });
                   }
@@ -680,7 +683,7 @@ export default class mainFeed extends React.Component {
                       }
                       <TouchableOpacity style={styles.fabIcon1} onPress={() => this.sendImage({ item, index })}>
                         <Image
-                          source={require('../images/message.png')}
+                          source={require('../images/message-new.png')}
                           style={styles.fabIcon} />
                         {/* <FontAwesome5 style={styles.fabIcon} name="telegram-plane" size={22} color="#808080" /> */}
                       </TouchableOpacity>
@@ -772,8 +775,8 @@ const styles = StyleSheet.create({
   fabIcon: {
     color: '#EE6E3D',
     marginLeft: wp('5%'),
-    width: 25,
-    height: 23
+    width: wp('6%'),
+    height: hp('4%')
   },
   fabIcon1: {
     flexDirection: 'row',

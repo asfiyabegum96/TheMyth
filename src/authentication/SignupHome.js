@@ -154,7 +154,7 @@ export default class SignupHome extends React.Component {
                 <View style={styles.TextInputDiv}>
                   <Text style={main.labelContainer}>Full Name *</Text>
                   <TextInput
-                    onSubmitEditing={this.onSubmit}
+                    onSubmitEditing={this.requireField}
                     ref={this.fieldRef}
                     style={main.inputContainer}
                     textColor='white'
@@ -165,7 +165,7 @@ export default class SignupHome extends React.Component {
                   />
                   <Text style={main.labelContainer}>Email *</Text>
                   <TextInput
-                    onSubmitEditing={this.onSubmit}
+                    onSubmitEditing={this.requireField}
                     ref="email"
                     style={main.inputContainer}
                     textColor='white'
@@ -188,7 +188,7 @@ export default class SignupHome extends React.Component {
                   <Text style={main.labelContainer}>Password *</Text>
                   <View style={{ flexDirection: 'row' }}>
                     <TextInput
-                      onSubmitEditing={this.onSubmit}
+                      onSubmitEditing={this.requireField}
                       ref="password"
                       style={main.passwordContainer}
                       textColor='white'
@@ -208,7 +208,7 @@ export default class SignupHome extends React.Component {
                   </View>
                   <Text style={main.labelContainer}>Confirm Password *</Text>
                   <TextInput
-                    onSubmitEditing={this.onSubmit}
+                    onSubmitEditing={this.requireField}
                     ref="confirmPassword"
                     style={main.inputContainer}
                     textColor='#ed5720'

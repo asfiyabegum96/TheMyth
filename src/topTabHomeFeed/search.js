@@ -76,11 +76,12 @@ export default class search extends React.Component {
         let photosRef = db.collection('signup');
         if (searchArray.length) {
             searchArray.forEach((searchElement) => {
-                photosRef.doc(searchElement.docRef).collection('followers').get().then(function (followerSnapshot) {
+                photosRef.doc(searchElement.docRef).collection('followers').get().then(function (followerSnapshot) {  
                     followerSnapshot.forEach(function (followerDoc) {
                         const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
                         if (docNotEmpty) {
-                            if (context.state.email.trim() === followerDoc.data().email.trim() && followerDoc.data().isDeleted === false) {
+                            console.log('insiode follow', context.state.email, followerDoc.data())
+                            if (context.state.email.trim() === followerDoc.data().email.trim() && followerDoc.data().isDeleted !== true) {
                                 isFollower = true;
                                 searchElement.isFollowed = true
                             }

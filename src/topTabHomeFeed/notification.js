@@ -237,8 +237,8 @@ notification.navigationOptions = {
   tabBarIcon: ({ tintColor, focused }) => (
     <View style={styles.fab}>
       <Image
-        source={require('../images/notifications.png')}
-        style={styles.fabIcon} tintColor={tintColor} width={25} height={30} />
+        source={require('../images/bell.png')}
+        style={styles.fabIcon} tintColor={tintColor} width={35} height={35} />
       {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
     </View>
   )

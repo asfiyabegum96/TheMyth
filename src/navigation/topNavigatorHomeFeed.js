@@ -82,8 +82,8 @@ const TopNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor, focused }) => (
           <View style={styles.fab}>
             <Image
-              source={require('../images/homeactive.png')}
-              style={styles.fabIcon} tintColor={tintColor} inactiveTintColor='#aaa' width={25} height={25} />
+              source={require('../images/home-active.png')}
+              style={styles.fabIcon} tintColor={tintColor} inactiveTintColor='#aaa' width={35} height={35} />
             {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
           </View>
         )
@@ -95,8 +95,8 @@ const TopNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor, focused }) => (
           <View style={styles.fab}>
             <Image
-              source={require('../images/explore.png')}
-              style={styles.fabIcon} tintColor={tintColor} width={25} height={25} />
+              source={require('../images/explore-new.png')}
+              style={styles.fabIcon} tintColor={tintColor} width={35} height={35} />
             {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
           </View>
 
@@ -116,8 +116,8 @@ const TopNavigator = createBottomTabNavigator(
             }}>
               <View style={styles.addFab}>
                 <Image
-                  source={require('../images/newpost.png')}
-                  style={styles.addIcon} tintColor={tintColor} width={25} height={25} />
+                  source={require('../images/new-post.png')}
+                  style={styles.addIcon} tintColor={tintColor} width={38} height={38} />
                 {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
               </View>
             </View>
@@ -132,8 +132,8 @@ const TopNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor, focused }) => (
           <View style={styles.fab}>
             <Image
-              source={require('../images/Diary.png')}
-              style={styles.fabIcon} tintColor={tintColor} width={25} height={25} />
+              source={require('../images/Diary-new.png')}
+              style={styles.fabIcon} tintColor={tintColor} width={35} height={35} />
             {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
           </View>
         )
