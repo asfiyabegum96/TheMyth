@@ -18,6 +18,12 @@ import {
 }
   from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
+import { GoogleSignin } from '@react-native-community/google-signin';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next'
+
+GoogleSignin.configure({
+  webClientId: '',
+});
 import main from "./styles/main";
 import RadialGradient from 'react-native-radial-gradient';
 export default class SignupHome extends React.Component {
@@ -37,7 +43,7 @@ export default class SignupHome extends React.Component {
     }
     this.ref = firebase.firestore().collection('signup')
   }
-
+ 
   setPasswordVisibility = () => {
     this.setState({ hidePassword: !this.state.hidePassword });
   }
@@ -117,12 +123,48 @@ export default class SignupHome extends React.Component {
         return 0;
       });
   }
+  
+onGoogleButtonPress=async()=> {
+  // Get the users ID token
+  const { idToken } = await GoogleSignin.signIn();
+
+  // Create a Google credential with the token
+  const googleCredential = firebase.auth.GoogleAuthProvider.credential(idToken);
+
+  // Sign-in the user with the credential
+  return firebase.auth().signInWithCredential(googleCredential);
+}
+ onFacebookButtonPress=async()=> {
+  // Attempt login with permissions
+  const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+
+  if (result.isCancelled) {
+    throw 'User cancelled the login process';
+  }
+
+  // Once signed in, get the users AccesToken
+  const data = await AccessToken.getCurrentAccessToken();
+
+  if (!data) {
+    throw 'Something went wrong obtaining access token';
+  }
+
+  // Create a Firebase credential with the AccessToken
+  const facebookCredential = firebase.auth.FacebookAuthProvider.credential(data.accessToken);
+
+  // Sign-in the user with the credential
+  return firebase.auth().signInWithCredential(facebookCredential);
+}
+
 
   componentDidMount() {
     this.setState({
       loading: false,
     });
     loc(this);
+    GoogleSignin.configure({
+      webClientId: "119026447603-caakapp6njtis28ujb4qs7b5dgqkh9el.apps.googleusercontent.com",
+    });
   }
 
   componentWillUnMount() {
@@ -150,6 +192,20 @@ export default class SignupHome extends React.Component {
                   <Image
                     source={require('../images/mythlogo.png')}
                     style={main.logo} />
+                </View>
+                <View style={main.primaryButtonContanier}>
+               
+                    <TouchableOpacity onPress={()=>this.onGoogleButtonPress()} >
+                      <Text style={main.primaryButtonText} >Sign Up with google</Text>
+                    </TouchableOpacity> : <></>
+                  
+                </View>
+                <View style={main.primaryButtonContanier}>
+               
+                    <TouchableOpacity onPress={()=>this.onFacebookButtonPress()} >
+                      <Text style={main.primaryButtonText} >Sign Up with Facebook</Text>
+                    </TouchableOpacity> : <></>
+                  
                 </View>
                 <View style={styles.TextInputDiv}>
                   <Text style={main.labelContainer}>Full Name *</Text>

@@ -2,11 +2,13 @@ package com.chatot;
 
 import android.app.Application;
 import android.content.Context;
-import com.facebook.react.PackageList;
+import com.facebook.react.PackageList; 
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -37,7 +39,6 @@ public class MainApplication extends Application implements ReactApplication {
           packages.add(new RNFirebaseDatabasePackage());
           packages.add(new RNFirebaseFirestorePackage());
           packages.add(new RNFirebaseStoragePackage()); 
-
           packages.add(new RNFirebaseMessagingPackage());
           packages.add(new RNFirebaseNotificationsPackage());
           return packages;

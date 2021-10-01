@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "119026447603-ddmscl0i6r5hci0fquuq44dbumvjqv08.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chatot",
+            "certificate_hash": "2e2de3655e64eb4472081bd0d9b62ded923c4895"
+          }
+        },
+        {
           "client_id": "119026447603-caakapp6njtis28ujb4qs7b5dgqkh9el.apps.googleusercontent.com",
           "client_type": 3
         }
