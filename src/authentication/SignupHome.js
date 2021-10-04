@@ -21,9 +21,7 @@ import firebase from 'react-native-firebase';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next'
 
-GoogleSignin.configure({
-  webClientId: '',
-});
+
 import main from "./styles/main";
 import RadialGradient from 'react-native-radial-gradient';
 export default class SignupHome extends React.Component {
@@ -193,20 +191,20 @@ onGoogleButtonPress=async()=> {
                     source={require('../images/mythlogo.png')}
                     style={main.logo} />
                 </View>
+            
+                {/*sign up with socials-google */}
                 <View style={main.primaryButtonContanier}>
-               
-                    <TouchableOpacity onPress={()=>this.onGoogleButtonPress()} >
-                      <Text style={main.primaryButtonText} >Sign Up with google</Text>
-                    </TouchableOpacity> : <></>
-                  
-                </View>
-                <View style={main.primaryButtonContanier}>
-               
-                    <TouchableOpacity onPress={()=>this.onFacebookButtonPress()} >
-                      <Text style={main.primaryButtonText} >Sign Up with Facebook</Text>
-                    </TouchableOpacity> : <></>
-                  
-                </View>
+              <TouchableOpacity onPress={() => this.onGoogleButtonPress()}>
+                <Text style={main.primaryButtonText}>Sign Up with google</Text>
+              </TouchableOpacity>
+            </View>
+            {/*sign up with socials-facebook */}
+            <View style={main.primaryButtonContanier}>
+              <TouchableOpacity onPress={() =>this.onFacebookButtonPress() }>
+                <Text style={main.primaryButtonText}>Sign Up with Facebook</Text>
+              </TouchableOpacity>
+            </View>
+                
                 <View style={styles.TextInputDiv}>
                   <Text style={main.labelContainer}>Full Name *</Text>
                   <TextInput
