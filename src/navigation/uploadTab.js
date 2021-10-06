@@ -87,6 +87,10 @@ class photosUpload extends React.Component {
                 path: 'images',
                 allowsEditing: true,
             },
+              mediaType: 'photo',
+              quality:0.5,
+              maxWidth: 500,
+              maxHeight: 500,
         };
 
         ImagePicker.showImagePicker(options, (response) => {
