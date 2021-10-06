@@ -142,24 +142,78 @@ class photosUpload extends React.Component {
           uri: response.uri,
           fieldNotEmpty: false,
         });
-      }
-    });
-  };
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+        this.fetchUserDetails();
+    }
 
-  fetchUserDetails() {
-    const context = this;
-    let db = firebase.firestore();
-    let photosRef = db.collection('signup');
-    photosRef
-      .where('email', '==', context.props.screenProps.email)
-      .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
-          let data;
-          const docNotEmpty = (doc.id, ' => ', doc.data() != null);
-          if (docNotEmpty) data = (doc.id, ' => ', doc.data());
-          context.setState({user: doc.data()});
-          context.getFollowers();
+    componentWillUnMount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        this.setState(this.baseState)
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+        return true;
+    }
+
+
+    // Generate random Id for images
+    s4 = () => {
+        return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+    }
+
+    uniqueId = () => {
+        return this.s4() + this.s4() + '-' + this.s4() + '-' + this.s4() + '-' +
+            this.s4() + '-' + this.s4() + '-' + this.s4() + '-' + this.s4();
+    }
+    // pick image from imagepicker
+    selectImage = () => {
+        const options = {
+            title: 'Food Upload',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+                allowsEditing: true,
+            },
+              mediaType: 'photo',
+              quality:0.5,
+              maxWidth: 500,
+              maxHeight: 500,
+        };
+
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+            this.setState({ fieldNotEmpty: true })
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+
+            }
+            else {
+                // var path = '';
+                // if (Platform.OS == 'ios')
+                //     path = response.uri.toString();
+                // else {
+                //     path = response.path.toString();
+                // }
+
+                // let image = {
+                //     path: response.path.toString()
+                // };
+                this.setState({
+                    path: response.path.toString(),
+                    uri: response.uri,
+                    fieldNotEmpty: false
+                });
+            }
         });
       });
   }
