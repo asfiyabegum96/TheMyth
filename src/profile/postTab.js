@@ -1,67 +1,64 @@
-import React, { Component } from 'react';
-import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
+import React, {Component} from 'react';
+import {createMaterialTopTabNavigator} from 'react-navigation-tabs';
 import {
-    heightPercentageToDP as hp,
-    widthPercentageToDP as wp,
-}
-    from 'react-native-responsive-screen';
+  heightPercentageToDP as hp,
+  widthPercentageToDP as wp,
+} from 'react-native-responsive-screen';
 import ProfilePosts from './profilePosts';
-import { createAppContainer } from 'react-navigation';
+import {createAppContainer} from 'react-navigation';
 import DiaryMaintain from '../topTabHomeFeed/diary-maintain';
 import SaveCollection from '../topTabHomeFeed/save-collection';
-const NavigatorTab = createMaterialTopTabNavigator({
+const NavigatorTab = createMaterialTopTabNavigator(
+  {
     Home: {
-        screen: ProfilePosts,
-        navigationOptions: {
-            title: 'Posts',
-            tabBarOnPress: ({ navigation, defaultHandler }) => {
-                defaultHandler()
-                if (navigation.state && navigation.state.params) {
-                    navigation.state.params.onFocus()
-                }
-            },
-        }
+      screen: ProfilePosts,
+      navigationOptions: {
+        title: 'Posts',
+        tabBarOnPress: ({navigation, defaultHandler}) => {
+          defaultHandler();
+          if (navigation.state && navigation.state.params) {
+            navigation.state.params.onFocus();
+          }
+        },
+      },
     },
     Second: {
-        screen: SaveCollection,
-        navigationOptions: {
-            title: 'Saved',
-            tabBarOnPress: ({ navigation, defaultHandler }) => {
-                defaultHandler()
-                if (navigation.state && navigation.state.params) {
-                    navigation.state.params.onFocus()
-                }
-            },
-        }
-    }
-},
-    {
-        tabBarOptions: {
-            activeTintColor: '#EE6E3D',
-            inactiveTintColor: '#22222C',
-            showIcon: false,
-            showLabel: true,
-            indicatorStyle: {
-                opacity: 0,
-            },
-            labelStyle: {
-                textTransform: "capitalize",
-                fontWeight: "bold"
-            },
-            style: {
-                backgroundColor: '#fff6f2',
-                borderTopColor: '#fff6f2',
-                borderTopWidth: wp('0.1%'),
-                borderBottomColor: '#EE6E3D',
-                borderBottomWidth: wp('0.1%')
-            }
+      screen: SaveCollection,
+      navigationOptions: {
+        title: 'Saved',
+        tabBarOnPress: ({navigation, defaultHandler}) => {
+          defaultHandler();
+          if (navigation.state && navigation.state.params) {
+            navigation.state.params.onFocus();
+          }
         },
+      },
     },
+  },
+  {
+    tabBarOptions: {
+      activeTintColor: '#EE6E3D',
+      inactiveTintColor: '#22222C',
+      showIcon: false,
+      showLabel: true,
+      indicatorStyle: {
+        opacity: 0,
+      },
+      labelStyle: {
+        textTransform: 'capitalize',
+        fontWeight: 'bold',
+      },
+      style: {
+        backgroundColor: '#fff6f2',
+        borderTopColor: '#fff6f2',
+        borderTopWidth: wp('0.1%'),
+        borderBottomColor: '#EE6E3D',
+        borderBottomWidth: wp('0.1%'),
+      },
+    },
+  },
 );
 
 const PostTab = createAppContainer(NavigatorTab);
 
 export default PostTab;
-
-
-

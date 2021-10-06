@@ -17,8 +17,6 @@ import {
   removeOrientationListener as rol,
 } from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
-import {GoogleSignin} from '@react-native-community/google-signin';
-import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import main from './styles/main';
 import RadialGradient from 'react-native-radial-gradient';
 export default class SignupHome extends React.Component {
@@ -128,54 +126,11 @@ export default class SignupHome extends React.Component {
       });
   };
 
-  onGoogleButtonPress = async () => {
-    // Get the users ID token
-    const {idToken} = await GoogleSignin.signIn();
-
-    // Create a Google credential with the token
-    const googleCredential = firebase.auth.GoogleAuthProvider.credential(
-      idToken,
-    );
-
-    // Sign-in the user with the credential
-    return firebase.auth().signInWithCredential(googleCredential);
-  };
-  onFacebookButtonPress = async () => {
-    // Attempt login with permissions
-    const result = await LoginManager.logInWithPermissions([
-      'public_profile',
-      'email',
-    ]);
-
-    if (result.isCancelled) {
-      throw 'User cancelled the login process';
-    }
-
-    // Once signed in, get the users AccesToken
-    const data = await AccessToken.getCurrentAccessToken();
-
-    if (!data) {
-      throw 'Something went wrong obtaining access token';
-    }
-
-    // Create a Firebase credential with the AccessToken
-    const facebookCredential = firebase.auth.FacebookAuthProvider.credential(
-      data.accessToken,
-    );
-
-    // Sign-in the user with the credential
-    return firebase.auth().signInWithCredential(facebookCredential);
-  };
-
   componentDidMount() {
     this.setState({
       loading: false,
     });
     loc(this);
-    GoogleSignin.configure({
-      webClientId:
-        '119026447603-caakapp6njtis28ujb4qs7b5dgqkh9el.apps.googleusercontent.com',
-    });
   }
 
   componentWillUnMount() {
@@ -214,28 +169,6 @@ export default class SignupHome extends React.Component {
                       source={require('../images/mythlogo.png')}
                       style={main.logo}
                     />
-                  </View>
-                  {/*sign up with socials-google */}
-                  <View>
-                    <TouchableOpacity
-                      style={styles.authbutton}
-                      onPress={() => this.onGoogleButtonPress()}>
-                      <Image
-                        source={require('../images/google.png')}
-                        style={styles.authimage}
-                      />
-                      <Text style={styles.authtext}>Sign up with Google</Text>
-                    </TouchableOpacity>
-                    {/*sign up with socials-facebook */}
-                    <TouchableOpacity
-                      style={styles.authbutton}
-                      onPress={() => this.onFacebookButtonPress()}>
-                      <Image
-                        source={require('../images/facebook.png')}
-                        style={styles.authimage}
-                      />
-                      <Text style={styles.authtext}>Sign up with Facebook</Text>
-                    </TouchableOpacity>
                   </View>
                   <View style={styles.TextInputDiv}>
                     <Text style={main.labelContainer}>Full Name *</Text>
@@ -334,9 +267,9 @@ export default class SignupHome extends React.Component {
                   </View>
                   <View style={main.primaryButtonContanier}>
                     {this.state.clicked === false ? (
-                      <TouchableOpacity disabled={this.state.clicked} style={{justifyContent: 'center', height: 40}}>
+                      <TouchableOpacity disabled={this.state.clicked}>
                         <Text
-                          style={main.primaryButtonText1}
+                          style={main.primaryButtonText}
                           onPress={this.requireField}>
                           Next
                         </Text>
@@ -346,20 +279,20 @@ export default class SignupHome extends React.Component {
                     )}
                   </View>
                   {/* <View style={styles.socialIconDiv}>
-              <TouchableOpacity>
-                <Text style={{ paddingRight: 40 }}>
-                  <FontAwesome5 style={styles.fontFacebook} name={'facebook-square'} />
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <FontAwesome5 style={styles.fontInsta} name={'instagram'} />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Text style={{ paddingLeft: 40 }}>
-                  <FontAwesome5 style={styles.fontGoogle} name={'google-plus'} />
-                </Text>
-              </TouchableOpacity>
-            </View> */}
+                        <TouchableOpacity>
+                          <Text style={{ paddingRight: 40 }}>
+                            <FontAwesome5 style={styles.fontFacebook} name={'facebook-square'} />
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                          <FontAwesome5 style={styles.fontInsta} name={'instagram'} />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                          <Text style={{ paddingLeft: 40 }}>
+                            <FontAwesome5 style={styles.fontGoogle} name={'google-plus'} />
+                          </Text>
+                        </TouchableOpacity>
+                  </View> */}
                 </View>
               </ScrollView>
             )}
@@ -384,7 +317,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   TextInputDiv: {
-    // marginTop: wp('-10%'),
+    marginTop: wp('-10%'),
     marginBottom: wp('10%'),
     justifyContent: 'center',
     alignSelf: 'center',
@@ -436,29 +369,183 @@ const styles = StyleSheet.create({
   logo: {
     left: 55,
   },
-  authbutton: {
-    height: 50,
-    width: '80%',
-    backgroundColor: '#ed5720',
-    elevation: 5,
-    alignSelf: 'center',
-    marginVertical: 10,
-    borderRadius: 10,
-    justifyContent: 'center',
-  },
-  authimage: {
-    height: 30,
-    width: 30,
-    alignSelf: 'center',
-    marginHorizontal: 10,
-    left: 0,
-    position: 'absolute',
-  },
-  authtext: {
-    fontSize: 14,
-    color: 'white',
-    fontWeight: '400',
-    alignSelf: 'center',
-    position: 'absolute',
-  },
 });
+
+
+
+
+
+// import {StyleSheet} from 'react-native';
+
+// import {
+//   widthPercentageToDP as wp,
+//   heightPercentageToDP as hp,
+//   listenOrientationChange as loc,
+//   removeOrientationListener as rol,
+// } from 'react-native-responsive-screen';
+// const main = StyleSheet.create({
+//   buttonContainer: {
+//     width: wp('80%'),
+//     marginLeft: wp('10%'),
+//     alignItems: 'center',
+//     marginTop: wp('3%'),
+//     borderRadius: wp('2%'),
+//     borderWidth: 2,
+//     borderColor: 'white',
+//   },
+//   primaryButtonContanier: {
+//     width: wp('80%'),
+//     color: '#ed5720',
+//     backgroundColor: 'white',
+//     alignItems: 'center',
+//     borderRadius: wp('2%'),
+//     borderWidth: 2,
+//     borderColor: 'white',
+//     alignSelf: 'center',
+//   },
+//   buttonText: {
+//     color: 'white',
+//     width: wp('80%'),
+//     alignItems: 'center',
+//     fontSize: hp('2.5%'),
+//     marginLeft: wp('55%'),
+//     paddingVertical: 8,
+//     paddingHorizontal: 20,
+//     fontWeight: 'bold',
+//   },
+//   primaryButtonText: {
+//     color: '#ed5720',
+//     width: wp('80%'),
+//     alignItems: 'center',
+//     fontSize: hp('2.5%'),
+//     marginLeft: wp('55%'),
+//     paddingVertical: 8,
+//     paddingHorizontal: 20,
+//     fontWeight: 'bold',
+//   },
+
+//   leftBorderButton: {
+//     color: '#ed5720',
+//     fontSize: hp('2%'),
+//     marginTop: 10,
+//     borderColor: '#A9A9A9',
+//     backgroundColor: '#fff',
+//     paddingVertical: wp('3%'),
+//     paddingHorizontal: wp('10%'),
+//     fontWeight: 'bold',
+//     borderTopRightRadius: wp('8%'),
+//     borderBottomRightRadius: wp('8%'),
+//     borderWidth: 1,
+//     borderColor: '#fff',
+//   },
+
+//   rightBorderButton: {
+//     color: '#ed5720',
+//     fontSize: hp('2%'),
+//     marginTop: 10,
+//     borderColor: '#A9A9A9',
+//     backgroundColor: '#fff',
+//     paddingVertical: wp('3%'),
+//     paddingHorizontal: wp('9%'),
+//     fontWeight: 'bold',
+//     borderTopLeftRadius: wp('8%'),
+//     borderBottomLeftRadius: wp('8%'),
+//     borderWidth: 1,
+//     borderColor: '#fff',
+//   },
+//   inputContainer: {
+//     width: wp('80%'),
+//     height: hp('6%'),
+//     marginBottom: wp('3%'),
+//     color: '#fff',
+//     borderColor: 'white',
+//     borderWidth: 1.5,
+//     borderRadius: wp('2%'),
+//   },
+//   passwordContainer: {
+//     width: wp('80%'),
+//     height: hp('6%'),
+//     borderColor: 'white',
+//     marginBottom: wp('2%'),
+//     borderWidth: 1.5,
+//     borderRadius: wp('2%'),
+//     color: '#fff',
+//   },
+//   labelContainer: {
+//     textAlign: 'left',
+//     color: 'white',
+//     paddingBottom: wp('2%'),
+//     marginTop: wp('4%'),
+//     alignItems: 'center',
+//   },
+//   logo: {
+//     width: wp('50%'),
+//     height: hp('40%'),
+//     resizeMode: 'cover',
+//     marginLeft: wp('10%'),
+//   },
+//   passwordIconContainer: {
+//     width: wp('50%'),
+//     height: hp('6%'),
+//     borderColor: 'white',
+//     marginBottom: wp('2%'),
+//     borderWidth: 1.5,
+//     borderRadius: wp('2%'),
+//     color: '#fff',
+//   },
+//   imagesContainer: {
+//     borderRadius: 10,
+//     borderWidth: 1.5,
+//     borderColor: 'white',
+//     height: hp('15%'),
+//     width: wp('27%'),
+//   },
+//   imagesContainer1: {
+//     borderRadius: 10,
+//     borderWidth: 1.5,
+//     borderColor: 'white',
+//     height: hp('15%'),
+//     width: wp('27%'),
+//   },
+//   inputSearch: {
+//     width: wp('70%'),
+//     paddingVertical: 2,
+//     borderBottomWidth: wp('0.1%'),
+//     borderBottomColor: '#fff',
+//     fontSize: 30,
+//     color: '#fff',
+//     height: hp('7%'),
+//     paddingLeft: wp('45%'),
+//     marginTop: wp('2%'),
+//     backgroundColor: '#EE6E3D',
+//     borderBottomWidth: 0,
+//     borderTopWidth: 0,
+//     fontFamily: 'SEAFOOL',
+//   },
+//   inputText: {
+//     width: wp('70%'),
+//     paddingVertical: 2,
+//     borderBottomWidth: wp('0.1%'),
+//     borderBottomColor: '#fff',
+//     fontSize: 17,
+//     color: '#fff',
+//     height: hp('7%'),
+//     paddingLeft: wp('5%'),
+//     paddingTop: wp('3.5%'),
+//     fontWeight: 'bold',
+//     marginTop: wp('2%'),
+//     backgroundColor: '#EE6E3D',
+//     borderBottomWidth: 0,
+//     borderTopWidth: 0,
+//   },
+//   header: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     backgroundColor: '#EE6E3D',
+//     marginTop: wp('-3%'),
+//     padding: 2.5,
+//   },
+// });
+
+// export default main;
+

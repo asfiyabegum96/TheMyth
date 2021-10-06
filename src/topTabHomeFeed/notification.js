@@ -10,7 +10,7 @@ import {
   ScrollView,
   ActivityIndicator,
   FlatList,
-  BackHandler
+  BackHandler,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/Entypo';
@@ -19,11 +19,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
   listenOrientationChange as loc,
-  removeOrientationListener as rol
-}
-  from 'react-native-responsive-screen';
+  removeOrientationListener as rol,
+} from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
-import main from '../authentication/styles/main'
+import main from '../authentication/styles/main';
+import {Header} from 'react-native-elements';
 const Jaguar = '#22222C';
 
 export default class notification extends React.Component {
@@ -33,17 +33,26 @@ export default class notification extends React.Component {
       loading: true,
       feedData: [],
       feedRefresh: false,
-    }
+    };
     this.baseState = this.state;
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
 
   componentDidMount() {
-    this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
-      // Perform the reset action here
-      BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-    });
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    this._onFocusListener = this.props.navigation.addListener(
+      'didFocus',
+      payload => {
+        // Perform the reset action here
+        BackHandler.addEventListener(
+          'hardwareBackPress',
+          this.handleBackButtonClick,
+        );
+      },
+    );
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
     loc(this);
     this.fetchFollowers();
   }
@@ -54,58 +63,72 @@ export default class notification extends React.Component {
     let context = this;
     let db = firebase.firestore();
     let photosRef = db.collection('signup');
-    photosRef.doc(context.props.screenProps.userDetails.docRef).collection('followers').get().then(function (followerSnapshot) {
-      followerSnapshot.forEach(function (followerDoc) {
-        const docNotEmpty = (followerDoc.id, " => ", followerDoc.data() != null);
-        if (docNotEmpty) {
-          isFollower = true;
-          emailArray.push(followerDoc.data().email);
-        }
+    photosRef
+      .doc(context.props.screenProps.userDetails.docRef)
+      .collection('followers')
+      .get()
+      .then(function(followerSnapshot) {
+        followerSnapshot.forEach(function(followerDoc) {
+          const docNotEmpty = (followerDoc.id,
+          ' => ',
+          followerDoc.data() != null);
+          if (docNotEmpty) {
+            isFollower = true;
+            emailArray.push(followerDoc.data().email);
+          }
+        });
+        context.fetchNotificationList(emailArray);
+        context.setState({
+          emailArray: emailArray,
+        });
       });
-      context.fetchNotificationList(emailArray);
-      context.setState({ emailArray: emailArray });
-    });
-  }
+  };
 
-  fetchNotificationList = (emailArray) => {
+  fetchNotificationList = emailArray => {
     this.setState({
       feedData: [],
-      feedRefresh: true
+      feedRefresh: true,
     });
     let that = this;
     let db = firebase.firestore();
     let notificationRef = db.collection('notifications');
-    notificationRef.orderBy('postedTime', 'desc').get().then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        let data;
-        const docNotEmpty = (doc.id, " => ", doc.data() != null);
-        if (docNotEmpty) {
-          data = (doc.id, " => ", doc.data());
-          if (data.title === 'Photo upload') {
-            if (data.followersEmail.includes(that.props.screenProps.userDetails.email.trim())) {
-              let feedData = that.state.feedData;
-              that.addToFlatlist(feedData, data);
+    notificationRef
+      .orderBy('postedTime', 'desc')
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          let data;
+          const docNotEmpty = (doc.id, ' => ', doc.data() != null);
+          if (docNotEmpty) {
+            data = (doc.id, ' => ', doc.data());
+            if (data.title === 'Photo upload') {
+              if (
+                data.followersEmail.includes(
+                  that.props.screenProps.userDetails.email.trim(),
+                )
+              ) {
+                let feedData = that.state.feedData;
+                that.addToFlatlist(feedData, data);
+              }
+            } else {
+              if (emailArray.includes(data.email)) {
+                let feedData = that.state.feedData;
+                that.addToFlatlist(feedData, data);
+              }
             }
           } else {
-            if (emailArray.includes(data.email)) {
-              let feedData = that.state.feedData;
-              that.addToFlatlist(feedData, data);
-            }
+            that.setState({
+              feedRefresh: false,
+              loading: false,
+            });
           }
-
-        } else {
-          that.setState({
-            feedRefresh: false,
-            loading: false,
-          });
-        }
+        });
       });
-    });
     that.setState({
       feedRefresh: false,
       loading: false,
     });
-  }
+  };
 
   addToFlatlist = (feedData, data) => {
     var that = this;
@@ -115,15 +138,15 @@ export default class notification extends React.Component {
       body: data.body,
       userAvatar: data.userAvatar,
       docRef: data.docRef,
-      email: data.email
+      email: data.email,
     });
     that.setState({
       feedRefresh: false,
       loading: false,
     });
-  }
+  };
 
-  timeConverter = (timestamp) => {
+  timeConverter = timestamp => {
     let a = new Date(timestamp * 1000);
     let seconds = Math.floor((new Date() - a) / 1000);
 
@@ -148,85 +171,144 @@ export default class notification extends React.Component {
       return interval + ' minute' + this.pluralCheck(interval);
     }
     return Math.floor(seconds) + ' second' + this.pluralCheck(seconds);
-  }
+  };
 
   // Cover the timestamp to show in real minutes
-  pluralCheck = (s) => {
+  pluralCheck = s => {
     if (s == 1) {
       return ' ago';
     } else {
       return 's ago';
     }
-  }
+  };
 
   componentWillUnMount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
     rol();
-    this.setState(this.baseState)
+    this.setState(this.baseState);
   }
 
   handleBackButtonClick() {
     this.props.navigation.goBack(null);
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
     return true;
   }
 
+  MyCustomLeftComponent = () => {
+    return (
+      <View style={{bottom: 12.5}}>
+        <Text
+          style={{
+            color: '#fff',
+            fontWeight: '700',
+            fontSize: 20,
+            width: 200,
+          }}>
+          Your Myths
+        </Text>
+      </View>
+    );
+  };
+
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#fff6f2', }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: '#fff6f2',
+        }}>
+        {/* <Header
+          leftComponent={<this.MyCustomLeftComponent />}
+          containerStyle={{
+            backgroundColor: '#EE6E3D',
+            borderColor: '#EE6E3D',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 55,
+          }}
+          statusBarProps={{
+            backgroundColor: '#000',
+          }}
+        /> */}
         <View style={main.header}>
-          <Text style={main.inputText}
-          >Your Myths</Text>
+          <Text style={main.inputText}>Your Myths</Text>
           {/* <TouchableOpacity onPress={() => this.props.screenProps.navigateToOther.navigate('profile', { email: this.state.email.trim(), searchedEmail: this.state.email.trim(), privateAccount: false, isSameProfile: true })}>
                         <FontAwesome5 style={styles.profile} name={'user'} />
                     </TouchableOpacity> */}
         </View>
         <View>
           {this.state.loading == true ? (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               {/* <ActivityIndicator  style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} size="large" color='red' /> */}
             </View>
           ) : (
-              <>
-                <Text style={styles.time1}>Recents</Text>
-                <FlatList
-                  style={styles.root}
-                  refreshing={this.state.feedRefresh}
-                  onRefresh={this.fetchFollowers}
-                  data={this.state.feedData}
-                  extraData={this.state}
-                  keyExtractor={(item) => {
-                    return item.id;
-                  }}
-                  renderItem={(item) => {
-                    const Notification = item.item;
-                    return (
-                      <View style={styles.container}>
+            <>
+              <Text style={styles.time1}>Recents</Text>
+              <FlatList
+                style={styles.root}
+                refreshing={this.state.feedRefresh}
+                onRefresh={this.fetchFollowers}
+                data={this.state.feedData}
+                extraData={this.state}
+                keyExtractor={item => {
+                  return item.id;
+                }}
+                renderItem={item => {
+                  const Notification = item.item;
+                  return (
+                    <View style={styles.container}>
+                      <Image
+                        source={{
+                          uri: Notification.userAvatar,
+                        }}
+                        style={{
+                          width: wp('15%'),
+                          height: hp('8%'),
+                          resizeMode: 'cover',
+                          borderRadius: wp('5%'),
+                        }}
+                      />
 
-                        <Image
-                          source={{ uri: Notification.userAvatar }}
-                          style={{
-                            width: wp('15%'),
-                            height: hp('8%'),
-                            resizeMode: 'cover',
-                            borderRadius: wp('5%'),
-                          }} />
-
-                        <View style={styles.content}>
-                          <TouchableOpacity onPress={() => this.props.screenProps.navigation(item, false, false, false, true)}>
-                            <View style={styles.contentHeader}>
-                              <Text style={styles.time}>
-                                {Notification.postedTime}
-                              </Text>
-                            </View>
-                            <Text style={styles.displaySection} rkType='primary3 mediumLine'>{Notification.body}</Text>
-                          </TouchableOpacity>
-                        </View>
+                      <View style={styles.content}>
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.props.screenProps.navigation(
+                              item,
+                              false,
+                              false,
+                              false,
+                              true,
+                            )
+                          }>
+                          <View style={styles.contentHeader}>
+                            <Text style={styles.time}>
+                              {Notification.postedTime}
+                            </Text>
+                          </View>
+                          <Text
+                            style={styles.displaySection}
+                            rkType="primary3 mediumLine">
+                            {Notification.body}
+                          </Text>
+                        </TouchableOpacity>
                       </View>
-                    );
-                  }} />
-              </>
-            )}
+                    </View>
+                  );
+                }}
+              />
+            </>
+          )}
         </View>
       </View>
     );
@@ -234,15 +316,19 @@ export default class notification extends React.Component {
 }
 
 notification.navigationOptions = {
-  tabBarIcon: ({ tintColor, focused }) => (
+  tabBarIcon: ({tintColor, focused}) => (
     <View style={styles.fab}>
       <Image
         source={require('../images/bell.png')}
-        style={styles.fabIcon} tintColor={tintColor} width={35} height={35} />
+        style={styles.fabIcon}
+        tintColor={tintColor}
+        width={35}
+        height={35}
+      />
       {/* <FontAwesome5 style={styles.fabIcon} name='telegram-plane' size={30} /> */}
     </View>
-  )
-}
+  ),
+};
 
 const styles = StyleSheet.create({
   fab: {
@@ -265,10 +351,10 @@ const styles = StyleSheet.create({
   contentHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 6
+    marginBottom: 6,
   },
   separator: {
-    backgroundColor: '#FF7200'
+    backgroundColor: '#FF7200',
   },
   separator1: {
     height: 2,
@@ -289,7 +375,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   displaySection: {
-    color: "black",
+    color: 'black',
     flexDirection: 'row',
     marginTop: wp('-6%'),
     width: wp('43%'),
@@ -298,17 +384,17 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 20,
-    marginLeft: 20
+    marginLeft: 20,
   },
   time: {
     fontSize: 10,
-    color: "#808080",
+    color: '#808080',
     marginLeft: wp('45%'),
     marginTop: wp('6%'),
   },
   time1: {
     fontSize: 20,
-    color: "black",
+    color: 'black',
     marginTop: wp('5%'),
     marginLeft: wp('5%'),
     fontWeight: 'bold',
@@ -321,7 +407,6 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 10,
-    marginLeft: 20
+    marginLeft: 20,
   },
 });
-

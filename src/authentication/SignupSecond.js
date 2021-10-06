@@ -6,51 +6,50 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  TextInput
+  TextInput,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
   listenOrientationChange as loc,
-  removeOrientationListener as rol
+  removeOrientationListener as rol,
 } from 'react-native-responsive-screen';
 
 import ImagePicker from 'react-native-image-picker';
-import main from "./styles/main";
+import main from './styles/main';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import RadialGradient from 'react-native-radial-gradient';
-import { Picker } from '@react-native-community/picker';
+import {Picker} from '@react-native-community/picker';
 
 export default class SignupSecond extends React.Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       uri: '',
       imagePath: '',
       imageSelected: false,
       radioState: 'others',
       signUpClicked: false,
-    }
+    };
   }
 
   genderSelected = key => {
-    this.setState({ radioState: key });
+    this.setState({radioState: key});
     if (key === 'male') {
-      this.setState({ maleSelected: true, femaleSelected: false })
+      this.setState({maleSelected: true, femaleSelected: false});
     } else if (key === 'female') {
-      this.setState({ maleSelected: false, femaleSelected: true })
+      this.setState({maleSelected: false, femaleSelected: true});
     }
-  }
+  };
 
   continue = e => {
     e.preventDefault();
     this.props.nextStep();
-  }
+  };
   back = e => {
     e.preventDefault();
     this.props.prevStep();
-  }
+  };
 
   // pick image from imagepicker
   selectImage = () => {
@@ -61,24 +60,20 @@ export default class SignupSecond extends React.Component {
         path: 'images',
         allowsEditing: true,
         maleSelected: false,
-        femaleSelected: false
+        femaleSelected: false,
       },
     };
 
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(options, response => {
       console.log('Response = ', response);
 
       if (response.didCancel) {
         console.log('User cancelled image picker');
-      }
-      else if (response.error) {
+      } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
-      }
-      else if (response.customButton) {
+      } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
-
-      }
-      else {
+      } else {
         // var path = '';
         // if (Platform.OS == 'ios')
         //     path = response.uri.toString();
@@ -95,26 +90,25 @@ export default class SignupSecond extends React.Component {
           imageSelected: true,
         });
 
-        this.props.handleChange('profilePicture', response.uri)
+        this.props.handleChange('profilePicture', response.uri);
       }
     });
-  }
+  };
 
   signUp = () => {
-    this.setState({ signUpClicked: true })
+    this.setState({signUpClicked: true});
     this.props.insertUser(this.state.imagePath);
-  }
+  };
 
   navigateToSignIn = () => {
     this.props.navigateToSignIn();
-  }
-
+  };
 
   componentWillUnMount() {
     rol();
   }
   render() {
-    const { values, handleChange } = this.props;
+    const {values, handleChange} = this.props;
     const radioState = this.state.radioState;
     const options = [
       {
@@ -127,61 +121,80 @@ export default class SignupSecond extends React.Component {
       },
     ];
     return (
-      <RadialGradient style={{ width: '100%', height: '100%' }}
+      <RadialGradient
+        style={{width: '100%', height: '100%'}}
         colors={['#FE7948', '#E23E00']}
         stops={[0.1, 0.95]}
         center={[180, 270]}
         radius={400}>
         {
-          <ScrollView keyboardShouldPersistTaps={true} style={styles.container}>
+          <ScrollView
+            keyboardShouldPersistTaps={true}
+            style={styles.container}
+            showsVerticalScrollIndicator={false}>
             {/* <View style={styles.logo}>
               <Image
                 source={require('../images/mythlogo.png')}
-                style={main.logo} />
+                style={main.logo}
+              />
             </View> */}
-            <View style={{
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: "center",
-              marginTop: wp('15%')
-            }}>
-
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+                marginTop: wp('15%'),
+              }}>
               <View>
                 {this.state.imageSelected == true ? (
                   <TouchableOpacity onPress={this.selectImage}>
                     <Image
-                      source={{ uri: this.state.uri }}
+                      source={{uri: this.state.uri}}
                       style={{
                         width: wp('30%'),
                         height: hp('15%'),
                         resizeMode: 'cover',
-                        borderRadius: wp('2%'), borderWidth: 1.5, borderColor: 'white'
-                      }} />
+                        borderRadius: wp('2%'),
+                        borderWidth: 1.5,
+                        borderColor: 'white',
+                      }}
+                    />
                   </TouchableOpacity>
                 ) : (
-                    <TouchableOpacity onPress={this.selectImage}>
-                      <Image
-                        source={{ uri: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" }}
-                        style={{
-                          width: wp('30%'),
-                          height: hp('15%'),
-                          resizeMode: 'cover',
-                          borderRadius: wp('2%'), borderWidth: 1.5, borderColor: 'white'
-                        }} />
-                    </TouchableOpacity>
-                  )}
+                  <TouchableOpacity onPress={this.selectImage}>
+                    <Image
+                      source={{
+                        uri:
+                          'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png',
+                      }}
+                      style={{
+                        width: wp('30%'),
+                        height: hp('15%'),
+                        resizeMode: 'cover',
+                        borderRadius: wp('2%'),
+                        borderWidth: 1.5,
+                        borderColor: 'white',
+                      }}
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
             <View style={styles.edit}>
-              <TouchableOpacity style={{ marginBottom: wp('5%'), marginTop: wp('-15%'), marginLeft: wp('-10%') }} onPress={this.selectImage}>
+              <TouchableOpacity
+                style={{
+                  marginBottom: wp('5%'),
+                  marginTop: wp('-15%'),
+                }}
+                onPress={this.selectImage}>
                 <Image
                   source={require('../images/add.png')}
                   style={{
                     width: wp('15%'),
                     height: wp('15%'),
-
                     resizeMode: 'cover',
-                  }} />
+                  }}
+                />
               </TouchableOpacity>
             </View>
 
@@ -191,42 +204,149 @@ export default class SignupSecond extends React.Component {
                 ref="Description"
                 maxLength={50}
                 style={main.inputContainer}
-                textColor='white'
+                textColor="white"
                 baseColor="white"
                 tintColor="white"
                 onChangeText={text => handleChange('description', text)}
                 defaultValue={values.description}
               />
             </View>
-            <Text style={{ marginLeft: wp('32%'), marginTop: wp('5%'), color: 'white', fontSize: hp('2%'), marginBottom: wp('5%'), }}>Select your gender</Text>
-            <View style={{ flex: 1, flexDirection: 'row', }}>
+            <Text
+              style={{
+                marginTop: wp('5%'),
+                color: 'white',
+                fontSize: hp('2%'),
+                marginBottom: wp('5%'),
+                alignSelf: 'center'
+              }}>
+              Select your gender
+            </Text>
 
-              {this.state.maleSelected === true ?
-                <View style={{ width: 100, height: 100, left: wp('5%'), flexDirection: 'row' }}>
-                  <TouchableOpacity onPress={() => this.genderSelected('male')} style={{ borderRadius: 10, width: 100, height: 100, marginLeft: wp('5%'), backgroundColor: '#6e92f3', }}>
-                    <FontAwesome5 style={styles.femaleSelect} name="mars" size={22} />
-                  </TouchableOpacity>
-                </View> :
-                <View style={{ width: 100, height: 100, left: wp('5%'), flexDirection: 'row' }}>
-                  <TouchableOpacity onPress={() => this.genderSelected('male')} style={{ borderRadius: 10, width: 100, height: 100, marginLeft: wp('5%'), backgroundColor: 'white', }}>
-                    <FontAwesome5 style={styles.fabIcon} name="mars" size={22} />
-                  </TouchableOpacity>
-                </View>
-              }
-              <Text style={{ color: 'white', fontSize: hp('2%'), left: wp('25%'), marginTop: wp('30%'), marginLeft: wp('-32%') }}>Male</Text>
-              {this.state.femaleSelected === true ?
-                <View style={{ width: 100, height: 100, left: wp('57%'), flexDirection: 'row' }}>
-                  <TouchableOpacity onPress={() => this.genderSelected('female')} style={{ borderRadius: 10, width: 100, height: 100, marginLeft: wp('5%'), backgroundColor: '#FF1493', }}>
-                    <FontAwesome5 style={styles.femaleSelect} name="venus" size={22} />
-                  </TouchableOpacity>
-                </View> :
-                <View style={{ width: 100, height: 100, left: wp('57%'), flexDirection: 'row' }}>
-                  <TouchableOpacity onPress={() => this.genderSelected('female')} style={{ borderRadius: 10, width: 100, height: 100, marginLeft: wp('5%'), backgroundColor: 'white', }}>
-                    <FontAwesome5 style={styles.fabIcon1} name="venus" size={22} />
-                  </TouchableOpacity>
-                </View>
-              }
-              <Text style={{ color: 'white', fontSize: hp('2%'), left: wp('63%'), marginTop: wp('30%'), marginLeft: wp('-20%') }}>Female</Text>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                {this.state.maleSelected === true ? (
+                  <View
+                    style={{
+                      width: 100,
+                      height: 100,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => this.genderSelected('male')}
+                      style={{
+                        borderRadius: 10,
+                        width: 100,
+                        height: 100,
+                        backgroundColor: '#6e92f3',
+                        justifyContent: 'center',
+                      }}>
+                      <FontAwesome5
+                        style={styles.femaleSelect}
+                        name="mars"
+                        size={22}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      width: 100,
+                      height: 100,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => this.genderSelected('male')}
+                      style={{
+                        borderRadius: 10,
+                        width: 100,
+                        height: 100,
+                        backgroundColor: 'white',
+                        justifyContent: 'center',
+                      }}>
+                      <FontAwesome5
+                        style={styles.fabIcon}
+                        name="mars"
+                        size={22}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: hp('2%'),
+                  }}>
+                  Male
+                </Text>
+              </View>
+
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}>
+                {this.state.femaleSelected === true ? (
+                  <View
+                    style={{
+                      width: 100,
+                      height: 100,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => this.genderSelected('female')}
+                      style={{
+                        borderRadius: 10,
+                        width: 100,
+                        height: 100,
+                        backgroundColor: '#FF1493',
+                        justifyContent: 'center',
+                      }}>
+                      <FontAwesome5
+                        style={styles.femaleSelect}
+                        name="venus"
+                        size={22}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      width: 100,
+                      height: 100,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => this.genderSelected('female')}
+                      style={{
+                        borderRadius: 10,
+                        width: 100,
+                        height: 100,
+                        backgroundColor: 'white',
+                        justifyContent: 'center',
+                      }}>
+                      <FontAwesome5
+                        style={styles.fabIcon1}
+                        name="venus"
+                        size={22}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
+                <Text
+                  style={{
+                    color: 'white',
+                    fontSize: hp('2%'),
+                  }}>
+                  Female
+                </Text>
+              </View>
             </View>
 
             <View style={styles.but}>
@@ -234,16 +354,26 @@ export default class SignupSecond extends React.Component {
                 {/* <TouchableOpacity onPress={this.back}>
                   <Text style={main.leftBorderButton}>BACK</Text>
                 </TouchableOpacity> */}
-                {this.state.signUpClicked === false ?
+                {this.state.signUpClicked === false ? (
                   <TouchableOpacity onPress={this.signUp}>
                     <Text style={main.primaryButtonText}>Sign Up</Text>
-                  </TouchableOpacity> : <></>
-                }
-
-
+                  </TouchableOpacity>
+                ) : (
+                  <></>
+                )}
               </View>
-              <TouchableOpacity style={{ marginLeft: wp('20%'), marginTop: wp('5%'), marginBottom: wp('5%'), }} onPress={this.navigateToSignIn}>
-                <Text style={{ color: 'white', fontSize: hp('2%') }}>Already a member? Then<Text style={{ fontWeight: "bold" }}> Sign In</Text></Text></TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  marginTop: wp('5%'),
+                  marginBottom: wp('5%'),
+                  alignItems: 'center',
+                }}
+                onPress={this.navigateToSignIn}>
+                <Text style={{color: 'white', fontSize: hp('2%')}}>
+                  Already a member? Then
+                  <Text style={{fontWeight: 'bold'}}> Sign In</Text>
+                </Text>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         }
@@ -254,8 +384,8 @@ export default class SignupSecond extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: '#ed5720',
     flex: 1,
+    // backgroundColor: '#ed5720',
   },
   title: {
     color: '#ed5720',
@@ -267,31 +397,30 @@ const styles = StyleSheet.create({
     height: 100,
     backgroundColor: 'white',
     borderRadius: 10,
-    marginLeft: 32,
   },
   fabIcon: {
     color: '#6e92f3',
     fontSize: hp('2.5%'),
-    marginTop: wp('7%'),
     fontSize: 45,
-    marginLeft: wp('9%'),
-
+    alignSelf: 'center',
+    // marginTop: wp('7%'),
+    // marginLeft: wp('9%'),
   },
   fabIcon1: {
     color: '#de6fb1',
     fontSize: hp('2.5%'),
-    marginTop: wp('7%'),
     fontSize: 45,
-    marginLeft: wp('9%'),
-
+    alignSelf: 'center',
+    // marginTop: wp('7%'),
+    // marginLeft: wp('9%'),
   },
   femaleSelect: {
     color: '#fff',
     fontSize: hp('2.5%'),
-    marginTop: wp('7%'),
     fontSize: 45,
-    marginLeft: wp('9%'),
-
+    alignSelf: 'center',
+    // marginTop: wp('7%'),
+    // marginLeft: wp('9%'),
   },
   selectImage: {
     color: '#fff',
@@ -307,8 +436,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   TextInputDiv: {
-    marginLeft: wp('10%'),
     marginTop: wp('5%'),
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
   inputfield: {
     width: wp('88%'),
@@ -324,12 +454,11 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     marginBottom: 6,
-    left: 110
+    left: 110,
   },
   edit: {
     left: 190,
-    marginTop: wp('7%')
-
+    marginTop: wp('7%'),
   },
   circle: {
     height: 20,
@@ -340,7 +469,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   checkedCircle: {
     width: 14,
     height: 14,
@@ -353,7 +481,7 @@ const styles = StyleSheet.create({
   },
   but: {
     borderRadius: 6,
-    marginTop: wp('7%')
+    marginTop: wp('7%'),
   },
   logo: {
     left: 55,
