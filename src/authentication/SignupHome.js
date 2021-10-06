@@ -193,16 +193,18 @@ onGoogleButtonPress=async()=> {
                 </View>
             
                 {/*sign up with socials-google */}
-                <View style={main.primaryButtonContanier}>
+                <View>
+                <View style={main.buttonContainer1}>
               <TouchableOpacity onPress={() => this.onGoogleButtonPress()}>
-                <Text style={main.primaryButtonText}>Sign Up with google</Text>
+                <Text style={main.buttonText1}>Sign Up with google</Text>
               </TouchableOpacity>
             </View>
             {/*sign up with socials-facebook */}
-            <View style={main.primaryButtonContanier}>
+            <View style={main.buttonContainer1}>
               <TouchableOpacity onPress={() =>this.onFacebookButtonPress() }>
-                <Text style={main.primaryButtonText}>Sign Up with Facebook</Text>
+                <Text style={main.buttonText1}>Sign Up with Facebook</Text>
               </TouchableOpacity>
+            </View>
             </View>
                 
                 <View style={styles.TextInputDiv}>
@@ -354,6 +356,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ed5720'
   },
+  
   socialIconDiv: {
     flexDirection: 'row',
     justifyContent: 'center',

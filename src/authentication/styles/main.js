@@ -40,6 +40,25 @@ const main = StyleSheet.create({
         paddingHorizontal: 20,
         fontWeight: 'bold',
     },
+    buttonText1: {
+        color: 'white',
+        width: wp('80%'),
+        alignItems: 'center',
+        fontSize: hp('2.5%'),
+        marginLeft: wp('45%'),
+        paddingVertical: 8,
+        paddingHorizontal: 0,
+        fontWeight: 'bold',
+    },
+    buttonContainer1: {
+        width: wp('80%'),
+        marginLeft: wp('10%'),
+        alignItems: 'center',
+        marginTop: wp('3%'),
+        borderRadius: wp('2%'),
+        borderWidth: 2,
+        borderColor: 'white',
+      },
     primaryButtonText: {
         color: '#ed5720',
         width: wp('80%'),
@@ -89,7 +108,7 @@ const main = StyleSheet.create({
         borderWidth: 1.5, borderRadius: wp('2%'), color: '#fff'
     },
     labelContainer: {
-        textAlign: 'left', color: 'white', paddingBottom: wp('2%'), marginTop: wp('4%')
+        textAlign: 'left', color: 'white', paddingBottom: wp('2%'), marginTop: wp('10%')
     },
     logo: {
         width: wp('50%'),
