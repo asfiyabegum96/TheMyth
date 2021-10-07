@@ -124,24 +124,79 @@ export default class SignupHome extends React.Component {
   
 onGoogleButtonPress=async()=> {
   // Get the users ID token
+  const userInfo=await GoogleSignin.signIn()
+  const userEmail=userInfo.user.email
+  const Token=userInfo.idToken
+
   const { idToken } = await GoogleSignin.signIn();
 
   // Create a Google credential with the token
   const googleCredential = firebase.auth.GoogleAuthProvider.credential(idToken);
+  let db = firebase.firestore();
+  db.collection("signup").doc(Token).set({ email: userEmail })
 
   // Sign-in the user with the credential
   return firebase.auth().signInWithCredential(googleCredential);
 }
+ //Create response callback.
+//   _responseInfoCallback = (error, result) => {
+//    if (error) {
+//     console.log('Error fetching data: ' + error.toString());
+//   } else {
+//          console.log('Result Name: ' + result.name);
+//   }
+//  }
+// initUser=(token)=>{
+//   ('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' + token)
+//   .then(response=>{
+//     response.json().then(json=>{
+//       const Id=json.id
+//       console.log('ID' + id)
+//       const EM=json.email
+//       console.log("EMAIL"+EM);
+//      const FN=json.first_name
+//      console.log("Firstname" + FN)
+//      const LN=json.last_name
+//      console.log("Firstname" + FN)
+//     })
+//   })
+//   .catch(()=>{
+//     console.log('error getting data from facebook')
+//   })
+// }
+
  onFacebookButtonPress=async()=> {
   // Attempt login with permissions
   const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-
+  //console.log(result)
   if (result.isCancelled) {
     throw 'User cancelled the login process';
   }
-
-  // Once signed in, get the users AccesToken
-  const data = await AccessToken.getCurrentAccessToken();
+  const data = await AccessToken.getCurrentAccessToken()
+  // const token=data.token
+  
+  // // Once signed in, get the users AccesToken
+  // const dummy = await AccessToken.getCurrentAccessToken()
+  
+  // .then(
+  //   res=>{
+  //     const{accessToken}=data
+  //     console.log(accessToken)
+  //     this.initUser(accessToken)
+  //   }
+  //  )
+  // console.log('data', data)
+//   let req = new GraphRequest('/me', {
+//     httpMethod: 'GET',
+//     version: 'v2.5',
+//     parameters: {
+//         'fields': {
+//             'string' : 'email,name,friends'
+//         }
+//     }
+// }, (err, res) => {
+//     console.log(err, res);
+// });
 
   if (!data) {
     throw 'Something went wrong obtaining access token';
@@ -152,6 +207,7 @@ onGoogleButtonPress=async()=> {
 
   // Sign-in the user with the credential
   return firebase.auth().signInWithCredential(facebookCredential);
+  
 }
 
 
