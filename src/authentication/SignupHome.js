@@ -126,86 +126,93 @@ export default class SignupHome extends React.Component {
       .catch(err => {
         return 0;
       });
-  }
-  
-onGoogleButtonPress=async()=> {
-  // Get the users ID token
-  const userInfo=await GoogleSignin.signIn()
-  const userEmail=userInfo.user.email
-  const Token=userInfo.idToken
+  };
 
-  const { idToken } = await GoogleSignin.signIn();
+  onGoogleButtonPress = async () => {
+    // Get the users ID token
+    const userInfo = await GoogleSignin.signIn();
+    const userEmail = userInfo.user.email;
+    const Token = userInfo.idToken;
 
-  // Create a Google credential with the token
-  const googleCredential = firebase.auth.GoogleAuthProvider.credential(idToken);
-  let db = firebase.firestore();
-  db.collection("signup").doc(Token).set({ email: userEmail })
+    const {idToken} = await GoogleSignin.signIn();
 
-  // Sign-in the user with the credential
-  return firebase.auth().signInWithCredential(googleCredential);
-}
- //Create response callback.
-//   _responseInfoCallback = (error, result) => {
-//    if (error) {
-//     console.log('Error fetching data: ' + error.toString());
-//   } else {
-//          console.log('Result Name: ' + result.name);
-//   }
-//  }
-// initUser=(token)=>{
-//   ('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' + token)
-//   .then(response=>{
-//     response.json().then(json=>{
-//       const Id=json.id
-//       console.log('ID' + id)
-//       const EM=json.email
-//       console.log("EMAIL"+EM);
-//      const FN=json.first_name
-//      console.log("Firstname" + FN)
-//      const LN=json.last_name
-//      console.log("Firstname" + FN)
-//     })
-//   })
-//   .catch(()=>{
-//     console.log('error getting data from facebook')
-//   })
-// }
+    // Create a Google credential with the token
+    const googleCredential = firebase.auth.GoogleAuthProvider.credential(
+      idToken,
+    );
+    let db = firebase.firestore();
+    db.collection('signup')
+      .doc(Token)
+      .set({email: userEmail});
 
- onFacebookButtonPress=async()=> {
-  // Attempt login with permissions
-  const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-  //console.log(result)
-  if (result.isCancelled) {
-    throw 'User cancelled the login process';
-  }
-  const data = await AccessToken.getCurrentAccessToken()
-  // const token=data.token
-  
-  // // Once signed in, get the users AccesToken
-  // const dummy = await AccessToken.getCurrentAccessToken()
-  
-  // .then(
-  //   res=>{
-  //     const{accessToken}=data
-  //     console.log(accessToken)
-  //     this.initUser(accessToken)
+    // Sign-in the user with the credential
+    return firebase.auth().signInWithCredential(googleCredential);
+  };
+  //Create response callback.
+  //   _responseInfoCallback = (error, result) => {
+  //    if (error) {
+  //     console.log('Error fetching data: ' + error.toString());
+  //   } else {
+  //          console.log('Result Name: ' + result.name);
   //   }
-  //  )
-  // console.log('data', data)
-//   let req = new GraphRequest('/me', {
-//     httpMethod: 'GET',
-//     version: 'v2.5',
-//     parameters: {
-//         'fields': {
-//             'string' : 'email,name,friends'
-//         }
-//     }
-// }, (err, res) => {
-//     console.log(err, res);
-// });
+  //  }
+  // initUser=(token)=>{
+  //   ('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' + token)
+  //   .then(response=>{
+  //     response.json().then(json=>{
+  //       const Id=json.id
+  //       console.log('ID' + id)
+  //       const EM=json.email
+  //       console.log("EMAIL"+EM);
+  //      const FN=json.first_name
+  //      console.log("Firstname" + FN)
+  //      const LN=json.last_name
+  //      console.log("Firstname" + FN)
+  //     })
+  //   })
+  //   .catch(()=>{
+  //     console.log('error getting data from facebook')
+  //   })
+  // }
+
+  onFacebookButtonPress = async () => {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+    //console.log(result)
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+    const data = await AccessToken.getCurrentAccessToken();
+    // const token=data.token
+
+    // // Once signed in, get the users AccesToken
+    // const dummy = await AccessToken.getCurrentAccessToken()
+
+    // .then(
+    //   res=>{
+    //     const{accessToken}=data
+    //     console.log(accessToken)
+    //     this.initUser(accessToken)
+    //   }
+    //  )
+    // console.log('data', data)
+    //   let req = new GraphRequest('/me', {
+    //     httpMethod: 'GET',
+    //     version: 'v2.5',
+    //     parameters: {
+    //         'fields': {
+    //             'string' : 'email,name,friends'
+    //         }
+    //     }
+    // }, (err, res) => {
+    //     console.log(err, res);
+    // });
 
     // Once signed in, get the users AccesToken
-    const data = await AccessToken.getCurrentAccessToken();
+    // const data = await AccessToken.getCurrentAccessToken();
 
     if (!data) {
       throw 'Something went wrong obtaining access token';
@@ -269,28 +276,7 @@ onGoogleButtonPress=async()=> {
                     />
                   </View>
                   {/*sign up with socials-google */}
-                  <View>
-                    <TouchableOpacity
-                      style={styles.authbutton}
-                      onPress={() => this.onGoogleButtonPress()}>
-                      <Image
-                        source={require('../images/google.png')}
-                        style={styles.authimage}
-                      />
-                      <Text style={styles.authtext}>Sign up with Google</Text>
-                    </TouchableOpacity>
-                    {/*sign up with socials-facebook */}
-                    <TouchableOpacity
-                      style={styles.authbutton}
-                      onPress={() => this.onFacebookButtonPress()}>
-                      <Image
-                        source={require('../images/facebook.png')}
-                        style={styles.authimage}
-                      />
-                      <Text style={styles.authtext}>Sign up with Facebook</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.TextInputDiv}>
+                  <View style={styles.TextInputDiv1}>
                     <Text style={main.labelContainer}>Full Name *</Text>
                     <TextInput
                       onSubmitEditing={this.requireField}
@@ -385,9 +371,51 @@ onGoogleButtonPress=async()=> {
                       <View />
                     )}
                   </View>
+                  {/* <TouchableOpacity
+                      style={styles.authbutton}
+                      onPress={() => this.onGoogleButtonPress()}>
+                      <Image
+                        source={require('../images/google.png')}
+                        style={styles.authimage}
+                      />
+                      <Text style={styles.authtext}>Sign up with Google</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.authbutton}
+                      onPress={() => this.onFacebookButtonPress()}>
+                      <Image
+                        source={require('../images/facebook.png')}
+                        style={styles.authimage}
+                      />
+                      <Text style={styles.authtext}>Sign up with Facebook</Text>
+                    </TouchableOpacity> */}
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginVertical: 20,
+                      justifyContent: 'center',
+                    }}>
+                    <Text style={styles.authtext}>or continue with</Text>
+                    <TouchableOpacity
+                      onPress={() => this.onFacebookButtonPress()}>
+                      <Image
+                        source={require('../images/facebook1.png')}
+                        style={styles.authimage}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => this.onGoogleButtonPress()}>
+                      <Image
+                        source={require('../images/google1.png')}
+                        style={styles.authimage1}
+                      />
+                    </TouchableOpacity>
+                  </View>
                   <View style={main.primaryButtonContanier}>
                     {this.state.clicked === false ? (
-                      <TouchableOpacity disabled={this.state.clicked} style={{justifyContent: 'center', height: 40}}>
+                      <TouchableOpacity
+                        disabled={this.state.clicked}
+                        style={{justifyContent: 'center', height: 40}}>
                         <Text
                           style={main.primaryButtonText1}
                           onPress={this.requireField}>
@@ -439,6 +467,11 @@ const styles = StyleSheet.create({
   TextInputDiv: {
     // marginTop: wp('-10%'),
     marginBottom: wp('10%'),
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  TextInputDiv1: {
+    // marginTop: wp('-10%'),
     justifyContent: 'center',
     alignSelf: 'center',
   },
@@ -505,13 +538,21 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginHorizontal: 10,
     left: 0,
-    position: 'absolute',
+    // position: 'absolute',
+  },
+  authimage1: {
+    height: 25,
+    width: 25,
+    alignSelf: 'center',
+    left: 0,
+    top: 2.5,
+    // position: 'absolute',
   },
   authtext: {
     fontSize: 14,
     color: 'white',
     fontWeight: '400',
     alignSelf: 'center',
-    position: 'absolute',
+    // position: 'absolute',
   },
 });
