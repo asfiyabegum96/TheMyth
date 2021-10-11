@@ -21,6 +21,7 @@ import {GoogleSignin} from '@react-native-community/google-signin';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import main from './styles/main';
 import RadialGradient from 'react-native-radial-gradient';
+import Backend from '../chat/Backend'
 export default class SignupHome extends React.Component {
   fieldRef = React.createRef();
 
@@ -35,6 +36,12 @@ export default class SignupHome extends React.Component {
       passwordMismatch: false,
       hidePassword: true,
       clicked: false,
+      facebookEmail:"",
+      facebookFirstName:"",
+      facebookLastName:"",
+      facebookId:"",
+      facebookToken:""
+     
     };
     this.ref = firebase.firestore().collection('signup');
   }
@@ -139,12 +146,18 @@ onGoogleButtonPress=async()=> {
   // Create a Google credential with the token
   const googleCredential = firebase.auth.GoogleAuthProvider.credential(idToken);
   let db = firebase.firestore();
-  db.collection("signup").doc(Token).set({ email: userEmail })
+  const GoogleRef=db.collection("signup").doc(Token)
+ // db.collection("signup").doc(Token).set({ email: userEmail,isDeleted:false,token:Token} )
+   GoogleRef.get().then((docSnapshot)=>{
+     if(!docSnapshot.exists){
+      GoogleRef.set({ email:userEmail,token:Token,isDeleted:false  })
+     }
+   })
 
   // Sign-in the user with the credential
   return firebase.auth().signInWithCredential(googleCredential);
 }
- //Create response callback.
+//Create response callback.
 //   _responseInfoCallback = (error, result) => {
 //    if (error) {
 //     console.log('Error fetching data: ' + error.toString());
@@ -152,24 +165,57 @@ onGoogleButtonPress=async()=> {
 //          console.log('Result Name: ' + result.name);
 //   }
 //  }
-// initUser=(token)=>{
-//   ('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' + token)
-//   .then(response=>{
-//     response.json().then(json=>{
-//       const Id=json.id
-//       console.log('ID' + id)
-//       const EM=json.email
-//       console.log("EMAIL"+EM);
-//      const FN=json.first_name
-//      console.log("Firstname" + FN)
-//      const LN=json.last_name
-//      console.log("Firstname" + FN)
-//     })
-//   })
-//   .catch(()=>{
-//     console.log('error getting data from facebook')
-//   })
-// }
+
+initUser=(token)=>{
+fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' + token)
+  .then(response=>{
+    response.json().then(json=>{
+      const Id=json.id
+      console.log('ID' + Id)
+      this.setState({
+        facebookID:json.id
+       });
+      const EM=json.email
+      this.setState({
+       facebookEmail:json.email
+      });
+      console.log("EMAIL"+EM);
+     const FN=json.first_name
+     this.setState({
+      facebookFirstName:json.first_name
+     });
+     console.log("Firstname" + FN)
+     const LN=json.last_name
+     this.setState({
+      facebookLastName:json.last_name
+     });
+     console.log("FirstnameState" + this.state.facebookLastName)
+ 
+     const token=this.state.facebookToken
+     let db = firebase.firestore();
+ 
+    
+     //db.collection("signup").doc(token).set({ email:this.state.facebookEmail,token:this.state.facebookToken,isDeleted:false  })
+     const FacebookRef=db.collection("signup").doc(token)
+     FacebookRef.get().then((docSnapshot)=>{
+       if(!docSnapshot.exists){
+        FacebookRef.set({ email:this.state.facebookEmail,token:this.state.facebookToken,isDeleted:false  })
+       }
+     })
+   
+    })
+
+  })
+  .catch(()=>{
+    console.log('error getting data from facebook')
+  })
+  // let db = firebase.firestore();
+  // const facebookEmailId=this.state.facebookEmail
+  // const facebookId=this.state.facebookId
+  // console.log('facebookEmailId',facebookEmailId)
+  // db.collection("signup").doc(facebookId).set({ email:this.state.facebookEmail  })
+
+}
 
  onFacebookButtonPress=async()=> {
   // Attempt login with permissions
@@ -179,18 +225,24 @@ onGoogleButtonPress=async()=> {
     throw 'User cancelled the login process';
   }
   const data = await AccessToken.getCurrentAccessToken()
+  const token=data.accessToken
   // const token=data.token
-  
+  this.setState({
+    facebookToken:data.accessToken
+   })
+ 
   // // Once signed in, get the users AccesToken
-  // const dummy = await AccessToken.getCurrentAccessToken()
+  const getToken = await AccessToken.getCurrentAccessToken()
   
-  // .then(
-  //   res=>{
-  //     const{accessToken}=data
-  //     console.log(accessToken)
-  //     this.initUser(accessToken)
-  //   }
-  //  )
+  .then(
+    res=>{
+      const{accessToken}=res
+      console.log('accessToken',accessToken)
+      this.initUser(accessToken)
+     
+    }
+    
+   )
   // console.log('data', data)
 //   let req = new GraphRequest('/me', {
 //     httpMethod: 'GET',
@@ -205,7 +257,7 @@ onGoogleButtonPress=async()=> {
 // });
 
     // Once signed in, get the users AccesToken
-    const data = await AccessToken.getCurrentAccessToken();
+  //  const data = await AccessToken.getCurrentAccessToken();
 
     if (!data) {
       throw 'Something went wrong obtaining access token';
@@ -215,9 +267,16 @@ onGoogleButtonPress=async()=> {
     const facebookCredential = firebase.auth.FacebookAuthProvider.credential(
       data.accessToken,
     );
-
-    // Sign-in the user with the credential
+   
+  //   let db = firebase.firestore();
+ 
+    
+  //   db.collection("signup").doc(facebookId).set({ email:this.state.facebookEmail  , isDeleted:false  })
+  //  // Sign-in the user with the credential
     return firebase.auth().signInWithCredential(facebookCredential);
+ 
+   
+    
   };
 
   componentDidMount() {
