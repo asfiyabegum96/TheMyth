@@ -49,6 +49,7 @@ export default class mainFeed extends React.Component {
         new Animated.Value(0),
       ],
       email: '',
+      // curLimit: 20
     };
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
   }
@@ -213,6 +214,12 @@ export default class mainFeed extends React.Component {
     rol();
   }
 
+  // componentDidUpdate() {
+  //   if(this.state.photoFeedData) {
+  //     console.log('photofeed data', this.state.photoFeedData)
+  //   }
+  // }
+
   // Cover the timestamp to show in real minutes
   pluralCheck = s => {
     if (s == 1) {
@@ -249,10 +256,10 @@ export default class mainFeed extends React.Component {
   };
   // Fetch data from the database and display in the view
 
-  loadFeed = (startAfter = {}) => {
+  loadFeed = () => {
     this.setState({
       feedRefresh: true,
-      photoFeedData: [],
+      photoFeedLoad: []
     });
     let viewSpecificPhotos = false;
     let url = 'photos';
@@ -287,22 +294,22 @@ export default class mainFeed extends React.Component {
       let photosRef = db.collection(url);
       photosRef
         .orderBy('postedTime', 'desc')
-        .startAfter(startAfter)
-        .limit(4)
+        .limit(10)
         .get()
         .then(function (querySnapshot) {
           if (querySnapshot._docs && querySnapshot._docs.length) {
+            console.log('loadFeed => ', querySnapshot._docs.length);
             let image = [];
             querySnapshot.forEach(function (doc) {
               let data;
               const docNotEmpty = (doc.id, ' => ', doc.data() != null);
               if (docNotEmpty) data = (doc.id, ' => ', doc.data());
-              if(!doc.data().isDeleted) {
-                image.push(doc.data())
+              if (!doc._data.isDeleted) {
+                image.push(doc)
                 that.setState({
                   photoFeedData: image,
                   feedRefresh: false,
-                  loading: false
+                  loading: false,
                 })
               }
               if (viewSpecificPhotos === true) {
@@ -346,7 +353,125 @@ export default class mainFeed extends React.Component {
               feedRefresh: false,
               loading: false
             });
-            that.setPhoto([]);
+            that.setPhoto([], 'loadFeed');
+          }
+        });
+    } else if (url === 'savedCollections') {
+      that.fetchImages();
+    } else {
+      that.fetchDiary();
+    }
+  };
+
+  loadMoreFeed = () => {
+    console.log('last visible', this.state.photoFeedData[this.state.photoFeedData.length - 1])
+    const lastVisible = this.state.photoFeedData[this.state.photoFeedData.length - 1];
+    this.setState({
+      feedRefresh: true
+    });
+    let viewSpecificPhotos = false;
+    let url = 'photos';
+    let email, selectedEmail;
+    if (
+      this.props.navigation &&
+      this.props.navigation.state &&
+      this.props.navigation.state.params.email
+    ) {
+      email = this.props.navigation.state.params.email;
+      selectedEmail = this.props.navigation.state.params.selectedItem.item
+        .email;
+      url =
+        this.props.navigation.state.params.isSavedCollection === true
+          ? 'savedCollections'
+          : 'photos';
+      if (url !== 'savedCollections') {
+        url =
+          this.props.navigation.state.params.isDiary === true
+            ? 'diary'
+            : 'photos';
+      }
+      viewSpecificPhotos = this.props.navigation.state.params
+        .viewSpecificPhotos;
+    } else {
+      email = this.props.screenProps.property.screenProps.email;
+    }
+    this.setState({ email: email });
+    let that = this;
+    if (url === 'photos') {
+      let db = firebase.firestore();
+      let photosRef = db.collection(url);
+      photosRef
+        .orderBy('postedTime', 'desc')
+        .startAfter(lastVisible)
+        .limit(10)
+        .get()
+        .then(function (querySnapshot) {
+          if (querySnapshot._docs && querySnapshot._docs.length) {
+            console.log('fetched post => ', querySnapshot._docs.length);
+            let image = [...that.state.photoFeedData];
+            let docs = image.map(doc => doc.docRef);
+            let snapshot = querySnapshot._docs;
+            console.log('loadMoreFeed => ', snapshot.map(e => e._data.caption));
+            snapshot.forEach(function (doc) {
+              let data;
+              const docNotEmpty = (doc.id, ' => ', doc.data() != null);
+              if (docNotEmpty) data = (doc.id, ' => ', doc.data());
+              if (!doc.data().isDeleted) {
+                if (!docs.includes(doc._data.docRef)) {
+                  image.push(doc)
+                  that.setState({
+                    photoFeedData: image,
+                    feedRefresh: false,
+                    loading: false
+                  })
+                }
+              }
+              if (viewSpecificPhotos === true) {
+                if (
+                  doc.data().isDeleted === false &&
+                  data.email === selectedEmail
+                ) {
+                  that.fetchUserFeed(email, data, that);
+                }
+              } else {
+                if (doc.data().isDeleted === false) {
+                  that.fetchUserFeed(email, data, that);
+                } else {
+                  if (
+                    that.props &&
+                    that.props.screenProps &&
+                    that.props.screenProps.navigateToOther
+                  ) {
+                    that.setState({
+                      screenPropsPresent: true
+                    });
+                  }
+                  that.setState({
+                    feedRefresh: false,
+                    loading: false
+                  });
+                }
+              }
+            });
+            that.setState({
+              // curLimit: that.state.curLimit + 10,
+              feedRefresh: false,
+              loading: false
+            })
+          } else {
+            if (
+              that.props &&
+              that.props.screenProps &&
+              that.props.screenProps.navigateToOther
+            ) {
+              that.setState({
+                screenPropsPresent: true,
+              });
+            }
+            that.setState({
+              feedRefresh: false,
+              loading: false
+            });
           }
         });
     } else if (url === 'savedCollections') {
@@ -398,6 +523,7 @@ export default class mainFeed extends React.Component {
   }
 
   fetchImages() {
+    console.log('fetching images')
     const context = this;
     context.setState({
       feedRefresh: true,
@@ -450,7 +576,7 @@ export default class mainFeed extends React.Component {
                         screenPropsPresent: true,
                       });
                     }
-                    context.setPhoto([]);
+                    context.setPhoto([], 'fetchImages-574');
                   }
                 });
               });
@@ -464,13 +590,14 @@ export default class mainFeed extends React.Component {
                 screenPropsPresent: true,
               });
             }
-            context.setPhoto([]);
+            context.setPhoto([], 'fetchImages-588');
           }
         });
       });
   }
 
   fetchUserFeed = (email, data, that) => {
+    console.log('fetching user feed')
     if (
       that.props.navigation &&
       that.props.navigation.state &&
@@ -489,6 +616,7 @@ export default class mainFeed extends React.Component {
   };
 
   userRefFeed = (email, data, that) => {
+    console.log('fetching user ref feed')
     let db = firebase.firestore();
     let photoFeedData = that.state.photoFeedData;
     let userRef = db.collection('signup');
@@ -571,7 +699,7 @@ export default class mainFeed extends React.Component {
                                       feedRefresh: false,
                                       loading: false,
                                     });
-                                    that.setPhoto([]);
+                                    that.setPhoto(that.state.photoFeedData, 'userRefFeed-697');
                                   }
                                 }
                               });
@@ -590,7 +718,7 @@ export default class mainFeed extends React.Component {
                                   feedRefresh: false,
                                   loading: false,
                                 });
-                                that.setPhoto([]);
+                                that.setPhoto([], '716');
                               }
                             }
                           });
@@ -605,6 +733,7 @@ export default class mainFeed extends React.Component {
   };
 
   addToFlatlist = (photoFeedData, data, userData, email) => {
+    console.log('adding to flatlist', photoFeedData)
     var that = this;
     that.setState({ screenPropsPresent: false });
     photoFeedData.push({
@@ -672,7 +801,7 @@ export default class mainFeed extends React.Component {
       });
     });
     setTimeout(() => {
-      that.setPhoto(item);
+      that.setPhoto(item, '799');
       that.setState({
         feedRefresh: false,
         loading: false,
@@ -680,7 +809,8 @@ export default class mainFeed extends React.Component {
     }, 1000);
   };
 
-  setPhoto = data => {
+  setPhoto = (data, invokingFuntion) => {
+    console.log('setPhoto', invokingFuntion)
     this.setState({ photoFeedData: data });
   };
 
@@ -767,7 +897,7 @@ export default class mainFeed extends React.Component {
       })
       .then(function (docRef) {
         context.state.photoFeedData[index].isSaved = true;
-        context.setPhoto(context.state.photoFeedData);
+        context.setPhoto(context.state.photoFeedData, 'addToSaveCollection');
       });
 
     // firebase.firestore().collection('savedCollections').doc(photoObj.email).set(photoObj)
@@ -784,7 +914,7 @@ export default class mainFeed extends React.Component {
       })
       .then(() => {
         context.state.photoFeedData[selectedItem.index].isSaved = false;
-        context.setPhoto(context.state.photoFeedData);
+        context.setPhoto(context.state.photoFeedData, 'deleteCollection');
       });
 
     db.collection('photos')
@@ -809,9 +939,6 @@ export default class mainFeed extends React.Component {
     console.log('Visible items', viewableItems);
     if (viewableItems && viewableItems.length > 0) {
       this.setState({ currentIndex: viewableItems[0].index });
-      if (viewableItems[0].index > 1) {
-        this.loadFeed(this.state.photoFeedData[viewableItems[0].index + 1])
-      }
     }
   };
 
@@ -923,9 +1050,10 @@ export default class mainFeed extends React.Component {
             snapToInterval={Dimensions.get('window').height}
             onViewableItemsChanged={this._onViewableItemsChanged}
             viewabilityConfig={this._viewabilityConfig}
+            onEndReached={this.loadMoreFeed}
             onEndReachedThreshold={0.5}
             renderItem={({ item, index }) => {
-              console.log('index - ', index)
+              const item1 = item._data;
               return <View
                 key={index}
                 style={{
@@ -941,13 +1069,13 @@ export default class mainFeed extends React.Component {
                 <View style={styles.feedBorder}>
                   <View style={styles.listHeader}>
                     <TouchableOpacity
-                      onPress={() => this.viewOtherUserProfiles({ item })}
+                      onPress={() => this.viewOtherUserProfiles({ item1 })}
                       style={{
                         paddingHorizontal: 10,
                       }}>
                       <Image
                         source={{
-                          uri: item.userAvatar,
+                          uri: item1.userAvatar,
                         }}
                         style={{
                           width: wp('15%'),
@@ -960,10 +1088,10 @@ export default class mainFeed extends React.Component {
                       />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.locationDiv}>
-                      <Text style={styles.listProfileName}>{item.author}</Text>
+                      <Text style={styles.listProfileName}>{item1.author}</Text>
                       {/* <View style={styles.locationDiv}> */}
-                      <Text style={styles.locationText}>{item.location}</Text>
-                      {/* <TouchableOpacity onPress={() => this.copyUrl(item)} style={{ paddingLeft: wp('1%') }}>
+                      <Text style={styles.locationText}>{item1.location}</Text>
+                      {/* <TouchableOpacity onPress={() => this.copyUrl(item1)} style={{ paddingLeft: wp('1%') }}>
                         <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
                       </TouchableOpacity> */}
                       {/* </View> */}
@@ -972,7 +1100,7 @@ export default class mainFeed extends React.Component {
                   <View style={styles.listViewImg}>
                     <Image
                       style={styles.listViewInlineImg}
-                      source={{ uri: item.url }}
+                      source={{ uri: item1.url }}
                       loadingIndicatorSource={require('../images/loading.gif')}
                     />
                   </View>
@@ -983,11 +1111,11 @@ export default class mainFeed extends React.Component {
                       paddingVertical: wp('2%'),
                       marginLeft: wp('1.3%'),
                     }}>
-                    {item.isLiked === true ? (
+                    {item1.isLiked === true ? (
                       <TouchableOpacity
                         onPress={() =>
                           this.onLikePost({
-                            item,
+                            item1,
                             index,
                           })
                         }
@@ -1005,7 +1133,7 @@ export default class mainFeed extends React.Component {
                       <TouchableOpacity
                         onPress={() =>
                           this.onLikePost({
-                            item,
+                            item1,
                             index,
                           })
                         }
@@ -1022,7 +1150,7 @@ export default class mainFeed extends React.Component {
                     )}
                     <TouchableOpacity
                       onPress={() =>
-                        this.navigateToComment({ item, index }, true)
+                        this.navigateToComment({ item1, index }, true)
                       }
                       style={{
                         paddingLeft: wp('1%'),
@@ -1034,11 +1162,11 @@ export default class mainFeed extends React.Component {
                         color="#808080"
                       />
                     </TouchableOpacity>
-                    {item.isSaved === true ? (
+                    {item1.isSaved === true ? (
                       <TouchableOpacity
                         onPress={() => {
                           this.deleteCollection({
-                            item,
+                            item1,
                             index,
                           });
                         }}
@@ -1054,7 +1182,7 @@ export default class mainFeed extends React.Component {
                     ) : (
                       <TouchableOpacity
                         onPress={() =>
-                          this.navigateToComment({ item, index }, false)
+                          this.navigateToComment({ item1, index }, false)
                         }
                         style={{
                           paddingLeft: wp('3%'),
@@ -1066,7 +1194,7 @@ export default class mainFeed extends React.Component {
                       style={styles.fabIcon1}
                       onPress={() =>
                         this.sendImage({
-                          item,
+                          item1,
                           index,
                         })
                       }>
@@ -1083,10 +1211,10 @@ export default class mainFeed extends React.Component {
                     flexDirection: 'column',
                     marginLeft: wp('5%'),
                   }}>
-                  <Text style={styles.likeText}>{item.likes} like(s)</Text>
+                  <Text style={styles.likeText}>{item1.likes} like(s)</Text>
                   <View style={styles.foodNameDiv}>
-                    <Text style={styles.listProfileName1}>{item.author}</Text>
-                    <Text style={styles.foodNameText}>{item.caption}</Text>
+                    <Text style={styles.listProfileName1}>{item1.author}</Text>
+                    <Text style={styles.foodNameText}>{item1.caption}</Text>
                   </View>
                   <Text
                     style={{
@@ -1095,7 +1223,7 @@ export default class mainFeed extends React.Component {
                       fontSize: hp('1.5%'),
                       color: '#808080',
                     }}>
-                    {item.postedTime}
+                    {item1.postedTime}
                   </Text>
                 </View>
               </View>
