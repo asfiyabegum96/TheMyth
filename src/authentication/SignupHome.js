@@ -133,15 +133,13 @@ export default class SignupHome extends React.Component {
       .catch(err => {
         return 0;
       });
-  }
-  
-onGoogleButtonPress=async()=> {
-  // Get the users ID token
-  const userInfo=await GoogleSignin.signIn()
-  const userEmail=userInfo.user.email
-  const Token=userInfo.idToken
+  };
 
-  const { idToken } = await GoogleSignin.signIn();
+  onGoogleButtonPress = async () => {
+    // Get the users ID token
+    const userInfo = await GoogleSignin.signIn();
+    const userEmail = userInfo.user.email;
+    const Token = userInfo.idToken;
 
   // Create a Google credential with the token
   const googleCredential = firebase.auth.GoogleAuthProvider.credential(idToken);
@@ -328,28 +326,7 @@ fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,frie
                     />
                   </View>
                   {/*sign up with socials-google */}
-                  <View>
-                    <TouchableOpacity
-                      style={styles.authbutton}
-                      onPress={() => this.onGoogleButtonPress()}>
-                      <Image
-                        source={require('../images/google.png')}
-                        style={styles.authimage}
-                      />
-                      <Text style={styles.authtext}>Sign up with Google</Text>
-                    </TouchableOpacity>
-                    {/*sign up with socials-facebook */}
-                    <TouchableOpacity
-                      style={styles.authbutton}
-                      onPress={() => this.onFacebookButtonPress()}>
-                      <Image
-                        source={require('../images/facebook.png')}
-                        style={styles.authimage}
-                      />
-                      <Text style={styles.authtext}>Sign up with Facebook</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.TextInputDiv}>
+                  <View style={styles.TextInputDiv1}>
                     <Text style={main.labelContainer}>Full Name *</Text>
                     <TextInput
                       onSubmitEditing={this.requireField}
@@ -444,9 +421,51 @@ fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,frie
                       <View />
                     )}
                   </View>
+                  {/* <TouchableOpacity
+                      style={styles.authbutton}
+                      onPress={() => this.onGoogleButtonPress()}>
+                      <Image
+                        source={require('../images/google.png')}
+                        style={styles.authimage}
+                      />
+                      <Text style={styles.authtext}>Sign up with Google</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.authbutton}
+                      onPress={() => this.onFacebookButtonPress()}>
+                      <Image
+                        source={require('../images/facebook.png')}
+                        style={styles.authimage}
+                      />
+                      <Text style={styles.authtext}>Sign up with Facebook</Text>
+                    </TouchableOpacity> */}
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginVertical: 20,
+                      justifyContent: 'center',
+                    }}>
+                    <Text style={styles.authtext}>or continue with</Text>
+                    <TouchableOpacity
+                      onPress={() => this.onFacebookButtonPress()}>
+                      <Image
+                        source={require('../images/facebook1.png')}
+                        style={styles.authimage}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => this.onGoogleButtonPress()}>
+                      <Image
+                        source={require('../images/google1.png')}
+                        style={styles.authimage1}
+                      />
+                    </TouchableOpacity>
+                  </View>
                   <View style={main.primaryButtonContanier}>
                     {this.state.clicked === false ? (
-                      <TouchableOpacity disabled={this.state.clicked} style={{justifyContent: 'center', height: 40}}>
+                      <TouchableOpacity
+                        disabled={this.state.clicked}
+                        style={{justifyContent: 'center', height: 40}}>
                         <Text
                           style={main.primaryButtonText1}
                           onPress={this.requireField}>
@@ -498,6 +517,11 @@ const styles = StyleSheet.create({
   TextInputDiv: {
     // marginTop: wp('-10%'),
     marginBottom: wp('10%'),
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  TextInputDiv1: {
+    // marginTop: wp('-10%'),
     justifyContent: 'center',
     alignSelf: 'center',
   },
@@ -564,13 +588,21 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginHorizontal: 10,
     left: 0,
-    position: 'absolute',
+    // position: 'absolute',
+  },
+  authimage1: {
+    height: 25,
+    width: 25,
+    alignSelf: 'center',
+    left: 0,
+    top: 2.5,
+    // position: 'absolute',
   },
   authtext: {
     fontSize: 14,
     color: 'white',
     fontWeight: '400',
     alignSelf: 'center',
-    position: 'absolute',
+    // position: 'absolute',
   },
 });
