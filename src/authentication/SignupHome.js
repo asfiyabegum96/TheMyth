@@ -153,6 +153,7 @@ export default class SignupHome extends React.Component {
         });
         console.log('this.state.docRef', this.state.docRef)
         let db = firebase.firestore();
+        console.log('this.state.docRef-2', this.state.docRef)
         db.collection("signup").doc(this.state.docRef).set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
     console.log('this.state.docRef-1', this.state.docRef)
     const GoogleRef = db.collection("signup").doc(this.state.docRef)
@@ -224,8 +225,8 @@ export default class SignupHome extends React.Component {
             
               let db = firebase.firestore();
               
-
-              db.collection("signup").doc(token).set({ email:this.state.facebookEmail,token:this.state.facebookToken,isDeleted:false  })
+              
+              db.collection("signup").doc(this.state.docRef).set({ email:this.state.facebookEmail,token:this.state.facebookToken,isDeleted:false,docRef: this.state.docRef })
               
               const FacebookRef = db.collection("signup").doc(this.state.docRef)
               FacebookRef.get().then((docSnapshot) => {
