@@ -65,12 +65,16 @@ export default class homeFixed extends React.Component {
       .get()
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
+          console.log('doc', doc.data())
           let data;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
           context.setState({user: doc.data()});
         });
-      });
+      })
+      .catch(e => {
+        console.log('Error::fetchUserDetails()', e)
+      })
   }
 
   componentDidUpdate() {

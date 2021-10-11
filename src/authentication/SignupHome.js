@@ -142,7 +142,7 @@ export default class SignupHome extends React.Component {
     const Token = userInfo.idToken;
 
   // Create a Google credential with the token
-  const googleCredential = firebase.auth.GoogleAuthProvider.credential(idToken);
+  const googleCredential = firebase.auth.GoogleAuthProvider.credential(Token);
   let db = firebase.firestore();
   const GoogleRef=db.collection("signup").doc(Token)
  // db.collection("signup").doc(Token).set({ email: userEmail,isDeleted:false,token:Token} )

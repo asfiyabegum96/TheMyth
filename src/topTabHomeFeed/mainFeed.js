@@ -25,7 +25,7 @@ import {
 } from 'react-native-responsive-screen';
 import Heart from './heart';
 import firebase from 'react-native-firebase';
-import {Header} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 
 export default class mainFeed extends React.Component {
   constructor(props) {
@@ -64,7 +64,7 @@ export default class mainFeed extends React.Component {
   };
 
   // Heart like trigger function
-  onLikePost({item, index}) {
+  onLikePost({ item, index }) {
     const selectedPhoto = this.state.photoFeedData[index];
     this.updateLikes(selectedPhoto, index);
     this.setState({
@@ -112,7 +112,7 @@ export default class mainFeed extends React.Component {
         .doc(selectedPhoto.docRef)
         .collection('likedUsers')
         .doc(this.state.email)
-        .set({email: this.state.email.trim()});
+        .set({ email: this.state.email.trim() });
       this.setState({
         alreadyLiked: true,
         liked: true,
@@ -128,8 +128,8 @@ export default class mainFeed extends React.Component {
     photosRef
       .where('email', '==', selectedPhoto.email)
       .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
           let data;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
@@ -191,7 +191,7 @@ export default class mainFeed extends React.Component {
           .collection('notifications')
           .doc(selectedPhoto.docRef)
           .set(notificationObj)
-          .then(function(docRef) {});
+          .then(function (docRef) { });
       }
     }
   }
@@ -249,7 +249,7 @@ export default class mainFeed extends React.Component {
   };
   // Fetch data from the database and display in the view
 
-  loadFeed = () => {
+  loadFeed = (startAfter = {}) => {
     this.setState({
       feedRefresh: true,
       photoFeedData: [],
@@ -280,21 +280,31 @@ export default class mainFeed extends React.Component {
     } else {
       email = this.props.screenProps.property.screenProps.email;
     }
-    this.setState({email: email});
+    this.setState({ email: email });
     let that = this;
     if (url === 'photos') {
       let db = firebase.firestore();
       let photosRef = db.collection(url);
       photosRef
         .orderBy('postedTime', 'desc')
+        .startAfter(startAfter)
         .limit(4)
         .get()
-        .then(function(querySnapshot) {
+        .then(function (querySnapshot) {
           if (querySnapshot._docs && querySnapshot._docs.length) {
-            querySnapshot.forEach(function(doc) {
+            let image = [];
+            querySnapshot.forEach(function (doc) {
               let data;
               const docNotEmpty = (doc.id, ' => ', doc.data() != null);
               if (docNotEmpty) data = (doc.id, ' => ', doc.data());
+              if(!doc.data().isDeleted) {
+                image.push(doc.data())
+                that.setState({
+                  photoFeedData: image,
+                  feedRefresh: false,
+                  loading: false
+                })
+              }
               if (viewSpecificPhotos === true) {
                 if (
                   doc.data().isDeleted === false &&
@@ -312,12 +322,12 @@ export default class mainFeed extends React.Component {
                     that.props.screenProps.navigateToOther
                   ) {
                     that.setState({
-                      screenPropsPresent: true,
+                      screenPropsPresent: true
                     });
                   }
                   that.setState({
                     feedRefresh: false,
-                    loading: false,
+                    loading: false
                   });
                 }
               }
@@ -334,7 +344,7 @@ export default class mainFeed extends React.Component {
             }
             that.setState({
               feedRefresh: false,
-              loading: false,
+              loading: false
             });
             that.setPhoto([]);
           }
@@ -361,9 +371,9 @@ export default class mainFeed extends React.Component {
       .where('email', '==', context.props.navigation.state.params.email)
       .where('isDeleted', '==', false)
       .get()
-      .then(function(querySnapshot) {
+      .then(function (querySnapshot) {
         let data;
-        querySnapshot.forEach(function(doc) {
+        querySnapshot.forEach(function (doc) {
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
           fetchData.push(doc.data());
@@ -399,8 +409,8 @@ export default class mainFeed extends React.Component {
     photosRef
       .where('isDeleted', '==', false)
       .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
           let data;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) {
@@ -409,12 +419,12 @@ export default class mainFeed extends React.Component {
               .doc(data.docRef)
               .collection('savedUsers')
               .get()
-              .then(function(savedSnapshot) {
-                savedSnapshot.forEach(function(savedDoc) {
+              .then(function (savedSnapshot) {
+                savedSnapshot.forEach(function (savedDoc) {
                   let savedData;
                   const docNotEmpty = (savedDoc.id,
-                  ' => ',
-                  savedDoc.data() != null);
+                    ' => ',
+                    savedDoc.data() != null);
                   if (docNotEmpty) {
                     savedData = (savedDoc.id, ' => ', savedDoc.data());
                     if (savedData.email === context.state.email) {
@@ -485,8 +495,8 @@ export default class mainFeed extends React.Component {
     userRef
       .where('email', '==', email.trim())
       .get()
-      .then(function(userQuerySnapshot) {
-        userQuerySnapshot.forEach(function(doc) {
+      .then(function (userQuerySnapshot) {
+        userQuerySnapshot.forEach(function (doc) {
           let userData;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) {
@@ -497,11 +507,11 @@ export default class mainFeed extends React.Component {
               userRef
                 .where('email', '==', data.email.trim())
                 .get()
-                .then(function(otheruserSnapshot) {
-                  otheruserSnapshot.forEach(function(otherDoc) {
+                .then(function (otheruserSnapshot) {
+                  otheruserSnapshot.forEach(function (otherDoc) {
                     const docNotEmpty = (otherDoc.id,
-                    ' => ',
-                    otherDoc.data() != null);
+                      ' => ',
+                      otherDoc.data() != null);
                     if (docNotEmpty) {
                       let otherUserData;
                       otherUserData = (otherDoc.id, ' => ', otherDoc.data());
@@ -511,7 +521,7 @@ export default class mainFeed extends React.Component {
                         that.props.navigation.state &&
                         that.props.navigation.state.params &&
                         that.props.navigation.state.params.viewOtherPhotos ===
-                          true
+                        true
                       ) {
                         that.addToFlatlist(
                           photoFeedData,
@@ -524,15 +534,15 @@ export default class mainFeed extends React.Component {
                           .doc(otherUserData.docRef)
                           .collection('followers')
                           .get()
-                          .then(function(followerSnapshot) {
+                          .then(function (followerSnapshot) {
                             if (
                               followerSnapshot._docs &&
                               followerSnapshot._docs.length
                             ) {
-                              followerSnapshot.forEach(function(followerDoc) {
+                              followerSnapshot.forEach(function (followerDoc) {
                                 const docNotEmpty = (followerDoc.id,
-                                ' => ',
-                                followerDoc.data() != null);
+                                  ' => ',
+                                  followerDoc.data() != null);
                                 if (docNotEmpty) {
                                   otherUserData.isFollowed = false;
                                   if (
@@ -596,7 +606,7 @@ export default class mainFeed extends React.Component {
 
   addToFlatlist = (photoFeedData, data, userData, email) => {
     var that = this;
-    that.setState({screenPropsPresent: false});
+    that.setState({ screenPropsPresent: false });
     photoFeedData.push({
       author: userData.fullName,
       authorDescription: userData.description,
@@ -619,7 +629,7 @@ export default class mainFeed extends React.Component {
       that.props.screenProps &&
       that.props.screenProps.navigateToOther
     ) {
-      that.setState({screenPropsPresent: true});
+      that.setState({ screenPropsPresent: true });
     }
     that.fetchSavedUsers(photoFeedData, email);
   };
@@ -633,8 +643,8 @@ export default class mainFeed extends React.Component {
         .collection('photos')
         .doc(element.docRef)
         .collection('savedUsers');
-      savedUsersRef.get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+      savedUsersRef.get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) {
             data = doc.data();
@@ -649,8 +659,8 @@ export default class mainFeed extends React.Component {
         .collection('photos')
         .doc(element.docRef)
         .collection('likedUsers');
-      likedUsersRef.get().then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+      likedUsersRef.get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) {
             data = doc.data();
@@ -671,35 +681,35 @@ export default class mainFeed extends React.Component {
   };
 
   setPhoto = data => {
-    this.setState({photoFeedData: data});
+    this.setState({ photoFeedData: data });
   };
 
-  navigateToComment = ({item, index}, isComment) => {
+  navigateToComment = ({ item, index }, isComment) => {
     if (this.props.screenProps) {
-      this.setState({screenPropsPresent: true});
+      this.setState({ screenPropsPresent: true });
       this.props.screenProps.navigation(
-        {item, index, context: this},
+        { item, index, context: this },
         isComment,
       );
     } else {
       if (isComment) {
         this.props.navigation.navigate('comments', {
-          selectedItem: {item: item},
+          selectedItem: { item: item },
           email: this.props.navigation.state.params.email.trim(),
         });
       } else {
-        this.addToSaveCollection({item, index});
+        this.addToSaveCollection({ item, index });
       }
     }
   };
 
-  sendImage = ({item, index}) => {
+  sendImage = ({ item, index }) => {
     if (this.props.screenProps) {
-      this.props.screenProps.navigation({item, index, context: this}, 'send');
+      this.props.screenProps.navigation({ item, index, context: this }, 'send');
     }
   };
 
-  viewOtherUserProfiles = ({item}) => {
+  viewOtherUserProfiles = ({ item }) => {
     const isSameProfile = this.state.email.trim() === item.email.trim();
     this.props.screenProps.navigation(
       {
@@ -755,7 +765,7 @@ export default class mainFeed extends React.Component {
       .set({
         email: this.props.navigation.state.params.email.trim(),
       })
-      .then(function(docRef) {
+      .then(function (docRef) {
         context.state.photoFeedData[index].isSaved = true;
         context.setPhoto(context.state.photoFeedData);
       });
@@ -795,10 +805,13 @@ export default class mainFeed extends React.Component {
     alert('Photo url copied!');
   }
 
-  _onViewableItemsChanged = ({viewableItems, changed}) => {
+  _onViewableItemsChanged = ({ viewableItems, changed }) => {
     console.log('Visible items', viewableItems);
     if (viewableItems && viewableItems.length > 0) {
-      this.setState({currentIndex: viewableItems[0].index});
+      this.setState({ currentIndex: viewableItems[0].index });
+      if (viewableItems[0].index > 1) {
+        this.loadFeed(this.state.photoFeedData[viewableItems[0].index + 1])
+      }
     }
   };
 
@@ -904,15 +917,16 @@ export default class mainFeed extends React.Component {
             onRefresh={this.photoFeedLoad}
             data={this.state.photoFeedData}
             keyExtractor={(item, index) => index.toString()}
-            style={{flex: 1}}
+            style={{ flex: 1 }}
             snapToAlignment={'start'}
             decelerationRate={'fast'}
             snapToInterval={Dimensions.get('window').height}
             onViewableItemsChanged={this._onViewableItemsChanged}
             viewabilityConfig={this._viewabilityConfig}
             onEndReachedThreshold={0.5}
-            renderItem={({item, index}) => (
-              <View
+            renderItem={({ item, index }) => {
+              console.log('index - ', index)
+              return <View
                 key={index}
                 style={{
                   paddingHorizontal: wp('1%'),
@@ -927,7 +941,7 @@ export default class mainFeed extends React.Component {
                 <View style={styles.feedBorder}>
                   <View style={styles.listHeader}>
                     <TouchableOpacity
-                      onPress={() => this.viewOtherUserProfiles({item})}
+                      onPress={() => this.viewOtherUserProfiles({ item })}
                       style={{
                         paddingHorizontal: 10,
                       }}>
@@ -950,15 +964,15 @@ export default class mainFeed extends React.Component {
                       {/* <View style={styles.locationDiv}> */}
                       <Text style={styles.locationText}>{item.location}</Text>
                       {/* <TouchableOpacity onPress={() => this.copyUrl(item)} style={{ paddingLeft: wp('1%') }}>
-                            <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
-                          </TouchableOpacity> */}
+                        <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
+                      </TouchableOpacity> */}
                       {/* </View> */}
                     </TouchableOpacity>
                   </View>
                   <View style={styles.listViewImg}>
                     <Image
                       style={styles.listViewInlineImg}
-                      source={{uri: item.url}}
+                      source={{ uri: item.url }}
                       loadingIndicatorSource={require('../images/loading.gif')}
                     />
                   </View>
@@ -1008,7 +1022,7 @@ export default class mainFeed extends React.Component {
                     )}
                     <TouchableOpacity
                       onPress={() =>
-                        this.navigateToComment({item, index}, true)
+                        this.navigateToComment({ item, index }, true)
                       }
                       style={{
                         paddingLeft: wp('1%'),
@@ -1040,7 +1054,7 @@ export default class mainFeed extends React.Component {
                     ) : (
                       <TouchableOpacity
                         onPress={() =>
-                          this.navigateToComment({item, index}, false)
+                          this.navigateToComment({ item, index }, false)
                         }
                         style={{
                           paddingLeft: wp('3%'),
@@ -1085,7 +1099,9 @@ export default class mainFeed extends React.Component {
                   </Text>
                 </View>
               </View>
-            )}
+
+            }
+            }
           />
         )}
       </View>

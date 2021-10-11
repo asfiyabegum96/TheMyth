@@ -72,6 +72,27 @@ class photosUpload extends React.Component {
     this.setState(this.baseState);
   }
 
+  fetchUserDetails() {
+    const context = this;
+    let db = firebase.firestore();
+    let photosRef = db.collection('signup');
+    photosRef
+      .where('email', '==', context.props.screenProps.email.trim())
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          console.log('doc', doc.data())
+          let data;
+          const docNotEmpty = (doc.id, ' => ', doc.data() != null);
+          if (docNotEmpty) data = (doc.id, ' => ', doc.data());
+          context.setState({user: doc.data()});
+        });
+      })
+      .catch(e => {
+        console.log('Error::fetchUserDetails()', e)
+      })
+  }
+
   handleBackButtonClick() {
     this.props.navigation.goBack(null);
     BackHandler.removeEventListener(
