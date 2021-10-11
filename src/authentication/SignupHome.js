@@ -17,8 +17,8 @@ import {
   removeOrientationListener as rol,
 } from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
-import {GoogleSignin} from '@react-native-community/google-signin';
-import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
+import { GoogleSignin } from '@react-native-community/google-signin';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import main from './styles/main';
 import RadialGradient from 'react-native-radial-gradient';
 import Backend from '../chat/Backend'
@@ -36,12 +36,13 @@ export default class SignupHome extends React.Component {
       passwordMismatch: false,
       hidePassword: true,
       clicked: false,
-      facebookEmail:"",
-      facebookFirstName:"",
-      facebookLastName:"",
-      facebookId:"",
-      facebookToken:""
-     
+      facebookEmail: "",
+      facebookFirstName: "",
+      facebookLastName: "",
+      facebookId: "",
+      facebookToken: "",
+      docRef: ""
+
     };
     this.ref = firebase.firestore().collection('signup');
   }
@@ -51,7 +52,7 @@ export default class SignupHome extends React.Component {
   };
 
   onSubmit = () => {
-    let {current: field} = this.fieldRef;
+    let { current: field } = this.fieldRef;
 
     console.log(field.value());
   };
@@ -123,11 +124,11 @@ export default class SignupHome extends React.Component {
       .get()
       .then(snapshot => {
         if (snapshot.empty) {
-          this.setState({clicked: true});
+          this.setState({ clicked: true });
           this.props.nextStep();
           return;
         } else {
-          this.setState({isInvalid: true});
+          this.setState({ isInvalid: true });
         }
       })
       .catch(err => {
@@ -140,122 +141,138 @@ export default class SignupHome extends React.Component {
     const userInfo = await GoogleSignin.signIn();
     const userEmail = userInfo.user.email;
     const Token = userInfo.idToken;
-
-  // Create a Google credential with the token
-  const googleCredential = firebase.auth.GoogleAuthProvider.credential(Token);
-  let db = firebase.firestore();
-  const GoogleRef=db.collection("signup").doc(Token)
- // db.collection("signup").doc(Token).set({ email: userEmail,isDeleted:false,token:Token} )
-   GoogleRef.get().then((docSnapshot)=>{
-     if(!docSnapshot.exists){
-      GoogleRef.set({ email:userEmail,token:Token,isDeleted:false  })
-     }
-   })
-
-  // Sign-in the user with the credential
-  return firebase.auth().signInWithCredential(googleCredential);
-}
-//Create response callback.
-//   _responseInfoCallback = (error, result) => {
-//    if (error) {
-//     console.log('Error fetching data: ' + error.toString());
-//   } else {
-//          console.log('Result Name: ' + result.name);
-//   }
-//  }
-
-initUser=(token)=>{
-fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' + token)
-  .then(response=>{
-    response.json().then(json=>{
-      const Id=json.id
-      console.log('ID' + Id)
-      this.setState({
-        facebookID:json.id
-       });
-      const EM=json.email
-      this.setState({
-       facebookEmail:json.email
-      });
-      console.log("EMAIL"+EM);
-     const FN=json.first_name
-     this.setState({
-      facebookFirstName:json.first_name
-     });
-     console.log("Firstname" + FN)
-     const LN=json.last_name
-     this.setState({
-      facebookLastName:json.last_name
-     });
-     console.log("FirstnameState" + this.state.facebookLastName)
- 
-     const token=this.state.facebookToken
-     let db = firebase.firestore();
- 
     
-     //db.collection("signup").doc(token).set({ email:this.state.facebookEmail,token:this.state.facebookToken,isDeleted:false  })
-     const FacebookRef=db.collection("signup").doc(token)
-     FacebookRef.get().then((docSnapshot)=>{
-       if(!docSnapshot.exists){
-        FacebookRef.set({ email:this.state.facebookEmail,token:this.state.facebookToken,isDeleted:false  })
-       }
-     })
-   
+    // Create a Google credential with the token
+    const googleCredential = firebase.auth.GoogleAuthProvider.credential(Token);
+    // console.log('uid',googleCredential)
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log('docRef', user)
+        this.setState({
+          docRef: user.uid
+        });
+        console.log('this.state.docRef', this.state.docRef)
+        let db = firebase.firestore();
+        db.collection("signup").doc(this.state.docRef).set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
+    console.log('this.state.docRef-1', this.state.docRef)
+    const GoogleRef = db.collection("signup").doc(this.state.docRef)
+ 
+    GoogleRef.get().then((docSnapshot) => {
+      
+      if (!docSnapshot.exists()) {
+        GoogleRef.set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
+      }
+    })
+      }
+    });
+    // let db = firebase.firestore();
+    // console.log('this.state.docRef-1', this.state.docRef)
+    // const GoogleRef = db.collection("signup").doc(docRef)
+    // // db.collection("signup").doc(Token).set({ email: userEmail,isDeleted:false,token:Token} )
+    // GoogleRef.get().then((docSnapshot) => {
+
+    //   if (!docSnapshot.exists()) {
+    //     GoogleRef.set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
+    //   }
+    // })
+
+    // Sign-in the user with the credential
+    return firebase.auth().signInWithCredential(googleCredential);
+  }
+  //Create response callback.
+  //   _responseInfoCallback = (error, result) => {
+  //    if (error) {
+  //     console.log('Error fetching data: ' + error.toString());
+  //   } else {
+  //          console.log('Result Name: ' + result.name);
+  //   }
+  //  }
+
+  initUser = (token) => {
+    fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' + token)
+      .then(response => {
+        response.json().then(json => {
+          const Id = json.id
+          console.log('ID' + Id)
+          this.setState({
+            facebookID: json.id
+          });
+          const EM = json.email
+          this.setState({
+            facebookEmail: json.email
+          });
+          console.log("EMAIL" + EM);
+          const FN = json.first_name
+          this.setState({
+            facebookFirstName: json.first_name
+          });
+          console.log("Firstname" + FN)
+          const LN = json.last_name
+          this.setState({
+            facebookLastName: json.last_name
+          });
+          console.log("FirstnameState" + this.state.facebookLastName)
+
+          const token = this.state.facebookToken
+
+          const onAuthStateChanged = firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+              console.log('docRef', user)
+              this.setState({
+                docRef: user.uid
+              });
+            
+              let db = firebase.firestore();
+              
+
+              db.collection("signup").doc(token).set({ email:this.state.facebookEmail,token:this.state.facebookToken,isDeleted:false  })
+              
+              const FacebookRef = db.collection("signup").doc(this.state.docRef)
+              FacebookRef.get().then((docSnapshot) => {
+
+                if (!docSnapshot.exists()) {
+                  FacebookRef.set({ email: this.state.facebookEmail, token: this.state.facebookToken, isDeleted: false, docRef: this.state.docRef })
+                }
+              })
+
+            }
+          })
+        })
+
+      })
+      .catch(() => {
+        console.log('error getting data from facebook')
+      })
+    
+  }
+
+  onFacebookButtonPress = async () => {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+    //console.log(result)
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+    const data = await AccessToken.getCurrentAccessToken()
+    const token = data.accessToken
+    // const token=data.token
+    this.setState({
+      facebookToken: data.accessToken
     })
 
-  })
-  .catch(()=>{
-    console.log('error getting data from facebook')
-  })
-  // let db = firebase.firestore();
-  // const facebookEmailId=this.state.facebookEmail
-  // const facebookId=this.state.facebookId
-  // console.log('facebookEmailId',facebookEmailId)
-  // db.collection("signup").doc(facebookId).set({ email:this.state.facebookEmail  })
+    // // Once signed in, get the users AccesToken
+    const getToken = await AccessToken.getCurrentAccessToken()
 
-}
+      .then(
+        res => {
+          const { accessToken } = res
+          console.log('accessToken', accessToken)
+          this.initUser(accessToken)
 
- onFacebookButtonPress=async()=> {
-  // Attempt login with permissions
-  const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-  //console.log(result)
-  if (result.isCancelled) {
-    throw 'User cancelled the login process';
-  }
-  const data = await AccessToken.getCurrentAccessToken()
-  const token=data.accessToken
-  // const token=data.token
-  this.setState({
-    facebookToken:data.accessToken
-   })
- 
-  // // Once signed in, get the users AccesToken
-  const getToken = await AccessToken.getCurrentAccessToken()
-  
-  .then(
-    res=>{
-      const{accessToken}=res
-      console.log('accessToken',accessToken)
-      this.initUser(accessToken)
-     
-    }
+        }
+
+      )
     
-   )
-  // console.log('data', data)
-//   let req = new GraphRequest('/me', {
-//     httpMethod: 'GET',
-//     version: 'v2.5',
-//     parameters: {
-//         'fields': {
-//             'string' : 'email,name,friends'
-//         }
-//     }
-// }, (err, res) => {
-//     console.log(err, res);
-// });
-
-    // Once signed in, get the users AccesToken
-  //  const data = await AccessToken.getCurrentAccessToken();
 
     if (!data) {
       throw 'Something went wrong obtaining access token';
@@ -265,27 +282,35 @@ fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,frie
     const facebookCredential = firebase.auth.FacebookAuthProvider.credential(
       data.accessToken,
     );
+
    
-  //   let db = firebase.firestore();
- 
-    
-  //   db.collection("signup").doc(facebookId).set({ email:this.state.facebookEmail  , isDeleted:false  })
-  //  // Sign-in the user with the credential
+
+
+
+
+
+
+
+   
     return firebase.auth().signInWithCredential(facebookCredential);
- 
-   
-    
+
+
+
+
   };
 
   componentDidMount() {
     this.setState({
       loading: false,
     });
+
+
     loc(this);
     GoogleSignin.configure({
       webClientId:
         '119026447603-caakapp6njtis28ujb4qs7b5dgqkh9el.apps.googleusercontent.com',
     });
+
   }
 
   componentWillUnMount() {
@@ -293,11 +318,11 @@ fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,frie
   }
 
   render() {
-    const {values, handleChange} = this.props;
+    const { values, handleChange } = this.props;
 
     return (
       <RadialGradient
-        style={{width: '100%', height: '100%'}}
+        style={{ width: '100%', height: '100%' }}
         colors={['#FE7948', '#E23E00']}
         stops={[0.1, 0.95]}
         center={[180, 270]}
@@ -351,21 +376,21 @@ fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,frie
                       defaultValue={values.email}
                     />
                     {this.state.emailInvalid == true ? (
-                      <Text style={{color: 'black'}}>
+                      <Text style={{ color: 'black' }}>
                         Please enter a valid Email ID
                       </Text>
                     ) : (
                       <View />
                     )}
                     {this.state.isInvalid == true ? (
-                      <Text style={{color: 'black'}}>
+                      <Text style={{ color: 'black' }}>
                         Email ID already exists!
                       </Text>
                     ) : (
                       <View />
                     )}
                     <Text style={main.labelContainer}>Password *</Text>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{ flexDirection: 'row' }}>
                       <TextInput
                         onSubmitEditing={this.requireField}
                         ref="password"
@@ -400,21 +425,21 @@ fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,frie
                       defaultValue={values.confirmPassword}
                     />
                     {this.state.passwordInvalid == true ? (
-                      <Text style={{color: 'black', alignSelf: 'center'}}>
+                      <Text style={{ color: 'black', alignSelf: 'center' }}>
                         Please enter strong password
                       </Text>
                     ) : (
                       <View />
                     )}
                     {this.state.passwordMismatch == true ? (
-                      <Text style={{color: 'black', alignSelf: 'center'}}>
+                      <Text style={{ color: 'black', alignSelf: 'center' }}>
                         Password mismatch!
                       </Text>
                     ) : (
                       <View />
                     )}
                     {this.state.fieldNotEmpty == true ? (
-                      <Text style={{color: 'black', alignSelf: 'center'}}>
+                      <Text style={{ color: 'black', alignSelf: 'center' }}>
                         Please enter all values
                       </Text>
                     ) : (
@@ -465,7 +490,7 @@ fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,frie
                     {this.state.clicked === false ? (
                       <TouchableOpacity
                         disabled={this.state.clicked}
-                        style={{justifyContent: 'center', height: 40}}>
+                        style={{ justifyContent: 'center', height: 40 }}>
                         <Text
                           style={main.primaryButtonText1}
                           onPress={this.requireField}>

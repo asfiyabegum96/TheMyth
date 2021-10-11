@@ -19,6 +19,8 @@ import {
 import firebase from 'react-native-firebase';
 import main from '../authentication/styles/main';
 import RadialGradient from 'react-native-radial-gradient';
+import {GoogleSignin} from '@react-native-community/google-signin';
+import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -91,8 +93,53 @@ export default class Home extends React.Component {
   componentDidMount() {
     this.checkUserAuthorization();
     loc(this);
+    GoogleSignin.configure({
+      webClientId:
+        '119026447603-caakapp6njtis28ujb4qs7b5dgqkh9el.apps.googleusercontent.com',
+    });
   }
+  onGoogleButtonPress = async () => {
+    // Get the users ID token
+    const context = this;
+    const userInfo = await GoogleSignin.signIn();
+    const userEmail = userInfo.user.email;
+    const Token = userInfo.idToken;
 
+  // Create a Google credential with the token
+  const googleCredential = firebase.auth.GoogleAuthProvider.credential(Token);
+
+   firebase.auth().signInWithCredential(googleCredential);
+  // Sign-in the user with the credential
+
+}
+  onFacebookButtonPress=async()=> {
+   
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+    //console.log(result)
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+    const data = await AccessToken.getCurrentAccessToken()
+    const token=data.accessToken
+   
+  ;
+  
+      if (!data) {
+        throw 'Something went wrong obtaining access token';
+      }
+  
+      // Create a Firebase credential with the AccessToken
+      const facebookCredential = firebase.auth.FacebookAuthProvider.credential(
+        data.accessToken,
+      );
+     
+   
+      firebase.auth().signInWithCredential(facebookCredential);
+   
+   
+     
+      }  
   async checkUserAuthorization() {
     firebase
       .messaging()
@@ -175,6 +222,28 @@ export default class Home extends React.Component {
                 Food. Photo. Memories
               </Text>
             </View>
+            <View
+                    style={{
+                      flexDirection: 'row',
+                      marginVertical: 20,
+                      justifyContent: 'center',
+                    }}>
+                    <Text style={styles.authtext}>or continue with</Text>
+                    <TouchableOpacity
+                      onPress={() => this.onFacebookButtonPress()}>
+                      <Image
+                        source={require('../images/facebook1.png')}
+                        style={styles.authimage}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => this.onGoogleButtonPress()}>
+                      <Image
+                        source={require('../images/google1.png')}
+                        style={styles.authimage1}
+                      />
+                    </TouchableOpacity>
+                  </View>
             <View style={styles.TextInputDiv}>
               {/* <View style={{ flexDirection: 'row', }}> */}
               <Text style={main.labelContainer}>Email *</Text>
@@ -342,5 +411,28 @@ const styles = StyleSheet.create({
     borderRightColor: '#000',
     height: hp('3.75%'),
     paddingRight: wp('3%'),
+  },
+  authimage: {
+    height: 30,
+    width: 30,
+    alignSelf: 'center',
+    marginHorizontal: 10,
+    left: 0,
+    // position: 'absolute',
+  },
+  authimage1: {
+    height: 25,
+    width: 25,
+    alignSelf: 'center',
+    left: 0,
+    top: 2.5,
+    // position: 'absolute',
+  },
+  authtext: {
+    fontSize: 14,
+    color: 'white',
+    fontWeight: '400',
+    alignSelf: 'center',
+    // position: 'absolute',
   },
 });
