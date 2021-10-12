@@ -74,7 +74,8 @@ export default class profile extends React.Component {
     //check google user
     const userInfo = await GoogleSignin.getCurrentUser();
     console.log('userInfo', userInfo.user);
-    let profilePicture = '',
+    let profilePicture = '';
+    
     if(userInfo.user) {
       profilePicture = userInfo.user.photo;
     }
@@ -105,7 +106,7 @@ export default class profile extends React.Component {
           console.log('this.state.navProps', context.state.navProps)
           console.log('user', doc.data())
           let user = doc.data();
-          if(profilePicture) {
+          if(profilePicture && !user.profilePicture) {
             user.profilePicture = profilePicture;
           }
           context.setState({user});
