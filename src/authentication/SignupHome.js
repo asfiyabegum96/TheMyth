@@ -139,7 +139,10 @@ export default class SignupHome extends React.Component {
     // Get the users ID token
     const userInfo = await GoogleSignin.signIn();
     const userEmail = userInfo.user.email;
+    const userName = userInfo.user.name;
     const Token = userInfo.idToken;
+
+    console.log(userInfo)
 
     // Create a Google credential with the token
     const googleCredential = firebase.auth.GoogleAuthProvider.credential(Token);
@@ -153,16 +156,16 @@ export default class SignupHome extends React.Component {
         console.log('this.state.docRef', this.state.docRef);
         let db = firebase.firestore();
         console.log('this.state.docRef-2', this.state.docRef)
-        db.collection("signup").doc(this.state.docRef).set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
-    console.log('this.state.docRef-1', this.state.docRef)
-    const GoogleRef = db.collection("signup").doc(this.state.docRef)
- 
-    GoogleRef.get().then((docSnapshot) => {
-      
-      if (!docSnapshot.exists()) {
-        GoogleRef.set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
-      }
-    })
+        db.collection("signup").doc(this.state.docRef).set({ email: userEmail, fullName: userName, token: Token, isDeleted: false, docRef: this.state.docRef })
+        console.log('this.state.docRef-1', this.state.docRef)
+        const GoogleRef = db.collection("signup").doc(this.state.docRef)
+
+        GoogleRef.get().then((docSnapshot) => {
+
+          if (!docSnapshot.exists()) {
+            GoogleRef.set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
+          }
+        })
       }
     });
     // let db = firebase.firestore();
@@ -224,12 +227,12 @@ export default class SignupHome extends React.Component {
               this.setState({
                 docRef: user.uid
               });
-            
+
               let db = firebase.firestore();
-              
-              
-              db.collection("signup").doc(this.state.docRef).set({ email:this.state.facebookEmail,token:this.state.facebookToken,isDeleted:false,docRef: this.state.docRef })
-              
+
+
+              db.collection("signup").doc(this.state.docRef).set({ email: this.state.facebookEmail, token: this.state.facebookToken, isDeleted: false, docRef: this.state.docRef })
+
               const FacebookRef = db.collection("signup").doc(this.state.docRef)
               FacebookRef.get().then((docSnapshot) => {
 
@@ -251,6 +254,9 @@ export default class SignupHome extends React.Component {
   onFacebookButtonPress = async () => {
     try {
       // Attempt login with permissions
+      if (Platform.OS === "android") {
+        LoginManager.setLoginBehavior("web_only")
+      }
       const result = await LoginManager.logInWithPermissions([
         'public_profile',
         'email',

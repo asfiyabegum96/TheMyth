@@ -63,6 +63,7 @@ export default class mainFeed extends React.Component {
 
   // Photo feed function
   photoFeedLoad = () => {
+    this.setPhoto([]);
     this.loadFeed();
   };
 
@@ -301,51 +302,12 @@ export default class mainFeed extends React.Component {
         .get()
         .then(function (querySnapshot) {
           if (querySnapshot._docs && querySnapshot._docs.length) {
-            // const snapshot1 = querySnapshot._docs
-            // console.log('ordered loadFeed => ', snapshot1.map(e => ({
-            //   caption: e.data().caption,
-            //   author: e.data().author
-            // })));
-            // querySnapshot.forEach(function (doc) {
-            //   let data;
-            //   const docNotEmpty = (doc.id, ' => ', doc.data() != null);
-            //   if (docNotEmpty) data = (doc.id, ' => ', doc.data());
-            //   if (viewSpecificPhotos === true) {
-            //     if (
-            //       doc.data().isDeleted === false &&
-            //       data.email === selectedEmail
-            //     ) {
-            //       // that.fetchUserFeed(email, data, that);
-            //       that.fetchUserFeed(email, data, that, doc, { isRandom: false });
-            //     }
-            //   } else {
-            //     if (doc.data().isDeleted === false) {
-            //       // that.fetchUserFeed(email, data, that);
-            //       that.fetchUserFeed(email, data, that, doc, { isRandom: false });
-            //     } else {
-            //       if (
-            //         that.props &&
-            //         that.props.screenProps &&
-            //         that.props.screenProps.navigateToOther
-            //       ) {
-            //         that.setState({
-            //           screenPropsPresent: true
-            //         });
-            //       }
-            //       that.setState({
-            //         feedRefresh: false,
-            //         loading: false
-            //       });
-            //     }
-            //   }
-            // });
-
+            console.log('total', querySnapshot._docs.length)
             //randmoized posts
             const snapshot = querySnapshot._docs
-              .map(e => ({ val: e, r: Math.random() * querySnapshot._docs.length }))
+              .map(e => ({ val: e, r: Math.random() }))
               .sort((a, b) => b.r - a.r)
               .map(e => e.val)
-            console.log('snapshot[snapshot.length - 1]', snapshot[snapshot.length - 1])
             that.setState({
               lastVisible: snapshot[snapshot.length - 1]
             })
@@ -449,50 +411,15 @@ export default class mainFeed extends React.Component {
         .get()
         .then(function (querySnapshot) {
           if (querySnapshot._docs && querySnapshot._docs.length) {
-            // const snapshot1 = querySnapshot._docs
-            // console.log('ordered loadMoreFeed => ', snapshot1.map(e => ({
-            //   caption: e.data().caption,
-            //   author: e.data().author
-            // })));
-            // querySnapshot.forEach(function (doc) {
-            //   let data;
-            //   const docNotEmpty = (doc.id, ' => ', doc.data() != null);
-            //   if (docNotEmpty) data = (doc.id, ' => ', doc.data());
-            //   if (viewSpecificPhotos === true) {
-            //     if (
-            //       doc.data().isDeleted === false &&
-            //       data.email === selectedEmail
-            //     ) {
-            //       // that.fetchUserFeed(email, data, that);
-            //       that.fetchUserFeed(email, data, that, doc, { isRandom: false });
-            //     }
-            //   } else {
-            //     if (doc.data().isDeleted === false) {
-            //       // that.fetchUserFeed(email, data, that);
-            //       that.fetchUserFeed(email, data, that, doc, { isRandom: false });
-            //     } else {
-            //       if (
-            //         that.props &&
-            //         that.props.screenProps &&
-            //         that.props.screenProps.navigateToOther
-            //       ) {
-            //         that.setState({
-            //           screenPropsPresent: true
-            //         });
-            //       }
-            //     }
-            //   }
-            //   that.setState({
-            //     feedRefresh: false,
-            //     loading: false
-            //   })
-            // });
-
+            //removed duplicates
+            const feed = that.state.photoFeedData.map(e => e.docRef);
+            
             //randmoized posts
             const snapshot = querySnapshot._docs
               .map(e => ({ val: e, r: Math.random() * querySnapshot._docs.length }))
               .sort((a, b) => b.r - a.r)
               .map(e => e.val)
+              .filter(e => !feed.includes(e.data().docRef))
             console.log('random loadMoreFeed => ', snapshot.map(e => e.data().caption));
 
             snapshot.forEach(function (doc) {
@@ -789,7 +716,7 @@ export default class mainFeed extends React.Component {
                                   feedRefresh: false,
                                   loading: false,
                                 });
-                                that.setPhoto(context);
+                                that.setPhoto([]);
                               }
                             }
                           });
@@ -1011,9 +938,6 @@ export default class mainFeed extends React.Component {
     if (viewableItems && viewableItems.length > 0) {
       this.setState({ currentIndex: viewableItems[0].index });
       const items = this.state.photoFeedData.map(e => e.docRef);
-      if(items.filter(e => e.docRef === viewableItems[0].item.docRef).length > 1) {
-        console.log('dup found')
-      }
     }
   };
 
@@ -1128,10 +1052,6 @@ export default class mainFeed extends React.Component {
             onEndReached={this.loadMoreFeed}
             onEndReachedThreshold={0.5}
             renderItem={({ item, index }) => {
-              let item1 = item;
-              if (item1._data) {
-                item1 = item._data
-              }
               return <View
                 key={index}
                 style={{
@@ -1147,13 +1067,13 @@ export default class mainFeed extends React.Component {
                 <View style={styles.feedBorder}>
                   <View style={styles.listHeader}>
                     <TouchableOpacity
-                      onPress={() => this.viewOtherUserProfiles({ item1 })}
+                      onPress={() => this.viewOtherUserProfiles({ item })}
                       style={{
                         paddingHorizontal: 10,
                       }}>
                       <Image
                         source={{
-                          uri: item1?.userAvatar,
+                          uri: item?.userAvatar,
                         }}
                         style={{
                           width: wp('15%'),
@@ -1166,10 +1086,10 @@ export default class mainFeed extends React.Component {
                       />
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.locationDiv}>
-                      <Text style={styles.listProfileName}>{item1.author}</Text>
+                      <Text style={styles.listProfileName}>{item.author}</Text>
                       {/* <View style={styles.locationDiv}> */}
-                      <Text style={styles.locationText}>{item1.location}</Text>
-                      {/* <TouchableOpacity onPress={() => this.copyUrl(item1)} style={{ paddingLeft: wp('1%') }}>
+                      <Text style={styles.locationText}>{item.location}</Text>
+                      {/* <TouchableOpacity onPress={() => this.copyUrl(item)} style={{ paddingLeft: wp('1%') }}>
                         <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
                       </TouchableOpacity> */}
                       {/* </View> */}
@@ -1178,7 +1098,7 @@ export default class mainFeed extends React.Component {
                   <View style={styles.listViewImg}>
                     <Image
                       style={styles.listViewInlineImg}
-                      source={{ uri: item1.url }}
+                      source={{ uri: item.url }}
                       loadingIndicatorSource={require('../images/loading.gif')}
                     />
                   </View>
@@ -1189,11 +1109,11 @@ export default class mainFeed extends React.Component {
                       paddingVertical: wp('2%'),
                       marginLeft: wp('1.3%'),
                     }}>
-                    {item1.isLiked === true ? (
+                    {item.isLiked === true ? (
                       <TouchableOpacity
                         onPress={() =>
                           this.onLikePost({
-                            item1,
+                            item,
                             index,
                           })
                         }
@@ -1211,7 +1131,7 @@ export default class mainFeed extends React.Component {
                       <TouchableOpacity
                         onPress={() =>
                           this.onLikePost({
-                            item1,
+                            item,
                             index,
                           })
                         }
@@ -1228,7 +1148,7 @@ export default class mainFeed extends React.Component {
                     )}
                     <TouchableOpacity
                       onPress={() =>
-                        this.navigateToComment({ item1, index }, true)
+                        this.navigateToComment({ item, index }, true)
                       }
                       style={{
                         paddingLeft: wp('1%'),
@@ -1240,11 +1160,11 @@ export default class mainFeed extends React.Component {
                         color="#808080"
                       />
                     </TouchableOpacity>
-                    {item1.isSaved === true ? (
+                    {item.isSaved === true ? (
                       <TouchableOpacity
                         onPress={() => {
                           this.deleteCollection({
-                            item1,
+                            item,
                             index,
                           });
                         }}
@@ -1260,7 +1180,7 @@ export default class mainFeed extends React.Component {
                     ) : (
                       <TouchableOpacity
                         onPress={() =>
-                          this.navigateToComment({ item1, index }, false)
+                          this.navigateToComment({ item, index }, false)
                         }
                         style={{
                           paddingLeft: wp('3%'),
@@ -1272,7 +1192,7 @@ export default class mainFeed extends React.Component {
                       style={styles.fabIcon1}
                       onPress={() =>
                         this.sendImage({
-                          item1,
+                          item,
                           index,
                         })
                       }>
@@ -1289,10 +1209,10 @@ export default class mainFeed extends React.Component {
                     flexDirection: 'column',
                     marginLeft: wp('5%'),
                   }}>
-                  <Text style={styles.likeText}>{item1.likes} like(s)</Text>
+                  <Text style={styles.likeText}>{item.likes} like(s)</Text>
                   <View style={styles.foodNameDiv}>
-                    <Text style={styles.listProfileName1}>{item1.author}</Text>
-                    <Text style={styles.foodNameText}>{item1.caption}</Text>
+                    <Text style={styles.listProfileName1}>{item.author}</Text>
+                    <Text style={styles.foodNameText}>{item.caption}</Text>
                   </View>
                   <Text
                     style={{
@@ -1301,7 +1221,7 @@ export default class mainFeed extends React.Component {
                       fontSize: hp('1.5%'),
                       color: '#808080',
                     }}>
-                    {item1.postedTime}
+                    {item.postedTime}
                   </Text>
                 </View>
               </View>

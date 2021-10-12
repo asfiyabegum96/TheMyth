@@ -66,7 +66,7 @@ export default class profile extends React.Component {
   fetchUserDetails() {
     const context = this;
     let email;
-    let params = context.props.navigation.state.params;
+    let params = this.props.navigation.state.params;
     let db = firebase.firestore();
     let photosRef = db.collection('signup');
     if (params.isSameProfile === true) {
@@ -88,6 +88,8 @@ export default class profile extends React.Component {
           let data;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
+          console.log('this.state.navProps', context.state.navProps)
+          console.log('user', doc.data())
           context.setState({user: doc.data()});
           context.fetchImages();
         });
