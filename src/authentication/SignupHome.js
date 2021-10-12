@@ -152,27 +152,17 @@ export default class SignupHome extends React.Component {
         });
         console.log('this.state.docRef', this.state.docRef);
         let db = firebase.firestore();
-        db.collection('signup')
-          .doc(this.state.docRef)
-          .set({
-            email: userEmail,
-            token: Token,
-            isDeleted: false,
-            docRef: this.state.docRef,
-          });
-        console.log('this.state.docRef-1', this.state.docRef);
-        const GoogleRef = db.collection('signup').doc(this.state.docRef);
-
-        GoogleRef.get().then(docSnapshot => {
-          if (!docSnapshot.exists()) {
-            GoogleRef.set({
-              email: userEmail,
-              token: Token,
-              isDeleted: false,
-              docRef: this.state.docRef,
-            });
-          }
-        });
+        console.log('this.state.docRef-2', this.state.docRef)
+        db.collection("signup").doc(this.state.docRef).set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
+    console.log('this.state.docRef-1', this.state.docRef)
+    const GoogleRef = db.collection("signup").doc(this.state.docRef)
+ 
+    GoogleRef.get().then((docSnapshot) => {
+      
+      if (!docSnapshot.exists()) {
+        GoogleRef.set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
+      }
+    })
       }
     });
     // let db = firebase.firestore();
@@ -224,45 +214,34 @@ export default class SignupHome extends React.Component {
           this.setState({
             facebookLastName: json.last_name,
           });
-          console.log('FirstnameState' + this.state.facebookLastName);
+          console.log("FirstnameState" + this.state.facebookLastName)
 
-          const token = this.state.facebookToken;
+          const token = this.state.facebookToken
 
-          const onAuthStateChanged = firebase
-            .auth()
-            .onAuthStateChanged(user => {
-              if (user) {
-                console.log('docRef', user);
-                this.setState({
-                  docRef: user.uid,
-                });
+          const onAuthStateChanged = firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+              console.log('docRef', user)
+              this.setState({
+                docRef: user.uid
+              });
+            
+              let db = firebase.firestore();
+              
+              
+              db.collection("signup").doc(this.state.docRef).set({ email:this.state.facebookEmail,token:this.state.facebookToken,isDeleted:false,docRef: this.state.docRef })
+              
+              const FacebookRef = db.collection("signup").doc(this.state.docRef)
+              FacebookRef.get().then((docSnapshot) => {
 
-                let db = firebase.firestore();
+                if (!docSnapshot.exists()) {
+                  FacebookRef.set({ email: this.state.facebookEmail, token: this.state.facebookToken, isDeleted: false, docRef: this.state.docRef })
+                }
+              })
 
-                db.collection('signup')
-                  .doc(token)
-                  .set({
-                    email: this.state.facebookEmail,
-                    token: this.state.facebookToken,
-                    isDeleted: false,
-                  });
+            }
+          })
+        })
 
-                const FacebookRef = db
-                  .collection('signup')
-                  .doc(this.state.docRef);
-                FacebookRef.get().then(docSnapshot => {
-                  if (!docSnapshot.exists()) {
-                    FacebookRef.set({
-                      email: this.state.facebookEmail,
-                      token: this.state.facebookToken,
-                      isDeleted: false,
-                      docRef: this.state.docRef,
-                    });
-                  }
-                });
-              }
-            });
-        });
       })
       .catch(() => {
         console.log('error getting data from facebook');
