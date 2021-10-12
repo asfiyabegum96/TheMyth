@@ -11,6 +11,7 @@ import {
   BackHandler,
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import { GoogleSignin } from '@react-native-community/google-signin';
 import Icon from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import UserAvatar from 'react-native-user-avatar';
@@ -61,10 +62,23 @@ export default class profile extends React.Component {
       this.fetchUserDetails();
     });
     this.fetchUserDetails();
+
+    GoogleSignin.configure({
+      webClientId:
+        '119026447603-caakapp6njtis28ujb4qs7b5dgqkh9el.apps.googleusercontent.com',
+    });
   }
 
-  fetchUserDetails() {
+  async fetchUserDetails() {
     const context = this;
+    //check google user
+    const userInfo = await GoogleSignin.getCurrentUser();
+    console.log('userInfo', userInfo.user);
+    let profilePicture = '',
+    if(userInfo.user) {
+      profilePicture = userInfo.user.photo;
+    }
+
     let email;
     let params = this.props.navigation.state.params;
     let db = firebase.firestore();
@@ -90,7 +104,11 @@ export default class profile extends React.Component {
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
           console.log('this.state.navProps', context.state.navProps)
           console.log('user', doc.data())
-          context.setState({user: doc.data()});
+          let user = doc.data();
+          if(profilePicture) {
+            user.profilePicture = profilePicture;
+          }
+          context.setState({user});
           context.fetchImages();
         });
       });
