@@ -63,7 +63,20 @@ class photosUpload extends React.Component {
     );
     this.fetchUserDetails();
   }
-
+  fetchUserDetails(){
+    const context=this;
+    let db=firebase.firestore()
+    let photosRef=db.collection('signup');
+    photosRef.where('email','==',context.props.screenProps.email)
+    .get().then(function(querySnapshot){
+      querySnapshot.forEach(function(doc){
+        let data;
+        const docNotEmpty=(doc.id,'=>',doc.data()!=null);
+        context.setState({user:doc.data()})
+        context.getFollowers()
+      })
+    })
+  }
   componentWillUnMount() {
     BackHandler.removeEventListener(
       'hardwareBackPress',
@@ -106,6 +119,42 @@ class photosUpload extends React.Component {
       this.s4()
     );
   };
+  selectImage=()=>{
+    const options = {
+      title: 'Food Upload',
+      
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+        allowEditing:true,
+      },
+      mediaType:'photo',
+      quality:0.5,
+      maxWidth:500,
+      maxHeight:500,
+    };
+    ImagePicker.showImagePicker(options,(response)=>{
+      console.log('Response=',response);
+      this.setState({fieldNotEmpty:true})
+      if(response.didCancel){
+        console.log('User cancelled image picker')
+      }
+      else if(response.error){
+        console.log('ImagePicker Error:',response.error);
+      }
+      else if(response.customButton){
+        console.log('User tapped custom button',response.customButton)
+      }
+      else{
+        this.setState({
+          path:response.path.toString(),
+          uri:response.uri,
+          fieldNotEmpty:false
+        })
+      }
+    })
+ 
+  }
 
   getFollowers = () => {
     const context = this;
