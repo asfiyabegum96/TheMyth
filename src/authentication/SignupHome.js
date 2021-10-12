@@ -21,7 +21,7 @@ import { GoogleSignin } from '@react-native-community/google-signin';
 import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import main from './styles/main';
 import RadialGradient from 'react-native-radial-gradient';
-import Backend from '../chat/Backend'
+import Backend from '../chat/Backend';
 export default class SignupHome extends React.Component {
   fieldRef = React.createRef();
 
@@ -36,19 +36,18 @@ export default class SignupHome extends React.Component {
       passwordMismatch: false,
       hidePassword: true,
       clicked: false,
-      facebookEmail: "",
-      facebookFirstName: "",
-      facebookLastName: "",
-      facebookId: "",
-      facebookToken: "",
-      docRef: ""
-
+      facebookEmail: '',
+      facebookFirstName: '',
+      facebookLastName: '',
+      facebookId: '',
+      facebookToken: '',
+      docRef: '',
     };
     this.ref = firebase.firestore().collection('signup');
   }
 
   setPasswordVisibility = () => {
-    this.setState({hidePassword: !this.state.hidePassword});
+    this.setState({ hidePassword: !this.state.hidePassword });
   };
 
   onSubmit = () => {
@@ -141,28 +140,39 @@ export default class SignupHome extends React.Component {
     const userInfo = await GoogleSignin.signIn();
     const userEmail = userInfo.user.email;
     const Token = userInfo.idToken;
-    
+
     // Create a Google credential with the token
     const googleCredential = firebase.auth.GoogleAuthProvider.credential(Token);
     // console.log('uid',googleCredential)
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log('docRef', user)
+        console.log('docRef', user);
         this.setState({
-          docRef: user.uid
+          docRef: user.uid,
         });
-        console.log('this.state.docRef', this.state.docRef)
+        console.log('this.state.docRef', this.state.docRef);
         let db = firebase.firestore();
-        db.collection("signup").doc(this.state.docRef).set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
-    console.log('this.state.docRef-1', this.state.docRef)
-    const GoogleRef = db.collection("signup").doc(this.state.docRef)
- 
-    GoogleRef.get().then((docSnapshot) => {
-      
-      if (!docSnapshot.exists()) {
-        GoogleRef.set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
-      }
-    })
+        db.collection('signup')
+          .doc(this.state.docRef)
+          .set({
+            email: userEmail,
+            token: Token,
+            isDeleted: false,
+            docRef: this.state.docRef,
+          });
+        console.log('this.state.docRef-1', this.state.docRef);
+        const GoogleRef = db.collection('signup').doc(this.state.docRef);
+
+        GoogleRef.get().then(docSnapshot => {
+          if (!docSnapshot.exists()) {
+            GoogleRef.set({
+              email: userEmail,
+              token: Token,
+              isDeleted: false,
+              docRef: this.state.docRef,
+            });
+          }
+        });
       }
     });
     // let db = firebase.firestore();
@@ -178,7 +188,7 @@ export default class SignupHome extends React.Component {
 
     // Sign-in the user with the credential
     return firebase.auth().signInWithCredential(googleCredential);
-  }
+  };
   //Create response callback.
   //   _responseInfoCallback = (error, result) => {
   //    if (error) {
@@ -188,115 +198,117 @@ export default class SignupHome extends React.Component {
   //   }
   //  }
 
-  initUser = (token) => {
-    fetch('https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' + token)
+  initUser = token => {
+    fetch(
+      'https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' +
+      token,
+    )
       .then(response => {
         response.json().then(json => {
-          const Id = json.id
-          console.log('ID' + Id)
+          const Id = json.id;
+          console.log('ID' + Id);
           this.setState({
-            facebookID: json.id
+            facebookID: json.id,
           });
-          const EM = json.email
+          const EM = json.email;
           this.setState({
-            facebookEmail: json.email
+            facebookEmail: json.email,
           });
-          console.log("EMAIL" + EM);
-          const FN = json.first_name
+          console.log('EMAIL' + EM);
+          const FN = json.first_name;
           this.setState({
-            facebookFirstName: json.first_name
+            facebookFirstName: json.first_name,
           });
-          console.log("Firstname" + FN)
-          const LN = json.last_name
+          console.log('Firstname' + FN);
+          const LN = json.last_name;
           this.setState({
-            facebookLastName: json.last_name
+            facebookLastName: json.last_name,
           });
-          console.log("FirstnameState" + this.state.facebookLastName)
+          console.log('FirstnameState' + this.state.facebookLastName);
 
-          const token = this.state.facebookToken
+          const token = this.state.facebookToken;
 
-          const onAuthStateChanged = firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-              console.log('docRef', user)
-              this.setState({
-                docRef: user.uid
-              });
-            
-              let db = firebase.firestore();
-              
+          const onAuthStateChanged = firebase
+            .auth()
+            .onAuthStateChanged(user => {
+              if (user) {
+                console.log('docRef', user);
+                this.setState({
+                  docRef: user.uid,
+                });
 
-              db.collection("signup").doc(token).set({ email:this.state.facebookEmail,token:this.state.facebookToken,isDeleted:false  })
-              
-              const FacebookRef = db.collection("signup").doc(this.state.docRef)
-              FacebookRef.get().then((docSnapshot) => {
+                let db = firebase.firestore();
 
-                if (!docSnapshot.exists()) {
-                  FacebookRef.set({ email: this.state.facebookEmail, token: this.state.facebookToken, isDeleted: false, docRef: this.state.docRef })
-                }
-              })
+                db.collection('signup')
+                  .doc(token)
+                  .set({
+                    email: this.state.facebookEmail,
+                    token: this.state.facebookToken,
+                    isDeleted: false,
+                  });
 
-            }
-          })
-        })
-
+                const FacebookRef = db
+                  .collection('signup')
+                  .doc(this.state.docRef);
+                FacebookRef.get().then(docSnapshot => {
+                  if (!docSnapshot.exists()) {
+                    FacebookRef.set({
+                      email: this.state.facebookEmail,
+                      token: this.state.facebookToken,
+                      isDeleted: false,
+                      docRef: this.state.docRef,
+                    });
+                  }
+                });
+              }
+            });
+        });
       })
       .catch(() => {
-        console.log('error getting data from facebook')
-      })
-    
-  }
+        console.log('error getting data from facebook');
+      });
+  };
 
   onFacebookButtonPress = async () => {
-    // Attempt login with permissions
-    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
-    //console.log(result)
-    if (result.isCancelled) {
-      throw 'User cancelled the login process';
+    try {
+      // Attempt login with permissions
+      const result = await LoginManager.logInWithPermissions([
+        'public_profile',
+        'email',
+      ]);
+      console.log(result)
+      if (result.isCancelled) {
+        throw 'User cancelled the login process';
+      }
+      const data = await AccessToken.getCurrentAccessToken();
+      const token = data.accessToken;
+      console.log('access token', token)
+      // const token=data.token
+      this.setState({
+        facebookToken: data.accessToken,
+      });
+
+      // // Once signed in, get the users AccesToken
+      const getToken = await AccessToken.getCurrentAccessToken()
+        .then(res => {
+          const { accessToken } = res;
+          console.log('accessToken', accessToken);
+          this.initUser(accessToken);
+        });
+
+      if (!data) {
+        throw 'Something went wrong obtaining access token';
+      }
+
+      // Create a Firebase credential with the AccessToken
+      const facebookCredential = firebase.auth.FacebookAuthProvider.credential(
+        data.accessToken,
+      );
+
+      return firebase.auth().signInWithCredential(facebookCredential);
+    } catch (e) {
+      console.log('Error::onFacebookButtonPress', e)
     }
-    const data = await AccessToken.getCurrentAccessToken()
-    const token = data.accessToken
-    // const token=data.token
-    this.setState({
-      facebookToken: data.accessToken
-    })
-
-    // // Once signed in, get the users AccesToken
-    const getToken = await AccessToken.getCurrentAccessToken()
-
-      .then(
-        res => {
-          const { accessToken } = res
-          console.log('accessToken', accessToken)
-          this.initUser(accessToken)
-
-        }
-
-      )
-    
-
-    if (!data) {
-      throw 'Something went wrong obtaining access token';
-    }
-
-    // Create a Firebase credential with the AccessToken
-    const facebookCredential = firebase.auth.FacebookAuthProvider.credential(
-      data.accessToken,
-    );
-
-   
-
-
-
-
-
-
-
-   
-    return firebase.auth().signInWithCredential(facebookCredential);
-
-
-
-
   };
 
   componentDidMount() {
@@ -304,13 +316,11 @@ export default class SignupHome extends React.Component {
       loading: false,
     });
 
-
     loc(this);
     GoogleSignin.configure({
       webClientId:
         '119026447603-caakapp6njtis28ujb4qs7b5dgqkh9el.apps.googleusercontent.com',
     });
-
   }
 
   componentWillUnMount() {

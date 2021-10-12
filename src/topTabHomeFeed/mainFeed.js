@@ -24,7 +24,7 @@ import {
   removeOrientationListener as rol,
 } from 'react-native-responsive-screen';
 import Heart from './heart';
-import firebase from 'react-native-firebase';
+import firebase, { auth } from 'react-native-firebase';
 import { Header } from 'react-native-elements';
 
 export default class mainFeed extends React.Component {
@@ -32,6 +32,8 @@ export default class mainFeed extends React.Component {
     super(props);
     this.state = {
       photoFeedData: [],
+      photoFeedDataConst: [],
+      lastVisible: {},
       feedRefresh: false,
       liked: false,
       loading: true,
@@ -254,6 +256,7 @@ export default class mainFeed extends React.Component {
     }
     return Math.floor(seconds) + ' second' + this.pluralCheck(seconds);
   };
+
   // Fetch data from the database and display in the view
 
   loadFeed = () => {
@@ -298,20 +301,60 @@ export default class mainFeed extends React.Component {
         .get()
         .then(function (querySnapshot) {
           if (querySnapshot._docs && querySnapshot._docs.length) {
-            console.log('loadFeed => ', querySnapshot._docs.length);
-            let image = [];
-            querySnapshot.forEach(function (doc) {
+            // const snapshot1 = querySnapshot._docs
+            // console.log('ordered loadFeed => ', snapshot1.map(e => ({
+            //   caption: e.data().caption,
+            //   author: e.data().author
+            // })));
+            // querySnapshot.forEach(function (doc) {
+            //   let data;
+            //   const docNotEmpty = (doc.id, ' => ', doc.data() != null);
+            //   if (docNotEmpty) data = (doc.id, ' => ', doc.data());
+            //   if (viewSpecificPhotos === true) {
+            //     if (
+            //       doc.data().isDeleted === false &&
+            //       data.email === selectedEmail
+            //     ) {
+            //       // that.fetchUserFeed(email, data, that);
+            //       that.fetchUserFeed(email, data, that, doc, { isRandom: false });
+            //     }
+            //   } else {
+            //     if (doc.data().isDeleted === false) {
+            //       // that.fetchUserFeed(email, data, that);
+            //       that.fetchUserFeed(email, data, that, doc, { isRandom: false });
+            //     } else {
+            //       if (
+            //         that.props &&
+            //         that.props.screenProps &&
+            //         that.props.screenProps.navigateToOther
+            //       ) {
+            //         that.setState({
+            //           screenPropsPresent: true
+            //         });
+            //       }
+            //       that.setState({
+            //         feedRefresh: false,
+            //         loading: false
+            //       });
+            //     }
+            //   }
+            // });
+
+            //randmoized posts
+            const snapshot = querySnapshot._docs
+              .map(e => ({ val: e, r: Math.random() * querySnapshot._docs.length }))
+              .sort((a, b) => b.r - a.r)
+              .map(e => e.val)
+            console.log('snapshot[snapshot.length - 1]', snapshot[snapshot.length - 1])
+            that.setState({
+              lastVisible: snapshot[snapshot.length - 1]
+            })
+            console.log('random loadFeed => ', snapshot.map(e => e.data().caption));
+
+            snapshot.forEach(function (doc) {
               let data;
               const docNotEmpty = (doc.id, ' => ', doc.data() != null);
               if (docNotEmpty) data = (doc.id, ' => ', doc.data());
-              if (!doc._data.isDeleted) {
-                image.push(doc)
-                that.setState({
-                  photoFeedData: image,
-                  feedRefresh: false,
-                  loading: false,
-                })
-              }
               if (viewSpecificPhotos === true) {
                 if (
                   doc.data().isDeleted === false &&
@@ -353,7 +396,7 @@ export default class mainFeed extends React.Component {
               feedRefresh: false,
               loading: false
             });
-            that.setPhoto([], 'loadFeed');
+            that.setPhoto([]);
           }
         });
     } else if (url === 'savedCollections') {
@@ -364,8 +407,6 @@ export default class mainFeed extends React.Component {
   };
 
   loadMoreFeed = () => {
-    console.log('last visible', this.state.photoFeedData[this.state.photoFeedData.length - 1])
-    const lastVisible = this.state.photoFeedData[this.state.photoFeedData.length - 1];
     this.setState({
       feedRefresh: true
     });
@@ -397,45 +438,79 @@ export default class mainFeed extends React.Component {
     }
     this.setState({ email: email });
     let that = this;
+    console.log('last visible', this.state.lastVisible)
     if (url === 'photos') {
       let db = firebase.firestore();
       let photosRef = db.collection(url);
       photosRef
         .orderBy('postedTime', 'desc')
-        .startAfter(lastVisible)
+        .startAfter(that.state.lastVisible)
         .limit(10)
         .get()
         .then(function (querySnapshot) {
           if (querySnapshot._docs && querySnapshot._docs.length) {
-            console.log('fetched post => ', querySnapshot._docs.length);
-            let image = [...that.state.photoFeedData];
-            let docs = image.map(doc => doc.docRef);
-            let snapshot = querySnapshot._docs;
-            console.log('loadMoreFeed => ', snapshot.map(e => e._data.caption));
+            // const snapshot1 = querySnapshot._docs
+            // console.log('ordered loadMoreFeed => ', snapshot1.map(e => ({
+            //   caption: e.data().caption,
+            //   author: e.data().author
+            // })));
+            // querySnapshot.forEach(function (doc) {
+            //   let data;
+            //   const docNotEmpty = (doc.id, ' => ', doc.data() != null);
+            //   if (docNotEmpty) data = (doc.id, ' => ', doc.data());
+            //   if (viewSpecificPhotos === true) {
+            //     if (
+            //       doc.data().isDeleted === false &&
+            //       data.email === selectedEmail
+            //     ) {
+            //       // that.fetchUserFeed(email, data, that);
+            //       that.fetchUserFeed(email, data, that, doc, { isRandom: false });
+            //     }
+            //   } else {
+            //     if (doc.data().isDeleted === false) {
+            //       // that.fetchUserFeed(email, data, that);
+            //       that.fetchUserFeed(email, data, that, doc, { isRandom: false });
+            //     } else {
+            //       if (
+            //         that.props &&
+            //         that.props.screenProps &&
+            //         that.props.screenProps.navigateToOther
+            //       ) {
+            //         that.setState({
+            //           screenPropsPresent: true
+            //         });
+            //       }
+            //     }
+            //   }
+            //   that.setState({
+            //     feedRefresh: false,
+            //     loading: false
+            //   })
+            // });
+
+            //randmoized posts
+            const snapshot = querySnapshot._docs
+              .map(e => ({ val: e, r: Math.random() * querySnapshot._docs.length }))
+              .sort((a, b) => b.r - a.r)
+              .map(e => e.val)
+            console.log('random loadMoreFeed => ', snapshot.map(e => e.data().caption));
+
             snapshot.forEach(function (doc) {
               let data;
               const docNotEmpty = (doc.id, ' => ', doc.data() != null);
               if (docNotEmpty) data = (doc.id, ' => ', doc.data());
-              if (!doc.data().isDeleted) {
-                if (!docs.includes(doc._data.docRef)) {
-                  image.push(doc)
-                  that.setState({
-                    photoFeedData: image,
-                    feedRefresh: false,
-                    loading: false
-                  })
-                }
-              }
               if (viewSpecificPhotos === true) {
                 if (
                   doc.data().isDeleted === false &&
                   data.email === selectedEmail
                 ) {
-                  that.fetchUserFeed(email, data, that);
+                  // that.fetchUserFeed(email, data, that);
+                  that.fetchUserFeed(email, data, that, doc);
                 }
               } else {
                 if (doc.data().isDeleted === false) {
-                  that.fetchUserFeed(email, data, that);
+                  // that.fetchUserFeed(email, data, that);
+                  that.fetchUserFeed(email, data, that, doc);
                 } else {
                   if (
                     that.props &&
@@ -454,9 +529,7 @@ export default class mainFeed extends React.Component {
               }
             });
             that.setState({
-              // curLimit: that.state.curLimit + 10,
-              feedRefresh: false,
-              loading: false
+              lastVisible: snapshot[snapshot.length - 1]
             })
           } else {
             if (
@@ -472,6 +545,7 @@ export default class mainFeed extends React.Component {
               feedRefresh: false,
               loading: false
             });
+            that.setPhoto([]);
           }
         });
     } else if (url === 'savedCollections') {
@@ -523,7 +597,6 @@ export default class mainFeed extends React.Component {
   }
 
   fetchImages() {
-    console.log('fetching images')
     const context = this;
     context.setState({
       feedRefresh: true,
@@ -576,7 +649,7 @@ export default class mainFeed extends React.Component {
                         screenPropsPresent: true,
                       });
                     }
-                    context.setPhoto([], 'fetchImages-574');
+                    context.setPhoto([]);
                   }
                 });
               });
@@ -590,14 +663,13 @@ export default class mainFeed extends React.Component {
                 screenPropsPresent: true,
               });
             }
-            context.setPhoto([], 'fetchImages-588');
+            context.setPhoto([]);
           }
         });
       });
   }
 
   fetchUserFeed = (email, data, that) => {
-    console.log('fetching user feed')
     if (
       that.props.navigation &&
       that.props.navigation.state &&
@@ -616,7 +688,6 @@ export default class mainFeed extends React.Component {
   };
 
   userRefFeed = (email, data, that) => {
-    console.log('fetching user ref feed')
     let db = firebase.firestore();
     let photoFeedData = that.state.photoFeedData;
     let userRef = db.collection('signup');
@@ -655,7 +726,7 @@ export default class mainFeed extends React.Component {
                           photoFeedData,
                           data,
                           otherUserData,
-                          email,
+                          email
                         );
                       } else {
                         userRef
@@ -682,7 +753,7 @@ export default class mainFeed extends React.Component {
                                       photoFeedData,
                                       data,
                                       otherUserData,
-                                      email,
+                                      email
                                     );
                                   } else {
                                     if (
@@ -699,7 +770,7 @@ export default class mainFeed extends React.Component {
                                       feedRefresh: false,
                                       loading: false,
                                     });
-                                    that.setPhoto(that.state.photoFeedData, 'userRefFeed-697');
+                                    that.setPhoto(that.state.photoFeedData);
                                   }
                                 }
                               });
@@ -718,7 +789,7 @@ export default class mainFeed extends React.Component {
                                   feedRefresh: false,
                                   loading: false,
                                 });
-                                that.setPhoto([], '716');
+                                that.setPhoto(context);
                               }
                             }
                           });
@@ -733,7 +804,6 @@ export default class mainFeed extends React.Component {
   };
 
   addToFlatlist = (photoFeedData, data, userData, email) => {
-    console.log('adding to flatlist', photoFeedData)
     var that = this;
     that.setState({ screenPropsPresent: false });
     photoFeedData.push({
@@ -801,7 +871,7 @@ export default class mainFeed extends React.Component {
       });
     });
     setTimeout(() => {
-      that.setPhoto(item, '799');
+      that.setPhoto(item);
       that.setState({
         feedRefresh: false,
         loading: false,
@@ -809,9 +879,10 @@ export default class mainFeed extends React.Component {
     }, 1000);
   };
 
-  setPhoto = (data, invokingFuntion) => {
-    console.log('setPhoto', invokingFuntion)
-    this.setState({ photoFeedData: data });
+  setPhoto = (data) => {
+    this.setState({
+      photoFeedData: data,
+    });
   };
 
   navigateToComment = ({ item, index }, isComment) => {
@@ -897,7 +968,7 @@ export default class mainFeed extends React.Component {
       })
       .then(function (docRef) {
         context.state.photoFeedData[index].isSaved = true;
-        context.setPhoto(context.state.photoFeedData, 'addToSaveCollection');
+        context.setPhoto(context.state.photoFeedData);
       });
 
     // firebase.firestore().collection('savedCollections').doc(photoObj.email).set(photoObj)
@@ -914,7 +985,7 @@ export default class mainFeed extends React.Component {
       })
       .then(() => {
         context.state.photoFeedData[selectedItem.index].isSaved = false;
-        context.setPhoto(context.state.photoFeedData, 'deleteCollection');
+        context.setPhoto(context.state.photoFeedData);
       });
 
     db.collection('photos')
@@ -939,6 +1010,10 @@ export default class mainFeed extends React.Component {
     console.log('Visible items', viewableItems);
     if (viewableItems && viewableItems.length > 0) {
       this.setState({ currentIndex: viewableItems[0].index });
+      const items = this.state.photoFeedData.map(e => e.docRef);
+      if(items.filter(e => e.docRef === viewableItems[0].item.docRef).length > 1) {
+        console.log('dup found')
+      }
     }
   };
 
@@ -1053,7 +1128,10 @@ export default class mainFeed extends React.Component {
             onEndReached={this.loadMoreFeed}
             onEndReachedThreshold={0.5}
             renderItem={({ item, index }) => {
-              const item1 = item._data;
+              let item1 = item;
+              if (item1._data) {
+                item1 = item._data
+              }
               return <View
                 key={index}
                 style={{
@@ -1075,7 +1153,7 @@ export default class mainFeed extends React.Component {
                       }}>
                       <Image
                         source={{
-                          uri: item1.userAvatar,
+                          uri: item1?.userAvatar,
                         }}
                         style={{
                           width: wp('15%'),
