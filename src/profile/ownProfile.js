@@ -28,11 +28,11 @@ import {
   CollapseBody,
 } from 'accordion-collapse-react-native';
 import firebase from 'react-native-firebase';
-import {SearchBar} from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 import main from '../authentication/styles/main';
 import PostTab from './postTab';
 import OtherPostTab from './otherPostTab';
-import {Header} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 
 export default class profile extends React.Component {
   constructor(props) {
@@ -70,46 +70,48 @@ export default class profile extends React.Component {
   }
 
   async fetchUserDetails() {
-    const context = this;
     //check google user
-    const userInfo = await GoogleSignin.getCurrentUser();
-    console.log('userInfo', userInfo.user);
+    let userInfo = await GoogleSignin.getCurrentUser();
     let profilePicture = '';
-    
-    if(userInfo.user) {
+
+    if (userInfo.user) {
       profilePicture = userInfo.user.photo;
     }
-
+    const context = this;
     let email;
     let params = this.props.navigation.state.params;
     let db = firebase.firestore();
     let photosRef = db.collection('signup');
     if (params.isSameProfile === true) {
+      userInfo = await GoogleSignin.getCurrentUser();
+      if (userInfo.user) {
+        profilePicture = userInfo.user.photo;
+      }
       email = params.email;
     } else {
       email = params.searchedEmail;
       if (params.isFollowed === true) {
-        this.setState({followText: 'Following'});
+        this.setState({ followText: 'Following' });
       }
       if (params.isPending === true) {
-        this.setState({whisperText: 'Pending'});
+        this.setState({ whisperText: 'Pending' });
       }
     }
     photosRef
       .where('email', '==', email)
       .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
           let data;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
           console.log('this.state.navProps', context.state.navProps)
           console.log('user', doc.data())
           let user = doc.data();
-          if(profilePicture && !user.profilePicture) {
+          if (profilePicture && !user.profilePicture) {
             user.profilePicture = profilePicture;
           }
-          context.setState({user});
+          context.setState({ user });
           context.fetchImages();
         });
       });
@@ -132,8 +134,8 @@ export default class profile extends React.Component {
         .where('email', '==', email)
         .where('isDeleted', '==', false)
         .get()
-        .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
+        .then(function (querySnapshot) {
+          querySnapshot.forEach(function (doc) {
             let data;
             const docNotEmpty = (doc.id, ' => ', doc.data() != null);
             if (docNotEmpty) data = (doc.id, ' => ', doc.data());
@@ -169,8 +171,8 @@ export default class profile extends React.Component {
       .doc(this.state.user.docRef)
       .collection('following')
       .get()
-      .then(function(followingSnapshot) {
-        followingSnapshot.forEach(function(doc) {
+      .then(function (followingSnapshot) {
+        followingSnapshot.forEach(function (doc) {
           let data;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
@@ -188,8 +190,8 @@ export default class profile extends React.Component {
       .doc(this.state.user.docRef)
       .collection('followers')
       .get()
-      .then(function(followerSnapshot) {
-        followerSnapshot.forEach(function(doc) {
+      .then(function (followerSnapshot) {
+        followerSnapshot.forEach(function (doc) {
           let data;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
@@ -245,14 +247,14 @@ export default class profile extends React.Component {
             style: 'cancel',
           },
         ],
-        {cancelable: false},
+        { cancelable: false },
         //clicking out side of alert will not cancel
       );
     }
   }
 
   deletePost(selectedItem) {
-    this.setState({loading: true});
+    this.setState({ loading: true });
     let db = firebase.firestore();
     db.collection('savedCollections')
       .doc(selectedItem.item.docRef)
@@ -290,8 +292,8 @@ export default class profile extends React.Component {
     db.collection('signup')
       .where('email', '==', this.state.navProps.email.trim())
       .get()
-      .then(function(userQuerySnapshot) {
-        userQuerySnapshot.forEach(function(doc) {
+      .then(function (userQuerySnapshot) {
+        userQuerySnapshot.forEach(function (doc) {
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) {
             userData = (doc.id, ' => ', doc.data());
@@ -308,8 +310,8 @@ export default class profile extends React.Component {
     db.collection('signup')
       .where('email', '==', this.state.navProps.searchedEmail.trim())
       .get()
-      .then(function(searchedQuerySnapshot) {
-        searchedQuerySnapshot.forEach(function(doc) {
+      .then(function (searchedQuerySnapshot) {
+        searchedQuerySnapshot.forEach(function (doc) {
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) {
             searchedUserData = (doc.id, ' => ', doc.data());
@@ -331,11 +333,11 @@ export default class profile extends React.Component {
       .doc(userData.docRef)
       .collection('following')
       .get()
-      .then(function(followerSnapshot) {
-        followerSnapshot.forEach(function(followerDoc) {
+      .then(function (followerSnapshot) {
+        followerSnapshot.forEach(function (followerDoc) {
           const docNotEmpty = (followerDoc.id,
-          ' => ',
-          followerDoc.data() != null);
+            ' => ',
+            followerDoc.data() != null);
           if (docNotEmpty) {
             if (searchedUserData) {
               if (
@@ -360,7 +362,7 @@ export default class profile extends React.Component {
         followersCount: followerCount,
       });
       if (searchedUserData.isPrivateAccount === true) {
-        this.setState({whisperText: 'Pending'});
+        this.setState({ whisperText: 'Pending' });
         const saveObj = {
           email: userData.email.trim(),
           fullName: userData.fullName,
@@ -385,7 +387,7 @@ export default class profile extends React.Component {
         .doc(searchedUserData.docRef)
         .collection('followers')
         .doc(userData.email.trim())
-        .set({email: userData.email.trim()});
+        .set({ email: userData.email.trim() });
     } else {
       if (this.state.whisperText === 'Pending') {
         const saveObj = {
@@ -394,7 +396,7 @@ export default class profile extends React.Component {
           profilePicture: userData.profilePicture,
           docRef: searchedUserData.docRef,
         };
-        this.setState({followText: 'Follow'});
+        this.setState({ followText: 'Follow' });
         db.collection('signup')
           .doc(searchedUserData.docRef)
           .collection('pendingFollowers')
@@ -406,7 +408,7 @@ export default class profile extends React.Component {
         followText: 'Follow',
         followersCount: followerCount,
       });
-      this.setState({whisperText: 'Whisper'});
+      this.setState({ whisperText: 'Whisper' });
       db.collection('signup')
         .doc(userData.docRef)
         .collection('following')
@@ -462,7 +464,7 @@ export default class profile extends React.Component {
 
   MyCustomLeftComponent = () => {
     return (
-      <View style={{bottom: 12.5, flexDirection: 'row'}}>
+      <View style={{ bottom: 12.5, flexDirection: 'row' }}>
         <TouchableOpacity
           onPress={() =>
             this.props.navigation.navigate('homeFixed', {
@@ -487,7 +489,7 @@ export default class profile extends React.Component {
 
   MyCustomCenterComponent = () => {
     return (
-      <View style={{bottom: 12.5}}>
+      <View style={{ bottom: 12.5 }}>
         <Text
           style={{
             color: '#fff',
@@ -503,7 +505,7 @@ export default class profile extends React.Component {
   MyCustomRightComponent = () => {
     return (
       <TouchableOpacity
-        style={{bottom: 12.5}}
+        style={{ bottom: 12.5 }}
         onPress={() =>
           this.props.navigation.navigate('settings', {
             email: this.props.navigation.state.params.email,
@@ -516,7 +518,7 @@ export default class profile extends React.Component {
 
   MyCustomLeftComponentOne = () => {
     return (
-      <View style={{bottom: 15}}>
+      <View style={{ bottom: 15 }}>
         <Text
           style={{
             color: '#fff',
@@ -532,7 +534,7 @@ export default class profile extends React.Component {
   MyCustomRightComponentOne = () => {
     return (
       <TouchableOpacity
-        style={{bottom: 15}}
+        style={{ bottom: 15 }}
         onPress={() =>
           this.props.navigation.navigate('settings', {
             email: this.props.navigation.state.params.email,
@@ -558,8 +560,8 @@ export default class profile extends React.Component {
             </View>
           </TouchableOpacity>)} */}
         {this.props.navigation.state &&
-        this.props.navigation.state.params &&
-        this.props.navigation.state.params.isSameProfile === true ? (
+          this.props.navigation.state.params &&
+          this.props.navigation.state.params.isSameProfile === true ? (
           <View style={styles.header}>
             <TouchableOpacity
               style={{
@@ -576,7 +578,7 @@ export default class profile extends React.Component {
             </TouchableOpacity>
             <Text style={styles.inputText}>Your Profile</Text>
             <TouchableOpacity
-              style={{marginTop: wp('5%'), marginRight: wp('5%')}}
+              style={{ marginTop: wp('5%'), marginRight: wp('5%') }}
               onPress={() =>
                 this.props.navigation.navigate('settings', {
                   email: this.props.navigation.state.params.email,
@@ -678,7 +680,7 @@ export default class profile extends React.Component {
                 </Text>
               </View>
               {this.props.navigation.state.params.isSameProfile === true ? (
-                <View style={{marginLeft: wp('70%')}}>
+                <View style={{ marginLeft: wp('70%') }}>
                   <TouchableOpacity
                     style={{
                       marginBottom: wp('5%'),
@@ -796,7 +798,7 @@ export default class profile extends React.Component {
                 <Text style={styles.followText}>Following</Text>
                 <Text style={styles.count}>{this.state.followingCount}</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{flexDirection: 'column'}}>
+              <TouchableOpacity style={{ flexDirection: 'column' }}>
                 <Text style={styles.followText}>Posts</Text>
                 <Text style={styles.count}>{this.state.images.length}</Text>
               </TouchableOpacity>
