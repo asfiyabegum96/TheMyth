@@ -230,14 +230,14 @@ export default class SignupHome extends React.Component {
 
               let db = firebase.firestore();
 
-
-              db.collection("signup").doc(this.state.docRef).set({ email: this.state.facebookEmail, token: this.state.facebookToken, isDeleted: false, docRef: this.state.docRef })
+              console.log('fb-user', json)
+              db.collection("signup").doc(this.state.docRef).set({ email: this.state.facebookEmail, fullName: `${FN} ${LN}`, token: this.state.facebookToken, isDeleted: false, docRef: this.state.docRef })
 
               const FacebookRef = db.collection("signup").doc(this.state.docRef)
               FacebookRef.get().then((docSnapshot) => {
 
                 if (!docSnapshot.exists()) {
-                  FacebookRef.set({ email: this.state.facebookEmail, token: this.state.facebookToken, isDeleted: false, docRef: this.state.docRef })
+                  FacebookRef.set({ email: this.state.facebookEmail, fullName: `${FN} ${LN}`, token: this.state.facebookToken, isDeleted: false, docRef: this.state.docRef })
                 }
               })
 

@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { GoogleSignin } from '@react-native-community/google-signin';
+import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
 import Icon from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import UserAvatar from 'react-native-user-avatar';
@@ -67,16 +68,14 @@ export default class profile extends React.Component {
       webClientId:
         '119026447603-caakapp6njtis28ujb4qs7b5dgqkh9el.apps.googleusercontent.com',
     });
+
+    console.log('params', this.props.navigation.state.params)
   }
 
   async fetchUserDetails() {
-    //check google user
-    let userInfo = await GoogleSignin.getCurrentUser();
-    let profilePicture = '';
+    let userInfo;
+    let profilePicture;
 
-    if (userInfo.user) {
-      profilePicture = userInfo.user.photo;
-    }
     const context = this;
     let email;
     let params = this.props.navigation.state.params;
@@ -84,7 +83,7 @@ export default class profile extends React.Component {
     let photosRef = db.collection('signup');
     if (params.isSameProfile === true) {
       userInfo = await GoogleSignin.getCurrentUser();
-      if (userInfo.user) {
+      if (userInfo && userInfo.user) {
         profilePicture = userInfo.user.photo;
       }
       email = params.email;

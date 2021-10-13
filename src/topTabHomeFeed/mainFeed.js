@@ -263,7 +263,7 @@ export default class mainFeed extends React.Component {
   loadFeed = () => {
     this.setState({
       feedRefresh: true,
-      photoFeedLoad: []
+      photoFeedData: []
     });
     let viewSpecificPhotos = false;
     let url = 'photos';
@@ -456,7 +456,7 @@ export default class mainFeed extends React.Component {
               }
             });
             that.setState({
-              lastVisible: snapshot[snapshot.length - 1]
+              lastVisible: snapshot[snapshot.length - 1],
             })
           } else {
             if (
@@ -472,7 +472,7 @@ export default class mainFeed extends React.Component {
               feedRefresh: false,
               loading: false
             });
-            that.setPhoto([]);
+            // that.setPhoto([]);
           }
         });
     } else if (url === 'savedCollections') {
@@ -807,20 +807,43 @@ export default class mainFeed extends React.Component {
   };
 
   setPhoto = (data) => {
+    console.log('data', data)
     this.setState({
       photoFeedData: data,
     });
   };
 
   navigateToComment = ({ item, index }, isComment) => {
-    if (this.props.screenProps) {
+    // if (this.props.screenProps) {
+    //   this.setState({ screenPropsPresent: true });
+    //   this.props.screenProps.navigateToOther.navigate(
+    //     { item, index, context: this },
+    //     isComment,
+    //   );
+    // } else {
+    //   if (isComment) {
+    //     this.props.navigation.navigate('comments', {
+    //       selectedItem: { item: item },
+    //       email: this.props.navigation.state.params.email.trim(),
+    //     });
+    //   } else {
+    //     this.addToSaveCollection({ item, index });
+    //   }
+    // }
+    if(this.props.screenProps) {
+      console.log('834')
       this.setState({ screenPropsPresent: true });
-      this.props.screenProps.navigation(
-        { item, index, context: this },
-        isComment,
-      );
-    } else {
-      if (isComment) {
+      if(isComment) {
+        this.props.screenProps.navigateToOther.navigate('comments', {
+          selectedItem: { item: item },
+          email: this.props.screenProps.navigateToOther.state.params.email.trim(),
+        });
+      } else {
+        this.addToSaveCollection({ item, index });
+      }
+    } else if(this.props.navigation) {
+      this.setState({ screenPropsPresent: false });
+      if(isComment) {
         this.props.navigation.navigate('comments', {
           selectedItem: { item: item },
           email: this.props.navigation.state.params.email.trim(),
@@ -852,7 +875,7 @@ export default class mainFeed extends React.Component {
   };
 
   //uploading feed data in cloud firestore
-  addToSaveCollection = (selectedItem, index) => {
+  addToSaveCollection = (selectedItem) => {
     let db = firebase.firestore();
     const context = this;
     //Set variable for feed
@@ -877,7 +900,7 @@ export default class mainFeed extends React.Component {
       userAvatar: userAvatar,
       docRef: selectedItem.item.docRef,
       isDeleted: isDeleted,
-      email: this.props.navigation.state.params.email.trim(),
+      email: this.props.screenProps.navigateToOther.state.params.email.trim(),
     };
 
     db.collection('photos')
@@ -891,10 +914,11 @@ export default class mainFeed extends React.Component {
       .collection('savedUsers')
       .doc(selectedItem.item.email)
       .set({
-        email: this.props.navigation.state.params.email.trim(),
+        email: this.props.screenProps.navigateToOther.state.params.email.trim(),
       })
       .then(function (docRef) {
-        context.state.photoFeedData[index].isSaved = true;
+        console.log(selectedItem.index , context.state.photoFeedData[selectedItem.index])
+        context.state.photoFeedData[selectedItem.index].isSaved = true;
         context.setPhoto(context.state.photoFeedData);
       });
 
@@ -937,7 +961,6 @@ export default class mainFeed extends React.Component {
     console.log('Visible items', viewableItems);
     if (viewableItems && viewableItems.length > 0) {
       this.setState({ currentIndex: viewableItems[0].index });
-      const items = this.state.photoFeedData.map(e => e.docRef);
     }
   };
 
