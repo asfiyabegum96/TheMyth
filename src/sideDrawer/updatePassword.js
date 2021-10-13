@@ -300,7 +300,7 @@ export default class updatePassword extends React.Component {
                     <View />
                   )}
                   {this.state.fieldNotEmpty == true ? (
-                    <Text style={{color: 'black'}}>
+                    <Text style={{color: 'black', alignSelf: 'center'}}>
                       Please enter all values.
                     </Text>
                   ) : (
@@ -314,11 +314,11 @@ export default class updatePassword extends React.Component {
                     <View />
                   )}
                 </View>
-                <View style={main.primaryButtonContanier}>
-                  <TouchableOpacity onPress={() => this.requireField()}>
-                    <Text style={styles.primaryButtonText}>Update</Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={main.primaryButtonContanier}
+                  onPress={() => this.requireField()}>
+                  <Text style={styles.primaryButtonText}>Update</Text>
+                </TouchableOpacity>
                 {this.state.showAlert === true ? (
                   <Toaster message={this.state.message} />
                 ) : (

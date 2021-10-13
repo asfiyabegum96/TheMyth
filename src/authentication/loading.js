@@ -98,16 +98,17 @@ export default class Home extends React.Component {
               />
             </View>
 
-            <View style={main.primaryButtonContanier}>
-              <TouchableOpacity onPress={() => this.login()}>
-                <Text style={main.primaryButtonText}>Sign In</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={main.buttonContainer}>
-              <TouchableOpacity onPress={() => this.signUp()}>
-                <Text style={main.buttonText}>Sign Up</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={main.primaryButtonContanier}
+              onPress={() => this.login()}>
+              <Text style={main.primaryButtonText}>Sign In</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={main.buttonContainer}
+              onPress={() => this.signUp()}>
+              <Text style={main.buttonText}>Sign Up</Text>
+            </TouchableOpacity>
 
             {this.state.loading == true ? (
               <View

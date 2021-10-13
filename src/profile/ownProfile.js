@@ -104,8 +104,8 @@ export default class profile extends React.Component {
           let data;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
-          console.log('this.state.navProps', context.state.navProps)
-          console.log('user', doc.data())
+          console.log('this.state.navProps', context.state.navProps);
+          console.log('user', doc.data());
           let user = doc.data();
           if (profilePicture && !user.profilePicture) {
             user.profilePicture = profilePicture;
@@ -602,35 +602,35 @@ export default class profile extends React.Component {
           //     backgroundColor: '#000',
           //   }}
           // />
-          // <View style={styles.header}>
-          //   <Text style={styles.inputText}>{this.state.user.fullName}</Text>
-          //   <TouchableOpacity
-          //     style={{
-          //       marginTop: wp('5%'),
-          //       marginRight: wp('5%'),
-          //     }}
-          //     onPress={() =>
-          //       this.props.navigation.navigate('settings', {
-          //         email: this.props.navigation.state.params.email,
-          //       })
-          //     }>
-          //     <Icon name={'cog'} size={30} color="#fff" />
-          //   </TouchableOpacity>
-          // </View>
-          <Header
-            leftComponent={<this.MyCustomLeftComponentOne />}
-            rightComponent={<this.MyCustomRightComponentOne />}
-            containerStyle={{
-              backgroundColor: '#EE6E3D',
-              borderColor: '#EE6E3D',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 55,
-            }}
-            statusBarProps={{
-              backgroundColor: '#000',
-            }}
-          />
+          <View style={styles.header}>
+            <Text style={styles.inputText}>{this.state.user.fullName}</Text>
+            <TouchableOpacity
+              style={{
+                marginTop: wp('5%'),
+                marginRight: wp('5%'),
+              }}
+              onPress={() =>
+                this.props.navigation.navigate('settings', {
+                  email: this.props.navigation.state.params.email,
+                })
+              }>
+              <Icon name={'cog'} size={30} color="#fff" />
+            </TouchableOpacity>
+          </View>
+          // <Header
+          //   leftComponent={<this.MyCustomLeftComponentOne />}
+          //   rightComponent={<this.MyCustomRightComponentOne />}
+          //   containerStyle={{
+          //     backgroundColor: '#EE6E3D',
+          //     borderColor: '#EE6E3D',
+          //     justifyContent: 'center',
+          //     alignItems: 'center',
+          //     height: 55,
+          //   }}
+          //   statusBarProps={{
+          //     backgroundColor: '#000',
+          //   }}
+          // />
         )}
         {this.state.loading == true ? (
           <View
@@ -701,26 +701,28 @@ export default class profile extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
+                  justifyContent: 'center',
                   marginBottom: wp('-8%'),
                 }}>
-                <View style={styles.following}>
-                  <TouchableOpacity onPress={() => this.followPressed()}>
-                    <Text style={styles.followingtext}>
-                      {this.state.followText}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                <View style={styles.following}>
-                  <TouchableOpacity onPress={() => this.handleWhisper()}>
-                    <Text style={styles.followingtext1}>
-                      {this.state.whisperText}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                  style={styles.following}
+                  onPress={() => this.followPressed()}>
+                  <Text style={styles.followingtext}>
+                    {this.state.followText}
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.following}
+                  onPress={() => this.handleWhisper()}>
+                  <Text style={styles.followingtext}>
+                    {this.state.whisperText}
+                  </Text>
+                </TouchableOpacity>
               </View>
             ) : (
-              <View style={styles.buttonContainer}>
+              <View>
                 <TouchableOpacity
+                  style={styles.buttonContainer}
                   onPress={() =>
                     this.props.navigation.navigate('editProfile', {
                       email: this.props.navigation.state.params.email,
@@ -786,7 +788,9 @@ export default class profile extends React.Component {
                   flexDirection: 'column',
                 }}>
                 <Text style={styles.followText}>Followers</Text>
-                <Text style={styles.count}>{this.state.followersCount}</Text>
+                <Text style={styles.count}>
+                  {this.state.followersCount}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{
@@ -795,7 +799,9 @@ export default class profile extends React.Component {
                   right: 10,
                 }}>
                 <Text style={styles.followText}>Following</Text>
-                <Text style={styles.count}>{this.state.followingCount}</Text>
+                <Text style={styles.count}>
+                  {this.state.followingCount}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity style={{ flexDirection: 'column' }}>
                 <Text style={styles.followText}>Posts</Text>
@@ -825,7 +831,8 @@ export default class profile extends React.Component {
                   }}>
                   <ActivityIndicator size="large" color="red" />
                 </View>
-              ) : this.props.navigation.state.params.isSameProfile === true ? (
+              ) : this.props.navigation.state.params.isSameProfile ===
+                true ? (
                 <PostTab
                   screenProps={{
                     navigation: this.props.navigation,
@@ -851,8 +858,8 @@ export default class profile extends React.Component {
 const styles = StyleSheet.create({
   buttonContainer: {
     width: wp('80%'),
-    marginLeft: wp('10%'),
     alignItems: 'center',
+    alignSelf: 'center',
     marginTop: wp('3%'),
     marginBottom: wp('-8%'),
     borderRadius: wp('3%'),
@@ -1019,33 +1026,29 @@ const styles = StyleSheet.create({
   following: {
     width: wp('35%'),
     backgroundColor: '#EE6E3D',
-    marginLeft: wp('10%'),
     alignItems: 'center',
-    marginTop: wp('1%'),
     borderRadius: wp('2%'),
     borderWidth: 1,
     borderColor: '#EE6E3D',
+    marginHorizontal: 10,
   },
   followingtext: {
     color: 'white',
-    width: wp('80%'),
-    alignItems: 'center',
+    alignSelf: 'center',
     fontSize: hp('2%'),
-    marginLeft: wp('50%'),
     paddingVertical: 8,
-    paddingHorizontal: 25,
     fontWeight: 'bold',
   },
-  followingtext1: {
-    color: 'white',
-    width: wp('80%'),
-    alignItems: 'center',
-    fontSize: hp('2%'),
-    marginLeft: wp('50%'),
-    paddingVertical: 8,
-    paddingHorizontal: 25,
-    fontWeight: 'bold',
-  },
+  // followingtext1: {
+  //   color: 'white',
+  //   width: wp('80%'),
+  //   alignItems: 'center',
+  //   fontSize: hp('2%'),
+  //   marginLeft: wp('50%'),
+  //   paddingVertical: 8,
+  //   paddingHorizontal: 25,
+  //   fontWeight: 'bold',
+  // },
   follow: {
     alignItems: 'center',
     backgroundColor: '#fff',

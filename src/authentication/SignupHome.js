@@ -17,8 +17,8 @@ import {
   removeOrientationListener as rol,
 } from 'react-native-responsive-screen';
 import firebase from 'react-native-firebase';
-import { GoogleSignin } from '@react-native-community/google-signin';
-import { LoginManager, AccessToken } from 'react-native-fbsdk-next';
+import {GoogleSignin} from '@react-native-community/google-signin';
+import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
 import main from './styles/main';
 import RadialGradient from 'react-native-radial-gradient';
 import Backend from '../chat/Backend';
@@ -47,11 +47,11 @@ export default class SignupHome extends React.Component {
   }
 
   setPasswordVisibility = () => {
-    this.setState({ hidePassword: !this.state.hidePassword });
+    this.setState({hidePassword: !this.state.hidePassword});
   };
 
   onSubmit = () => {
-    let { current: field } = this.fieldRef;
+    let {current: field} = this.fieldRef;
 
     console.log(field.value());
   };
@@ -123,11 +123,11 @@ export default class SignupHome extends React.Component {
       .get()
       .then(snapshot => {
         if (snapshot.empty) {
-          this.setState({ clicked: true });
+          this.setState({clicked: true});
           this.props.nextStep();
           return;
         } else {
-          this.setState({ isInvalid: true });
+          this.setState({isInvalid: true});
         }
       })
       .catch(err => {
@@ -142,7 +142,7 @@ export default class SignupHome extends React.Component {
     const userName = userInfo.user.name;
     const Token = userInfo.idToken;
 
-    console.log(userInfo)
+    console.log(userInfo);
 
     // Create a Google credential with the token
     const googleCredential = firebase.auth.GoogleAuthProvider.credential(Token);
@@ -155,17 +155,29 @@ export default class SignupHome extends React.Component {
         });
         console.log('this.state.docRef', this.state.docRef);
         let db = firebase.firestore();
-        console.log('this.state.docRef-2', this.state.docRef)
-        db.collection("signup").doc(this.state.docRef).set({ email: userEmail, fullName: userName, token: Token, isDeleted: false, docRef: this.state.docRef })
-        console.log('this.state.docRef-1', this.state.docRef)
-        const GoogleRef = db.collection("signup").doc(this.state.docRef)
+        console.log('this.state.docRef-2', this.state.docRef);
+        db.collection('signup')
+          .doc(this.state.docRef)
+          .set({
+            email: userEmail,
+            fullName: userName,
+            token: Token,
+            isDeleted: false,
+            docRef: this.state.docRef,
+          });
+        console.log('this.state.docRef-1', this.state.docRef);
+        const GoogleRef = db.collection('signup').doc(this.state.docRef);
 
-        GoogleRef.get().then((docSnapshot) => {
-
+        GoogleRef.get().then(docSnapshot => {
           if (!docSnapshot.exists()) {
-            GoogleRef.set({ email: userEmail, token: Token, isDeleted: false, docRef: this.state.docRef })
+            GoogleRef.set({
+              email: userEmail,
+              token: Token,
+              isDeleted: false,
+              docRef: this.state.docRef,
+            });
           }
-        })
+        });
       }
     });
     // let db = firebase.firestore();
@@ -194,7 +206,7 @@ export default class SignupHome extends React.Component {
   initUser = token => {
     fetch(
       'https://graph.facebook.com/v2.5/me?fields=email,first_name,last_name,friends&access_token=' +
-      token,
+        token,
     )
       .then(response => {
         response.json().then(json => {
@@ -254,32 +266,31 @@ export default class SignupHome extends React.Component {
   onFacebookButtonPress = async () => {
     try {
       // Attempt login with permissions
-      if (Platform.OS === "android") {
-        LoginManager.setLoginBehavior("web_only")
+      if (Platform.OS === 'android') {
+        LoginManager.setLoginBehavior('web_only');
       }
       const result = await LoginManager.logInWithPermissions([
         'public_profile',
         'email',
       ]);
-      console.log(result)
+      console.log(result);
       if (result.isCancelled) {
         throw 'User cancelled the login process';
       }
       const data = await AccessToken.getCurrentAccessToken();
       const token = data.accessToken;
-      console.log('access token', token)
+      console.log('access token', token);
       // const token=data.token
       this.setState({
         facebookToken: data.accessToken,
       });
 
       // // Once signed in, get the users AccesToken
-      const getToken = await AccessToken.getCurrentAccessToken()
-        .then(res => {
-          const { accessToken } = res;
-          console.log('accessToken', accessToken);
-          this.initUser(accessToken);
-        });
+      const getToken = await AccessToken.getCurrentAccessToken().then(res => {
+        const {accessToken} = res;
+        console.log('accessToken', accessToken);
+        this.initUser(accessToken);
+      });
 
       if (!data) {
         throw 'Something went wrong obtaining access token';
@@ -292,7 +303,7 @@ export default class SignupHome extends React.Component {
 
       return firebase.auth().signInWithCredential(facebookCredential);
     } catch (e) {
-      console.log('Error::onFacebookButtonPress', e)
+      console.log('Error::onFacebookButtonPress', e);
     }
   };
 
@@ -313,11 +324,11 @@ export default class SignupHome extends React.Component {
   }
 
   render() {
-    const { values, handleChange } = this.props;
+    const {values, handleChange} = this.props;
 
     return (
       <RadialGradient
-        style={{ width: '100%', height: '100%' }}
+        style={{width: '100%', height: '100%'}}
         colors={['#FE7948', '#E23E00']}
         stops={[0.1, 0.95]}
         center={[180, 270]}
@@ -371,21 +382,21 @@ export default class SignupHome extends React.Component {
                       defaultValue={values.email}
                     />
                     {this.state.emailInvalid == true ? (
-                      <Text style={{ color: 'black' }}>
+                      <Text style={{color: 'black'}}>
                         Please enter a valid Email ID
                       </Text>
                     ) : (
                       <View />
                     )}
                     {this.state.isInvalid == true ? (
-                      <Text style={{ color: 'black' }}>
+                      <Text style={{color: 'black'}}>
                         Email ID already exists!
                       </Text>
                     ) : (
                       <View />
                     )}
                     <Text style={main.labelContainer}>Password *</Text>
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{flexDirection: 'row'}}>
                       <TextInput
                         onSubmitEditing={this.requireField}
                         ref="password"
@@ -420,21 +431,21 @@ export default class SignupHome extends React.Component {
                       defaultValue={values.confirmPassword}
                     />
                     {this.state.passwordInvalid == true ? (
-                      <Text style={{ color: 'black', alignSelf: 'center' }}>
+                      <Text style={{color: 'black', alignSelf: 'center'}}>
                         Please enter strong password
                       </Text>
                     ) : (
                       <View />
                     )}
                     {this.state.passwordMismatch == true ? (
-                      <Text style={{ color: 'black', alignSelf: 'center' }}>
+                      <Text style={{color: 'black', alignSelf: 'center'}}>
                         Password mismatch!
                       </Text>
                     ) : (
                       <View />
                     )}
                     {this.state.fieldNotEmpty == true ? (
-                      <Text style={{ color: 'black', alignSelf: 'center' }}>
+                      <Text style={{color: 'black', alignSelf: 'center'}}>
                         Please enter all values
                       </Text>
                     ) : (
@@ -481,21 +492,19 @@ export default class SignupHome extends React.Component {
                       />
                     </TouchableOpacity>
                   </View>
-                  <View style={main.primaryButtonContanier}>
-                    {this.state.clicked === false ? (
+
+                  {this.state.clicked === false ? (
+                    <>
                       <TouchableOpacity
                         disabled={this.state.clicked}
-                        style={{ justifyContent: 'center', height: 40 }}>
-                        <Text
-                          style={main.primaryButtonText1}
-                          onPress={this.requireField}>
-                          Next
-                        </Text>
+                        onPress={this.requireField}
+                        style={main.primaryButtonContanier}>
+                        <Text style={main.primaryButtonText}>Next</Text>
                       </TouchableOpacity>
-                    ) : (
-                      <></>
-                    )}
-                  </View>
+                    </>
+                  ) : (
+                    <></>
+                  )}
                   {/* <View style={styles.socialIconDiv}>
               <TouchableOpacity>
                 <Text style={{ paddingRight: 40 }}>
