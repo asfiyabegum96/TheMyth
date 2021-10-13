@@ -331,11 +331,11 @@ export default class editProfile extends React.Component {
                 defaultValue={this.state.user.description}
               />
             </View>
-            <View style={main.primaryButtonContanier}>
-              <TouchableOpacity onPress={() => this.updateProfileDetails()}>
-                <Text style={styles.primaryButtonText}>Update</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={main.primaryButtonContanier}
+              onPress={() => this.updateProfileDetails()}>
+              <Text style={styles.primaryButtonText}>Update</Text>
+            </TouchableOpacity>
           </View>
         )}
       </ScrollView>

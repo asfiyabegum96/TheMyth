@@ -274,21 +274,29 @@ export default class search extends React.Component {
             const Notification = item.item;
             return (
               <View style={styles.container}>
-                <TouchableOpacity onPress={() => {}}>
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    margin: 10,
+                  }}
+                  onPress={selectedItem => this.navigateToOtherUser(item)}>
                   <Image
                     style={styles.image}
                     source={{
                       uri: Notification.profilePicture,
                     }}
                   />
+                  <View
+                    style={{
+                      flexDirection: 'column',
+                    }}>
+                    <Text style={styles.name}>{Notification.fullName}</Text>
+                    <Text style={styles.description}>
+                      {Notification.description}
+                    </Text>
+                  </View>
                 </TouchableOpacity>
-                <View style={styles.content}>
-                  <Text
-                    onPress={selectedItem => this.navigateToOtherUser(item)}
-                    style={styles.name}>
-                    {Notification.fullName}
-                  </Text>
-                </View>
               </View>
             );
           }}
@@ -302,24 +310,29 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: '#fff',
     paddingTop: 10,
-    paddingLeft: '5.5%',
+    // paddingLeft: '5.5%',
   },
   separator: {
     height: 1,
     backgroundColor: '#EE6E3D',
     width: wp('90%'),
+    alignSelf: 'center',
   },
   container: {
-    paddingLeft: 19,
-    paddingRight: 16,
-    paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
   name: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '700',
+    color: '#000000',
+    marginHorizontal: 5,
+  },
+  description: {
+    fontSize: 12,
+    fontWeight: '400',
     color: '#EE6E3D',
+    marginHorizontal: 5,
   },
   content: {
     marginLeft: 16,
@@ -345,7 +358,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 10,
-    marginLeft: 20,
+    // marginLeft: 20,
   },
   profile: {
     color: '#EE6E3D',

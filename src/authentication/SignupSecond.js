@@ -217,7 +217,7 @@ export default class SignupSecond extends React.Component {
                 color: 'white',
                 fontSize: hp('2%'),
                 marginBottom: wp('5%'),
-                alignSelf: 'center'
+                alignSelf: 'center',
               }}>
               Select your gender
             </Text>
@@ -350,18 +350,18 @@ export default class SignupSecond extends React.Component {
             </View>
 
             <View style={styles.but}>
-              <View style={main.primaryButtonContanier}>
-                {/* <TouchableOpacity onPress={this.back}>
+              {/* <TouchableOpacity onPress={this.back}>
                   <Text style={main.leftBorderButton}>BACK</Text>
                 </TouchableOpacity> */}
-                {this.state.signUpClicked === false ? (
-                  <TouchableOpacity onPress={this.signUp}>
-                    <Text style={main.primaryButtonText}>Sign Up</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <></>
-                )}
-              </View>
+              {this.state.signUpClicked === false ? (
+                <TouchableOpacity
+                  style={main.primaryButtonContanier}
+                  onPress={this.signUp}>
+                  <Text style={main.primaryButtonText}>Sign Up</Text>
+                </TouchableOpacity>
+              ) : (
+                <></>
+              )}
               <TouchableOpacity
                 style={{
                   marginTop: wp('5%'),

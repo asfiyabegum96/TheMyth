@@ -133,11 +133,11 @@ export default class forgotPassword extends React.Component {
                 <View />
               )}
             </View>
-            <View style={main.primaryButtonContanier}>
-              <TouchableOpacity onPress={() => this.updatePassword()}>
-                <Text style={main.primaryButtonText}>Reset</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={main.primaryButtonContanier}
+              onPress={() => this.updatePassword()}>
+              <Text style={main.primaryButtonText}>Reset</Text>
+            </TouchableOpacity>
           </ScrollView>
         }
       </RadialGradient>

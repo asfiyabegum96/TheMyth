@@ -105,41 +105,36 @@ export default class Home extends React.Component {
     const userEmail = userInfo.user.email;
     const Token = userInfo.idToken;
 
-  // Create a Google credential with the token
-  const googleCredential = firebase.auth.GoogleAuthProvider.credential(Token);
+    // Create a Google credential with the token
+    const googleCredential = firebase.auth.GoogleAuthProvider.credential(Token);
 
-   firebase.auth().signInWithCredential(googleCredential);
-  // Sign-in the user with the credential
-
-}
-  onFacebookButtonPress=async()=> {
-   
+    firebase.auth().signInWithCredential(googleCredential);
+    // Sign-in the user with the credential
+  };
+  onFacebookButtonPress = async () => {
     // Attempt login with permissions
-    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
     //console.log(result)
     if (result.isCancelled) {
       throw 'User cancelled the login process';
     }
-    const data = await AccessToken.getCurrentAccessToken()
-    const token=data.accessToken
-   
-  ;
-  
-      if (!data) {
-        throw 'Something went wrong obtaining access token';
-      }
-  
-      // Create a Firebase credential with the AccessToken
-      const facebookCredential = firebase.auth.FacebookAuthProvider.credential(
-        data.accessToken,
-      );
-     
-   
-      firebase.auth().signInWithCredential(facebookCredential);
-   
-   
-     
-      }  
+    const data = await AccessToken.getCurrentAccessToken();
+    const token = data.accessToken;
+
+    if (!data) {
+      throw 'Something went wrong obtaining access token';
+    }
+
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = firebase.auth.FacebookAuthProvider.credential(
+      data.accessToken,
+    );
+
+    firebase.auth().signInWithCredential(facebookCredential);
+  };
   async checkUserAuthorization() {
     firebase
       .messaging()
@@ -222,28 +217,6 @@ export default class Home extends React.Component {
                 Food. Photo. Memories
               </Text>
             </View>
-            <View
-                    style={{
-                      flexDirection: 'row',
-                      marginVertical: 20,
-                      justifyContent: 'center',
-                    }}>
-                    <Text style={styles.authtext}>or continue with</Text>
-                    <TouchableOpacity
-                      onPress={() => this.onFacebookButtonPress()}>
-                      <Image
-                        source={require('../images/facebook1.png')}
-                        style={styles.authimage}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => this.onGoogleButtonPress()}>
-                      <Image
-                        source={require('../images/google1.png')}
-                        style={styles.authimage1}
-                      />
-                    </TouchableOpacity>
-                  </View>
             <View style={styles.TextInputDiv}>
               {/* <View style={{ flexDirection: 'row', }}> */}
               <Text style={main.labelContainer}>Email *</Text>
@@ -317,6 +290,26 @@ export default class Home extends React.Component {
                 <View />
               )}
             </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginVertical: 20,
+                justifyContent: 'center',
+              }}>
+              <Text style={styles.authtext}>or continue with</Text>
+              <TouchableOpacity onPress={() => this.onFacebookButtonPress()}>
+                <Image
+                  source={require('../images/facebook1.png')}
+                  style={styles.authimage}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.onGoogleButtonPress()}>
+                <Image
+                  source={require('../images/google1.png')}
+                  style={styles.authimage1}
+                />
+              </TouchableOpacity>
+            </View>
             <View style={styles.CreateDiv}>
               <View>
                 <Text style={styles.pass}>Don't have an account?</Text>
@@ -326,11 +319,12 @@ export default class Home extends React.Component {
                 <Text style={styles.pass2}>Create</Text>
               </TouchableOpacity>
             </View>
-            <View style={main.primaryButtonContanier}>
-              <TouchableOpacity onPress={() => this.requireField()}>
-                <Text style={main.primaryButtonText}>Sign In</Text>
-              </TouchableOpacity>
-            </View>
+
+            <TouchableOpacity
+              style={main.primaryButtonContanier}
+              onPress={() => this.requireField()}>
+              <Text style={main.primaryButtonText}>Sign In</Text>
+            </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('forgotPassword')}
@@ -388,7 +382,7 @@ const styles = StyleSheet.create({
   CreateDiv: {
     flexDirection: 'row',
     justifyContent: 'center',
-    margin: wp('8%'),
+    marginBottom: wp('8%'),
   },
   pass: {
     color: 'white',

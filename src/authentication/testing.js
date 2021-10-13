@@ -265,19 +265,20 @@ export default class SignupHome extends React.Component {
                       <View />
                     )}
                   </View>
-                  <View style={main.primaryButtonContanier}>
-                    {this.state.clicked === false ? (
-                      <TouchableOpacity disabled={this.state.clicked}>
-                        <Text
-                          style={main.primaryButtonText}
-                          onPress={this.requireField}>
-                          Next
-                        </Text>
-                      </TouchableOpacity>
-                    ) : (
-                      <></>
-                    )}
-                  </View>
+
+                  {this.state.clicked === false ? (
+                    <TouchableOpacity
+                      style={main.primaryButtonContanier}
+                      disabled={this.state.clicked}>
+                      <Text
+                        style={main.primaryButtonText}
+                        onPress={this.requireField}>
+                        Next
+                      </Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <></>
+                  )}
                   {/* <View style={styles.socialIconDiv}>
                         <TouchableOpacity>
                           <Text style={{ paddingRight: 40 }}>
@@ -370,10 +371,6 @@ const styles = StyleSheet.create({
     left: 55,
   },
 });
-
-
-
-
 
 // import {StyleSheet} from 'react-native';
 
@@ -548,4 +545,3 @@ const styles = StyleSheet.create({
 // });
 
 // export default main;
-

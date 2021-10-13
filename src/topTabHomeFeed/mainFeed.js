@@ -24,8 +24,8 @@ import {
   removeOrientationListener as rol,
 } from 'react-native-responsive-screen';
 import Heart from './heart';
-import firebase, { auth } from 'react-native-firebase';
-import { Header } from 'react-native-elements';
+import firebase, {auth} from 'react-native-firebase';
+import {Header} from 'react-native-elements';
 
 export default class mainFeed extends React.Component {
   constructor(props) {
@@ -68,7 +68,7 @@ export default class mainFeed extends React.Component {
   };
 
   // Heart like trigger function
-  onLikePost({ item, index }) {
+  onLikePost({item, index}) {
     const selectedPhoto = this.state.photoFeedData[index];
     this.updateLikes(selectedPhoto, index);
     this.setState({
@@ -116,7 +116,7 @@ export default class mainFeed extends React.Component {
         .doc(selectedPhoto.docRef)
         .collection('likedUsers')
         .doc(this.state.email)
-        .set({ email: this.state.email.trim() });
+        .set({email: this.state.email.trim()});
       this.setState({
         alreadyLiked: true,
         liked: true,
@@ -132,8 +132,8 @@ export default class mainFeed extends React.Component {
     photosRef
       .where('email', '==', selectedPhoto.email)
       .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
           let data;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
@@ -195,7 +195,7 @@ export default class mainFeed extends React.Component {
           .collection('notifications')
           .doc(selectedPhoto.docRef)
           .set(notificationObj)
-          .then(function (docRef) { });
+          .then(function(docRef) {});
       }
     }
   }
@@ -263,7 +263,7 @@ export default class mainFeed extends React.Component {
   loadFeed = () => {
     this.setState({
       feedRefresh: true,
-      photoFeedLoad: []
+      photoFeedLoad: [],
     });
     let viewSpecificPhotos = false;
     let url = 'photos';
@@ -291,7 +291,7 @@ export default class mainFeed extends React.Component {
     } else {
       email = this.props.screenProps.property.screenProps.email;
     }
-    this.setState({ email: email });
+    this.setState({email: email});
     let that = this;
     if (url === 'photos') {
       let db = firebase.firestore();
@@ -300,20 +300,23 @@ export default class mainFeed extends React.Component {
         .orderBy('postedTime', 'desc')
         .limit(10)
         .get()
-        .then(function (querySnapshot) {
+        .then(function(querySnapshot) {
           if (querySnapshot._docs && querySnapshot._docs.length) {
-            console.log('total', querySnapshot._docs.length)
+            console.log('total', querySnapshot._docs.length);
             //randmoized posts
             const snapshot = querySnapshot._docs
-              .map(e => ({ val: e, r: Math.random() }))
+              .map(e => ({val: e, r: Math.random()}))
               .sort((a, b) => b.r - a.r)
-              .map(e => e.val)
+              .map(e => e.val);
             that.setState({
-              lastVisible: snapshot[snapshot.length - 1]
-            })
-            console.log('random loadFeed => ', snapshot.map(e => e.data().caption));
+              lastVisible: snapshot[snapshot.length - 1],
+            });
+            console.log(
+              'random loadFeed => ',
+              snapshot.map(e => e.data().caption),
+            );
 
-            snapshot.forEach(function (doc) {
+            snapshot.forEach(function(doc) {
               let data;
               const docNotEmpty = (doc.id, ' => ', doc.data() != null);
               if (docNotEmpty) data = (doc.id, ' => ', doc.data());
@@ -334,12 +337,12 @@ export default class mainFeed extends React.Component {
                     that.props.screenProps.navigateToOther
                   ) {
                     that.setState({
-                      screenPropsPresent: true
+                      screenPropsPresent: true,
                     });
                   }
                   that.setState({
                     feedRefresh: false,
-                    loading: false
+                    loading: false,
                   });
                 }
               }
@@ -356,7 +359,7 @@ export default class mainFeed extends React.Component {
             }
             that.setState({
               feedRefresh: false,
-              loading: false
+              loading: false,
             });
             that.setPhoto([]);
           }
@@ -370,7 +373,7 @@ export default class mainFeed extends React.Component {
 
   loadMoreFeed = () => {
     this.setState({
-      feedRefresh: true
+      feedRefresh: true,
     });
     let viewSpecificPhotos = false;
     let url = 'photos';
@@ -398,9 +401,9 @@ export default class mainFeed extends React.Component {
     } else {
       email = this.props.screenProps.property.screenProps.email;
     }
-    this.setState({ email: email });
+    this.setState({email: email});
     let that = this;
-    console.log('last visible', this.state.lastVisible)
+    console.log('last visible', this.state.lastVisible);
     if (url === 'photos') {
       let db = firebase.firestore();
       let photosRef = db.collection(url);
@@ -409,20 +412,26 @@ export default class mainFeed extends React.Component {
         .startAfter(that.state.lastVisible)
         .limit(10)
         .get()
-        .then(function (querySnapshot) {
+        .then(function(querySnapshot) {
           if (querySnapshot._docs && querySnapshot._docs.length) {
             //removed duplicates
             const feed = that.state.photoFeedData.map(e => e.docRef);
-            
+
             //randmoized posts
             const snapshot = querySnapshot._docs
-              .map(e => ({ val: e, r: Math.random() * querySnapshot._docs.length }))
+              .map(e => ({
+                val: e,
+                r: Math.random() * querySnapshot._docs.length,
+              }))
               .sort((a, b) => b.r - a.r)
               .map(e => e.val)
-              .filter(e => !feed.includes(e.data().docRef))
-            console.log('random loadMoreFeed => ', snapshot.map(e => e.data().caption));
+              .filter(e => !feed.includes(e.data().docRef));
+            console.log(
+              'random loadMoreFeed => ',
+              snapshot.map(e => e.data().caption),
+            );
 
-            snapshot.forEach(function (doc) {
+            snapshot.forEach(function(doc) {
               let data;
               const docNotEmpty = (doc.id, ' => ', doc.data() != null);
               if (docNotEmpty) data = (doc.id, ' => ', doc.data());
@@ -445,19 +454,19 @@ export default class mainFeed extends React.Component {
                     that.props.screenProps.navigateToOther
                   ) {
                     that.setState({
-                      screenPropsPresent: true
+                      screenPropsPresent: true,
                     });
                   }
                   that.setState({
                     feedRefresh: false,
-                    loading: false
+                    loading: false,
                   });
                 }
               }
             });
             that.setState({
-              lastVisible: snapshot[snapshot.length - 1]
-            })
+              lastVisible: snapshot[snapshot.length - 1],
+            });
           } else {
             if (
               that.props &&
@@ -470,7 +479,7 @@ export default class mainFeed extends React.Component {
             }
             that.setState({
               feedRefresh: false,
-              loading: false
+              loading: false,
             });
             that.setPhoto([]);
           }
@@ -497,9 +506,9 @@ export default class mainFeed extends React.Component {
       .where('email', '==', context.props.navigation.state.params.email)
       .where('isDeleted', '==', false)
       .get()
-      .then(function (querySnapshot) {
+      .then(function(querySnapshot) {
         let data;
-        querySnapshot.forEach(function (doc) {
+        querySnapshot.forEach(function(doc) {
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) data = (doc.id, ' => ', doc.data());
           fetchData.push(doc.data());
@@ -535,8 +544,8 @@ export default class mainFeed extends React.Component {
     photosRef
       .where('isDeleted', '==', false)
       .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
           let data;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) {
@@ -545,12 +554,12 @@ export default class mainFeed extends React.Component {
               .doc(data.docRef)
               .collection('savedUsers')
               .get()
-              .then(function (savedSnapshot) {
-                savedSnapshot.forEach(function (savedDoc) {
+              .then(function(savedSnapshot) {
+                savedSnapshot.forEach(function(savedDoc) {
                   let savedData;
                   const docNotEmpty = (savedDoc.id,
-                    ' => ',
-                    savedDoc.data() != null);
+                  ' => ',
+                  savedDoc.data() != null);
                   if (docNotEmpty) {
                     savedData = (savedDoc.id, ' => ', savedDoc.data());
                     if (savedData.email === context.state.email) {
@@ -621,8 +630,8 @@ export default class mainFeed extends React.Component {
     userRef
       .where('email', '==', email.trim())
       .get()
-      .then(function (userQuerySnapshot) {
-        userQuerySnapshot.forEach(function (doc) {
+      .then(function(userQuerySnapshot) {
+        userQuerySnapshot.forEach(function(doc) {
           let userData;
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) {
@@ -633,11 +642,11 @@ export default class mainFeed extends React.Component {
               userRef
                 .where('email', '==', data.email.trim())
                 .get()
-                .then(function (otheruserSnapshot) {
-                  otheruserSnapshot.forEach(function (otherDoc) {
+                .then(function(otheruserSnapshot) {
+                  otheruserSnapshot.forEach(function(otherDoc) {
                     const docNotEmpty = (otherDoc.id,
-                      ' => ',
-                      otherDoc.data() != null);
+                    ' => ',
+                    otherDoc.data() != null);
                     if (docNotEmpty) {
                       let otherUserData;
                       otherUserData = (otherDoc.id, ' => ', otherDoc.data());
@@ -647,28 +656,28 @@ export default class mainFeed extends React.Component {
                         that.props.navigation.state &&
                         that.props.navigation.state.params &&
                         that.props.navigation.state.params.viewOtherPhotos ===
-                        true
+                          true
                       ) {
                         that.addToFlatlist(
                           photoFeedData,
                           data,
                           otherUserData,
-                          email
+                          email,
                         );
                       } else {
                         userRef
                           .doc(otherUserData.docRef)
                           .collection('followers')
                           .get()
-                          .then(function (followerSnapshot) {
+                          .then(function(followerSnapshot) {
                             if (
                               followerSnapshot._docs &&
                               followerSnapshot._docs.length
                             ) {
-                              followerSnapshot.forEach(function (followerDoc) {
+                              followerSnapshot.forEach(function(followerDoc) {
                                 const docNotEmpty = (followerDoc.id,
-                                  ' => ',
-                                  followerDoc.data() != null);
+                                ' => ',
+                                followerDoc.data() != null);
                                 if (docNotEmpty) {
                                   otherUserData.isFollowed = false;
                                   if (
@@ -680,7 +689,7 @@ export default class mainFeed extends React.Component {
                                       photoFeedData,
                                       data,
                                       otherUserData,
-                                      email
+                                      email,
                                     );
                                   } else {
                                     if (
@@ -732,7 +741,7 @@ export default class mainFeed extends React.Component {
 
   addToFlatlist = (photoFeedData, data, userData, email) => {
     var that = this;
-    that.setState({ screenPropsPresent: false });
+    that.setState({screenPropsPresent: false});
     photoFeedData.push({
       author: userData.fullName,
       authorDescription: userData.description,
@@ -755,7 +764,7 @@ export default class mainFeed extends React.Component {
       that.props.screenProps &&
       that.props.screenProps.navigateToOther
     ) {
-      that.setState({ screenPropsPresent: true });
+      that.setState({screenPropsPresent: true});
     }
     that.fetchSavedUsers(photoFeedData, email);
   };
@@ -769,8 +778,8 @@ export default class mainFeed extends React.Component {
         .collection('photos')
         .doc(element.docRef)
         .collection('savedUsers');
-      savedUsersRef.get().then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
+      savedUsersRef.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) {
             data = doc.data();
@@ -785,8 +794,8 @@ export default class mainFeed extends React.Component {
         .collection('photos')
         .doc(element.docRef)
         .collection('likedUsers');
-      likedUsersRef.get().then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
+      likedUsersRef.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
           const docNotEmpty = (doc.id, ' => ', doc.data() != null);
           if (docNotEmpty) {
             data = doc.data();
@@ -806,38 +815,38 @@ export default class mainFeed extends React.Component {
     }, 1000);
   };
 
-  setPhoto = (data) => {
+  setPhoto = data => {
     this.setState({
       photoFeedData: data,
     });
   };
 
-  navigateToComment = ({ item, index }, isComment) => {
+  navigateToComment = ({item, index}, isComment) => {
     if (this.props.screenProps) {
-      this.setState({ screenPropsPresent: true });
+      this.setState({screenPropsPresent: true});
       this.props.screenProps.navigation(
-        { item, index, context: this },
+        {item, index, context: this},
         isComment,
       );
     } else {
       if (isComment) {
         this.props.navigation.navigate('comments', {
-          selectedItem: { item: item },
+          selectedItem: {item: item},
           email: this.props.navigation.state.params.email.trim(),
         });
       } else {
-        this.addToSaveCollection({ item, index });
+        this.addToSaveCollection({item, index});
       }
     }
   };
 
-  sendImage = ({ item, index }) => {
+  sendImage = ({item, index}) => {
     if (this.props.screenProps) {
-      this.props.screenProps.navigation({ item, index, context: this }, 'send');
+      this.props.screenProps.navigation({item, index, context: this}, 'send');
     }
   };
 
-  viewOtherUserProfiles = ({ item }) => {
+  viewOtherUserProfiles = ({item}) => {
     const isSameProfile = this.state.email.trim() === item.email.trim();
     this.props.screenProps.navigation(
       {
@@ -893,7 +902,7 @@ export default class mainFeed extends React.Component {
       .set({
         email: this.props.navigation.state.params.email.trim(),
       })
-      .then(function (docRef) {
+      .then(function(docRef) {
         context.state.photoFeedData[index].isSaved = true;
         context.setPhoto(context.state.photoFeedData);
       });
@@ -933,10 +942,10 @@ export default class mainFeed extends React.Component {
     alert('Photo url copied!');
   }
 
-  _onViewableItemsChanged = ({ viewableItems, changed }) => {
+  _onViewableItemsChanged = ({viewableItems, changed}) => {
     console.log('Visible items', viewableItems);
     if (viewableItems && viewableItems.length > 0) {
-      this.setState({ currentIndex: viewableItems[0].index });
+      this.setState({currentIndex: viewableItems[0].index});
       const items = this.state.photoFeedData.map(e => e.docRef);
     }
   };
@@ -1043,7 +1052,7 @@ export default class mainFeed extends React.Component {
             onRefresh={this.photoFeedLoad}
             data={this.state.photoFeedData}
             keyExtractor={(item, index) => index.toString()}
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             snapToAlignment={'start'}
             decelerationRate={'fast'}
             snapToInterval={Dimensions.get('window').height}
@@ -1051,183 +1060,187 @@ export default class mainFeed extends React.Component {
             viewabilityConfig={this._viewabilityConfig}
             onEndReached={this.loadMoreFeed}
             onEndReachedThreshold={0.5}
-            renderItem={({ item, index }) => {
-              return <View
-                key={index}
-                style={{
-                  paddingHorizontal: wp('1%'),
-                  marginHorizontal: hp('1%'),
-                  borderRadius: wp('2%'),
-                  borderWidth: 1,
-                  backgroundColor: 'white',
-                  borderColor: 'white',
-                  height: Dimensions.get('window').height,
-                  // elevation: 5
-                }}>
-                <View style={styles.feedBorder}>
-                  <View style={styles.listHeader}>
-                    <TouchableOpacity
-                      onPress={() => this.viewOtherUserProfiles({ item })}
-                      style={{
-                        paddingHorizontal: 10,
-                      }}>
-                      <Image
-                        source={{
-                          uri: item?.userAvatar,
-                        }}
-                        style={{
-                          width: wp('15%'),
-                          height: hp('8%'),
-                          resizeMode: 'cover',
-                          borderRadius: wp('3%'),
-                          borderWidth: 1,
-                          marginLeft: wp('2%'),
-                        }}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.locationDiv}>
-                      <Text style={styles.listProfileName}>{item.author}</Text>
-                      {/* <View style={styles.locationDiv}> */}
-                      <Text style={styles.locationText}>{item.location}</Text>
-                      {/* <TouchableOpacity onPress={() => this.copyUrl(item)} style={{ paddingLeft: wp('1%') }}>
-                        <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
-                      </TouchableOpacity> */}
-                      {/* </View> */}
-                    </TouchableOpacity>
-                  </View>
-                  <View style={styles.listViewImg}>
-                    <Image
-                      style={styles.listViewInlineImg}
-                      source={{ uri: item.url }}
-                      loadingIndicatorSource={require('../images/loading.gif')}
-                    />
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      paddingHorizontal: wp('2%'),
-                      paddingVertical: wp('2%'),
-                      marginLeft: wp('1.3%'),
-                    }}>
-                    {item.isLiked === true ? (
+            renderItem={({item, index}) => {
+              return (
+                <View
+                  key={index}
+                  style={{
+                    paddingHorizontal: wp('1%'),
+                    marginHorizontal: hp('1%'),
+                    borderRadius: wp('2%'),
+                    borderWidth: 1,
+                    backgroundColor: 'white',
+                    borderColor: 'white',
+                    height: Dimensions.get('window').height,
+                    // elevation: 5
+                  }}>
+                  <View style={styles.feedBorder}>
+                    <View style={styles.listHeader}>
                       <TouchableOpacity
-                        onPress={() =>
-                          this.onLikePost({
-                            item,
-                            index,
-                          })
-                        }
+                        onPress={() => this.viewOtherUserProfiles({item})}
                         style={{
-                          paddingLeft: wp('1%'),
+                          paddingHorizontal: 10,
                         }}>
-                        <FontAwesome5
-                          style={styles.comment}
-                          name="cookie-bite"
-                          size={22}
-                          color="#EE6E3D"
+                        <Image
+                          source={{
+                            uri: item?.userAvatar,
+                          }}
+                          style={{
+                            width: wp('15%'),
+                            height: hp('8%'),
+                            resizeMode: 'cover',
+                            borderRadius: wp('3%'),
+                            borderWidth: 1,
+                            marginLeft: wp('2%'),
+                          }}
                         />
                       </TouchableOpacity>
-                    ) : (
+                      <TouchableOpacity
+                        onPress={() => this.viewOtherUserProfiles({item})}
+                        style={styles.locationDiv}>
+                        <Text style={styles.listProfileName}>
+                          {item.author}
+                        </Text>
+                        {/* <View style={styles.locationDiv}> */}
+                        <Text style={styles.locationText}>{item.location}</Text>
+                        {/* <TouchableOpacity onPress={() => this.copyUrl(item)} style={{ paddingLeft: wp('1%') }}>
+                        <Entypo style={styles.more} name="dots-three-horizontal" size={22} color="#22222C" />
+                      </TouchableOpacity> */}
+                        {/* </View> */}
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.listViewImg}>
+                      <Image
+                        style={styles.listViewInlineImg}
+                        source={{uri: item.url}}
+                        loadingIndicatorSource={require('../images/loading.gif')}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        paddingHorizontal: wp('2%'),
+                        paddingVertical: wp('2%'),
+                        marginLeft: wp('1.3%'),
+                      }}>
+                      {item.isLiked === true ? (
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.onLikePost({
+                              item,
+                              index,
+                            })
+                          }
+                          style={{
+                            paddingLeft: wp('1%'),
+                          }}>
+                          <FontAwesome5
+                            style={styles.comment}
+                            name="cookie-bite"
+                            size={22}
+                            color="#EE6E3D"
+                          />
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.onLikePost({
+                              item,
+                              index,
+                            })
+                          }
+                          style={{
+                            paddingLeft: wp('1%'),
+                          }}>
+                          <FontAwesome5
+                            style={styles.comment}
+                            name="cookie-bite"
+                            size={22}
+                            color="#808080"
+                          />
+                        </TouchableOpacity>
+                      )}
                       <TouchableOpacity
                         onPress={() =>
-                          this.onLikePost({
-                            item,
-                            index,
-                          })
+                          this.navigateToComment({item, index}, true)
                         }
                         style={{
                           paddingLeft: wp('1%'),
                         }}>
-                        <FontAwesome5
+                        <Fontisto
                           style={styles.comment}
-                          name="cookie-bite"
+                          name="commenting"
                           size={22}
                           color="#808080"
                         />
                       </TouchableOpacity>
-                    )}
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.navigateToComment({ item, index }, true)
-                      }
-                      style={{
-                        paddingLeft: wp('1%'),
-                      }}>
-                      <Fontisto
-                        style={styles.comment}
-                        name="commenting"
-                        size={22}
-                        color="#808080"
-                      />
-                    </TouchableOpacity>
-                    {item.isSaved === true ? (
+                      {item.isSaved === true ? (
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.deleteCollection({
+                              item,
+                              index,
+                            });
+                          }}
+                          style={{
+                            paddingLeft: wp('3%'),
+                          }}>
+                          <Fontisto
+                            name="bookmark-alt"
+                            size={22}
+                            color="#EE6E3D"
+                          />
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.navigateToComment({item, index}, false)
+                          }
+                          style={{
+                            paddingLeft: wp('3%'),
+                          }}>
+                          <Fontisto name="bookmark" size={22} color="#808080" />
+                        </TouchableOpacity>
+                      )}
                       <TouchableOpacity
-                        onPress={() => {
-                          this.deleteCollection({
+                        style={styles.fabIcon1}
+                        onPress={() =>
+                          this.sendImage({
                             item,
                             index,
-                          });
-                        }}
-                        style={{
-                          paddingLeft: wp('3%'),
-                        }}>
-                        <Fontisto
-                          name="bookmark-alt"
-                          size={22}
-                          color="#EE6E3D"
+                          })
+                        }>
+                        <Image
+                          source={require('../images/message-new.png')}
+                          style={styles.fabIcon}
                         />
+                        {/* <FontAwesome5 style={styles.fabIcon} name="telegram-plane" size={22} color="#808080" /> */}
                       </TouchableOpacity>
-                    ) : (
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.navigateToComment({ item, index }, false)
-                        }
-                        style={{
-                          paddingLeft: wp('3%'),
-                        }}>
-                        <Fontisto name="bookmark" size={22} color="#808080" />
-                      </TouchableOpacity>
-                    )}
-                    <TouchableOpacity
-                      style={styles.fabIcon1}
-                      onPress={() =>
-                        this.sendImage({
-                          item,
-                          index,
-                        })
-                      }>
-                      <Image
-                        source={require('../images/message-new.png')}
-                        style={styles.fabIcon}
-                      />
-                      {/* <FontAwesome5 style={styles.fabIcon} name="telegram-plane" size={22} color="#808080" /> */}
-                    </TouchableOpacity>
+                    </View>
                   </View>
-                </View>
-                <View
-                  style={{
-                    flexDirection: 'column',
-                    marginLeft: wp('5%'),
-                  }}>
-                  <Text style={styles.likeText}>{item.likes} like(s)</Text>
-                  <View style={styles.foodNameDiv}>
-                    <Text style={styles.listProfileName1}>{item.author}</Text>
-                    <Text style={styles.foodNameText}>{item.caption}</Text>
-                  </View>
-                  <Text
+                  <View
                     style={{
-                      // marginLeft: wp('5%'),
-                      marginBottom: wp('5%'),
-                      fontSize: hp('1.5%'),
-                      color: '#808080',
+                      flexDirection: 'column',
+                      marginLeft: wp('5%'),
                     }}>
-                    {item.postedTime}
-                  </Text>
+                    <Text style={styles.likeText}>{item.likes} like(s)</Text>
+                    <View style={styles.foodNameDiv}>
+                      <Text style={styles.listProfileName1}>{item.author}</Text>
+                      <Text style={styles.foodNameText}>{item.caption}</Text>
+                    </View>
+                    <Text
+                      style={{
+                        // marginLeft: wp('5%'),
+                        marginBottom: wp('5%'),
+                        fontSize: hp('1.5%'),
+                        color: '#808080',
+                      }}>
+                      {item.postedTime}
+                    </Text>
+                  </View>
                 </View>
-              </View>
-
-            }
-            }
+              );
+            }}
           />
         )}
       </View>
